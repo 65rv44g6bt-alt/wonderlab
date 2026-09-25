@@ -257,9 +257,36 @@ video.is-waiting { opacity: 0 !important; }
 .ch-skill b { font-family: var(--display); font-weight: 650; }
 .ch-panel.is-swapping .ch-figure > *, .ch-panel.is-swapping .ch-body { opacity: 0; transform: translateY(6px); }
 .ch-figure > *, .ch-body { transition: opacity 180ms ease, transform 260ms cubic-bezier(.2,.8,.2,1); }
+.ch-carousel { display: none; }
 @media (max-width: 900px) {
   .challenges { grid-template-columns: 1fr; }
-  .ch-list { display: flex; gap: 8px; overflow-x: auto; border: 0; padding-bottom: 8px; scrollbar-width: thin; }
+  .ch-list, .ch-panel { display: none; }
+  .challenges { display: flex; flex-direction: column; }
+  .challenges > div:first-child { order: 2; }
+  .ch-carousel { display: block; order: 1; }
+  .ch-ask { margin-top: 4px; }
+  .ch-track {
+    display: grid; grid-auto-flow: column; grid-auto-columns: 88%; gap: 12px;
+    overflow-x: auto; overscroll-behavior-x: contain;
+    scroll-snap-type: x mandatory; scroll-padding-inline: 0;
+    padding-bottom: 4px; -webkit-overflow-scrolling: touch; scrollbar-width: none;
+  }
+  .ch-track::-webkit-scrollbar { display: none; }
+  .ch-slide {
+    scroll-snap-align: center; scroll-snap-stop: always;
+    background: var(--card); border: 1px solid var(--line); border-radius: var(--radius-m);
+    overflow: hidden; display: flex; flex-direction: column;
+  }
+  .ch-slide .ch-body { padding: 18px 18px 22px; }
+  .ch-nav { display: flex; align-items: center; justify-content: center; gap: 14px; margin-top: 14px; }
+  .ch-dots { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; justify-content: center; }
+  .ch-dot {
+    width: 9px; height: 9px; padding: 0; border: 0; border-radius: 50%;
+    background: var(--line); cursor: pointer; transition: width 200ms ease, background-color 200ms ease;
+  }
+  .ch-dot[aria-current="true"] { width: 26px; border-radius: 5px; background: var(--ink); }
+  .ch-count { font: 600 0.92rem var(--display); color: var(--ink-soft); font-variant-numeric: tabular-nums; }
+  .ch-swipe { margin-top: 6px; text-align: center; font: 500 0.88rem var(--display); color: var(--ink-soft); }
   .ch-list li { flex: none; }
   .ch-tab { border: 1px solid var(--line); border-radius: 999px; padding: 9px 14px; font-size: 0.95rem; white-space: nowrap; }
   .ch-tab small { display: none; }
@@ -267,7 +294,8 @@ video.is-waiting { opacity: 0 !important; }
   .ch-panel { position: static; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .ch-figure > *, .ch-body, .ch-tab, .btn, .stage { transition: none; }
+  .ch-figure > *, .ch-body, .ch-tab, .btn, .stage, .ch-dot { transition: none; }
+  .ch-track { scroll-behavior: auto; }
 }
 
 /* Loop */
@@ -469,6 +497,13 @@ footer .brand svg { --mark-dark: #A8D8F0; --mark-frame: #DCE85E; }
       <div>
         <ul class="ch-list" role="tablist" aria-label="Challenges" id="ch-list"></ul>
         <a class="ch-ask js-wa" id="ch-ask" href="https://wa.me/85267533727"></a>
+      </div>
+      <div class="ch-carousel" id="ch-carousel">
+        <div class="ch-track" id="ch-track" aria-label="Challenges, swipe left and right"></div>
+        <div class="ch-nav">
+          <div class="ch-dots" id="ch-dots"></div>
+          <p class="ch-count" id="ch-count"></p>
+        </div>
       </div>
       <div class="ch-panel" id="ch-panel" role="tabpanel" tabindex="0">
         <div class="ch-figure" id="ch-figure"></div>
@@ -1201,6 +1236,10 @@ footer .brand svg { --mark-dark: #A8D8F0; --mark-frame: #DCE85E; }
   var elWhat = document.getElementById("ch-what");
   var elSkill = document.getElementById("ch-skill");
   var ask = document.getElementById("ch-ask");
+  var track = document.getElementById("ch-track");
+  var dotsBox = document.getElementById("ch-dots");
+  var countEl = document.getElementById("ch-count");
+  var isPhone = window.matchMedia("(max-width: 900px)");
   var reduce = window.matchMedia("(prefers-reduced-motion: reduce)");
   var group = null, tabs = [], active = -1, swapTimer;
 
@@ -1211,6 +1250,98 @@ footer .brand svg { --mark-dark: #A8D8F0; --mark-frame: #DCE85E; }
     if (e.key === "Home") next = 0;
     if (e.key === "End") next = n - 1;
     if (next !== null) { e.preventDefault(); go(next); }
+  }
+
+  function figureInto(box, key, load) {
+    var base = "media/challenges/" + key;
+    box.textContent = "";
+    var poster = document.createElement("img");
+    poster.src = base + ".jpg"; poster.alt = ""; poster.width = 960; poster.height = 720;
+    poster.onerror = function () { box.innerHTML = DRAW[key] || ""; };
+    box.appendChild(poster);
+    if (reduce.matches) return null;
+    var v = document.createElement("video");
+    v.className = "is-waiting";
+    v.muted = true; v.loop = true; v.playsInline = true;
+    v.setAttribute("muted", ""); v.setAttribute("playsinline", ""); v.setAttribute("aria-hidden", "true");
+    v.preload = load ? "auto" : "none"; v.width = 960; v.height = 720;
+    v.dataset.src = base + ".mp4";
+    v.addEventListener("playing", function () { v.classList.remove("is-waiting"); });
+    box.appendChild(v);
+    return v;
+  }
+
+  function playOnly(v) {
+    var all = track.querySelectorAll("video");
+    Array.prototype.forEach.call(all, function (other) { if (other !== v) other.pause(); });
+    if (!v) return;
+    var go = function () { var p = v.play(); if (p && p.catch) p.catch(function () {}); };
+    if (!v.src) {
+      v.src = v.dataset.src;               // a play() during load aborts, so wait for the first frame
+      v.addEventListener("loadeddata", go, { once: true });
+    }
+    go();
+  }
+
+  function buildCarousel() {
+    track.textContent = ""; dotsBox.textContent = "";
+    group.items.forEach(function (item, i) {
+      var slide = document.createElement("article");
+      slide.className = "ch-slide";
+      slide.id = "slide-" + group.id + "-" + i;
+      var figure = document.createElement("div");
+      figure.className = "ch-figure";
+      var body = document.createElement("div");
+      body.className = "ch-body";
+      var kind = document.createElement("p"); kind.className = "ch-kind"; kind.textContent = item[4];
+      var h = document.createElement("h3"); h.textContent = item[1];
+      var what = document.createElement("p"); what.textContent = item[2];
+      var skill = document.createElement("p"); skill.className = "ch-skill";
+      skill.innerHTML = "<b>Skill.</b> "; skill.appendChild(document.createTextNode(item[3]));
+      body.appendChild(kind); body.appendChild(h); body.appendChild(what); body.appendChild(skill);
+      slide.appendChild(figure); slide.appendChild(body);
+      track.appendChild(slide);
+      figureInto(figure, item[0], i === 0);
+
+      var dot = document.createElement("button");
+      dot.type = "button"; dot.className = "ch-dot";
+      dot.setAttribute("aria-label", "Show challenge " + (i + 1) + " of " + group.items.length + ", " + item[1]);
+      dot.setAttribute("aria-current", i === 0 ? "true" : "false");
+      dot.addEventListener("click", function () {
+        var r = slide.getBoundingClientRect(), b2 = track.getBoundingClientRect();
+        track.scrollBy({ left: (r.left + r.width / 2) - (b2.left + b2.width / 2), behavior: reduce.matches ? "auto" : "smooth" });
+      });
+      dotsBox.appendChild(dot);
+    });
+    countEl.textContent = "1 / " + group.items.length;
+
+    // the active card is the one nearest the middle of the track
+    var current = -1;
+    function syncActive() {
+      var box = track.getBoundingClientRect(), mid = box.left + box.width / 2, best = 0, bestD = Infinity;
+      Array.prototype.forEach.call(track.children, function (sl, i) {
+        var r = sl.getBoundingClientRect(), d = Math.abs(r.left + r.width / 2 - mid);
+        if (d < bestD) { bestD = d; best = i; }
+      });
+      if (best === current) return;
+      current = best;
+      countEl.textContent = (best + 1) + " / " + group.items.length;
+      Array.prototype.forEach.call(dotsBox.children, function (d, j) { d.setAttribute("aria-current", j === best ? "true" : "false"); });
+      track.__active = track.children[best].querySelector("video");
+      playOnly(track.__active);
+      var nxt = track.children[best + 1] && track.children[best + 1].querySelector("video");
+      if (nxt && !nxt.src) nxt.preload = "auto";
+    }
+    var raf = 0;
+    track.onscroll = function () { if (raf) return; raf = requestAnimationFrame(function () { raf = 0; syncActive(); }); };
+    track.scrollLeft = 0;
+    syncActive();
+    if (!track.__vis) {
+      track.__vis = true;
+      document.addEventListener("visibilitychange", function () {
+        if (document.visibilityState === "visible" && isPhone.matches && track.__active) playOnly(track.__active);
+      });
+    }
   }
 
   function showFigure(key) {
@@ -1239,6 +1370,7 @@ footer .brand svg { --mark-dark: #A8D8F0; --mark-frame: #DCE85E; }
   }
 
   function fill(item) {
+    if (isPhone.matches) return;   // the carousel owns the phone layout
     showFigure(item[0]);
     elKind.textContent = item[4];
     elTitle.textContent = item[1];
@@ -1292,6 +1424,7 @@ footer .brand svg { --mark-dark: #A8D8F0; --mark-frame: #DCE85E; }
       list.appendChild(li);
       return b;
     });
+    buildCarousel();
     ask.textContent = "Ask about " + group.name + " on WhatsApp";
     ask.href = "https://wa.me/85267533727?text=" + encodeURIComponent("Hi Julien, I'd like to ask about WonderLab " + group.name + " (" + group.ages + ").");
     selectItem(0, false, true);
@@ -1302,6 +1435,10 @@ footer .brand svg { --mark-dark: #A8D8F0; --mark-frame: #DCE85E; }
     t.addEventListener("keydown", function (e) { arrowNav(e, g, stageTabs.length, function (n) { selectGroup(n, true); }); });
   });
   selectGroup(0, false);
+  isPhone.addEventListener("change", function () {
+    if (isPhone.matches) { fig.textContent = ""; buildCarousel(); }
+    else { playOnly(null); fill(group.items[Math.max(0, active)]); }
+  });
 
   var hv = document.getElementById("hero-video");
   if (hv) {
