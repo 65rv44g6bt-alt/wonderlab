@@ -94,23 +94,27 @@ p { margin: 0; }
 .head h2 { font-size: var(--t3); }
 
 /* hero */
-.hero { position: relative; height: 100svh; min-height: 520px; padding: 0; overflow: hidden; background: var(--navy); }
+.hero { position: relative; height: calc(100svh - 68px); min-height: 520px; padding: 0; overflow: hidden; background: var(--navy); color: var(--on-navy); }
 .hero-media { position: absolute; inset: 0; }
 .hero-media img, .hero-media video { width: 100%; height: 100%; object-fit: cover; }
-@media (max-width: 900px) { .hero { height: 100svh; min-height: 480px; } }
+
 .hero-media video { position: absolute; inset: 0; transition: opacity 500ms ease; }
 .hero-media::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(13,27,38,0.45) 0%, rgba(13,27,38,0.1) 40%, rgba(13,27,38,0.75) 100%); }
-.hero .wrap { position: relative; z-index: 1; height: 100%; display: flex; align-items: flex-end; padding-bottom: clamp(28px, 5vw, 64px); }
-.hero-top { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
-.wordmark {
-  margin: 0 0 0 -0.055em; font-weight: 500; letter-spacing: -0.055em; line-height: 0.86;
-  font-size: clamp(3.4rem, 15vw, 13rem); color: var(--on-navy);
+.hero .wrap { position: relative; z-index: 1; height: 100%; display: flex; align-items: flex-end; padding-bottom: clamp(32px, 6vw, 72px); }
+.hero-statement { font-size: clamp(1.45rem, 0.7rem + 2.7vw, 3.1rem); font-weight: 500; letter-spacing: -0.035em; line-height: 1.1; color: var(--on-navy); max-width: 17ch; }
+@media (max-width: 900px) {
+  /* phone: the portrait reel sits smaller in the navy, with the statement under it */
+  .hero { height: calc(100svh - 68px); min-height: 480px; display: flex; flex-direction: column; }
+  .hero-media { position: relative; flex: 1 1 0; min-height: 0; }
+  .hero-media img, .hero-media video { position: absolute; inset: 0; object-fit: contain; }
+  .hero-media::after { background: linear-gradient(180deg, rgba(13,27,38,0) 55%, rgba(13,27,38,0.9) 100%); }
+  .hero .wrap { flex: 0 0 auto; height: auto; padding-bottom: clamp(26px, 6vw, 44px); }
+  .hero-statement { max-width: none; font-size: clamp(1.32rem, 0.6rem + 3.4vw, 2rem); }
 }
+.hero-top { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
 video.is-waiting { opacity: 0 !important; }
 
 /* statement, revealed line by line */
-.statement { font-size: clamp(1.55rem, 0.9rem + 3vw, 3.3rem); letter-spacing: -0.035em; line-height: 1.1; font-weight: 500; }
-.statement .rv-line { display: block; }
 .rv { overflow: hidden; }
 .rv-line { display: block; transform: translateY(105%); opacity: 0; transition: transform 900ms cubic-bezier(.16,.84,.3,1), opacity 700ms ease; }
 .is-in .rv-line { transform: translateY(0); opacity: 1; }
@@ -281,14 +285,14 @@ footer { background: var(--navy); color: var(--on-navy-soft); padding-bottom: cl
     <video id="hero-video" class="is-waiting" muted loop playsinline preload="auto"></video>
   </div>
   <div class="wrap">
-    <h1 class="wordmark">WonderLab</h1>
+    <h1 class="hero-statement rv-wrap" data-lines="We&rsquo;re WonderLab &mdash; a|creative thinking academy|where kids learn to ask|better questions, imagine|new possibilities, and|design meaningful solutions|for the world around them."></h1>
   </div>
 </section>
 
 <section class="section" id="approach">
   <div class="wrap">
-    <p class="statement rv-wrap" data-lines="We&rsquo;re WonderLab &mdash; a|creative thinking academy|where kids learn to ask|better questions, imagine|new possibilities, and|design meaningful solutions|for the world around them.">We&rsquo;re WonderLab &mdash; a creative thinking academy where kids learn to ask better questions, imagine new possibilities, and design meaningful solutions for the world around them.</p>
-    <p class="approach-lead fade" style="margin-top: clamp(28px, 4vw, 52px)">Through design thinking, storytelling, innovation challenges, hands-on making, and collaborative projects, kids develop the confidence to think independently, the creativity to solve complex problems, and the courage to bring their ideas to life.</p>
+    <div class="head fade"><h2>Approach.</h2><p class="meta">Why it works</p></div>
+    <p class="approach-lead fade">Through design thinking, storytelling, innovation challenges, hands-on making, and collaborative projects, kids develop the confidence to think independently, the creativity to solve complex problems, and the courage to bring their ideas to life.</p>
     <div class="pillars">
       <div class="pillar fade">
         <p class="num">01</p>
@@ -1026,7 +1030,7 @@ var DRAW = {
     });
   }, { rootMargin: "0px 0px -12% 0px", threshold: 0.15 });
   document.querySelectorAll(".fade").forEach(function (el) { io.observe(el); });
-  if (statement) io.observe(statement);
+  if (statement) requestAnimationFrame(function () { statement.classList.add("is-in"); });
 
   /* ---------- parallax on the media blocks ---------- */
   var par = Array.prototype.slice.call(document.querySelectorAll(".parallax"));
