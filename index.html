@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>WonderLab — Creative thinking academy, Wong Chuk Hang</title>
-<meta name="description" content="WonderLab is a creative thinking academy in Wong Chuk Hang, Hong Kong. Kids aged 7 to 14 design, build and test their own ideas in classes of nine or fewer.">
+<title>WonderLab — Creative thinking academy, Mong Kok</title>
+<meta name="description" content="WonderLab is a creative thinking academy in Mong Kok, Hong Kong. Kids aged 7 to 14 design, build and test their own ideas in classes of nine or fewer.">
 <meta name="theme-color" content="#FFFFFF">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='-64 -64 128 128'%3E%3Crect x='-60' y='-60' width='120' height='120' rx='14' fill='%230D1B26'/%3E%3Crect x='-36' y='-36' width='72' height='72' fill='none' stroke='%23FFFFFF' stroke-width='9'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -77,8 +77,11 @@ p { margin: 0; }
 .site-head.at-top .btn-ink:hover { background: rgba(237, 243, 246, 0.24); }
 .site-head .wrap { display: flex; align-items: center; justify-content: space-between; gap: 16px; height: 76px; }
 .brand { display: inline-flex; align-items: center; gap: 10px; text-decoration: none; }
-.brand svg { width: 36px; height: 36px; flex: none; }
-.brand span { font-weight: 600; font-size: 1.24rem; letter-spacing: -0.03em; }
+.brand { gap: 12px; }
+.brand svg { width: 48px; height: 48px; flex: none; }
+.brand span { font-weight: 600; font-size: 1.62rem; letter-spacing: -0.035em; }
+.foot-bottom .brand svg { width: 36px; height: 36px; }
+.foot-bottom .brand span { font-size: 1.24rem; }
 .nav { display: flex; align-items: center; gap: 28px; }
 .nav a:not(.btn) { text-decoration: none; font-size: 0.98rem; font-weight: 500; color: var(--ink-soft); padding: 10px 0; }
 .nav a:not(.btn):hover { color: var(--ink); }
@@ -120,6 +123,19 @@ p { margin: 0; }
 @media (max-width: 900px) {
   .hero-statement { max-width: none; }
   .hero-media img, .hero-media video { object-fit: contain; object-position: center 32%; }
+}
+.hero-shell { height: 100%; }
+@media (min-width: 901px) {
+  .hero { margin-top: 0; height: auto; min-height: 0; overflow: visible; background: none; padding: clamp(12px, 1.6vw, 24px) 0 0; }
+  .hero-shell {
+    position: relative; height: auto; aspect-ratio: 16 / 9; max-height: calc(100svh - 110px);
+    width: calc(100% - 2 * var(--gutter)); max-width: calc(var(--max) - 2 * var(--gutter)); margin: 0 auto;
+    border-radius: var(--r); overflow: hidden; background: var(--navy); color: var(--on-navy);
+  }
+  .hero-media img, .hero-media video { object-fit: cover; object-position: center; }
+  .hero .wrap { max-width: none; padding: 0 clamp(24px, 3.4vw, 48px) clamp(22px, 3.2vw, 44px); }
+  .hero-statement { font-size: clamp(1rem, 0.55rem + 1.1vw, 1.7rem); }
+  .hero-statement .big { font-size: clamp(2.2rem, 0.8rem + 4.2vw, 5rem); }
 }
 .hero-top { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
 video.is-waiting { opacity: 0 !important; }
@@ -170,7 +186,7 @@ video.is-waiting { opacity: 0 !important; }
   .s-verb { flex-basis: 100%; color: var(--ink-soft); }
 }
 
-.challenges { display: grid; grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr); gap: clamp(20px, 4vw, 56px); align-items: start; margin-top: clamp(24px, 3vw, 40px); }
+.challenges { --ch-gap: clamp(20px, 4vw, 56px); display: grid; grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr); gap: var(--ch-gap); align-items: start; margin-top: clamp(24px, 3vw, 40px); }
 .challenges > * { min-width: 0; }
 .ch-list { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--line); }
 .ch-tab {
@@ -182,10 +198,40 @@ video.is-waiting { opacity: 0 !important; }
 }
 .ch-tab small { font-size: 0.88rem; font-weight: 400; color: var(--ink-soft); white-space: nowrap; }
 .ch-tab:hover { color: var(--ink); }
-.ch-tab[aria-selected="true"] { color: var(--ink); padding-left: 12px; box-shadow: inset 3px 0 0 var(--ink); }
-.ch-panel { position: sticky; top: 92px; border-radius: var(--r); overflow: hidden; background: var(--stage); transition: background-color 320ms ease; }
+.ch-tab { position: relative; border-radius: var(--r); transition: color 260ms ease, padding 420ms cubic-bezier(.22,.9,.24,1); }
+.ch-tab[aria-selected="true"] { color: var(--on-navy); padding-left: 18px; padding-right: 18px; border-bottom-color: transparent; }
+/* the selected title's box: one real element behind the titles that slides to the selected row. It runs on across the
+   gap and 2px into the panel, and two small corner pieces round it into the panel edge. The pieces overlap the box by
+   3px and the panel by 2px, so no edge is ever shared and no hairline can show. */
+.ch-col { position: relative; }
+.ch-list { position: relative; z-index: 1; }
+.ch-slider { display: none; }
+@media (min-width: 901px) {
+  .ch-slider {
+    display: block; position: absolute; z-index: 0; left: 0; top: 0; height: 48px; width: calc(100% + var(--ch-gap) + 2px);
+    background-color: var(--stage); border-radius: var(--r) 0 0 var(--r); pointer-events: none; will-change: transform;
+    transition: transform 460ms cubic-bezier(.22,.9,.24,1), height 460ms cubic-bezier(.22,.9,.24,1), background-color 320ms ease;
+  }
+  .ch-slider::before, .ch-slider::after {
+    content: ""; position: absolute; right: 0; width: calc(var(--r) + 2px); height: calc(var(--r) + 3px);
+    background-color: var(--stage); transition: background-color 320ms ease, opacity 260ms ease;
+  }
+  .ch-slider::before { top: calc(-1 * var(--r));
+    -webkit-mask: radial-gradient(circle at 0 0, transparent calc(var(--r) - 0.5px), #000 var(--r)); mask: radial-gradient(circle at 0 0, transparent calc(var(--r) - 0.5px), #000 var(--r)); }
+  .ch-slider::after { bottom: calc(-1 * var(--r));
+    -webkit-mask: radial-gradient(circle at 0 100%, transparent calc(var(--r) - 0.5px), #000 var(--r)); mask: radial-gradient(circle at 0 100%, transparent calc(var(--r) - 0.5px), #000 var(--r)); }
+  .challenges.at-first .ch-slider::before { opacity: 0; }
+  .challenges.at-first .ch-list { border-top-color: transparent; }
+  .challenges.at-first .ch-panel { border-top-left-radius: 0; }
+  .challenges.no-anim .ch-slider, .challenges.no-anim .ch-slider::before, .challenges.no-anim .ch-slider::after, .challenges.no-anim .ch-panel, .challenges.no-anim .ch-tab { transition: none; }
+}
+.ch-tab[aria-selected="true"] small { color: var(--on-navy-soft); }
+.ch-list li:has(+ li > .ch-tab[aria-selected="true"]) > .ch-tab { border-bottom-color: transparent; }
+.ch-panel { position: sticky; top: 92px; border-radius: var(--r); overflow: hidden; background: var(--stage); transition: background-color 320ms ease, border-radius 260ms ease; }
 .ch-figure { position: relative; aspect-ratio: 4 / 3; background: var(--stage); overflow: hidden; }
-.ch-figure video, .ch-figure img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.ch-figure video, .ch-figure img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;
+  --edge: linear-gradient(90deg, transparent, #000 22px, #000 calc(100% - 22px), transparent), linear-gradient(180deg, transparent, #000 18px, #000 calc(100% - 18px), transparent);
+  -webkit-mask-image: var(--edge); -webkit-mask-composite: source-in; mask-image: var(--edge); mask-composite: intersect; }
 .ch-figure video { transition: opacity 260ms ease; }
 .ch-figure svg { width: 82%; margin: 0 auto; color: var(--on-navy); }
 .ch-body { padding: clamp(18px, 2.4vw, 28px); color: var(--on-navy); }
@@ -194,8 +240,10 @@ video.is-waiting { opacity: 0 !important; }
 .ch-body p { margin-top: 10px; color: var(--on-navy-soft); }
 .ch-skill { margin-top: 14px; padding-top: 14px; border-top: 1px solid rgba(237,243,246,0.16); font-size: 0.98rem; color: var(--on-navy-soft); }
 .ch-skill b { color: var(--on-navy); font-weight: 500; }
-.ch-panel.is-swapping .ch-figure > *, .ch-panel.is-swapping .ch-body { opacity: 0; }
-.ch-figure > *, .ch-body { transition: opacity 200ms ease; }
+.ch-panel.is-swapping .ch-figure > * { opacity: 0; }
+.ch-panel.is-swapping .ch-body { opacity: 0; transform: translateY(10px); }
+.ch-figure > * { transition: opacity 240ms ease; }
+.ch-body { transition: opacity 240ms ease, transform 420ms cubic-bezier(.22,.9,.24,1); }
 .ch-carousel { display: none; }
 @media (max-width: 900px) {
   .challenges { display: flex; flex-direction: column; }
@@ -294,12 +342,17 @@ footer { background: var(--navy); color: var(--on-navy-soft); padding-bottom: cl
 <main id="main">
 
 <section class="hero" id="top">
-  <div class="hero-media" aria-hidden="true">
-    <img id="hero-poster" src="media/hero-portrait.jpg" alt="" width="1080" height="1920">
-    <video id="hero-video" class="is-waiting" muted loop playsinline preload="auto"></video>
-  </div>
-  <div class="wrap">
-    <h1 class="hero-statement rv-wrap" data-lines="<span class='big'>We&rsquo;re WonderLab</span>|&mdash; a creative thinking academy where kids|learn to ask better questions, imagine new|possibilities, and design meaningful solutions|for the world around them."></h1>
+  <div class="hero-shell">
+    <div class="hero-media" aria-hidden="true">
+      <picture>
+        <source media="(min-width: 901px)" srcset="media/hero.jpg?v=11">
+        <img id="hero-poster" src="media/hero-portrait.jpg?v=11" alt="" width="1080" height="1920">
+      </picture>
+      <video id="hero-video" class="is-waiting" muted loop playsinline preload="auto"></video>
+    </div>
+    <div class="wrap">
+      <h1 class="hero-statement rv-wrap" data-lines="<span class='big'>We&rsquo;re WonderLab</span>|A creative thinking academy where kids|learn to ask better questions, imagine new|possibilities, and design meaningful solutions|for the world around them."></h1>
+    </div>
   </div>
 </section>
 
@@ -355,7 +408,8 @@ footer { background: var(--navy); color: var(--on-navy-soft); padding-bottom: cl
     </div>
 
     <div class="challenges" id="challenges" role="tabpanel" aria-labelledby="stage-explorers">
-      <div>
+      <div class="ch-col">
+        <div class="ch-slider" id="ch-slider" aria-hidden="true"></div>
         <ul class="ch-list" role="tablist" aria-label="Challenges" id="ch-list"></ul>
       </div>
       <div class="ch-carousel" id="ch-carousel">
@@ -428,43 +482,49 @@ footer { background: var(--navy); color: var(--on-navy-soft); padding-bottom: cl
       </div>
       <dl class="hours fade">
         <div><dt>When</dt><dd>Monday to Friday, 4:00 to 5:30pm, plus weekend workshops</dd></div>
-        <div><dt>Where</dt><dd>Wong Chuk Hang, Hong Kong</dd></div>
+        <div><dt>Where</dt><dd>Mong Kok, Kowloon, Hong Kong</dd></div>
         <div><dt>Class size</dt><dd>Nine kids at most</dd></div>
         <div><dt>WhatsApp</dt><dd><a class="js-wa" data-msg="Hi Julien, I have a question about WonderLab." href="https://wa.me/85267533727">+852 6753 3727</a></dd></div>
       </dl>
     </div>
     <figure class="map fade" style="margin-bottom:0">
-      <svg viewBox="0 0 640 360" role="img" aria-label="Schematic map of Wong Chuk Hang on the south side of Hong Kong Island, showing the South Island MTR line from Ocean Park through Wong Chuk Hang to Ap Lei Chau, with WonderLab near Wong Chuk Hang station">
-        <rect class="sea" width="640" height="360"/>
-        <path class="land" d="M0 0H640V186C606 196 580 212 566 238C552 268 528 296 496 306C472 313 455 300 450 280C444 255 428 232 398 224C360 214 330 206 296 199C256 191 220 189 188 178C148 164 110 151 70 151C40 151 18 157 0 162Z"/>
-        <path class="land" d="M80 250C110 226 170 222 214 232C250 240 268 262 262 290C256 318 215 336 165 334C120 332 82 316 72 292C66 276 68 262 80 250Z"/>
-        <path class="road-s" d="M300 150C310 104 300 56 292 0M520 190C516 140 540 80 548 0M104 150C120 110 128 60 124 0"/>
-        <path class="road" d="M0 124C120 120 230 142 332 152C420 160 500 152 640 132"/>
-        <path class="road" d="M372 154C378 104 390 52 398 0"/>
-        <path class="road" d="M206 186L192 232"/>
-        <path class="mtr" d="M470 0V160C470 176 458 184 444 182L346 166C312 161 272 186 244 214L190 266L132 302"/>
-        <circle class="stn" cx="470" cy="150" r="8"/>
-        <circle class="stn" cx="346" cy="166" r="8"/>
-        <circle class="stn" cx="190" cy="266" r="8"/>
-        <circle class="stn" cx="132" cy="302" r="8"/>
-        <text class="lbl-s" x="484" y="146">Ocean Park</text>
-        <text class="lbl-s" x="206" y="270">Lei Tung</text>
-        <text class="lbl-s" x="96" y="330">South Horizons</text>
-        <text class="lbl" x="22" y="104">Aberdeen</text>
-        <text class="lbl" x="116" y="238">Ap Lei Chau</text>
-        <text class="lbl" x="500" y="262">Ocean Park</text>
-        <text class="water" x="232" y="214">Aberdeen Channel</text>
-        <text class="water" x="508" y="340">Deep Water Bay</text>
-        <g transform="translate(362 112)">
+      <svg viewBox="0 0 640 360" role="img" aria-label="Schematic map of Mong Kok in Kowloon, showing Nathan Road and the MTR from Prince Edward through Mong Kok to Yau Ma Tei, Mong Kok East on the East Rail line and Olympic to the west, with WonderLab near Mong Kok station">
+        <rect class="land" width="640" height="360" stroke="none"/>
+        <path class="sea" d="M0 0H58C70 60 52 118 66 176C78 226 60 286 72 360H0Z"/>
+        <path class="road" d="M96 0C92 120 100 240 94 360"/>
+        <path class="road-s" d="M150 0V360M236 0V360M284 0V360M388 0V360M430 0V360M498 18C492 120 500 240 494 360"/>
+        <path class="road-s" d="M94 110H640M94 238H640M94 300H640"/>
+        <path class="road" d="M94 58C260 52 430 54 640 40"/>
+        <path class="road" d="M94 176H640"/>
+        <path class="road" d="M330 0V360"/>
+        <path class="road" d="M430 300C500 280 560 252 640 236"/>
+        <path class="mtr" d="M344 0V360"/>
+        <path class="mtr" d="M560 0C556 90 568 170 562 250C558 300 566 330 564 360"/>
+        <path class="mtr" d="M60 132C110 166 150 190 176 206C200 222 218 250 226 280L234 360"/>
+        <circle class="stn" cx="344" cy="58" r="8"/>
+        <circle class="stn" cx="344" cy="176" r="8"/>
+        <circle class="stn" cx="344" cy="306" r="8"/>
+        <circle class="stn" cx="562" cy="176" r="8"/>
+        <circle class="stn" cx="176" cy="206" r="8"/>
+        <text class="lbl-s" x="358" y="48">Prince Edward</text>
+        <text class="lbl-s" x="358" y="334">Yau Ma Tei</text>
+        <text class="lbl-s" x="548" y="204" text-anchor="end">Mong Kok East</text>
+        <text class="lbl-s" x="120" y="236">Olympic</text>
+        <text class="lbl-s" x="321" y="292" transform="rotate(-90 321 292)">Nathan Road</text>
+        <text class="lbl-s" x="196" y="170">Argyle Street</text>
+        <text class="lbl" x="130" y="94">Tai Kok Tsui</text>
+        <text class="lbl" x="450" y="276">Yau Ma Tei</text>
+        <text class="water" x="12" y="330" transform="rotate(-90 12 330)" dx="0" dy="18">Victoria Harbour</text>
+        <g transform="translate(370 140)">
           <circle r="26" fill="rgba(237,243,246,0.14)"/>
           <path d="M0 18C-9 6-14 0-14-8A14 14 0 0 1 14-8C14 0 9 6 0 18Z" fill="#EDF3F6" stroke="#0D1B26" stroke-width="2"/>
           <circle cy="-8" r="5" fill="#0D1B26"/>
         </g>
-        <text class="pin-t" x="394" y="104">WonderLab</text>
-        <text class="lbl-s" x="394" y="124">Wong Chuk Hang</text>
+        <text class="pin-t" x="398" y="136">WonderLab</text>
+        <text class="lbl-s" x="398" y="156">Mong Kok</text>
         <g transform="translate(606 34)" fill="none" stroke="#7F95A5" stroke-width="2"><path d="M0 14V-12M-6-4L0-12L6-4"/></g>
         <text class="lbl-s" x="599" y="64">N</text>
-        <text class="lbl-s" x="22" y="346">Schematic, not to scale</text>
+        <text class="lbl-s" x="112" y="30">Schematic, not to scale</text>
       </svg>
     </figure>
   </div>
@@ -475,7 +535,7 @@ footer { background: var(--navy); color: var(--on-navy-soft); padding-bottom: cl
     <div class="foot-lead">
       <a class="foot-mail" href="mailto:Julien@Wonderlab.com">Julien@Wonderlab.com</a>
       <span class="foot-links">
-        <a href="https://www.google.com/maps/search/?api=1&amp;query=Wong%20Chuk%20Hang%20Station%2C%20Hong%20Kong" rel="noopener">Directions</a>
+        <a href="https://www.google.com/maps/search/?api=1&amp;query=Mong%20Kok%20Station%2C%20Hong%20Kong" rel="noopener">Directions</a>
         <a href="https://www.instagram.com/jk_hk/" rel="noopener">Instagram</a>
       </span>
     </div>
@@ -484,7 +544,7 @@ footer { background: var(--navy); color: var(--on-navy-soft); padding-bottom: cl
         <svg class="js-mark" data-n="5" viewBox="-72 -72 144 144" aria-hidden="true"></svg>
         <span>WonderLab</span>
       </a>
-      <p>&copy; 2026 WonderLab. Wong Chuk Hang, Hong Kong.</p>
+      <p>&copy; 2026 WonderLab. Mong Kok, Hong Kong.</p>
     </div>
   </div>
 </footer>
@@ -795,20 +855,6 @@ var DRAW = {
     "Structural engineering"
    ],
    [
-    "rain",
-    "The Rainwater Harvesting Roof",
-    "Design roof gutters and catchment systems from plastic cups and straws, then pour measured water to test how well they drain.",
-    "Hydrological systems and resource conservation.",
-    "Water and resources"
-   ],
-   [
-    "corridor",
-    "The Biodiversity Corridor",
-    "Map a bare urban strip and build a green corridor with vertical gardens and bird-nesting boxes that link separated spaces.",
-    "Eco-urbanism and habitat preservation.",
-    "Eco-urbanism"
-   ],
-   [
     "tiles",
     "The Infinite Façade",
     "Use modular stamps and paper tessellation to prototype repeating patterns for futuristic building skins, testing depth and rhythm.",
@@ -823,11 +869,11 @@ var DRAW = {
     "Buoyancy and materials"
    ],
    [
-    "mobile",
-    "The Kinetic Wind Sculpture",
-    "Build balanced mobiles from wire, string and cups that turn gently in a breeze without tangling.",
-    "Weight balancing and kinetic movement.",
-    "Balance and motion"
+    "solar",
+    "The Solar Oven Bake-Off",
+    "Engineer solar cookers from pizza boxes, foil and plastic wrap, using orientation and reflection to melt marshmallows.",
+    "Passive sustainable design and thermodynamics.",
+    "Eco-design and heat"
    ],
    [
     "rube",
@@ -837,18 +883,32 @@ var DRAW = {
     "Systems thinking"
    ],
    [
+    "rain",
+    "The Rainwater Harvesting Roof",
+    "Design roof gutters and catchment systems from plastic cups and straws, then pour measured water to test how well they drain.",
+    "Hydrological systems and resource conservation.",
+    "Water and resources"
+   ],
+   [
+    "corridor",
+    "The Biodiversity Corridor",
+    "Map a bare urban strip and build a green corridor with vertical gardens and bird-nesting boxes that link separated spaces.",
+    "Eco-urbanism and habitat preservation.",
+    "Eco-urbanism"
+   ],
+   [
+    "mobile",
+    "The Kinetic Wind Sculpture",
+    "Build balanced mobiles from wire, string and cups that turn gently in a breeze without tangling.",
+    "Weight balancing and kinetic movement.",
+    "Balance and motion"
+   ],
+   [
     "maze",
     "Blindfolded Architectural Obstacle Course",
     "Guide a blindfolded teammate through a furniture maze with words alone, and discover how spaces work for people with different abilities.",
     "Universal design and spatial empathy.",
     "Universal design"
-   ],
-   [
-    "solar",
-    "The Solar Oven Bake-Off",
-    "Engineer solar cookers from pizza boxes, foil and plastic wrap, using orientation and reflection to melt marshmallows.",
-    "Passive sustainable design and thermodynamics.",
-    "Eco-design and heat"
    ]
   ]
  },
@@ -865,18 +925,32 @@ var DRAW = {
     "Structural engineering"
    ],
    [
-    "truss",
-    "The Upcycled Waste-to-Resource Bridge",
-    "Using only single-use plastics and twine, teams engineer a truss bridge across 60 cm, testing its load and improving the design every 10 minutes.",
-    "Rapid structural prototyping and resilience under constraints.",
-    "Upcycled structures"
-   ],
-   [
     "facade",
     "The Infinite Façade",
     "Craft modular geometric stamps and use paper tessellation to prototype repeating patterns for futuristic building skins, testing depth and rhythm.",
     "Mathematical tessellation and visual perception.",
     "Tiling and perception"
+   ],
+   [
+    "egg",
+    "The Egg Drop Challenge",
+    "Engineer a protective capsule from straws, rubber bands and tape so a raw egg survives a drop from a height.",
+    "Impact protection and iterative prototyping.",
+    "Risk and problem solving"
+   ],
+   [
+    "bridge",
+    "The Newspaper Bridge",
+    "Roll newspaper into tight tubes and use masking tape to span a 50 cm gap strong enough to hold a water bottle.",
+    "Tension and compression.",
+    "Tension and compression"
+   ],
+   [
+    "truss",
+    "The Upcycled Waste-to-Resource Bridge",
+    "Using only single-use plastics and twine, teams engineer a truss bridge across 60 cm, testing its load and improving the design every 10 minutes.",
+    "Rapid structural prototyping and resilience under constraints.",
+    "Upcycled structures"
    ],
    [
     "wind",
@@ -898,20 +972,6 @@ var DRAW = {
     "In just 20 minutes, prototype a lightweight flat-pack emergency shelter from corrugated plastic that can stand up to a wind test.",
     "Humanitarian architecture and crisis response.",
     "Humanitarian architecture"
-   ],
-   [
-    "egg",
-    "The Egg Drop Challenge",
-    "Engineer a protective capsule from straws, rubber bands and tape so a raw egg survives a drop from a height.",
-    "Impact protection and iterative prototyping.",
-    "Risk and problem solving"
-   ],
-   [
-    "bridge",
-    "The Newspaper Bridge",
-    "Roll newspaper into tight tubes and use masking tape to span a 50 cm gap strong enough to hold a water bottle.",
-    "Tension and compression.",
-    "Tension and compression"
    ],
    [
     "column",
@@ -942,6 +1002,41 @@ var DRAW = {
     "Full-scale prototyping"
    ],
    [
+    "airport",
+    "The Airport of Tomorrow",
+    "Plan an airport for 20 aircraft stands, then redraw it so the walk from the entrance to the farthest gate gets as short as it can be. Teams test one layout against another and measure the longest walk.",
+    "Circulation planning and shortest-path thinking.",
+    "Systems and circulation"
+   ],
+   [
+    "room",
+    "Dream Room Blueprint and 3D Maquette",
+    "Sketch a floor plan on grid paper, then build a scale model in a shoebox with fabric and toothpicks, focusing on scale and light.",
+    "Interior architecture and spatial scale.",
+    "Interior architecture"
+   ],
+   [
+    "park",
+    "Community Park Redesign",
+    "Brainstorm and collage a green redesign for a dull public space, then present why it would improve community wellbeing.",
+    "User-centred design and public advocacy.",
+    "Public space design"
+   ],
+   [
+    "tensegrity",
+    "The Tensegrity Table",
+    "Build a gravity-defying table from craft sticks, rubber bands and string, where the top seems to float on tension alone.",
+    "Physics and structural counter-forces.",
+    "Physics and forces"
+   ],
+   [
+    "quake",
+    "The Disaster-Resilient Foundation Test",
+    "Build model houses on a tray of wobbling jelly or marbles, simulate earthquakes, and redesign the foundations until they stand.",
+    "Geotechnical engineering and seismic resilience.",
+    "Seismic resilience"
+   ],
+   [
     "slots",
     "The Cardboard Eco-Pavilion",
     "Design and build an interlocking modular shelter big enough to sit under, using only slot-fits and tension locks, with no glue or tape.",
@@ -956,25 +1051,11 @@ var DRAW = {
     "Aerodynamics"
    ],
    [
-    "airport",
-    "The Airport of Tomorrow",
-    "Plan an airport for 20 aircraft stands, then redraw it so the walk from the entrance to the farthest gate gets as short as it can be. Teams test one layout against another and measure the longest walk.",
-    "Circulation planning and shortest-path thinking.",
-    "Systems and circulation"
-   ],
-   [
     "flood",
     "The Tape-Resistant Neighbourhood",
     "Plan a town, then re-plan it halfway through when a simulated crisis, like a flood, changes the zoning rules.",
     "Urban planning under sudden constraints.",
     "Urban planning"
-   ],
-   [
-    "room",
-    "Dream Room Blueprint and 3D Maquette",
-    "Sketch a floor plan on grid paper, then build a scale model in a shoebox with fabric and toothpicks, focusing on scale and light.",
-    "Interior architecture and spatial scale.",
-    "Interior architecture"
    ],
    [
     "charades",
@@ -984,32 +1065,11 @@ var DRAW = {
     "Technical drawing"
    ],
    [
-    "park",
-    "Community Park Redesign",
-    "Brainstorm and collage a green redesign for a dull public space, then present why it would improve community wellbeing.",
-    "User-centred design and public advocacy.",
-    "Public space design"
-   ],
-   [
-    "quake",
-    "The Disaster-Resilient Foundation Test",
-    "Build model houses on a tray of wobbling jelly or marbles, simulate earthquakes, and redesign the foundations until they stand.",
-    "Geotechnical engineering and seismic resilience.",
-    "Seismic resilience"
-   ],
-   [
     "dome",
     "The Zero-Waste Packaging Pavilion",
     "Study natural patterns like honeycombs and leaves, then use clean packaging to build a self-supporting geodesic dome.",
     "Biomimicry and structural repetition.",
     "Biomimicry"
-   ],
-   [
-    "tensegrity",
-    "The Tensegrity Table",
-    "Build a gravity-defying table from craft sticks, rubber bands and string, where the top seems to float on tension alone.",
-    "Physics and structural counter-forces.",
-    "Physics and forces"
    ]
   ]
  }
@@ -1073,10 +1133,13 @@ var DRAW = {
   }
 
   /* ---------- hero clip ---------- */
-  var hv = document.getElementById("hero-video");
+  var MV = "?v=11";   // bump when media files are replaced, so returning visitors get the new clips
+  var hv = document.getElementById("hero-video"), wide = window.matchMedia("(min-width: 901px)");
+  var heroSrc = function () { return (wide.matches ? "media/hero.mp4" : "media/hero-portrait.mp4") + MV; };
   if (hv && !reduce.matches) {
     hv.addEventListener("playing", function () { hv.classList.remove("is-waiting"); });
-    hv.src = "media/hero-portrait.mp4";
+    hv.src = heroSrc();
+    wide.addEventListener("change", function () { hv.classList.add("is-waiting"); hv.src = heroSrc(); var p = hv.play(); if (p && p.catch) p.catch(function () {}); });
     var startHero = function () { if (hv.paused) { var p = hv.play(); if (p && p.catch) p.catch(function () {}); } };
     hv.addEventListener("loadeddata", startHero, { once: true });
     startHero();
@@ -1086,7 +1149,7 @@ var DRAW = {
   /* the bar is transparent over the hero, then takes its translucent white */
   var head = document.querySelector(".site-head"), heroEl = document.querySelector(".hero");
   if (head && heroEl) {
-    var setHead = function () { head.classList.toggle("at-top", window.scrollY < heroEl.offsetHeight - 120); };
+    var setHead = function () { head.classList.toggle("at-top", !window.matchMedia("(min-width: 901px)").matches && window.scrollY < heroEl.offsetHeight - 120); };
     setHead();
     window.addEventListener("scroll", setHead, { passive: true });
     window.addEventListener("resize", setHead);
@@ -1117,7 +1180,7 @@ var DRAW = {
     var base = "media/challenges/" + key;
     box.textContent = "";
     var poster = document.createElement("img");
-    poster.src = base + ".jpg"; poster.alt = ""; poster.width = 960; poster.height = 720;
+    poster.src = base + ".jpg" + MV; poster.alt = ""; poster.width = 960; poster.height = 720;
     poster.onerror = function () { box.innerHTML = DRAW[key] || ""; };
     box.appendChild(poster);
     if (reduce.matches) return null;
@@ -1126,7 +1189,7 @@ var DRAW = {
     v.muted = true; v.loop = true; v.playsInline = true;
     v.setAttribute("muted", ""); v.setAttribute("playsinline", ""); v.setAttribute("aria-hidden", "true");
     v.preload = "none"; v.width = 960; v.height = 720;
-    v.dataset.src = base + ".mp4";
+    v.dataset.src = base + ".mp4" + MV;
     v.addEventListener("playing", function () { v.classList.remove("is-waiting"); });
     box.appendChild(v);
     return v;
@@ -1139,6 +1202,20 @@ var DRAW = {
     if (!v.src) { v.src = v.dataset.src; v.addEventListener("loadeddata", go, { once: true }); }
     go();
   }
+
+  /* the selected title's box slides to the chosen row (instant when a stage is switched) */
+  var slider = document.getElementById("ch-slider");
+  function moveSlider(i, instant) {
+    if (!slider || !tabs[i] || isPhone.matches) return;
+    var col = slider.parentNode.getBoundingClientRect(), r = tabs[i].getBoundingClientRect();
+    var top = i === 0 ? 0 : r.top - col.top, h = r.bottom - col.top - top;
+    if (instant) { chWrap.classList.add("no-anim"); }
+    chWrap.classList.toggle("at-first", i === 0);
+    slider.style.transform = "translateY(" + top.toFixed(2) + "px)";
+    slider.style.height = h.toFixed(2) + "px";
+    if (instant) { void slider.offsetWidth; chWrap.classList.remove("no-anim"); void slider.offsetWidth; }
+  }
+  window.addEventListener("resize", function () { if (active >= 0) moveSlider(active, true); });
 
   function fill(item) {
     if (isPhone.matches) return;
@@ -1155,6 +1232,7 @@ var DRAW = {
     tabs.forEach(function (t, j) { t.setAttribute("aria-selected", j === i ? "true" : "false"); t.tabIndex = j === i ? 0 : -1; });
     panel.setAttribute("aria-labelledby", tabs[i].id);
     if (focus) tabs[i].focus();
+    moveSlider(i, instant);
     active = i;
     clearTimeout(swapTimer);
     var item = group.items[i];
@@ -1251,7 +1329,7 @@ var DRAW = {
   selectGroup(0, false);
   isPhone.addEventListener("change", function () {
     if (isPhone.matches) { fig.textContent = ""; buildCarousel(); }
-    else { playOnly(null, track); fill(group.items[Math.max(0, active)]); }
+    else { playOnly(null, track); fill(group.items[Math.max(0, active)]); moveSlider(Math.max(0, active), true); }
   });
 })();
 </script>
