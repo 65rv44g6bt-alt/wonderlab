@@ -72,7 +72,7 @@ p { margin: 0; }
   backdrop-filter: none; -webkit-backdrop-filter: none;
 }
 .site-head.at-top .brand svg { filter: drop-shadow(0 1px 6px rgba(0, 0, 0, 0.45)); }
-.site-head.at-top .brand svg rect { stroke: var(--on-navy); }
+.site-head.at-top .brand svg rect { stroke: var(--orange); }
 .site-head.at-top .nav a:not(.btn) { color: rgba(237, 243, 246, 0.8); }
 .site-head.at-top .nav a:not(.btn):hover { color: var(--on-navy); }
 .site-head.at-top .btn-ink { background: rgba(237, 243, 246, 0.14); color: var(--on-navy); border-color: rgba(237, 243, 246, 0.4); }
@@ -113,7 +113,6 @@ p { margin: 0; }
 .head { display: flex; align-items: baseline; justify-content: space-between; gap: 20px; flex-wrap: wrap; margin-bottom: clamp(28px, 4vw, 52px); }
 .head h2 { font-size: var(--t3); }
 .dot { color: var(--orange); }
-.joy-word { color: var(--orange); }
 
 /* hero */
 .hero { position: relative; margin-top: -76px; height: 100svh; min-height: 560px; padding: 0; overflow: hidden; background: var(--navy); color: var(--on-navy); }
@@ -303,6 +302,9 @@ video.is-waiting { opacity: 0 !important; }
 .dr-thin { stroke-width: 2; }
 .dr-brand { stroke: #7FB2E0; }
 .dr-dash { stroke-dasharray: 6 7; }
+.dr-hair { stroke-width: 1.25; }
+.dr-ghost { opacity: 0.45; }
+.fill-stage { fill: var(--stage); } /* shapes that hide what is behind them, in whatever colour the panel is */
 .fill-sky { fill: rgba(127, 178, 224, 0.28); }
 .fill-zing { fill: var(--orange); }
 .fill-paper { fill: var(--navy-2); }
@@ -347,12 +349,105 @@ video.is-waiting { opacity: 0 !important; }
 @media (max-width: 860px) { .tutor { grid-template-columns: 1fr; } .tutor-photo { max-width: 340px; } }
 @media (max-width: 520px) { .highlights { grid-template-columns: 1fr; } }
 
+/* bookings: price tiers, a calendar of classes with the seats left, and the booking panel */
+.tiers { list-style: none; margin: 0 0 clamp(22px, 3vw, 36px); padding: 0; display: grid; grid-template-columns: 1.4fr repeat(3, 1fr); gap: 12px clamp(14px, 2vw, 28px); }
+.tiers li { border-top: 2px solid var(--line); padding-top: 12px; transition: border-color 220ms ease; }
+.tiers li.is-on { border-top-color: var(--orange); }
+.tiers b { display: block; font-size: var(--t2); font-weight: 500; letter-spacing: -0.03em; line-height: 1.05; }
+.tiers .off { color: var(--orange); }
+.tiers span { display: block; margin-top: 6px; color: var(--ink-soft); font-size: 0.95rem; line-height: 1.4; }
+@media (max-width: 760px) { .tiers { grid-template-columns: 1fr 1fr; } }
+.book { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr); gap: clamp(20px, 3vw, 40px); align-items: start; }
+@media (max-width: 900px) { .book { grid-template-columns: 1fr; } }
+.cal { border: 1px solid var(--line); border-radius: var(--r); padding: clamp(14px, 2.2vw, 26px); }
+.cal-stages { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 18px; }
+.chip { border: 1px solid var(--line); background: none; border-radius: 999px; padding: 7px 13px; font: inherit; font-size: 0.9rem; font-weight: 500;
+  color: var(--ink); cursor: pointer; transition: background-color 200ms ease, border-color 200ms ease, color 200ms ease; }
+.chip small { margin-left: 5px; font-size: 0.8rem; font-weight: 400; color: var(--ink-soft); }
+.chip:hover { border-color: var(--orange); }
+.chip[data-stage="0"] { --tint: var(--teal); }
+.chip[data-stage="1"] { --tint: var(--blue); }
+.chip[data-stage="2"] { --tint: var(--navy); }
+.chip[aria-pressed="true"] { background: var(--tint, var(--ink)); border-color: var(--tint, var(--ink)); color: var(--on-navy); }
+.chip[aria-pressed="true"] small { color: var(--on-navy-soft); }
+.chip:focus-visible, .cal-day:focus-visible, .cal-nav button:focus-visible { outline-color: var(--orange); }
+.cal-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 12px; }
+.cal-month { font-size: var(--t1); font-weight: 500; letter-spacing: -0.02em; }
+.cal-nav { display: flex; gap: 6px; }
+.cal-nav button { width: 38px; height: 38px; border-radius: 50%; border: 1px solid var(--line); background: none; color: var(--ink); font: inherit; font-size: 1.25rem; line-height: 1; cursor: pointer; }
+.cal-nav button:hover:not(:disabled) { border-color: var(--ink); }
+.cal-nav button:disabled { opacity: 0.3; cursor: default; }
+.cal-dow, .cal-grid { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 6px; }
+.cal-dow span { padding-bottom: 6px; text-align: center; font-size: var(--t-1); color: var(--ink-soft); }
+.cal-day { display: flex; flex-direction: column; align-items: flex-start; gap: 1px; min-width: 0; min-height: 78px; padding: 8px 9px; border: 0; border-radius: 12px;
+  background: none; color: var(--ink-soft); font: inherit; text-align: left; cursor: default; transition: background-color 200ms ease, color 200ms ease, box-shadow 200ms ease; }
+.cal-n { font-size: 0.98rem; font-weight: 500; font-variant-numeric: tabular-nums; }
+.cal-st { max-width: 100%; overflow: hidden; font-size: 0.68rem; line-height: 1.2; white-space: nowrap; text-overflow: ellipsis; }
+@media (max-width: 1099px) { .cal-st { display: none; } } /* the cells get too narrow; the chips and the panel still say which group */
+.cal-left { margin-top: auto; font-size: 0.74rem; font-variant-numeric: tabular-nums; }
+.cal-day.has-class { background: var(--paper-2); color: var(--ink); cursor: pointer; }
+.cal-day.has-class .cal-st, .cal-day.has-class .cal-left { color: var(--ink-soft); }
+.cal-day.has-class:hover { box-shadow: inset 0 0 0 1px var(--ink); }
+.cal-day.is-low .cal-left { color: var(--orange-ink); font-weight: 600; }
+.cal-day.is-full { opacity: 0.5; cursor: not-allowed; }
+.cal-day.is-past { opacity: 0.35; }
+.cal-day.is-today .cal-n { color: var(--orange-ink); }
+.cal-day.in-course { box-shadow: inset 0 0 0 2px var(--orange); }
+.cal-day.st-0 { --tint: var(--teal); }
+.cal-day.st-1 { --tint: var(--blue); }
+.cal-day.st-2 { --tint: var(--navy); }
+.cal-day[aria-pressed="true"] { background: var(--tint); color: var(--on-navy); box-shadow: none; }
+.cal-day[aria-pressed="true"] .cal-n, .cal-day[aria-pressed="true"] .cal-st, .cal-day[aria-pressed="true"] .cal-left { color: var(--on-navy); }
+.cal-note { margin-top: 14px; font-size: 0.86rem; color: var(--ink-soft); }
+@media (max-width: 600px) {
+  .cal-dow, .cal-grid { gap: 4px; }
+  .cal-day { min-height: 52px; padding: 5px 6px; border-radius: 9px; }
+  .cal-st { display: none; }
+  .cal-left { font-size: 0.66rem; }
+}
+.book-panel { position: sticky; top: 92px; border-radius: var(--r); background: var(--tint, var(--navy)); color: var(--on-navy); padding: clamp(20px, 2.6vw, 30px); transition: background-color 320ms ease; }
+@media (max-width: 900px) { .book-panel { position: static; } }
+.bp-kind { font-size: var(--t-1); font-weight: 500; color: var(--orange); }
+.bp-title { margin-top: 6px; font-size: var(--t2); }
+.bp-when { margin-top: 10px; color: var(--on-navy-soft); }
+.bp-seats { margin-top: 2px; color: #FFFFFF; }
+.bp-seats b { color: var(--orange); font-weight: 600; }
+.bp-dates { list-style: none; margin: 14px 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 6px; }
+.bp-dates li { padding: 4px 10px; border: 1px solid rgba(237,243,246,0.24); border-radius: 999px; font-size: 0.82rem; font-variant-numeric: tabular-nums; }
+.bp-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: 20px; padding-top: 18px; border-top: 1px solid rgba(237,243,246,0.16); }
+.bp-row p { color: #FFFFFF; }
+.bp-row small { display: block; color: var(--on-navy-soft); font-size: 0.84rem; }
+.stepper { display: inline-flex; align-items: center; gap: 6px; padding: 3px; border: 1px solid rgba(237,243,246,0.3); border-radius: 999px; }
+.stepper button { width: 34px; height: 34px; border: 0; border-radius: 50%; background: rgba(237,243,246,0.12); color: var(--on-navy); font: inherit; font-size: 1.15rem; line-height: 1; cursor: pointer; }
+.stepper button:hover:not(:disabled) { background: rgba(237,243,246,0.22); }
+.stepper button:disabled { opacity: 0.3; cursor: default; }
+.stepper output { min-width: 2ch; text-align: center; font-weight: 600; font-variant-numeric: tabular-nums; }
+.bp-price { margin-top: 18px; padding-top: 18px; border-top: 1px solid rgba(237,243,246,0.16); }
+.bp-line { color: var(--on-navy-soft); font-size: 0.95rem; }
+.bp-total { margin-top: 4px; font-size: var(--t2); font-weight: 500; letter-spacing: -0.03em; line-height: 1.05; }
+.bp-save { margin-top: 6px; color: var(--orange); font-size: 0.95rem; font-weight: 500; }
+.bp-cta { width: 100%; margin-top: 20px; }
+.bp-small { margin-top: 10px; font-size: 0.85rem; color: var(--on-navy-soft); }
+
 /* visit */
 .visit { background: var(--navy); color: var(--on-navy); padding: clamp(64px, 8vw, 120px) 0 0; }
 .visit-top { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(28px, 5vw, 72px); align-items: start; }
 /* details on the left, the map beside them, the closing line underneath */
-.visit h2 { font-size: var(--t3); max-width: 20ch; }
+.visit h2 { font-size: var(--t3); }
 .visit-line { margin-top: clamp(48px, 6vw, 96px); }
+.visit-line { text-wrap: balance; } /* when it wraps, it splits evenly: "Sketch it. Build it." / "Break it. Try again." */
+.visit-sub { margin-top: 14px; color: var(--on-navy-soft); font-size: var(--t0); letter-spacing: -0.01em; }
+/* the verbs roll like an odometer: each letter is a two-high reel (the letter, then itself again further down) in a
+   one-line window. The reel waits below the window, rolls up into place, and later rolls on to its copy. */
+.roll { color: var(--orange); white-space: nowrap; }
+.vl-roll, .vl-shape { display: block; }
+/* with motion, the verbs take turns in one slot: the old word's letters roll up and out as the new word's roll in
+   from below, and the slot eases to the new word's width so "it." glides along */
+.verb-slot { display: inline-block; position: relative; vertical-align: top; height: 1.02em; padding-bottom: 0.2em; margin-bottom: -0.2em;
+  overflow: hidden; color: var(--orange); transition: width 280ms cubic-bezier(.65,0,.35,1); }
+.verb-word { position: absolute; left: 0; top: 0; white-space: nowrap; }
+.verb-letter { display: inline-block; }
+.sr-only { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
 .hours { margin: 0; }
 .hours div { display: grid; grid-template-columns: 8.5rem 1fr; gap: 14px; padding: 13px 0; border-top: 1px solid rgba(237,243,246,0.16); }
 .hours div:last-child { border-bottom: 1px solid rgba(237,243,246,0.16); }
@@ -396,7 +491,7 @@ footer { background: var(--navy); color: var(--on-navy-soft); padding: clamp(44p
       <a href="#programme">Programme</a>
       <a href="#method">Method</a>
       <a href="#tutor">Tutor</a>
-      <a class="btn btn-ink js-wa" data-msg="Hi Julien, I'd like to book a trial class at WonderLab." href="https://wa.me/85267533727">Book a trial</a>
+      <a class="btn btn-ink" href="#bookings">Bookings</a>
     </nav>
   </div>
 </header>
@@ -446,7 +541,7 @@ footer { background: var(--navy); color: var(--on-navy-soft); padding: clamp(44p
   <div class="wrap">
     <div class="head fade">
       <h2>Programme<span class="dot">.</span></h2>
-      <p class="meta">Three stages, 61 challenges</p>
+      <p class="meta">Three stages, 39 challenges</p>
     </div>
     <div class="stages" role="tablist" aria-label="Age groups" id="stage-tabs">
       <button class="stage" type="button" role="tab" id="stage-explorers" aria-controls="challenges" aria-selected="true">
@@ -529,6 +624,42 @@ footer { background: var(--navy); color: var(--on-navy-soft); padding: clamp(44p
   </div>
 </section>
 
+<section class="section" id="bookings">
+  <div class="wrap">
+    <div class="head fade">
+      <h2>Bookings<span class="dot">.</span></h2>
+      <p class="meta">HK$4,200 for 8 sessions</p>
+    </div>
+    <ul class="tiers fade">
+      <li data-friends="0"><b>HK$4,200</b><span>8 weekly sessions of 90 minutes</span></li>
+      <li data-friends="1"><b class="off">&minus;10%</b><span>Bring 1 friend</span></li>
+      <li data-friends="2"><b class="off">&minus;15%</b><span>Bring 2 friends</span></li>
+      <li data-friends="3"><b class="off">&minus;20%</b><span>Bring 3 friends or more</span></li>
+    </ul>
+    <div class="book fade">
+      <div class="cal">
+        <div class="cal-stages" role="group" aria-label="Age group">
+          <button type="button" class="chip" data-stage="-1" aria-pressed="true">All ages</button>
+          <button type="button" class="chip" data-stage="0" aria-pressed="false">Explorers<small>7&ndash;8</small></button>
+          <button type="button" class="chip" data-stage="1" aria-pressed="false">Creators<small>9&ndash;11</small></button>
+          <button type="button" class="chip" data-stage="2" aria-pressed="false">Changemakers<small>12&ndash;14</small></button>
+        </div>
+        <div class="cal-head">
+          <p class="cal-month" id="cal-month" aria-live="polite"></p>
+          <div class="cal-nav">
+            <button type="button" id="cal-prev" aria-label="Previous month">&lsaquo;</button>
+            <button type="button" id="cal-next" aria-label="Next month">&rsaquo;</button>
+          </div>
+        </div>
+        <div class="cal-dow" aria-hidden="true"><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span></div>
+        <div class="cal-grid" id="cal-grid"></div>
+        <p class="cal-note">Seats left are for the whole 8-week course that starts that day. The rest of the chosen course is ringed in orange.</p>
+      </div>
+      <div class="book-panel" id="book-panel" aria-live="polite"></div>
+    </div>
+  </div>
+</section>
+
 </main>
 
 <section class="visit" id="visit">
@@ -582,7 +713,8 @@ footer { background: var(--navy); color: var(--on-navy-soft); padding: clamp(44p
         </svg>
       </figure>
     </div>
-    <h2 class="visit-line fade">The future belongs to those who can <span class="joy-word">imagine</span> what doesn&rsquo;t exist yet.</h2>
+    <h2 class="visit-line fade"><span class="vl-roll"><span class="roll">Dream</span> it. <span class="roll">Sketch</span> it. <span class="roll">Build</span> it. <span class="roll">Break</span> it.</span> <span class="vl-shape">Shape the world of tomorrow.</span></h2>
+    <p class="visit-sub fade">Built by architects. Designed for kids.</p>
   </div>
 </section>
 
@@ -888,66 +1020,14 @@ var DRAW = {
       '<g class="dr dr-thin dr-brand"><path d="M14 90l8 8-8 8 8 8-8 8M226 90l-8 8 8 8-8 8 8 8"/></g>' +
       '<text x="20" y="30" class="dr-note">shake test</text>' +
       '</svg>',
-    friend:
-      '<svg viewBox="0 0 240 180" aria-hidden="true"><g class="dr"><circle cx="70" cy="112" r="20"/><path d="M38 168c4-20 16-30 32-30s28 10 32 30"/><circle cx="170" cy="112" r="20"/><path d="M138 168c4-20 16-30 32-30s28 10 32 30"/></g><g class="dr dr-thin"><path d="M34 24h76v34H70l-12 12V58H34Z" class="fill-sky"/><path d="M226 30h-96v34h66l12 12V64h18Z"/></g><text x="44" y="45" class="dr-note">tell me about</text><text x="140" y="51" class="dr-note">my mornings…</text></svg>',
     bench:
       '<svg viewBox="0 0 240 180" aria-hidden="true"><path class="dr dr-thin" d="M14 164H226"/><g class="dr"><path d="M40 118H200M50 118V164M190 118V164M40 100H200" /></g><g class="dr dr-thin"><circle cx="70" cy="70" r="9"/><path d="M70 79V104M70 104L62 118M70 104L78 118M58 90H82"/><circle cx="120" cy="92" r="7" class="fill-zing"/><path d="M120 99V110M113 104H127"/><circle cx="164" cy="64" r="9"/><path d="M164 73V100M156 86H178M178 86V116"/></g><g class="dr dr-thin fill-sky"><path d="M206 148h14v-10l-4-6h-6l-4 6z"/></g><text x="20" y="30" class="dr-note">one bench, many users</text></svg>',
-    museum:
-      '<svg viewBox="0 0 240 180" aria-hidden="true"><g class="dr"><path d="M20 40H220M20 96H220M20 152H220"/></g><g class="dr dr-thin"><circle cx="50" cy="76" r="14" class="fill-zing"/><circle cx="84" cy="80" r="10" class="fill-zing"/><path d="M120 90l16-30 16 30Z" class="fill-sky"/><path d="M160 90l12-22 12 22Z" class="fill-sky"/><rect x="40" y="116" width="28" height="28"/><rect x="80" y="124" width="20" height="20"/><path d="M140 132h40v12h-40z"/><path d="M190 110v34"/></g><text x="20" y="30" class="dr-note">our groups, our rules</text></svg>',
-    route:
-      '<svg viewBox="0 0 240 180" aria-hidden="true"><g class="dr"><path d="M22 150h32v-26l-16-12-16 12z"/><path d="M186 58h36v-30h-36zM186 36l18-12 18 12"/></g><path class="dr dr-dash dr-brand" d="M50 128C90 128 70 80 110 80S150 110 170 70 186 60 190 58"/><g class="dr dr-thin"><path d="M104 64l6-12 6 12-6 4z" class="fill-zing"/><path d="M150 104l10 18h-20z" class="fill-sky"/></g><text x="20" y="30" class="dr-note">favourite spot, scary spot</text></svg>',
-    shapes:
-      '<svg viewBox="0 0 240 180" aria-hidden="true"><path class="dr dr-thin" d="M14 164H226"/><g class="dr"><path d="M40 164V96h60v68"/><path d="M40 96l30-34 30 34" class="fill-sky"/><path d="M58 164v-26a12 12 0 0 1 24 0v26"/><path d="M110 164V70h40v94"/><circle cx="130" cy="90" r="10" class="fill-zing"/></g><g class="dr"><circle cx="182" cy="70" r="26"/><path d="M200 88L222 110"/></g><text x="20" y="30" class="dr-note">circle, triangle, arch</text></svg>',
-    animal:
-      '<svg viewBox="0 0 240 180" aria-hidden="true"><g class="dr"><rect x="100" y="40" width="120" height="110" rx="4"/><path d="M160 40V96H220M100 110H160M130 110V150"/></g><g class="dr dr-thin"><text x="108" y="70" class="dr-note">nest</text><text x="168" y="70" class="dr-note">food</text><text x="106" y="136" class="dr-note">hide</text><text x="170" y="128" class="dr-note">sleep</text></g><g class="dr"><ellipse cx="54" cy="112" rx="26" ry="20" class="fill-zing"/><circle cx="72" cy="90" r="12" class="fill-zing"/><path d="M83 88l12 4-12 4"/><path d="M44 132v14M60 132v14"/></g><text x="20" y="30" class="dr-note">what does it need?</text></svg>',
-    game:
-      '<svg viewBox="0 0 240 180" aria-hidden="true"><g class="dr"><rect x="20" y="40" width="200" height="120" rx="4"/><path d="M120 40V160"/><circle cx="120" cy="100" r="20"/></g><circle cx="80" cy="120" r="8" class="dr fill-zing"/><g class="dr dr-thin dr-brand"><path d="M88 116C120 90 150 90 176 110"/><path d="M168 104l8 6-9 4"/></g><text x="20" y="30" class="dr-note">rule 3: no hands</text></svg>',
-    signs:
-      '<svg viewBox="0 0 240 180" aria-hidden="true"><g class="dr"><rect x="20" y="56" width="60" height="60" rx="8"/><rect x="90" y="56" width="60" height="60" rx="8"/><rect x="160" y="56" width="60" height="60" rx="8"/></g><g class="dr dr-thin"><path d="M34 86h32M54 74l12 12-12 12"/><path d="M102 104h10v-10h10v-10h10v-10h8" class="dr"/><path d="M176 74h28l-4 30h-20z" class="fill-sky"/><path d="M204 80h6v14h-8"/></g><text x="20" y="148" class="dr-note">no words allowed. do they get it?</text></svg>',
     floating:
       '<svg viewBox="0 0 240 180" aria-hidden="true"><g class="dr"><path d="M40 116H200L186 132H54Z" class="fill-paper"/><path d="M62 116V76h26v40M96 116V56h30v60M134 116V84h22v32M164 116V70h20v46"/><path d="M96 56l15-14 15 14" class="fill-zing"/></g><path class="dr dr-brand" d="M14 146c12-8 24 8 36 0s24 8 36 0 24 8 36 0 24 8 36 0 24 8 36 0 24 8 36 0"/><g class="dr dr-thin"><circle cx="200" cy="40" r="12" class="fill-zing"/></g><text x="20" y="30" class="dr-note">a day on the sea</text></svg>',
-    senses:
-      '<svg viewBox="0 0 240 180" aria-hidden="true"><g class="dr"><path d="M30 90C60 54 110 54 140 90C110 126 60 126 30 90Z"/><circle cx="85" cy="90" r="16" class="fill-sky"/><circle cx="85" cy="90" r="5" class="fill-paper"/></g><g class="dr dr-thin dr-brand"><path d="M160 70a26 26 0 0 1 0 40M176 58a44 44 0 0 1 0 64M192 46a62 62 0 0 1 0 88"/></g><text x="20" y="160" class="dr-note">listen, look, smell, touch</text></svg>',
-    badhunt:
-      '<svg viewBox="0 0 240 180" aria-hidden="true"><g class="dr"><rect x="60" y="24" width="90" height="140" rx="3"/><path d="M130 84v30" /><path d="M126 84h8M126 114h8"/></g><g class="dr dr-thin"><rect x="80" y="50" width="50" height="18" class="fill-sky"/></g><text x="90" y="63" class="dr-note">PUSH</text><g class="dr dr-brand"><path d="M170 60l40 40M210 60l-40 40"/></g><text x="164" y="130" class="dr-note">but it looks</text><text x="164" y="143" class="dr-note">like pull…</text></svg>',
-    persona:
-      '<svg viewBox="0 0 240 180" aria-hidden="true"><g class="dr"><rect x="18" y="34" width="84" height="112" rx="8"/><circle cx="60" cy="72" r="16" class="fill-zing"/></g><g class="dr dr-thin"><path d="M36 106h48M36 118h40M36 130h44"/></g><g class="dr"><path d="M120 150h20v-20h20v-20h20v-20h20v-20h20"/></g><g class="dr dr-brand"><path d="M120 164L220 110"/></g><text x="124" y="40" class="dr-note">stairs or ramp?</text></svg>',
-    journey:
-      '<svg viewBox="0 0 240 180" aria-hidden="true"><path class="dr dr-thin" d="M20 150H220"/><path class="dr dr-brand" d="M28 70C50 60 60 60 72 80S96 136 116 130 140 60 160 56 190 110 212 96"/><g class="dr dr-thin fill-zing"><circle cx="28" cy="70" r="6"/><circle cx="72" cy="80" r="6"/><circle cx="116" cy="130" r="6"/><circle cx="160" cy="56" r="6"/><circle cx="212" cy="96" r="6"/></g><text x="96" y="162" class="dr-note">worst moment</text><text x="20" y="30" class="dr-note">7:00 → 8:00</text></svg>',
-    scamper:
-      '<svg viewBox="0 0 240 180" aria-hidden="true"><g class="dr"><path d="M90 96a30 30 0 0 1 60 0Z" class="fill-sky"/><path d="M120 96v34a8 8 0 0 1-16 0"/></g><g class="dr dr-thin"><circle cx="36" cy="50" r="11"/><circle cx="36" cy="110" r="11"/><circle cx="80" cy="160" r="11"/><circle cx="160" cy="160" r="11"/><circle cx="204" cy="110" r="11"/><circle cx="204" cy="50" r="11"/><circle cx="120" cy="24" r="11"/></g><text x="32" y="54" class="dr-note">S</text><text x="32" y="114" class="dr-note">C</text><text x="76" y="164" class="dr-note">A</text><text x="156" y="164" class="dr-note">M</text><text x="200" y="114" class="dr-note">P</text><text x="200" y="54" class="dr-note">E</text><text x="116" y="28" class="dr-note">R</text></svg>',
     tinyflat:
       '<svg viewBox="0 0 240 180" aria-hidden="true"><g class="dr dr-brand"><rect x="20" y="20" width="200" height="140"/><path d="M120 20V90H220M20 100H80"/></g><g class="dr dr-thin"><rect x="136" y="30" width="40" height="50" class="fill-sky"/><rect x="182" y="30" width="30" height="50" class="fill-sky"/><rect x="36" y="36" width="54" height="24"/><circle cx="190" cy="120" r="14" class="fill-zing"/><rect x="30" y="112" width="40" height="40"/></g><text x="86" y="148" class="dr-note">30 m², full size</text></svg>',
-    wayfind:
-      '<svg viewBox="0 0 240 180" aria-hidden="true"><g class="dr"><rect x="16" y="20" width="208" height="140" rx="4"/><path d="M16 80H90M150 20V100M90 80V160M150 100H224"/></g><g class="dr dr-thin"><rect x="40" y="100" width="22" height="14" class="fill-zing"/><rect x="164" y="54" width="22" height="14" class="fill-sky"/></g><path class="dr dr-dash dr-brand" d="M36 50H120V130H190"/><g transform="translate(196 126)"><path d="M0 12C-6 4-9 0-9-5A9 9 0 0 1 9-5C9 0 6 4 0 12Z" class="dr fill-zing"/></g></svg>',
-    pitch:
-      '<svg viewBox="0 0 240 180" aria-hidden="true"><g class="dr"><rect x="16" y="34" width="60" height="44"/><rect x="90" y="34" width="60" height="44"/><rect x="16" y="92" width="60" height="44"/><rect x="90" y="92" width="60" height="44"/></g><g class="dr dr-thin"><path d="M26 66l12-14 10 10 8-6 12 10M100 62h40M112 104l8 20 16-26"/><circle cx="46" cy="114" r="10" class="fill-zing"/></g><g class="dr"><circle cx="192" cy="96" r="30"/><path d="M192 96V76M186 60h12"/></g><text x="178" y="146" class="dr-note">60 s</text></svg>',
     postcard:
-      '<svg viewBox="0 0 240 180" aria-hidden="true"><g class="dr"><rect x="16" y="26" width="208" height="130" rx="4"/><rect x="178" y="36" width="36" height="36" class="fill-zing"/></g><g class="dr dr-thin"><path d="M30 140V96h20v44M56 140V76h24v64M86 140V104h18v36M110 140V86h22v54"/><circle cx="150" cy="118" r="14" class="fill-sky"/><path d="M150 132V140M24 140H170"/></g><text x="183" y="58" class="dr-note" style="fill:#0D1B26">2050</text></svg>',
-    lot:
-      '<svg viewBox="0 0 240 180" aria-hidden="true"><g class="dr"><rect x="30" y="20" width="180" height="140"/></g><g class="dr dr-dash dr-brand"><path d="M120 20V160M30 90H210"/></g><g class="dr dr-thin"><circle cx="75" cy="50" r="16" class="fill-sky"/><path d="M75 66v12"/><path d="M150 72V46l20-12 20 12v26z" class="fill-zing"/><circle cx="75" cy="124" r="12"/><path d="M152 110l12 10-12 10M176 110l-12 10 12 10"/></g><text x="30" y="176" class="dr-note">who gets the space?</text></svg>',
-    canteen:
-      '<svg viewBox="0 0 240 180" aria-hidden="true"><g class="dr"><rect x="170" y="30" width="44" height="50" class="fill-paper"/><rect x="170" y="100" width="44" height="50" class="fill-paper"/></g><g class="dr dr-thin fill-zing"><circle cx="24" cy="90" r="6"/><circle cx="40" cy="90" r="6"/><circle cx="56" cy="90" r="6"/><circle cx="72" cy="90" r="6"/><circle cx="88" cy="90" r="6"/><circle cx="104" cy="90" r="6"/></g><g class="dr dr-brand"><path d="M124 90C140 90 144 56 164 56M124 90C140 90 144 124 164 124"/></g><text x="20" y="30" class="dr-note">one queue, or two?</text></svg>',
-    fieldwork:
-      '<svg viewBox="0 0 240 180" aria-hidden="true"><g class="dr"><rect x="16" y="30" width="70" height="120" rx="4"/><path d="M36 30v-8h30v8"/></g><g class="dr dr-thin"><path d="M28 60h46M28 76h40M28 92h46M28 108h34"/></g><g class="dr dr-thin"><rect x="104" y="34" width="28" height="28" class="fill-zing"/><rect x="138" y="34" width="28" height="28" class="fill-zing"/><rect x="104" y="68" width="28" height="28" class="fill-zing"/><rect x="176" y="40" width="28" height="28" class="fill-sky"/><rect x="206" y="40" width="28" height="28" class="fill-sky"/><rect x="190" y="74" width="28" height="28" class="fill-sky"/><rect x="124" y="112" width="28" height="28" class="fill-paper"/><rect x="158" y="112" width="28" height="28" class="fill-paper"/></g><text x="100" y="164" class="dr-note">how might we…?</text></svg>',
-    heat:
-      '<svg viewBox="0 0 240 180" aria-hidden="true"><path class="dr dr-thin" d="M14 150H226"/><g class="dr"><path d="M20 150V80h40v70M180 150V70h40v70"/><circle cx="130" cy="36" r="14" class="fill-zing"/></g><g class="dr dr-thin"><path d="M130 14v-6M152 36h6M146 20l4-4M114 20l-4-4"/><circle cx="96" cy="104" r="22" class="fill-sky"/><path d="M96 126v24"/></g><g class="dr"><path d="M150 138V100a6 6 0 0 1 12 0v38"/><circle cx="156" cy="142" r="9" class="fill-zing"/></g><text x="66" y="170" class="dr-note">shade vs. sun</text></svg>',
-    sprint:
-      '<svg viewBox="0 0 240 180" aria-hidden="true"><g class="dr"><rect x="12" y="70" width="34" height="40" rx="4" class=""/><rect x="58" y="70" width="34" height="40" rx="4" class="fill-sky"/><rect x="104" y="70" width="34" height="40" rx="4" class=""/><rect x="150" y="70" width="34" height="40" rx="4" class="fill-zing"/><rect x="196" y="70" width="34" height="40" rx="4" class=""/></g><g class="dr dr-thin dr-brand"><path d="M46 90h12M92 90h12M138 90h12M184 90h12"/></g><text x="29" y="128" class="dr-note" text-anchor="middle">map</text><text x="75" y="128" class="dr-note" text-anchor="middle">sketch</text><text x="121" y="128" class="dr-note" text-anchor="middle">vote</text><text x="167" y="128" class="dr-note" text-anchor="middle">build</text><text x="213" y="128" class="dr-note" text-anchor="middle">test</text><text x="12" y="50" class="dr-note">8 ideas, 8 minutes</text></svg>',
-    service:
-      '<svg viewBox="0 0 240 180" aria-hidden="true"><g class="dr dr-thin"><path d="M14 80H226M14 120H226"/></g><g class="dr"><path d="M24 70v-22l14-10 14 10v22z" class="fill-zing"/><rect x="96" y="40" width="20" height="32" rx="3"/><path d="M170 70V44h40v26M166 44h48"/></g><g class="dr dr-brand"><path d="M58 56H90M122 56H164"/></g><g class="dr dr-thin fill-sky"><circle cx="40" cy="100" r="7"/><circle cx="106" cy="100" r="7"/><circle cx="190" cy="100" r="7"/></g><text x="16" y="162" class="dr-note">typhoon day, step by step</text></svg>',
-    ethics:
-      '<svg viewBox="0 0 240 180" aria-hidden="true"><g class="dr"><path d="M120 30V150M84 150h72M50 60H190"/><path d="M50 60l-22 40h44zM190 60l-22 40h44z"/></g><g class="dr dr-thin"><rect x="36" y="80" width="28" height="18" rx="3" class="fill-sky"/><circle cx="50" cy="89" r="5"/><rect x="178" y="84" width="24" height="16" rx="2" class="fill-zing"/><path d="M182 84v-6a8 8 0 0 1 16 0v6"/></g><text x="26" y="124" class="dr-note">safety</text><text x="170" y="124" class="dr-note">privacy</text></svg>',
-    circular:
-      '<svg viewBox="0 0 240 180" aria-hidden="true"><g class="dr dr-brand"><path d="M120 24a66 66 0 1 1-60 38"/><path d="M52 52l8 12 12-6"/></g><g class="dr"><path d="M84 110v-24l20 4 18 12 30 4c8 2 8 12 0 14H84z" class="fill-zing"/></g><text x="104" y="18" class="dr-note">make</text><text x="192" y="96" class="dr-note">use</text><text x="100" y="174" class="dr-note">repair</text><text x="10" y="104" class="dr-note">return</text></svg>',
-    data:
-      '<svg viewBox="0 0 240 180" aria-hidden="true"><path class="dr dr-thin" d="M20 150H220M20 150V30"/><g class="dr"><rect x="40" y="70" width="30" height="80" class="fill-zing"/><rect x="90" y="110" width="30" height="40" class="fill-sky"/><rect x="140" y="50" width="30" height="100"/></g><g class="dr dr-thin"><path d="M186 40v20M192 40v20M198 40v20M204 40v20M182 56l26-12"/></g><text x="55" y="166" class="dr-note" text-anchor="middle">walk</text><text x="105" y="166" class="dr-note" text-anchor="middle">bike</text><text x="155" y="166" class="dr-note" text-anchor="middle">car</text></svg>',
-    brief:
-      '<svg viewBox="0 0 240 180" aria-hidden="true"><g class="dr"><path d="M110 20h80l24 24v120H110Z"/><path d="M190 20v24h24"/></g><g class="dr dr-thin"><path d="M124 64h70M124 80h56M124 96h70M124 112h44M124 128h62"/><rect x="122" y="90" width="48" height="12" class="fill-zing"/></g><g class="dr dr-thin"><path d="M14 40h80v50H48l-14 14V90H14Z" class="fill-sky"/><path d="M24 56c10-8 20 8 30 0s20 8 30 0M24 72c10-8 20 8 30 0"/></g><text x="16" y="130" class="dr-note">what do they</text><text x="16" y="143" class="dr-note">really need?</text></svg>',
-    app:
-      '<svg viewBox="0 0 240 180" aria-hidden="true"><g class="dr"><rect x="18" y="30" width="52" height="100" rx="8"/><rect x="94" y="30" width="52" height="100" rx="8"/><rect x="170" y="30" width="52" height="100" rx="8"/></g><g class="dr dr-thin"><rect x="26" y="44" width="36" height="20" class="fill-sky"/><path d="M26 76h36M26 88h28"/><rect x="102" y="44" width="36" height="36" class="fill-zing"/><path d="M102 92h36"/><path d="M178 50h36M178 64h36M178 78h36"/></g><g class="dr dr-brand dr-thin"><path d="M72 80h20M86 74l6 6-6 6M148 80h20M162 74l6 6-6 6"/></g><text x="18" y="156" class="dr-note">tap here, then what?</text></svg>',
-    hearing:
-      '<svg viewBox="0 0 240 180" aria-hidden="true"><g class="dr"><path d="M20 70H220V86H20Z" class="fill-paper"/></g><g class="dr dr-thin"><circle cx="48" cy="52" r="10"/><circle cx="84" cy="52" r="10"/><circle cx="120" cy="52" r="10"/><circle cx="156" cy="52" r="10"/><circle cx="192" cy="52" r="10"/></g><g class="dr"><circle cx="120" cy="120" r="12" class="fill-zing"/><path d="M96 170c4-18 12-26 24-26s20 8 24 26"/><path d="M160 150h30v20H160Z" class="fill-paper"/></g><text x="160" y="142" class="dr-note">evidence</text></svg>'
+      '<svg viewBox="0 0 240 180" aria-hidden="true"><g class="dr dr-hair dr-ghost"><path d="M14 104L30 96L44 99L58 88L72 92L86 80L100 84L112 76L126 82L140 74L156 80L170 72L186 78L200 74L214 84L226 88"/><path d="M18 141q6-3 12 0t12 0t12 0t12 0t12 0t12 0t12 0t12 0t12 0M92 151q6-3 12 0t12 0t12 0t12 0t12 0M18 159q6-3 12 0t12 0t12 0"/><path d="M69 134V143M98 134V145M135 134V148M154 134V142" stroke-dasharray="2 3"/><circle cx="178" cy="40" r="13" stroke-dasharray="3 3"/><path d="M146 34q5-3 10 0t10 0t10 0M146 40q5-3 10 0t10 0t10 0M146 46q5-3 10 0t10 0t10 0"/></g><g class="dr dr-hair fill-stage"><path d="M18 130V112H30V130Z"/><path d="M31 130V100H40V130Z"/><path d="M44 130C46 110 42 92 47 72L53 70C58 90 54 110 56 130Z"/><path d="M62 130V62L65 58V52L69 44L73 52V58L76 62V130Z"/><path d="M90 130V78L98 50L106 70V130Z"/><path d="M110 130V70L115 64L120 70V130Z"/><path d="M128 130V40L131 34L135 25L139 34L142 40V130Z"/><path d="M148 130V78H160V130Z"/><path d="M164 130V96Q170 86 176 96V130Z"/><path d="M178 130V108H196V130Z"/><path d="M198 130V116H222V130Z"/></g><g class="dr dr-hair"><path d="M45 118L55 112M45 104L55 98M46 90L54 85M47 79L53 75"/><path d="M66 50V45M72 50V45M76 88H90M76 92H90"/><path d="M98 50V130M90 78L106 96M90 96L106 78M90 112L106 96M98 50V41M102 60V53"/><path d="M115 64V54M131 34H139"/><path d="M154 78V64M154 64L148.5 60.5M154 64L159.5 60.5M154 64V70.5"/></g><g class="dr dr-hair dr-ghost"><path d="M66 62V130M72 62V130M132 40V130M138 40V130"/><circle cx="150.5" cy="85" r="2"/><circle cx="157.5" cy="92" r="2"/><circle cx="150.5" cy="99" r="2"/><circle cx="157.5" cy="106" r="2"/><circle cx="150.5" cy="113" r="2"/><circle cx="157.5" cy="120" r="2"/></g><g class="dr dr-hair"><rect x="10" y="12" width="220" height="156" rx="5"/><path d="M14 130H226"/><path d="M40 146H64L60 150H44ZM46 146V142H58V146"/><ellipse cx="178" cy="151" rx="21" ry="4"/><path d="M172 147V142M184 147V141"/><circle cx="172" cy="140" r="3"/><circle cx="184" cy="139" r="3.5"/><circle cx="178" cy="143" r="2.2"/></g><rect x="190" y="20" width="32" height="38" rx="1.5" class="dr dr-hair fill-zing"/><rect x="193.5" y="23.5" width="25" height="31" class="dr dr-hair" stroke-dasharray="1.5 2" style="stroke:#0D1B26"/><text x="206" y="42" text-anchor="middle" class="dr-note" style="fill:#0D1B26;font-size:8.5px;font-weight:700">2050</text><text x="20" y="30" class="dr-note">Hong Kong, 2050</text></svg>'
   };
 
   var GROUPS = [
@@ -1020,60 +1100,11 @@ var DRAW = {
     "Universal design"
    ],
    [
-    "friend",
-    "A Morning Fixed for a Friend",
-    "Interview a partner about the trickiest part of their morning, then draw an invention or a room that makes it easier, and check it with them.",
-    "Listening, asking good questions and designing for someone else.",
-    "Empathy"
-   ],
-   [
     "bench",
     "The Bench for Everyone",
     "Act out how a toddler, a grandparent, a dog walker and a skateboarder use a park bench, then draw one bench that works for all of them.",
     "Seeing a problem through many users' eyes.",
     "Inclusive design"
-   ],
-   [
-    "museum",
-    "The Mystery Object Museum",
-    "Sort a pile of everyday objects into groups you invent yourselves, name each collection and explain your thinking to the visitors.",
-    "Finding patterns and explaining reasoning.",
-    "Classification"
-   ],
-   [
-    "route",
-    "The Map of My Way to School",
-    "Draw your route to school from memory, mark the favourite and scary spots, then redesign one spot to make it safer or more fun.",
-    "Mental mapping and noticing the everyday city.",
-    "Mapping"
-   ],
-   [
-    "shapes",
-    "The Shape Detective Walk",
-    "Hunt for circles, triangles and arches in the buildings around the studio, then design a new building using only the shapes you found.",
-    "Careful observation and visual vocabulary.",
-    "Observation"
-   ],
-   [
-    "animal",
-    "The Animal Architect",
-    "Pick an animal, list what it needs to eat, sleep and hide, then draw a home plan for it and explain every room.",
-    "Turning needs into a design brief.",
-    "Designing for needs"
-   ],
-   [
-    "game",
-    "The Playground Rulebook",
-    "Invent a new playground game and the space it needs, play it with the group, then change one rule at a time until it is fair and fun.",
-    "Testing ideas and improving them step by step.",
-    "Iteration"
-   ],
-   [
-    "signs",
-    "Signs Without Words",
-    "Design picture signs for places that confuse people, then test whether friends can understand them without a single word.",
-    "Visual communication and user testing.",
-    "Visual communication"
    ],
    [
     "floating",
@@ -1083,11 +1114,11 @@ var DRAW = {
     "Speculative thinking"
    ],
    [
-    "senses",
-    "The Five Senses Walk",
-    "Record what you hear, see, smell and touch around the studio, then design a calm corner for classmates who need a quiet moment.",
-    "Sensory awareness and designing for feelings.",
-    "Sensory design"
+    "postcard",
+    "Postcards from 2050",
+    "Draw a postcard from a Hong Kong street in 2050, then work backwards to the three changes that would have to happen to get there.",
+    "Futures thinking and planning backwards.",
+    "Futures thinking"
    ]
   ]
  },
@@ -1174,53 +1205,11 @@ var DRAW = {
     "Climate adaptation"
    ],
    [
-    "badhunt",
-    "The Bad Design Hunt",
-    "Find everyday objects that frustrate people, like doors you push instead of pull, work out why they fail, and redesign them on paper.",
-    "Diagnosing problems before solving them.",
-    "Critical observation"
-   ],
-   [
-    "persona",
-    "Walk in Their Shoes",
-    "Draw a persona card, such as a wheelchair user or a visitor who cannot read English, and redesign an MTR station journey for them.",
-    "Empathy and inclusive problem solving.",
-    "Inclusive design"
-   ],
-   [
-    "journey",
-    "The Morning Journey Map",
-    "Map every step of a school morning, chart where it feels good or stressful, and propose three fixes for the worst moments.",
-    "Service design and finding pain points.",
-    "Service design"
-   ],
-   [
-    "scamper",
-    "The SCAMPER Remix",
-    "Take an ordinary umbrella and push it through seven idea tricks, substitute, combine, adapt and more, to generate twenty ideas in twenty minutes.",
-    "Structured idea generation.",
-    "Ideation"
-   ],
-   [
     "tinyflat",
     "The Tiny Flat Challenge",
     "Tape a real Hong Kong flat at full size on the floor, then plan where a family of four sleeps, eats, studies and stores things.",
     "Spatial planning at real scale.",
     "Spatial planning"
-   ],
-   [
-    "wayfind",
-    "Lost in the Building",
-    "Design a sign and colour system for a confusing building, then test it: can a classmate find the goal using only your signs?",
-    "Wayfinding and testing with real users.",
-    "Wayfinding"
-   ],
-   [
-    "pitch",
-    "The 60-Second Pitch",
-    "Spot a real problem at school, storyboard a solution in six frames, and pitch it in one minute to a panel of parent investors.",
-    "Clear, persuasive communication.",
-    "Communication"
    ],
    [
     "postcard",
@@ -1230,18 +1219,11 @@ var DRAW = {
     "Futures thinking"
    ],
    [
-    "lot",
-    "Who Gets the Empty Lot?",
-    "Each team speaks for residents, shop owners, children or birds, and together they negotiate one plan for an empty corner of the city.",
-    "Negotiation and balancing different needs.",
-    "Stakeholders"
-   ],
-   [
-    "canteen",
-    "Rethink the Canteen Queue",
-    "Simulate the lunch rush, time the queue, then redesign the counters and flow to cut waiting and food waste.",
-    "Systems thinking and measuring results.",
-    "Flow and systems"
+    "bench",
+    "The Bench for Everyone",
+    "Act out how a toddler, a grandparent, a dog walker and a skateboarder use a park bench, then draw one bench that works for all of them.",
+    "Seeing a problem through many users' eyes.",
+    "Inclusive design"
    ]
   ]
  },
@@ -1328,74 +1310,18 @@ var DRAW = {
     "Biomimicry"
    ],
    [
-    "fieldwork",
-    "The Field Research Sprint",
-    "Interview real people in a café or station, cluster what they say on a sticky-note wall, and turn it into sharp “how might we” questions.",
-    "Design research and synthesis.",
-    "Design research"
+    "bench",
+    "The Bench for Everyone",
+    "Act out how a toddler, a grandparent, a dog walker and a skateboarder use a park bench, then draw one bench that works for all of them.",
+    "Seeing a problem through many users' eyes.",
+    "Inclusive design"
    ],
    [
-    "heat",
-    "The Heat Island Audit",
-    "Measure temperature and shade along a street, map the hot spots, and propose trees, canopies or materials with a clear cost and benefit.",
-    "Collecting evidence and designing from data.",
-    "Climate data"
-   ],
-   [
-    "sprint",
-    "The Five-Step Design Sprint",
-    "Run a compressed sprint on a real brief: understand, sketch eight ideas in eight minutes, vote, storyboard, and test with users.",
-    "Working fast and deciding as a team.",
-    "Design sprint"
-   ],
-   [
-    "service",
-    "Design a Service, Not a Thing",
-    "Plan how older neighbours get groceries during a typhoon, drawing every step, person and hand-over in a service blueprint.",
-    "Service design and seeing the whole system.",
-    "Service design"
-   ],
-   [
-    "ethics",
-    "The Smart City Dilemma",
-    "Debate a city-wide camera network from every side, weigh safety against privacy, and write the rules a fair system would follow.",
-    "Ethical reasoning and weighing trade-offs.",
-    "Design ethics"
-   ],
-   [
-    "circular",
-    "The Circular Sneaker",
-    "Trace the life of a sneaker from factory to landfill, then redesign it and the system around it so it can be repaired, returned and remade.",
-    "Life-cycle and circular economy thinking.",
-    "Circular economy"
-   ],
-   [
-    "data",
-    "Data Tells a Story",
-    "Count people, bikes and cars at a busy crossing, then turn the numbers into an infographic that argues for one change.",
-    "Data collection and visual argument.",
-    "Data visualisation"
-   ],
-   [
-    "brief",
-    "Write the Brief",
-    "Listen to a role-played client with a messy wish list, dig out the real need, and write a one-page brief with goals and constraints.",
-    "Problem framing, the first skill of every designer.",
-    "Problem framing"
-   ],
-   [
-    "app",
-    "The Paper App",
-    "Design an app for a real need as a stack of paper screens, then run usability tests with classmates and fix what trips them up.",
-    "Interaction design and usability testing.",
-    "Interaction design"
-   ],
-   [
-    "hearing",
-    "The Mock Planning Hearing",
-    "Present a proposal, like a new cycle lane, to a panel playing residents and officials, and answer their objections with evidence.",
-    "Public speaking and defending a design.",
-    "Civic persuasion"
+    "postcard",
+    "Postcards from 2050",
+    "Draw a postcard from a Hong Kong street in 2050, then work backwards to the three changes that would have to happen to get there.",
+    "Futures thinking and planning backwards.",
+    "Futures thinking"
    ]
   ]
  }
@@ -1471,6 +1397,58 @@ var DRAW = {
     block.style.setProperty("--out", (pieces.length * 90) + "ms"); // the bar retracts once its text is tucked away
     casIO.observe(block);
   });
+
+  /* ---------- closing line: Dream, Sketch, Build, Break take turns in one slot before "it." ---------- */
+  var rollLine = document.querySelector(".vl-roll");
+  if (rollLine && !reduce.matches && rollLine.animate) {
+    var VERBS = Array.prototype.map.call(rollLine.querySelectorAll(".roll"), function (w) { return w.textContent; });
+    var LIFT = 1.42, ROLL = 280, STEP = 20, TURN = 1200; // LIFT in em: the one-line window plus its room below
+    var sr = document.createElement("span"), vis = document.createElement("span"), rollSlot = document.createElement("span");
+    sr.className = "sr-only"; sr.textContent = rollLine.textContent.replace(/\s+/g, " ").trim(); // screen readers get the whole line
+    vis.setAttribute("aria-hidden", "true"); rollSlot.className = "verb-slot"; // not "slot": that class belongs to the text cascades
+    vis.appendChild(rollSlot); vis.appendChild(document.createTextNode(" it."));
+    rollLine.textContent = ""; rollLine.appendChild(sr); rollLine.appendChild(vis);
+
+    var verbWord = function (text) {
+      var el = document.createElement("span");
+      el.className = "verb-word";
+      text.split("").forEach(function (ch) { var l = document.createElement("span"); l.className = "verb-letter"; l.textContent = ch; el.appendChild(l); });
+      rollSlot.appendChild(el);
+      return el;
+    };
+    var rollWord = function (el, from, to, lead) {
+      Array.prototype.forEach.call(el.children, function (l, i) {
+        l.animate([{ transform: "translateY(" + from + "em)" }, { transform: "translateY(" + to + "em)" }],
+          { duration: ROLL, delay: lead + i * STEP, easing: "cubic-bezier(.65,0,.35,1)", fill: "both" });
+      });
+    };
+    // the first verb waits below the window; the slot starts at its width
+    var verbAt = 0, curVerb = verbWord(VERBS[0]);
+    var fitSlot = function () { rollSlot.style.width = curVerb.offsetWidth + "px"; };
+    fitSlot();
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(fitSlot); // measured in px: again once Inter is in
+    window.addEventListener("resize", fitSlot);
+    Array.prototype.forEach.call(curVerb.children, function (l) { l.style.transform = "translateY(" + LIFT + "em)"; });
+    var nextVerb = function () {
+      var old = curVerb;
+      verbAt = (verbAt + 1) % VERBS.length;
+      curVerb = verbWord(VERBS[verbAt]);
+      fitSlot();
+      rollWord(old, 0, -LIFT, 0);
+      rollWord(curVerb, LIFT, 0, 35);
+      setTimeout(function () { old.remove(); }, ROLL + 35 + old.children.length * STEP + 60);
+    };
+    var started = false, turn = null;
+    new IntersectionObserver(function (entries) {
+      if (!entries[0].isIntersecting) { clearInterval(turn); turn = null; return; }
+      if (!started) {
+        started = true;
+        Array.prototype.forEach.call(curVerb.children, function (l) { l.style.transform = ""; });
+        rollWord(curVerb, LIFT, 0, 250);
+      }
+      if (!turn) turn = setInterval(nextVerb, TURN);
+    }, { threshold: 0.4 }).observe(rollLine.parentNode);
+  }
 
   /* ---------- parallax on the media blocks ---------- */
   var par = Array.prototype.slice.call(document.querySelectorAll(".parallax"));
@@ -1723,6 +1701,181 @@ var DRAW = {
     if (isPhone.matches) { fig.textContent = ""; buildCarousel(); }
     else { playOnly(null, track); fill(group.items[Math.max(0, active)]); moveSlider(Math.max(0, active), true); }
   });
+
+  /* ---------- bookings: a calendar of classes with the seats left, and the price for a group ---------- */
+  // EDIT HERE: the weekly timetable, the days with no class, and the seats already taken on each date.
+  // The timetable is provisional; no bookings are recorded yet, so every course shows all its seats.
+  var BOOK = {
+    price: 4200, sessions: 8, seats: 9, months: 3,
+    off: [0, 0.10, 0.15, 0.20],          // discount for everyone in the group, by friends brought along (3 or more: 20%)
+    week: [                              // day: 1 Monday ... 6 Saturday; stage: 0 Explorers, 1 Creators, 2 Changemakers
+      { day: 1, from: "16:00", to: "17:30", stage: 0 },
+      { day: 2, from: "16:00", to: "17:30", stage: 1 },
+      { day: 3, from: "16:00", to: "17:30", stage: 2 },
+      { day: 4, from: "16:00", to: "17:30", stage: 0 },
+      { day: 5, from: "16:00", to: "17:30", stage: 1 },
+      { day: 6, from: "10:00", to: "11:30", stage: 2 }
+    ],
+    closed: ["2026-10-01", "2026-12-25", "2026-12-26"],
+    taken: {}                            // e.g. "2026-10-06": 4 means 4 of the 9 seats that day are booked
+  };
+
+  var bookGrid = document.getElementById("cal-grid");
+  if (bookGrid) {
+    var DAYS = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+    var MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+    var pad2 = function (x) { return (x < 10 ? "0" : "") + x; };
+    var dkey = function (d) { return d.getFullYear() + "-" + pad2(d.getMonth() + 1) + "-" + pad2(d.getDate()); };
+    var dparse = function (k) { var q = k.split("-"); return new Date(+q[0], q[1] - 1, +q[2]); };
+    var short = function (d) { return DAYS[d.getDay()].slice(0, 3) + " " + d.getDate() + " " + MONTHS[d.getMonth()].slice(0, 3); };
+    var clock = function (hm) { var q = hm.split(":"), h = +q[0]; return ((h + 11) % 12 + 1) + ":" + q[1] + (h < 12 ? "am" : "pm"); };
+    var hours = function (c) { var a = clock(c.from), b = clock(c.to); return (a.slice(-2) === b.slice(-2) ? a.slice(0, -2) : a) + "–" + b; };
+    var money = function (x) { return "HK$" + Math.round(x).toLocaleString("en-US"); };
+    var classOn = function (d) {
+      if (BOOK.closed.indexOf(dkey(d)) >= 0) return null;
+      for (var i = 0; i < BOOK.week.length; i++) if (BOOK.week[i].day === d.getDay()) return BOOK.week[i];
+      return null;
+    };
+    // a course is the same class every week for 8 sessions, skipping the days with no class
+    var course = function (d) {
+      var out = [], x = new Date(d);
+      while (out.length < BOOK.sessions) { if (BOOK.closed.indexOf(dkey(x)) < 0) out.push(new Date(x)); x.setDate(x.getDate() + 7); }
+      return out;
+    };
+    var seatsFor = function (dates) { return Math.min.apply(null, dates.map(function (x) { return BOOK.seats - (BOOK.taken[dkey(x)] || 0); })); };
+
+    var today = new Date(); today.setHours(0, 0, 0, 0);
+    var tomorrow = new Date(today); tomorrow.setDate(tomorrow.getDate() + 1);
+    var firstMonth = new Date(tomorrow.getFullYear(), tomorrow.getMonth(), 1); // the months shown start from the first bookable day
+    var lastMonth = new Date(firstMonth.getFullYear(), firstMonth.getMonth() + BOOK.months - 1, 1);
+    var view = new Date(firstMonth), stageSel = -1, pick = null, friends = 0;
+    var monthEl = document.getElementById("cal-month"), prevBtn = document.getElementById("cal-prev"), nextBtn = document.getElementById("cal-next");
+    var bookPanel = document.getElementById("book-panel"), chips = document.querySelectorAll(".chip"), tierEls = document.querySelectorAll(".tiers li");
+    // courses can start from tomorrow on
+    var bookable = function (d) { var c = classOn(d); return c && d > today && (stageSel < 0 || c.stage === stageSel) ? c : null; };
+
+    function drawMonth() {
+      monthEl.textContent = MONTHS[view.getMonth()] + " " + view.getFullYear();
+      prevBtn.disabled = view <= firstMonth;
+      nextBtn.disabled = view >= lastMonth;
+      bookGrid.textContent = "";
+      for (var i = 0; i < (view.getDay() + 6) % 7; i++) bookGrid.appendChild(document.createElement("span")); // weeks start on Monday
+      var count = new Date(view.getFullYear(), view.getMonth() + 1, 0).getDate();
+      for (var n = 1; n <= count; n++) {
+        var d = new Date(view.getFullYear(), view.getMonth(), n), c = bookable(d), b = document.createElement("button");
+        var label = DAYS[d.getDay()] + " " + n + " " + MONTHS[d.getMonth()];
+        b.type = "button"; b.className = "cal-day"; b.dataset.date = dkey(d);
+        b.innerHTML = '<span class="cal-n">' + n + "</span>";
+        if (+d === +today) b.classList.add("is-today");
+        if (c) {
+          var left = seatsFor(course(d)), st = document.createElement("span"), note = document.createElement("span");
+          st.className = "cal-st"; st.textContent = "Ages " + GROUPS[c.stage].ages.replace(/^ages /, "").replace(" to ", "\u2013");
+          note.className = "cal-left"; note.textContent = left > 0 ? left + " left" : "Full";
+          b.appendChild(st); b.appendChild(note);
+          b.classList.add("has-class", "st-" + c.stage);
+          if (left <= 0) { b.classList.add("is-full"); b.disabled = true; }
+          else if (left <= 2) b.classList.add("is-low");
+          b.setAttribute("aria-label", label + ": " + GROUPS[c.stage].name + ", " + hours(c) + ", " + (left > 0 ? left + (left === 1 ? " seat" : " seats") + " left" : "full"));
+          if (left > 0) b.setAttribute("aria-pressed", "false");
+        } else {
+          b.disabled = true;
+          if (d <= today) b.classList.add("is-past");
+          b.setAttribute("aria-label", label + ": no class");
+        }
+        bookGrid.appendChild(b);
+      }
+      paint();
+    }
+
+    // the chosen day fills with its stage colour; the rest of its course gets an orange ring
+    function paint() {
+      var run = pick ? course(pick).map(dkey) : [];
+      Array.prototype.forEach.call(bookGrid.querySelectorAll(".cal-day"), function (b) {
+        if (b.hasAttribute("aria-pressed")) b.setAttribute("aria-pressed", pick && b.dataset.date === dkey(pick) ? "true" : "false");
+        b.classList.toggle("in-course", run.indexOf(b.dataset.date) > 0);
+      });
+    }
+
+    var firstOpen = function () {
+      for (var d = new Date(today); d < new Date(lastMonth.getFullYear(), lastMonth.getMonth() + 1, 1); d.setDate(d.getDate() + 1)) {
+        if (bookable(d) && seatsFor(course(d)) > 0) return new Date(d);
+      }
+      return null;
+    };
+    var seatsNow = function () { return pick ? seatsFor(course(pick)) : 0; };
+    var maxFriends = function () { return Math.max(0, seatsNow() - 1); };
+
+    function drawPanel() {
+      if (!pick) {
+        bookPanel.style.removeProperty("--tint");
+        bookPanel.innerHTML = '<p class="bp-kind">No seats</p><h3 class="bp-title">Every class is full for now.</h3>' +
+          '<p class="bp-when">Message Julien to join the waiting list.</p>';
+        return;
+      }
+      var c = classOn(pick), g = GROUPS[c.stage], run = course(pick), left = seatsFor(run);
+      bookPanel.style.setProperty("--tint", STAGE_TINT[c.stage]);
+      bookPanel.innerHTML =
+        '<p class="bp-kind">' + g.name + " &middot; " + g.ages + "</p>" +
+        '<h3 class="bp-title">' + DAYS[c.day] + "s, " + hours(c) + "</h3>" +
+        '<p class="bp-when">Starts ' + short(run[0]) + ", last class " + short(run[run.length - 1]) + "</p>" +
+        '<p class="bp-seats"><b>' + left + "</b> " + (left === 1 ? "seat" : "seats") + " left in this group</p>" +
+        '<ol class="bp-dates" aria-label="The 8 sessions">' + run.map(function (x) { return "<li>" + x.getDate() + " " + MONTHS[x.getMonth()].slice(0, 3) + "</li>"; }).join("") + "</ol>" +
+        '<div class="bp-row"><p>Friends joining<small>Everyone in the group gets the discount</small></p>' +
+        '<div class="stepper"><button type="button" data-step="-1" aria-label="One friend fewer">&minus;</button><output aria-live="polite"></output>' +
+        '<button type="button" data-step="1" aria-label="One more friend">+</button></div></div>' +
+        '<div class="bp-price"><p class="bp-line"></p><p class="bp-total"></p><p class="bp-save"></p></div>' +
+        '<a class="btn btn-light bp-cta" href="https://wa.me/85267533727">Request this booking on WhatsApp</a>' +
+        '<p class="bp-small">Julien confirms every booking and the seats on WhatsApp.</p>';
+      friends = Math.min(friends, maxFriends());
+      price();
+    }
+
+    // the price and the WhatsApp message follow the number of friends; only the figures change, so focus stays put
+    function price() {
+      if (!pick) return;
+      var c = classOn(pick), g = GROUPS[c.stage], run = course(pick), kids = friends + 1;
+      var rate = BOOK.off[Math.min(friends, BOOK.off.length - 1)], each = BOOK.price * (1 - rate), total = each * kids;
+      bookPanel.querySelector("output").textContent = friends;
+      bookPanel.querySelector('[data-step="-1"]').disabled = friends <= 0;
+      bookPanel.querySelector('[data-step="1"]').disabled = friends >= maxFriends();
+      bookPanel.querySelector(".bp-line").textContent = kids + (kids === 1 ? " student" : " students") + " × " + money(each) + (rate ? " (" + Math.round(rate * 100) + "% off)" : "");
+      bookPanel.querySelector(".bp-total").textContent = money(total);
+      bookPanel.querySelector(".bp-save").textContent = rate ? "You save " + money(BOOK.price * kids - total) : "Bring a friend and you both save 10%";
+      Array.prototype.forEach.call(tierEls, function (li) { li.classList.toggle("is-on", +li.dataset.friends === Math.min(friends, 3)); });
+      var msg = "Hi Julien, I'd like to book the " + g.name + " course (" + g.ages + "), " + DAYS[c.day] + "s " + hours(c) +
+        ", 8 sessions from " + short(run[0]) + " to " + short(run[run.length - 1]) + " " + run[run.length - 1].getFullYear() +
+        ", for " + kids + (kids === 1 ? " student" : " students") + (friends ? " (my child and " + friends + (friends === 1 ? " friend" : " friends") + ")" : "") +
+        ". Total " + money(total) + ".";
+      bookPanel.querySelector(".bp-cta").href = "https://wa.me/85267533727?text=" + encodeURIComponent(msg);
+    }
+
+    function choose(d) { pick = d; view = new Date(d.getFullYear(), d.getMonth(), 1); drawMonth(); drawPanel(); }
+
+    bookGrid.addEventListener("click", function (e) {
+      var b = e.target.closest(".cal-day");
+      if (!b || b.disabled || !b.classList.contains("has-class")) return;
+      pick = dparse(b.dataset.date); paint(); drawPanel();
+    });
+    bookPanel.addEventListener("click", function (e) {
+      var b = e.target.closest("[data-step]");
+      if (!b || b.disabled) return;
+      friends = Math.max(0, Math.min(maxFriends(), friends + +b.dataset.step));
+      price();
+    });
+    prevBtn.addEventListener("click", function () { view.setMonth(view.getMonth() - 1); drawMonth(); });
+    nextBtn.addEventListener("click", function () { view.setMonth(view.getMonth() + 1); drawMonth(); });
+    Array.prototype.forEach.call(chips, function (chip) {
+      chip.addEventListener("click", function () {
+        stageSel = +chip.dataset.stage;
+        Array.prototype.forEach.call(chips, function (o) { o.setAttribute("aria-pressed", o === chip ? "true" : "false"); });
+        // keep the chosen day if it still fits the filter, otherwise jump to the first class with a seat
+        if (pick && bookable(pick)) drawMonth();
+        else { pick = firstOpen(); if (pick) choose(pick); else { drawMonth(); drawPanel(); } }
+      });
+    });
+    pick = firstOpen();
+    if (pick) choose(pick); else { drawMonth(); drawPanel(); }
+  }
 })();
 </script>
 </body>
