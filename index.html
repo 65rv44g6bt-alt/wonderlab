@@ -26,6 +26,7 @@
   --on-navy-soft: #9FB2BF;
   --orange: #FF6000;     /* the joyful accent: lines, dots, labels, the map pin */
   --orange-ink: #C24A00; /* the same orange, deep enough for small text on white */
+  --family: #4B2206;     /* parent & child workshops: the accent's own deep tone */
   --font: "Inter", "Helvetica Neue", Arial, sans-serif;
 
   --t-1: 0.86rem;
@@ -151,7 +152,7 @@ video.is-waiting { opacity: 0 !important; }
 .is-in .rv-line { transform: translateY(0); opacity: 1; }
 .fade { opacity: 0; transform: translateY(18px); transition: opacity 700ms ease, transform 900ms cubic-bezier(.16,.84,.3,1); }
 .fade.is-in { opacity: 1; transform: none; }
-/* Approach and Method: each piece slides down from under the bar above it, one after another.
+/* Approach and Tutor: each piece slides down from under the bar above it, one after another.
    A piece is clipped at its own top edge; the gap above it is padding inside the clip, so that edge
    touches the heading, line or title above and the text appears to pour out from beneath it. */
 .slot { display: block; overflow: hidden; padding-bottom: 0.16em; margin-bottom: -0.16em; }
@@ -162,16 +163,13 @@ video.is-waiting { opacity: 0 !important; }
 .is-in .slot-in { transform: none; }
 .head .slot-in, .rise .slot-in { transform: translateY(calc(100% + 0.2em)); } /* headings themselves rise from below */
 .head.is-in .slot-in, .rise.is-in .slot-in { transform: none; }
-#approach .head.cascade { margin-bottom: 0; }
-.approach-lead.slot { padding-top: clamp(28px, 4vw, 52px); --lift: clamp(28px, 4vw, 52px); }
 .cascade.pillar { padding-top: 0; }
-.pillar .num.slot { padding-top: 30px; --lift: 30px; } /* the pillar's 18px padding plus the 12px every pillar paragraph gets */
-.pillar h3.slot { margin-top: 0; padding-top: 10px; --lift: 10px; }
-.pillar p.slot { margin-top: 0; padding-top: 12px; --lift: 12px; }
+.pillar h3.slot { padding-top: 16px; --lift: 16px; } /* the pillar's own padding moves into its first piece */
+.pillar p.slot { margin-top: 0; padding-top: 6px; --lift: 6px; }
+.steps-label.slot { margin-top: 0; padding-top: clamp(40px, 5vw, 64px); --lift: clamp(40px, 5vw, 64px); }
 .cascade.step { padding-top: 0; }
-.step h3.slot { padding-top: 12px; --lift: 12px; }
-.step .num.slot { padding-top: 16px; --lift: 16px; } /* the step's 12px padding plus the 4px every step paragraph gets */
-.step p.slot { margin-top: 0; padding-top: 4px; --lift: 4px; }
+.step .num.slot { padding-top: 12px; --lift: 12px; }
+.step h3.slot, .step p.slot { margin-top: 0; padding-top: 2px; --lift: 2px; }
 .tutor-role.slot { margin-top: 0; padding-top: 10px; --lift: 10px; }
 .tutor-body .tutor-role.slot + .tutor-role.slot { padding-top: 0; --lift: 0px; }
 .tutor-body p + p.slot { margin-top: 0; padding-top: 16px; --lift: 16px; }
@@ -194,14 +192,13 @@ video.is-waiting { opacity: 0 !important; }
   .cascade::before { transform: none !important; transition: none !important; }
 }
 
-/* approach */
-.approach-lead { max-width: 46rem; font-size: var(--t1); color: var(--ink-soft); letter-spacing: -0.015em; }
-.pillars { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(20px, 3vw, 44px); margin-top: clamp(38px, 5vw, 72px); }
-.pillar { border-top: 1px solid var(--ink); padding-top: 18px; }
-.pillar .num { font-size: var(--t-1); font-weight: 600; color: var(--orange-ink); font-variant-numeric: tabular-nums; }
-.pillar h3 { margin-top: 10px; font-size: var(--t2); }
-.pillar p { margin-top: 12px; color: var(--ink-soft); }
-@media (max-width: 860px) { .pillars { grid-template-columns: 1fr; } }
+/* approach: the why in three short pillars, then how every challenge runs, six steps in one row */
+.pillars { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(20px, 3vw, 44px); }
+.pillar { border-top: 1px solid var(--ink); padding-top: 16px; }
+.pillar h3 { font-size: clamp(1.3rem, 1.05rem + 0.7vw, 1.7rem); letter-spacing: -0.03em; line-height: 1.15; }
+.pillar p { margin-top: 6px; color: var(--ink-soft); }
+@media (max-width: 860px) { .pillars { grid-template-columns: 1fr; gap: 22px; } }
+.steps-label { margin-top: clamp(40px, 5vw, 64px); font-size: var(--t-1); font-weight: 600; color: var(--ink-soft); }
 
 /* programme */
 .stages { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
@@ -324,14 +321,13 @@ video.is-waiting { opacity: 0 !important; }
   .ch-count { font-size: 0.9rem; font-weight: 500; color: var(--ink-soft); font-variant-numeric: tabular-nums; }
 }
 
-/* method */
-.steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0 clamp(20px, 3vw, 44px); }
-.step { display: grid; grid-template-columns: 2.2rem 1fr; gap: 0 12px; align-items: baseline; border-top: 1px solid var(--line); padding: 12px 0; }
-.step .num { grid-column: 1; grid-row: 1; font-size: var(--t-1); font-weight: 600; color: var(--orange-ink); font-variant-numeric: tabular-nums; }
-.step h3 { grid-column: 2; grid-row: 1; font-size: 1.22rem; letter-spacing: -0.025em; }
-.step p { grid-column: 2; grid-row: 2; margin-top: 4px; color: var(--ink-soft); font-size: 0.97rem; line-height: 1.45; }
-@media (max-width: 900px) { .steps { grid-template-columns: 1fr 1fr; } }
-@media (max-width: 560px) { .steps { grid-template-columns: 1fr; } }
+.steps { list-style: none; margin: 12px 0 0; padding: 0; display: grid; grid-template-columns: repeat(6, 1fr); gap: 0 clamp(14px, 2vw, 28px); }
+.step { border-top: 1px solid var(--line); padding: 12px 0; }
+.step .num { font-size: var(--t-1); font-weight: 600; color: var(--orange-ink); font-variant-numeric: tabular-nums; }
+.step h3 { margin-top: 2px; font-size: 1.22rem; letter-spacing: -0.025em; }
+.step p { margin-top: 2px; color: var(--ink-soft); font-size: 0.95rem; line-height: 1.4; }
+@media (max-width: 900px) { .steps { grid-template-columns: repeat(3, 1fr); } }
+@media (max-width: 560px) { .steps { grid-template-columns: 1fr 1fr; } }
 
 /* tutor */
 .tutor { display: grid; grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr); gap: clamp(26px, 5vw, 72px); align-items: start; }
@@ -345,18 +341,13 @@ video.is-waiting { opacity: 0 !important; }
 .highlights { list-style: none; margin: clamp(26px, 3vw, 40px) 0 0; padding: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 18px 32px; }
 .highlights li { border-top: 1px solid var(--line); padding-top: 12px; }
 .highlights b { display: block; font-weight: 500; letter-spacing: -0.02em; }
+.highlights a { text-decoration-color: var(--orange); text-decoration-thickness: 1.5px; text-underline-offset: 0.18em; }
+.highlights a:hover { color: var(--orange-ink); }
 .highlights li > span { display: block; margin-top: 4px; color: var(--ink-soft); font-size: 0.97rem; line-height: 1.45; }
 @media (max-width: 860px) { .tutor { grid-template-columns: 1fr; } .tutor-photo { max-width: 340px; } }
 @media (max-width: 520px) { .highlights { grid-template-columns: 1fr; } }
 
-/* bookings: price tiers, a calendar of classes with the seats left, and the booking panel */
-.tiers { list-style: none; margin: 0 0 clamp(22px, 3vw, 36px); padding: 0; display: grid; grid-template-columns: 1.4fr repeat(3, 1fr); gap: 12px clamp(14px, 2vw, 28px); }
-.tiers li { border-top: 2px solid var(--line); padding-top: 12px; transition: border-color 220ms ease; }
-.tiers li.is-on { border-top-color: var(--orange); }
-.tiers b { display: block; font-size: var(--t2); font-weight: 500; letter-spacing: -0.03em; line-height: 1.05; }
-.tiers .off { color: var(--orange); }
-.tiers span { display: block; margin-top: 6px; color: var(--ink-soft); font-size: 0.95rem; line-height: 1.4; }
-@media (max-width: 760px) { .tiers { grid-template-columns: 1fr 1fr; } }
+/* bookings: a calendar of classes and weekend workshops with the places left, and the booking panel */
 .book { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr); gap: clamp(20px, 3vw, 40px); align-items: start; }
 @media (max-width: 900px) { .book { grid-template-columns: 1fr; } }
 .cal { border: 1px solid var(--line); border-radius: var(--r); padding: clamp(14px, 2.2vw, 26px); }
@@ -368,6 +359,7 @@ video.is-waiting { opacity: 0 !important; }
 .chip[data-stage="0"] { --tint: var(--teal); }
 .chip[data-stage="1"] { --tint: var(--blue); }
 .chip[data-stage="2"] { --tint: var(--navy); }
+.chip[data-stage="3"] { --tint: var(--family); }
 .chip[aria-pressed="true"] { background: var(--tint, var(--ink)); border-color: var(--tint, var(--ink)); color: var(--on-navy); }
 .chip[aria-pressed="true"] small { color: var(--on-navy-soft); }
 .chip:focus-visible, .cal-day:focus-visible, .cal-nav button:focus-visible { outline-color: var(--orange); }
@@ -379,7 +371,7 @@ video.is-waiting { opacity: 0 !important; }
 .cal-nav button:disabled { opacity: 0.3; cursor: default; }
 .cal-dow, .cal-grid { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 6px; }
 .cal-dow span { padding-bottom: 6px; text-align: center; font-size: var(--t-1); color: var(--ink-soft); }
-.cal-day { display: flex; flex-direction: column; align-items: flex-start; gap: 1px; min-width: 0; min-height: 78px; padding: 8px 9px; border: 0; border-radius: 12px;
+.cal-day { position: relative; display: flex; flex-direction: column; align-items: flex-start; gap: 1px; min-width: 0; min-height: 78px; padding: 8px 9px; border: 0; border-radius: 12px;
   background: none; color: var(--ink-soft); font: inherit; text-align: left; cursor: default; transition: background-color 200ms ease, color 200ms ease, box-shadow 200ms ease; }
 .cal-n { font-size: 0.98rem; font-weight: 500; font-variant-numeric: tabular-nums; }
 .cal-st { max-width: 100%; overflow: hidden; font-size: 0.68rem; line-height: 1.2; white-space: nowrap; text-overflow: ellipsis; }
@@ -393,9 +385,7 @@ video.is-waiting { opacity: 0 !important; }
 .cal-day.is-past { opacity: 0.35; }
 .cal-day.is-today .cal-n { color: var(--orange-ink); }
 .cal-day.in-course { box-shadow: inset 0 0 0 2px var(--orange); }
-.cal-day.st-0 { --tint: var(--teal); }
-.cal-day.st-1 { --tint: var(--blue); }
-.cal-day.st-2 { --tint: var(--navy); }
+.cal-day.has-ws::after { content: ""; position: absolute; top: 9px; right: 9px; width: 7px; height: 7px; border-radius: 50%; background: var(--orange); } /* a workshop that afternoon */
 .cal-day[aria-pressed="true"] { background: var(--tint); color: var(--on-navy); box-shadow: none; }
 .cal-day[aria-pressed="true"] .cal-n, .cal-day[aria-pressed="true"] .cal-st, .cal-day[aria-pressed="true"] .cal-left { color: var(--on-navy); }
 .cal-note { margin-top: 14px; font-size: 0.86rem; color: var(--ink-soft); }
@@ -404,11 +394,13 @@ video.is-waiting { opacity: 0 !important; }
   .cal-day { min-height: 52px; padding: 5px 6px; border-radius: 9px; }
   .cal-st { display: none; }
   .cal-left { font-size: 0.66rem; }
+  .cal-day.has-ws::after { top: 6px; right: 6px; width: 5px; height: 5px; }
 }
 .book-panel { position: sticky; top: 92px; border-radius: var(--r); background: var(--tint, var(--navy)); color: var(--on-navy); padding: clamp(20px, 2.6vw, 30px); transition: background-color 320ms ease; }
 @media (max-width: 900px) { .book-panel { position: static; } }
 .bp-kind { font-size: var(--t-1); font-weight: 500; color: var(--orange); }
 .bp-title { margin-top: 6px; font-size: var(--t2); }
+.bp-title span { white-space: nowrap; } /* a line may break after the date, never inside the hours */
 .bp-when { margin-top: 10px; color: var(--on-navy-soft); }
 .bp-seats { margin-top: 2px; color: #FFFFFF; }
 .bp-seats b { color: var(--orange); font-weight: 600; }
@@ -425,8 +417,12 @@ video.is-waiting { opacity: 0 !important; }
 .bp-price { margin-top: 18px; padding-top: 18px; border-top: 1px solid rgba(237,243,246,0.16); }
 .bp-line { color: var(--on-navy-soft); font-size: 0.95rem; }
 .bp-total { margin-top: 4px; font-size: var(--t2); font-weight: 500; letter-spacing: -0.03em; line-height: 1.05; }
+.bp-save:empty { display: none; }
 .bp-save { margin-top: 6px; color: var(--orange); font-size: 0.95rem; font-weight: 500; }
 .bp-cta { width: 100%; margin-top: 20px; }
+.bp-also { display: block; margin-top: 14px; padding: 0; border: 0; background: none; color: var(--on-navy); font: inherit; font-size: 0.92rem; text-align: left;
+  text-decoration: underline; text-decoration-color: var(--orange); text-underline-offset: 3px; cursor: pointer; }
+.bp-also:hover { color: #FFFFFF; }
 .bp-small { margin-top: 10px; font-size: 0.85rem; color: var(--on-navy-soft); }
 
 /* visit */
@@ -475,6 +471,7 @@ video.is-waiting { opacity: 0 !important; }
 footer { background: var(--navy); color: var(--on-navy-soft); padding: clamp(44px, 6vw, 84px) 0 clamp(24px, 3vw, 40px); }
 .foot-bottom { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; padding-top: 22px; border-top: 1px solid rgba(237,243,246,0.16); font-size: 0.92rem; }
 .foot-bottom .brand span { color: var(--on-navy); }
+.foot-copy { font-size: 0.78rem; }
 </style>
 </head>
 <body>
@@ -489,7 +486,6 @@ footer { background: var(--navy); color: var(--on-navy-soft); padding: clamp(44p
     <nav class="nav" aria-label="Main">
       <a href="#approach">Approach</a>
       <a href="#programme">Programme</a>
-      <a href="#method">Method</a>
       <a href="#tutor">Tutor</a>
       <a class="btn btn-ink" href="#bookings">Bookings</a>
     </nav>
@@ -502,38 +498,34 @@ footer { background: var(--navy); color: var(--on-navy-soft); padding: clamp(44p
   <div class="hero-shell">
     <div class="hero-media" aria-hidden="true">
       <picture>
-        <source media="(min-width: 901px)" srcset="media/hero.jpg?v=16">
-        <img id="hero-poster" src="media/hero-portrait.jpg?v=16" alt="" width="1080" height="1920">
+        <source media="(min-width: 901px)" srcset="media/hero.jpg?v=18">
+        <img id="hero-poster" src="media/hero-portrait.jpg?v=18" alt="" width="1080" height="1920">
       </picture>
       <video id="hero-video" class="is-waiting" muted loop playsinline preload="auto"></video>
     </div>
     <div class="wrap">
-      <h1 class="hero-statement rv-wrap" data-lines="<span class='big'>We&rsquo;re WonderLab</span>|A creative thinking academy where students|learn to ask better questions, imagine new|possibilities, and design meaningful solutions|for the world around them."></h1>
+      <h1 class="hero-statement rv-wrap" data-lines="<span class='big'>We&rsquo;re WonderLab</span>|A creative thinking academy where young minds|take on meaningful design challenges|that build confidence, creativity and|the courage to bring ideas to life."></h1>
     </div>
   </div>
 </section>
 
 <section class="section" id="approach">
   <div class="wrap">
-    <div class="head" data-cascade><h2>Approach<span class="dot">.</span></h2><p class="meta">Why it works</p></div>
-    <p class="approach-lead" data-cascade>Through design thinking, storytelling, innovation challenges, hands-on making, and collaborative projects, students develop the confidence to think independently, the creativity to solve complex problems, and the courage to bring their ideas to life.</p>
+    <div class="head" data-cascade><h2>Approach<span class="dot">.</span></h2></div>
     <div class="pillars">
-      <div class="pillar" data-cascade>
-        <p class="num">01</p>
-        <h3>Small cohorts, big thinking</h3>
-        <p>Students learn in small groups that foster deep collaboration, communication, leadership and emotional resilience. Through shared challenges, they learn how to listen, influence and thrive alongside others.</p>
-      </div>
-      <div class="pillar" data-cascade>
-        <p class="num">02</p>
-        <h3>From idea to impact</h3>
-        <p>WonderLab bridges imagination and action. Students move beyond concepts to build prototypes, test ideas, refine solutions and experience the satisfaction of turning vision into reality.</p>
-      </div>
-      <div class="pillar" data-cascade>
-        <p class="num">03</p>
-        <h3>Designing for the future</h3>
-        <p>Students tackle real-world challenges inspired by sustainability, climate resilience and emerging global issues. They learn to think beyond themselves and create solutions that contribute to a flourishing future.</p>
-      </div>
+      <div class="pillar" data-cascade><h3>Small cohorts, big thinking</h3><p>Nine students at most, learning to listen, lead and work as a team.</p></div>
+      <div class="pillar" data-cascade><h3>From idea to impact</h3><p>Ideas become real prototypes, built, tested and refined.</p></div>
+      <div class="pillar" data-cascade><h3>Designing for the future</h3><p>Real-world challenges in sustainability and climate resilience.</p></div>
     </div>
+    <p class="steps-label" data-cascade>Every challenge in six steps</p>
+    <ol class="steps">
+      <li class="step" data-cascade><p class="num">01</p><h3>Brief</h3><p>A real problem, a clear goal.</p></li>
+      <li class="step" data-cascade><p class="num">02</p><h3>Sketch</h3><p>Ideas start on paper.</p></li>
+      <li class="step" data-cascade><p class="num">03</p><h3>Build</h3><p>Simple materials, against the clock.</p></li>
+      <li class="step" data-cascade><p class="num">04</p><h3>Test</h3><p>Load&nbsp;it. Drop&nbsp;it. Float&nbsp;it.</p></li>
+      <li class="step" data-cascade><p class="num">05</p><h3>Improve</h3><p>Refine it and build again.</p></li>
+      <li class="step" data-cascade><p class="num">06</p><h3>Share</h3><p>Present, reflect, learn.</p></li>
+    </ol>
   </div>
 </section>
 
@@ -541,7 +533,6 @@ footer { background: var(--navy); color: var(--on-navy-soft); padding: clamp(44p
   <div class="wrap">
     <div class="head fade">
       <h2>Programme<span class="dot">.</span></h2>
-      <p class="meta">Three stages, 39 challenges</p>
     </div>
     <div class="stages" role="tablist" aria-label="Age groups" id="stage-tabs">
       <button class="stage" type="button" role="tab" id="stage-explorers" aria-controls="challenges" aria-selected="true">
@@ -586,23 +577,6 @@ footer { background: var(--navy); color: var(--on-navy-soft); padding: clamp(44p
   </div>
 </section>
 
-<section class="section" id="method">
-  <div class="wrap">
-    <div class="head" data-cascade>
-      <h2>Method<span class="dot">.</span></h2>
-      <p class="meta">How a challenge runs</p>
-    </div>
-    <div class="steps">
-      <div class="step" data-cascade><p class="num">01</p><h3>Brief</h3><p>A real challenge with a clear goal and a few constraints. Build a tower that holds a weight for ten seconds. Design a shelter using only limited materials. Solve the problem together.</p></div>
-      <div class="step" data-cascade><p class="num">02</p><h3>Sketch</h3><p>Ideas start on paper. Teams explore different approaches, compare possibilities, and choose the strongest direction before building.</p></div>
-      <div class="step" data-cascade><p class="num">03</p><h3>Build</h3><p>Hands-on making begins. Using simple materials and creative thinking, ideas take shape, often against the clock.</p></div>
-      <div class="step" data-cascade><p class="num">04</p><h3>Test</h3><p>Load it. Drop it. Float it. Every prototype is put to the test. The results are honest, and every outcome is an opportunity to learn.</p></div>
-      <div class="step" data-cascade><p class="num">05</p><h3>Improve</h3><p>Find what worked. Identify what didn&rsquo;t. Refine the design and build again. Iteration is part of the process.</p></div>
-      <div class="step" data-cascade><p class="num">06</p><h3>Share</h3><p>Teams present their solutions, reflect on their journey, and explain what they learned from both success and failure.</p></div>
-    </div>
-  </div>
-</section>
-
 <section class="section" id="tutor">
   <div class="wrap tutor">
     <figure class="tutor-photo fade">
@@ -612,13 +586,12 @@ footer { background: var(--navy); color: var(--on-navy-soft); padding: clamp(44p
       <h2 class="rise" data-cascade>Julien Klisz<span class="dot">.</span></h2>
       <p class="tutor-role" data-cascade>Licensed Architect</p>
       <p class="tutor-role" data-cascade>WonderLab Founder &amp; Lead Tutor</p>
-      <p data-cascade>Julien is an award-winning architect and Design Director at LEAD (Laboratory for Explorative Architecture &amp; Design) in Hong Kong. Through WonderLab, he brings the creative process used by architects and designers into a hands-on learning experience for children, helping them turn curiosity into ideas, ideas into prototypes, and prototypes into solutions.</p>
-      <p data-cascade>Originally from France, Julien studied architecture in France and Sweden before practising in Paris. Since 2013, he has taught architecture and computational design at the master&rsquo;s level at both The Chinese University of Hong Kong and The University of Hong Kong.</p>
+      <p data-cascade>Julien is an award-winning architect and Design Director at LEAD (Laboratory for Explorative Architecture &amp; Design) in Hong Kong. Through WonderLab, he brings the creative process used by architects and designers into a hands-on learning experience for students, helping them turn curiosity into ideas, ideas into prototypes, and prototypes into solutions.</p>
       <ul class="highlights">
-        <li data-cascade><b>Venice Architecture Biennale</b><span>Exhibited at the 12th International Architecture Exhibition in Venice.</span></li>
-        <li data-cascade><b>University educator</b><span>Has taught master&rsquo;s students at CUHK and HKU since 2013.</span></li>
+        <li data-cascade><b>Design Director at <a href="https://www.l-e-a-d.pro" target="_blank" rel="noopener">LEAD</a></b><span>Oversees major projects ranging from cultural buildings and public installations to large-scale urban developments.</span></li>
+        <li data-cascade><b>University Educator</b><span>Has taught master&rsquo;s students at CUHK and HKU since 2013.</span></li>
         <li data-cascade><b>Award-winning projects</b><span>Led and contributed to innovative architectural and fa&ccedil;ade projects across Asia and the Middle East.</span></li>
-        <li data-cascade><b>Design Director at LEAD</b><span>Oversees major projects ranging from cultural buildings and public installations to large-scale urban developments.</span></li>
+        <li data-cascade><b>Venice Architecture Biennale</b><span>Exhibited at the 12th International Architecture Exhibition in Venice.</span></li>
       </ul>
     </div>
   </div>
@@ -628,14 +601,7 @@ footer { background: var(--navy); color: var(--on-navy-soft); padding: clamp(44p
   <div class="wrap">
     <div class="head fade">
       <h2>Bookings<span class="dot">.</span></h2>
-      <p class="meta">HK$4,200 for 8 sessions</p>
     </div>
-    <ul class="tiers fade">
-      <li data-friends="0"><b>HK$4,200</b><span>8 weekly sessions of 90 minutes</span></li>
-      <li data-friends="1"><b class="off">&minus;10%</b><span>Bring 1 friend</span></li>
-      <li data-friends="2"><b class="off">&minus;15%</b><span>Bring 2 friends</span></li>
-      <li data-friends="3"><b class="off">&minus;20%</b><span>Bring 3 friends or more</span></li>
-    </ul>
     <div class="book fade">
       <div class="cal">
         <div class="cal-stages" role="group" aria-label="Age group">
@@ -643,6 +609,7 @@ footer { background: var(--navy); color: var(--on-navy-soft); padding: clamp(44p
           <button type="button" class="chip" data-stage="0" aria-pressed="false">Explorers<small>7&ndash;8</small></button>
           <button type="button" class="chip" data-stage="1" aria-pressed="false">Creators<small>9&ndash;11</small></button>
           <button type="button" class="chip" data-stage="2" aria-pressed="false">Changemakers<small>12&ndash;14</small></button>
+          <button type="button" class="chip" data-stage="3" aria-pressed="false">Parent &amp; child<small>Weekends</small></button>
         </div>
         <div class="cal-head">
           <p class="cal-month" id="cal-month" aria-live="polite"></p>
@@ -653,7 +620,7 @@ footer { background: var(--navy); color: var(--on-navy-soft); padding: clamp(44p
         </div>
         <div class="cal-dow" aria-hidden="true"><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span></div>
         <div class="cal-grid" id="cal-grid"></div>
-        <p class="cal-note">Seats left are for the whole 8-week course that starts that day. The rest of the chosen course is ringed in orange.</p>
+        <p class="cal-note">Seats left are for the whole 8-week course that starts that day; the rest of the chosen course is ringed in orange. An orange dot marks a parent &amp; child workshop that afternoon.</p>
       </div>
       <div class="book-panel" id="book-panel" aria-live="polite"></div>
     </div>
@@ -725,7 +692,7 @@ footer { background: var(--navy); color: var(--on-navy-soft); padding: clamp(44p
         <svg class="js-mark" data-n="5" viewBox="-72 -72 144 144" aria-hidden="true"></svg>
         <span>WonderLab</span>
       </a>
-      <p>&copy; 2026 WonderLab. Mong Kok, Hong Kong.</p>
+      <p class="foot-copy">&copy; 2026 WonderLab Hong Kong.</p>
     </div>
   </div>
 </footer>
@@ -1359,7 +1326,7 @@ var DRAW = {
   document.querySelectorAll(".fade").forEach(function (el) { io.observe(el); });
   if (statement) requestAnimationFrame(function () { statement.classList.add("is-in"); });
 
-  /* ---------- Approach and Method: text pours down from under the bar above it ---------- */
+  /* ---------- Approach and Tutor: text pours down from under the bar above it ---------- */
   // each piece gets a clipping slot; its content waits just above the slot's top edge,
   // tucked under whatever sits above it, and slides down into place
   function slot(el) {
@@ -1476,7 +1443,7 @@ var DRAW = {
   }
 
   /* ---------- hero clip ---------- */
-  var MV = "?v=16";   // bump when media files are replaced, so returning visitors get the new clips
+  var MV = "?v=18";   // bump when media files are replaced, so returning visitors get the new clips
   var hv = document.getElementById("hero-video"), wide = window.matchMedia("(min-width: 901px)");
   var heroSrc = function () { return (wide.matches ? "media/hero.mp4" : "media/hero-portrait.mp4") + MV; };
   if (hv && !reduce.matches) {
@@ -1702,9 +1669,9 @@ var DRAW = {
     else { playOnly(null, track); fill(group.items[Math.max(0, active)]); moveSlider(Math.max(0, active), true); }
   });
 
-  /* ---------- bookings: a calendar of classes with the seats left, and the price for a group ---------- */
-  // EDIT HERE: the weekly timetable, the days with no class, and the seats already taken on each date.
-  // The timetable is provisional; no bookings are recorded yet, so every course shows all its seats.
+  /* ---------- bookings: a calendar of classes and weekend workshops with the places left, and the price ---------- */
+  // EDIT HERE: the weekly timetable, the weekend workshop, the days with no class, and the places already taken on each date.
+  // The timetable is provisional; no bookings are recorded yet, so every course and workshop shows all its places.
   var BOOK = {
     price: 4200, sessions: 8, seats: 9, months: 3,
     off: [0, 0.10, 0.15, 0.20],          // discount for everyone in the group, by friends brought along (3 or more: 20%)
@@ -1716,9 +1683,13 @@ var DRAW = {
       { day: 5, from: "16:00", to: "17:30", stage: 1 },
       { day: 6, from: "10:00", to: "11:30", stage: 2 }
     ],
+    // Saturday and Sunday afternoons: a one-off design workshop where each child teams up with a parent, priced and
+    // counted per pair; taken works as below, in pairs
+    workshop: { days: [6, 0], from: "14:00", to: "16:00", price: 760, pairs: 6, taken: {} },
     closed: ["2026-10-01", "2026-12-25", "2026-12-26"],
     taken: {}                            // e.g. "2026-10-06": 4 means 4 of the 9 seats that day are booked
   };
+  var WORKSHOP = 3;                      // the workshop's filter chip, after the three stages
 
   var bookGrid = document.getElementById("cal-grid");
   if (bookGrid) {
@@ -1731,10 +1702,13 @@ var DRAW = {
     var clock = function (hm) { var q = hm.split(":"), h = +q[0]; return ((h + 11) % 12 + 1) + ":" + q[1] + (h < 12 ? "am" : "pm"); };
     var hours = function (c) { var a = clock(c.from), b = clock(c.to); return (a.slice(-2) === b.slice(-2) ? a.slice(0, -2) : a) + "–" + b; };
     var money = function (x) { return "HK$" + Math.round(x).toLocaleString("en-US"); };
-    var classOn = function (d) {
-      if (BOOK.closed.indexOf(dkey(d)) >= 0) return null;
-      for (var i = 0; i < BOOK.week.length; i++) if (BOOK.week[i].day === d.getDay()) return BOOK.week[i];
-      return null;
+    var WS = BOOK.workshop, isWs = function (s) { return s === WS; };
+    // what runs on a day, in time order: the weekly class, then the weekend workshop
+    var sessionsOn = function (d) {
+      if (BOOK.closed.indexOf(dkey(d)) >= 0) return [];
+      var out = BOOK.week.filter(function (c) { return c.day === d.getDay(); });
+      if (WS.days.indexOf(d.getDay()) >= 0) out.push(WS);
+      return out;
     };
     // a course is the same class every week for 8 sessions, skipping the days with no class
     var course = function (d) {
@@ -1743,16 +1717,35 @@ var DRAW = {
       return out;
     };
     var seatsFor = function (dates) { return Math.min.apply(null, dates.map(function (x) { return BOOK.seats - (BOOK.taken[dkey(x)] || 0); })); };
+    // a course counts seats for children across all 8 weeks; a workshop counts child-and-parent pairs on its one day
+    var leftFor = function (d, s) { return isWs(s) ? WS.pairs - (WS.taken[dkey(d)] || 0) : seatsFor(course(d)); };
+    var places = function (s, n) { return n + " " + (isWs(s) ? (n === 1 ? "pair" : "pairs") : (n === 1 ? "seat" : "seats")); };
+    var nameOf = function (s) { return isWs(s) ? "Parent & child workshop" : GROUPS[s.stage].name; };
+    var tintOf = function (s) { return isWs(s) ? "var(--family)" : STAGE_TINT[s.stage]; };
+    var tagOf = function (s) { return isWs(s) ? "Parent & child" : "Ages " + GROUPS[s.stage].ages.replace(/^ages /, "").replace(" to ", "\u2013"); };
+    // a cell names the session it stands for: the chosen one on the chosen day, otherwise the day's first with places
+    var showIn = function (b, d, s) {
+      var left = leftFor(d, s);
+      b.querySelector(".cal-st").textContent = tagOf(s);
+      b.querySelector(".cal-left").textContent = left > 0 ? left + " left" : "Full";
+      b.classList.toggle("is-low", left > 0 && left <= 2);
+    };
 
     var today = new Date(); today.setHours(0, 0, 0, 0);
     var tomorrow = new Date(today); tomorrow.setDate(tomorrow.getDate() + 1);
     var firstMonth = new Date(tomorrow.getFullYear(), tomorrow.getMonth(), 1); // the months shown start from the first bookable day
     var lastMonth = new Date(firstMonth.getFullYear(), firstMonth.getMonth() + BOOK.months - 1, 1);
-    var view = new Date(firstMonth), stageSel = -1, pick = null, friends = 0;
+    var view = new Date(firstMonth), stageSel = -1, pick = null, pickS = null, friends = 0, pairs = 1;
     var monthEl = document.getElementById("cal-month"), prevBtn = document.getElementById("cal-prev"), nextBtn = document.getElementById("cal-next");
-    var bookPanel = document.getElementById("book-panel"), chips = document.querySelectorAll(".chip"), tierEls = document.querySelectorAll(".tiers li");
-    // courses can start from tomorrow on
-    var bookable = function (d) { var c = classOn(d); return c && d > today && (stageSel < 0 || c.stage === stageSel) ? c : null; };
+    var bookPanel = document.getElementById("book-panel"), chips = document.querySelectorAll(".chip");
+    // bookings start from tomorrow; a day offers the sessions that fit the chip, those with places left first
+    var bookable = function (d) {
+      if (d <= today) return [];
+      var fit = sessionsOn(d).filter(function (s) { return stageSel < 0 || (isWs(s) ? stageSel === WORKSHOP : s.stage === stageSel); });
+      return fit.filter(function (s) { return leftFor(d, s) > 0; }).concat(fit.filter(function (s) { return leftFor(d, s) <= 0; }));
+    };
+    // the other session with places on the chosen day, if any (a Saturday has the morning class and the afternoon workshop)
+    var alsoOn = function () { return pick ? bookable(pick).filter(function (s) { return s !== pickS && leftFor(pick, s) > 0; })[0] : null; };
 
     function drawMonth() {
       monthEl.textContent = MONTHS[view.getMonth()] + " " + view.getFullYear();
@@ -1762,20 +1755,23 @@ var DRAW = {
       for (var i = 0; i < (view.getDay() + 6) % 7; i++) bookGrid.appendChild(document.createElement("span")); // weeks start on Monday
       var count = new Date(view.getFullYear(), view.getMonth() + 1, 0).getDate();
       for (var n = 1; n <= count; n++) {
-        var d = new Date(view.getFullYear(), view.getMonth(), n), c = bookable(d), b = document.createElement("button");
+        var d = new Date(view.getFullYear(), view.getMonth(), n), list = bookable(d), c = list[0], b = document.createElement("button");
         var label = DAYS[d.getDay()] + " " + n + " " + MONTHS[d.getMonth()];
         b.type = "button"; b.className = "cal-day"; b.dataset.date = dkey(d);
         b.innerHTML = '<span class="cal-n">' + n + "</span>";
         if (+d === +today) b.classList.add("is-today");
         if (c) {
-          var left = seatsFor(course(d)), st = document.createElement("span"), note = document.createElement("span");
-          st.className = "cal-st"; st.textContent = "Ages " + GROUPS[c.stage].ages.replace(/^ages /, "").replace(" to ", "\u2013");
-          note.className = "cal-left"; note.textContent = left > 0 ? left + " left" : "Full";
+          var left = leftFor(d, c), st = document.createElement("span"), note = document.createElement("span");
+          st.className = "cal-st"; note.className = "cal-left";
           b.appendChild(st); b.appendChild(note);
-          b.classList.add("has-class", "st-" + c.stage);
+          b.classList.add("has-class");
+          if (list.some(isWs)) b.classList.add("has-ws");
+          showIn(b, d, c);
           if (left <= 0) { b.classList.add("is-full"); b.disabled = true; }
-          else if (left <= 2) b.classList.add("is-low");
-          b.setAttribute("aria-label", label + ": " + GROUPS[c.stage].name + ", " + hours(c) + ", " + (left > 0 ? left + (left === 1 ? " seat" : " seats") + " left" : "full"));
+          b.setAttribute("aria-label", label + ": " + list.map(function (s) {
+            var l = leftFor(d, s);
+            return nameOf(s) + ", " + hours(s) + ", " + (l > 0 ? places(s, l) + " left" : "full");
+          }).join("; "));
           if (left > 0) b.setAttribute("aria-pressed", "false");
         } else {
           b.disabled = true;
@@ -1787,23 +1783,34 @@ var DRAW = {
       paint();
     }
 
-    // the chosen day fills with its stage colour; the rest of its course gets an orange ring
+    // the chosen day fills with its session's colour; the rest of a chosen course gets an orange ring
     function paint() {
-      var run = pick ? course(pick).map(dkey) : [];
+      var run = pick && !isWs(pickS) ? course(pick).map(dkey) : [];
       Array.prototype.forEach.call(bookGrid.querySelectorAll(".cal-day"), function (b) {
-        if (b.hasAttribute("aria-pressed")) b.setAttribute("aria-pressed", pick && b.dataset.date === dkey(pick) ? "true" : "false");
+        var on = !!pick && b.dataset.date === dkey(pick);
+        if (b.hasAttribute("aria-pressed")) {
+          var d = dparse(b.dataset.date);
+          b.setAttribute("aria-pressed", on ? "true" : "false");
+          showIn(b, d, on ? pickS : bookable(d)[0]);
+        }
+        if (on) b.style.setProperty("--tint", tintOf(pickS)); else b.style.removeProperty("--tint");
         b.classList.toggle("in-course", run.indexOf(b.dataset.date) > 0);
       });
     }
 
     var firstOpen = function () {
       for (var d = new Date(today); d < new Date(lastMonth.getFullYear(), lastMonth.getMonth() + 1, 1); d.setDate(d.getDate() + 1)) {
-        if (bookable(d) && seatsFor(course(d)) > 0) return new Date(d);
+        var s = bookable(d)[0];
+        if (s && leftFor(d, s) > 0) return { d: new Date(d), s: s };
       }
       return null;
     };
-    var seatsNow = function () { return pick ? seatsFor(course(pick)) : 0; };
-    var maxFriends = function () { return Math.max(0, seatsNow() - 1); };
+    var leftNow = function () { return pick ? leftFor(pick, pickS) : 0; };
+    var maxFriends = function () { return Math.max(0, leftNow() - 1); };
+    var stepper = function (one) {
+      return '<div class="stepper"><button type="button" data-step="-1" aria-label="One ' + one + ' fewer">&minus;</button><output aria-live="polite"></output>' +
+        '<button type="button" data-step="1" aria-label="One more ' + one + '">+</button></div>';
+    };
 
     function drawPanel() {
       if (!pick) {
@@ -1812,54 +1819,76 @@ var DRAW = {
           '<p class="bp-when">Message Julien to join the waiting list.</p>';
         return;
       }
-      var c = classOn(pick), g = GROUPS[c.stage], run = course(pick), left = seatsFor(run);
-      bookPanel.style.setProperty("--tint", STAGE_TINT[c.stage]);
-      bookPanel.innerHTML =
-        '<p class="bp-kind">' + g.name + " &middot; " + g.ages + "</p>" +
-        '<h3 class="bp-title">' + DAYS[c.day] + "s, " + hours(c) + "</h3>" +
-        '<p class="bp-when">Starts ' + short(run[0]) + ", last class " + short(run[run.length - 1]) + "</p>" +
-        '<p class="bp-seats"><b>' + left + "</b> " + (left === 1 ? "seat" : "seats") + " left in this group</p>" +
-        '<ol class="bp-dates" aria-label="The 8 sessions">' + run.map(function (x) { return "<li>" + x.getDate() + " " + MONTHS[x.getMonth()].slice(0, 3) + "</li>"; }).join("") + "</ol>" +
-        '<div class="bp-row"><p>Friends joining<small>Everyone in the group gets the discount</small></p>' +
-        '<div class="stepper"><button type="button" data-step="-1" aria-label="One friend fewer">&minus;</button><output aria-live="polite"></output>' +
-        '<button type="button" data-step="1" aria-label="One more friend">+</button></div></div>' +
-        '<div class="bp-price"><p class="bp-line"></p><p class="bp-total"></p><p class="bp-save"></p></div>' +
+      var s = pickS, left = leftFor(pick, s), other = alsoOn();
+      var also = other ? '<button type="button" class="bp-also" data-also>Also that day: ' + nameOf(other).replace("&", "&amp;") + ", " + hours(other) + " &rarr;</button>" : "";
+      var tail = '<div class="bp-price"><p class="bp-line"></p><p class="bp-total"></p><p class="bp-save"></p></div>' +
         '<a class="btn btn-light bp-cta" href="https://wa.me/85267533727">Request this booking on WhatsApp</a>' +
         '<p class="bp-small">Julien confirms every booking and the seats on WhatsApp.</p>';
-      friends = Math.min(friends, maxFriends());
+      bookPanel.style.setProperty("--tint", tintOf(s));
+      if (isWs(s)) {
+        bookPanel.innerHTML =
+          '<p class="bp-kind">Parent &amp; child &middot; Weekend workshop</p>' +
+          '<h3 class="bp-title">' + DAYS[pick.getDay()] + " " + pick.getDate() + " " + MONTHS[pick.getMonth()].slice(0, 3) + ', <span>' + hours(s) + "</span></h3>" +
+          '<p class="bp-when">A special design workshop where children and parents team up to rise to the challenge.</p>' +
+          '<p class="bp-seats"><b>' + left + "</b> " + (left === 1 ? "pair" : "pairs") + " left</p>" + also +
+          '<div class="bp-row"><p>Pairs<small>One child and one parent each</small></p>' + stepper("pair") + "</div>" + tail;
+        pairs = Math.max(1, Math.min(pairs, left));
+      } else {
+        var g = GROUPS[s.stage], run = course(pick);
+        bookPanel.innerHTML =
+          '<p class="bp-kind">' + g.name + " &middot; " + g.ages + "</p>" +
+          '<h3 class="bp-title">' + DAYS[s.day] + "s, " + hours(s) + "</h3>" +
+          '<p class="bp-when">Starts ' + short(run[0]) + ", last class " + short(run[run.length - 1]) + "</p>" +
+          '<p class="bp-seats"><b>' + left + "</b> " + (left === 1 ? "seat" : "seats") + " left in this group</p>" +
+          '<ol class="bp-dates" aria-label="The 8 sessions">' + run.map(function (x) { return "<li>" + x.getDate() + " " + MONTHS[x.getMonth()].slice(0, 3) + "</li>"; }).join("") + "</ol>" + also +
+          '<div class="bp-row"><p>Friends joining<small>Everyone in the group gets the discount</small></p>' + stepper("friend") + "</div>" + tail;
+        friends = Math.min(friends, maxFriends());
+      }
       price();
     }
 
-    // the price and the WhatsApp message follow the number of friends; only the figures change, so focus stays put
+    // the price and the WhatsApp message follow the stepper; only the figures change, so focus stays put
     function price() {
       if (!pick) return;
-      var c = classOn(pick), g = GROUPS[c.stage], run = course(pick), kids = friends + 1;
-      var rate = BOOK.off[Math.min(friends, BOOK.off.length - 1)], each = BOOK.price * (1 - rate), total = each * kids;
-      bookPanel.querySelector("output").textContent = friends;
-      bookPanel.querySelector('[data-step="-1"]').disabled = friends <= 0;
-      bookPanel.querySelector('[data-step="1"]').disabled = friends >= maxFriends();
-      bookPanel.querySelector(".bp-line").textContent = kids + (kids === 1 ? " student" : " students") + " × " + money(each) + (rate ? " (" + Math.round(rate * 100) + "% off)" : "");
+      var s = pickS, n, total, line, save = "", msg;
+      if (isWs(s)) {
+        n = pairs; total = WS.price * pairs;
+        line = pairs + (pairs === 1 ? " pair" : " pairs") + " × " + money(WS.price);
+        msg = "Hi Julien, I'd like to book the parent & child design workshop on " + short(pick) + " " + pick.getFullYear() + ", " + hours(s) +
+          ", for " + pairs + (pairs === 1 ? " pair (one child and one parent)" : " pairs (a child and a parent each)") + ". Total " + money(total) + ".";
+      } else {
+        var g = GROUPS[s.stage], run = course(pick), kids = friends + 1;
+        var rate = BOOK.off[Math.min(friends, BOOK.off.length - 1)], each = BOOK.price * (1 - rate);
+        n = friends; total = each * kids;
+        line = kids + (kids === 1 ? " student" : " students") + " × " + money(each) + (rate ? " (" + Math.round(rate * 100) + "% off)" : "");
+        save = rate ? "You save " + money(BOOK.price * kids - total) : "Bring friends and enjoy discounts";
+        msg = "Hi Julien, I'd like to book the " + g.name + " course (" + g.ages + "), " + DAYS[s.day] + "s " + hours(s) +
+          ", 8 sessions from " + short(run[0]) + " to " + short(run[run.length - 1]) + " " + run[run.length - 1].getFullYear() +
+          ", for " + kids + (kids === 1 ? " student" : " students") + (friends ? " (my child and " + friends + (friends === 1 ? " friend" : " friends") + ")" : "") +
+          ". Total " + money(total) + ".";
+      }
+      bookPanel.querySelector("output").textContent = n;
+      bookPanel.querySelector('[data-step="-1"]').disabled = isWs(s) ? pairs <= 1 : friends <= 0;
+      bookPanel.querySelector('[data-step="1"]').disabled = isWs(s) ? pairs >= leftNow() : friends >= maxFriends();
+      bookPanel.querySelector(".bp-line").textContent = line;
       bookPanel.querySelector(".bp-total").textContent = money(total);
-      bookPanel.querySelector(".bp-save").textContent = rate ? "You save " + money(BOOK.price * kids - total) : "Bring a friend and you both save 10%";
-      Array.prototype.forEach.call(tierEls, function (li) { li.classList.toggle("is-on", +li.dataset.friends === Math.min(friends, 3)); });
-      var msg = "Hi Julien, I'd like to book the " + g.name + " course (" + g.ages + "), " + DAYS[c.day] + "s " + hours(c) +
-        ", 8 sessions from " + short(run[0]) + " to " + short(run[run.length - 1]) + " " + run[run.length - 1].getFullYear() +
-        ", for " + kids + (kids === 1 ? " student" : " students") + (friends ? " (my child and " + friends + (friends === 1 ? " friend" : " friends") + ")" : "") +
-        ". Total " + money(total) + ".";
+      bookPanel.querySelector(".bp-save").textContent = save;
       bookPanel.querySelector(".bp-cta").href = "https://wa.me/85267533727?text=" + encodeURIComponent(msg);
     }
 
-    function choose(d) { pick = d; view = new Date(d.getFullYear(), d.getMonth(), 1); drawMonth(); drawPanel(); }
+    function choose(p) { pick = p.d; pickS = p.s; view = new Date(pick.getFullYear(), pick.getMonth(), 1); drawMonth(); drawPanel(); }
 
     bookGrid.addEventListener("click", function (e) {
       var b = e.target.closest(".cal-day");
       if (!b || b.disabled || !b.classList.contains("has-class")) return;
-      pick = dparse(b.dataset.date); paint(); drawPanel();
+      pick = dparse(b.dataset.date); pickS = bookable(pick)[0]; paint(); drawPanel();
     });
     bookPanel.addEventListener("click", function (e) {
+      if (e.target.closest("[data-also]")) { pickS = alsoOn(); paint(); drawPanel(); return; }
       var b = e.target.closest("[data-step]");
       if (!b || b.disabled) return;
-      friends = Math.max(0, Math.min(maxFriends(), friends + +b.dataset.step));
+      if (isWs(pickS)) pairs = Math.max(1, Math.min(leftNow(), pairs + +b.dataset.step));
+      else friends = Math.max(0, Math.min(maxFriends(), friends + +b.dataset.step));
       price();
     });
     prevBtn.addEventListener("click", function () { view.setMonth(view.getMonth() - 1); drawMonth(); });
@@ -1868,13 +1897,13 @@ var DRAW = {
       chip.addEventListener("click", function () {
         stageSel = +chip.dataset.stage;
         Array.prototype.forEach.call(chips, function (o) { o.setAttribute("aria-pressed", o === chip ? "true" : "false"); });
-        // keep the chosen day if it still fits the filter, otherwise jump to the first class with a seat
-        if (pick && bookable(pick)) drawMonth();
-        else { pick = firstOpen(); if (pick) choose(pick); else { drawMonth(); drawPanel(); } }
+        // keep the chosen session if it still fits the filter, otherwise jump to the first one with a place
+        if (pick && bookable(pick).indexOf(pickS) >= 0) drawMonth();
+        else { var p = firstOpen(); if (p) choose(p); else { pick = pickS = null; drawMonth(); drawPanel(); } }
       });
     });
-    pick = firstOpen();
-    if (pick) choose(pick); else { drawMonth(); drawPanel(); }
+    var first = firstOpen();
+    if (first) choose(first); else { drawMonth(); drawPanel(); }
   }
 })();
 </script>
