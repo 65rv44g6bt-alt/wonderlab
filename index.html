@@ -388,7 +388,8 @@ video.is-waiting { opacity: 0 !important; }
 .cal-day.has-ws::after { content: ""; position: absolute; top: 9px; right: 9px; width: 7px; height: 7px; border-radius: 50%; background: var(--orange); } /* a workshop that afternoon */
 .cal-day[aria-pressed="true"] { background: var(--tint); color: var(--on-navy); box-shadow: none; }
 .cal-day[aria-pressed="true"] .cal-n, .cal-day[aria-pressed="true"] .cal-st, .cal-day[aria-pressed="true"] .cal-left { color: var(--on-navy); }
-.cal-note { margin-top: 14px; font-size: 0.86rem; color: var(--ink-soft); }
+.cal-note { margin: 14px 0 0; padding-left: 1.1em; font-size: 0.86rem; color: var(--ink-soft); }
+.cal-note li + li { margin-top: 3px; }
 @media (max-width: 600px) {
   .cal-dow, .cal-grid { gap: 4px; }
   .cal-day { min-height: 52px; padding: 5px 6px; border-radius: 9px; }
@@ -403,7 +404,18 @@ video.is-waiting { opacity: 0 !important; }
 .bp-title span { white-space: nowrap; } /* a line may break after the date, never inside the hours */
 .bp-when { margin-top: 10px; color: var(--on-navy-soft); }
 .bp-seats { margin-top: 2px; color: #FFFFFF; }
+.bp-title + .bp-seats { margin-top: 10px; }
 .bp-seats b { color: var(--orange); font-weight: 600; }
+.bp-plans { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 18px; }
+.bp-plans button { display: flex; flex-direction: column; align-items: flex-start; gap: 2px; padding: 11px 14px; border: 1px solid rgba(237,243,246,0.3); border-radius: 14px;
+  background: none; color: var(--on-navy); font: inherit; text-align: left; cursor: pointer; }
+.bp-plans button b { font-weight: 600; color: #FFFFFF; }
+.bp-plans button span { font-size: 0.88rem; color: var(--on-navy-soft); white-space: nowrap; }
+.bp-plans button em { font-style: normal; font-weight: 600; color: #FFFFFF; }
+@media (max-width: 420px) { .bp-plans { grid-template-columns: 1fr; } }
+.bp-plans button:hover { background: rgba(237,243,246,0.08); }
+.bp-plans button[aria-checked="true"] { border-color: var(--orange); background: rgba(237,243,246,0.06); box-shadow: inset 0 0 0 1px var(--orange); }
+.bp-loop { margin-top: 10px; font-size: 0.88rem; color: var(--on-navy-soft); }
 .bp-dates { list-style: none; margin: 14px 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 6px; }
 .bp-dates li { padding: 4px 10px; border: 1px solid rgba(237,243,246,0.24); border-radius: 999px; font-size: 0.82rem; font-variant-numeric: tabular-nums; }
 .bp-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: 20px; padding-top: 18px; border-top: 1px solid rgba(237,243,246,0.16); }
@@ -415,9 +427,11 @@ video.is-waiting { opacity: 0 !important; }
 .stepper button:disabled { opacity: 0.3; cursor: default; }
 .stepper output { min-width: 2ch; text-align: center; font-weight: 600; font-variant-numeric: tabular-nums; }
 .bp-price { margin-top: 18px; padding-top: 18px; border-top: 1px solid rgba(237,243,246,0.16); }
-.bp-line { color: var(--on-navy-soft); font-size: 0.95rem; }
+.bp-line { color: #FFFFFF; font-size: 0.9rem; }
 .bp-total { margin-top: 4px; font-size: var(--t2); font-weight: 500; letter-spacing: -0.03em; line-height: 1.05; }
-.bp-save:empty { display: none; }
+.bp-line:empty, .bp-save:empty, .bp-pay:empty, .bp-each:empty { display: none; }
+.bp-save small { display: block; margin-top: 2px; font-size: 0.8rem; font-weight: 400; opacity: 0.85; }
+.bp-pay { margin-top: 8px; font-size: 0.85rem; color: var(--on-navy-soft); }
 .bp-save { margin-top: 6px; color: var(--orange); font-size: 0.95rem; font-weight: 500; }
 .bp-cta { width: 100%; margin-top: 20px; }
 .bp-also { display: block; margin-top: 14px; padding: 0; border: 0; background: none; color: var(--on-navy); font: inherit; font-size: 0.92rem; text-align: left;
@@ -620,7 +634,10 @@ footer { background: var(--navy); color: var(--on-navy-soft); padding: clamp(44p
         </div>
         <div class="cal-dow" aria-hidden="true"><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span></div>
         <div class="cal-grid" id="cal-grid"></div>
-        <p class="cal-note">Seats left are for the whole 8-week course that starts that day; the rest of the chosen course is ringed in orange. An orange dot marks a parent &amp; child workshop that afternoon.</p>
+        <ul class="cal-note">
+          <li>Seats left are for the whole run that starts that day.</li>
+          <li>An orange dot marks a parent &amp; child workshop that afternoon.</li>
+        </ul>
       </div>
       <div class="book-panel" id="book-panel" aria-live="polite"></div>
     </div>
@@ -994,7 +1011,7 @@ var DRAW = {
     tinyflat:
       '<svg viewBox="0 0 240 180" aria-hidden="true"><g class="dr dr-brand"><rect x="20" y="20" width="200" height="140"/><path d="M120 20V90H220M20 100H80"/></g><g class="dr dr-thin"><rect x="136" y="30" width="40" height="50" class="fill-sky"/><rect x="182" y="30" width="30" height="50" class="fill-sky"/><rect x="36" y="36" width="54" height="24"/><circle cx="190" cy="120" r="14" class="fill-zing"/><rect x="30" y="112" width="40" height="40"/></g><text x="86" y="148" class="dr-note">30 m², full size</text></svg>',
     postcard:
-      '<svg viewBox="0 0 240 180" aria-hidden="true"><g class="dr dr-hair dr-ghost"><path d="M14 104L30 96L44 99L58 88L72 92L86 80L100 84L112 76L126 82L140 74L156 80L170 72L186 78L200 74L214 84L226 88"/><path d="M18 141q6-3 12 0t12 0t12 0t12 0t12 0t12 0t12 0t12 0t12 0M92 151q6-3 12 0t12 0t12 0t12 0t12 0M18 159q6-3 12 0t12 0t12 0"/><path d="M69 134V143M98 134V145M135 134V148M154 134V142" stroke-dasharray="2 3"/><circle cx="178" cy="40" r="13" stroke-dasharray="3 3"/><path d="M146 34q5-3 10 0t10 0t10 0M146 40q5-3 10 0t10 0t10 0M146 46q5-3 10 0t10 0t10 0"/></g><g class="dr dr-hair fill-stage"><path d="M18 130V112H30V130Z"/><path d="M31 130V100H40V130Z"/><path d="M44 130C46 110 42 92 47 72L53 70C58 90 54 110 56 130Z"/><path d="M62 130V62L65 58V52L69 44L73 52V58L76 62V130Z"/><path d="M90 130V78L98 50L106 70V130Z"/><path d="M110 130V70L115 64L120 70V130Z"/><path d="M128 130V40L131 34L135 25L139 34L142 40V130Z"/><path d="M148 130V78H160V130Z"/><path d="M164 130V96Q170 86 176 96V130Z"/><path d="M178 130V108H196V130Z"/><path d="M198 130V116H222V130Z"/></g><g class="dr dr-hair"><path d="M45 118L55 112M45 104L55 98M46 90L54 85M47 79L53 75"/><path d="M66 50V45M72 50V45M76 88H90M76 92H90"/><path d="M98 50V130M90 78L106 96M90 96L106 78M90 112L106 96M98 50V41M102 60V53"/><path d="M115 64V54M131 34H139"/><path d="M154 78V64M154 64L148.5 60.5M154 64L159.5 60.5M154 64V70.5"/></g><g class="dr dr-hair dr-ghost"><path d="M66 62V130M72 62V130M132 40V130M138 40V130"/><circle cx="150.5" cy="85" r="2"/><circle cx="157.5" cy="92" r="2"/><circle cx="150.5" cy="99" r="2"/><circle cx="157.5" cy="106" r="2"/><circle cx="150.5" cy="113" r="2"/><circle cx="157.5" cy="120" r="2"/></g><g class="dr dr-hair"><rect x="10" y="12" width="220" height="156" rx="5"/><path d="M14 130H226"/><path d="M40 146H64L60 150H44ZM46 146V142H58V146"/><ellipse cx="178" cy="151" rx="21" ry="4"/><path d="M172 147V142M184 147V141"/><circle cx="172" cy="140" r="3"/><circle cx="184" cy="139" r="3.5"/><circle cx="178" cy="143" r="2.2"/></g><rect x="190" y="20" width="32" height="38" rx="1.5" class="dr dr-hair fill-zing"/><rect x="193.5" y="23.5" width="25" height="31" class="dr dr-hair" stroke-dasharray="1.5 2" style="stroke:#0D1B26"/><text x="206" y="42" text-anchor="middle" class="dr-note" style="fill:#0D1B26;font-size:8.5px;font-weight:700">2050</text><text x="20" y="30" class="dr-note">Hong Kong, 2050</text></svg>'
+      '<svg viewBox="0 0 240 180" aria-hidden="true"><g class="dr dr-hair dr-ghost"><path d="M14 98L24 92L34 95L46 86L58 89L70 80L84 84L96 76L110 81L124 72L138 77L152 70L166 75L180 69L194 74L206 72L216 78L226 82"/><circle cx="158" cy="34" r="9" stroke-dasharray="3 3"/><path d="M18 52q2.5-2.5 5 0q2.5-2.5 5 0M26 45q2-2 4 0q2-2 4 0"/><path d="M18 160q6-3 12 0t12 0t12 0t12 0t12 0t12 0t12 0t12 0t12 0t12 0M66 165q6-3 12 0t12 0t12 0t12 0t12 0t12 0t12 0t12 0t12 0t12 0t12 0t12 0M128 141q5-3 10 0t10 0"/><path d="M14 130H226"/><path d="M118 46V126M122.5 33V126M127 46V126"/></g><path class="dr dr-hair" d="M22 93V79M22 79L22 72.5M22 79L27.6 82.2M22 79L16.4 82.2M200 73V66M200 66L200 60.5M200 66L204.8 68.8M200 66L195.2 68.8M216 78V70M216 70L216 65M216 70L220.3 72.5M216 70L211.7 72.5"/><g class="dr dr-hair fill-stage"><path d="M14 126V108H19V102H24V96H28V126Z"/><path d="M31 126V62H44V126Z"/><path d="M52 126C53 100 51 74 54 52L57.5 46L61 49C63 74 65 100 64 126Z"/><path d="M68 126V66L78 40L88 58V126Z"/><path d="M92 126V80H110V126ZM92 64V56Q101 45 110 56V64Z"/><path d="M114 126V46L116.5 42V36L119 33V27L122.5 20L126 27V33L128.5 36V42L131 46V126Z"/><path d="M140 126V92C140 72 147 58 160 50V126Z"/><path d="M164 126V82L179 73V126Z"/><path d="M183 126V104H202V126Z"/><path d="M205 126V112H226V126Z"/></g><path class="dr dr-hair" d="M31 70H44M31 78H44M31 86H44M31 94H44M31 102H44M31 110H44M31 118H44M27.5 70H31M44 78H47.5M27.5 86H31M44 94H47.5M27.5 102H31M44 110H47.5M27.5 118H31M52.5 114L63.8 104M52.6 100L63.4 90M52.6 86L62.8 76M53.2 72L62.2 62M54 58L61 52M68 104H88M68 82H88M68 126L88 104M88 126L68 104M68 104L88 82M88 104L68 82M78 40V82M78 40V34M83.5 49V44M92 64V80M94 64V80M108 64V80M110 64V80M92 88H110M92 96H110M92 104H110M92 112H110M92 120H110M101 72m-1.4 0a1.4 1.4 0 1 0 2.8 0a1.4 1.4 0 1 0 -2.8 0M102 70.6L101 65L100 70.6M101.7 73.6L107.1 75.5L102.7 71.8M99.3 71.8L94.9 75.5L100.3 73.6M122.5 20V15M145.8 66.5H160M141.5 78H160M140 90H160M140 102H160M140 114H160M168 79.5V83.5M172 77V81M176 74.5V78.5M164 96H179M164 106H179M164 116H179M183 112H202M183 119H202M205 112l5.25-4v4l5.25-4v4l5.25-4v4l5.25-4v4M205 119H226M14 126H226"/><path class="dr dr-hair fill-stage" d="M44 74H52V77.5H44ZM131 84H140V87.5H131Z"/><path class="dr dr-hair fill-stage" d="M36.5 62C36.5 60 37.7 59 38.9 59.4C39.3 58 41.5 58 41.9 59.4C43.1 59 44.3 60 43.5 62ZM28 70C28 68 28.7 67 29.4 67.4C29.6 66 30.9 66 31.1 67.4C31.8 67 32.5 68 32 70ZM43.5 78C43.5 76 44.2 75 44.9 75.4C45.1 74 46.4 74 46.6 75.4C47.3 75 48 76 47.5 78ZM28 86C28 84 28.7 83 29.4 83.4C29.6 82 30.9 82 31.1 83.4C31.8 83 32.5 84 32 86ZM43.5 94C43.5 92 44.2 91 44.9 91.4C45.1 90 46.4 90 46.6 91.4C47.3 91 48 92 47.5 94ZM28 102C28 100 28.7 99 29.4 99.4C29.6 98 30.9 98 31.1 99.4C31.8 99 32.5 100 32 102ZM43.5 110C43.5 108 44.2 107 44.9 107.4C45.1 106 46.4 106 46.6 107.4C47.3 107 48 108 47.5 110ZM28 118C28 116 28.7 115 29.4 115.4C29.6 114 30.9 114 31.1 115.4C31.8 115 32.5 116 32 118ZM15 108C15 106 15.7 105 16.4 105.4C16.6 104 17.9 104 18.1 105.4C18.8 105 19.5 106 19 108ZM19.5 102C19.5 100 20.2 99 20.9 99.4C21.1 98 22.4 98 22.6 99.4C23.3 99 24 100 23.5 102ZM24 96C24 94 24.7 93 25.4 93.4C25.6 92 26.9 92 27.1 93.4C27.8 93 28.5 94 28 96ZM45 74C45 72 46.2 71 47.4 71.4C47.8 70 50 70 50.4 71.4C51.6 71 52.8 72 52 74ZM132 84C132 82 133.2 81 134.4 81.4C134.8 80 137 80 137.4 81.4C138.6 81 139.8 82 139 84ZM141 90C141 88 141.9 87 142.7 87.4C143 86 144.6 86 144.9 87.4C145.7 87 146.6 88 146 90ZM142.3 78C142.3 76 143.2 75 144 75.4C144.3 74 145.9 74 146.2 75.4C147 75 147.9 76 147.3 78ZM146.2 66.5C146.2 64.5 147.1 63.5 147.9 63.9C148.2 62.5 149.8 62.5 150.1 63.9C150.9 63.5 151.8 64.5 151.2 66.5ZM152.6 57C152.6 55 153.5 54 154.3 54.4C154.6 53 156.2 53 156.5 54.4C157.3 54 158.2 55 157.6 57ZM184.5 104C184.5 102 185.4 101 186.2 101.4C186.5 100 188.1 100 188.4 101.4C189.2 101 190.1 102 189.5 104ZM190 104C190 102 190.9 101 191.7 101.4C192 100 193.6 100 193.9 101.4C194.7 101 195.6 102 195 104ZM195.5 104C195.5 102 196.4 101 197.2 101.4C197.5 100 199.1 100 199.4 101.4C200.2 101 201.1 102 200.5 104Z"/><path class="dr dr-hair fill-stage" d="M48.5 126V121M45.5 118a3 4 0 1 0 6 0a3 4 0 1 0 -6 0ZM90 126V121M87 118a3 4 0 1 0 6 0a3 4 0 1 0 -6 0ZM112 126V121M109 118a3 4 0 1 0 6 0a3 4 0 1 0 -6 0ZM135.5 126V121M132.5 118a3 4 0 1 0 6 0a3 4 0 1 0 -6 0ZM203.5 126V121M200.5 118a3 4 0 1 0 6 0a3 4 0 1 0 -6 0Z"/><path class="dr dr-hair fill-stage" d="M199 125V118H152C147 118 143 120.5 141 125Z"/><path class="dr dr-hair" d="M154 121.5H195" stroke-dasharray="4 2.5"/><g class="dr dr-hair"><path d="M28 147H74L69 153H33Z M35 147V141H67V147"/><path d="M33 141L36 138H66L69 141Z" class="fill-sky"/><path d="M39 144H63" stroke-dasharray="2 2"/><path d="M92 148Q108 152 126 147L122 154H97Z M104 148V128M115 148V134"/><path d="M105 130L114 128L117 145H105Z M116 135L122 134L124 146H116Z" class="fill-zing"/><path d="M156 143.5h9l-2.5 3.5h-9zM167 143.5h9l-2.5 3.5h-9zM178 143.5h9l-2.5 3.5h-9zM189 143.5h9l-2.5 3.5h-9zM200 143.5h9l-2.5 3.5h-9zM211 143.5h9l-2.5 3.5h-9zM152.5 149.5h9l-2.5 3.5h-9zM163.5 149.5h9l-2.5 3.5h-9zM174.5 149.5h9l-2.5 3.5h-9zM185.5 149.5h9l-2.5 3.5h-9zM196.5 149.5h9l-2.5 3.5h-9zM207.5 149.5h9l-2.5 3.5h-9z" class="fill-sky"/><ellipse cx="176" cy="57" rx="4" ry="1.8" class="fill-stage"/><path d="M169 53.5h5M178 53.5h5M171.5 53.5V55.6M180.5 53.5V55.6"/></g><rect x="10" y="12" width="220" height="156" rx="5" class="dr dr-hair"/><rect x="190" y="20" width="32" height="38" rx="1.5" class="dr dr-hair fill-zing"/><rect x="193.5" y="23.5" width="25" height="31" class="dr dr-hair" stroke-dasharray="1.5 2" style="stroke:#0D1B26"/><text x="206" y="42" text-anchor="middle" class="dr-note" style="fill:#0D1B26;font-size:8.5px;font-weight:700">2050</text><text x="20" y="30" class="dr-note">Hong Kong, 2050</text></svg>'
   };
 
   var GROUPS = [
@@ -1083,7 +1100,7 @@ var DRAW = {
    [
     "postcard",
     "Postcards from 2050",
-    "Draw a postcard from a Hong Kong street in 2050, then work backwards to the three changes that would have to happen to get there.",
+    "Draw a postcard from a Hong Kong skyline in 2050, then work backwards to the three changes that would have to happen to get there.",
     "Futures thinking and planning backwards.",
     "Futures thinking"
    ]
@@ -1181,7 +1198,7 @@ var DRAW = {
    [
     "postcard",
     "Postcards from 2050",
-    "Draw a postcard from a Hong Kong street in 2050, then work backwards to the three changes that would have to happen to get there.",
+    "Draw a postcard from a Hong Kong skyline in 2050, then work backwards to the three changes that would have to happen to get there.",
     "Futures thinking and planning backwards.",
     "Futures thinking"
    ],
@@ -1286,7 +1303,7 @@ var DRAW = {
    [
     "postcard",
     "Postcards from 2050",
-    "Draw a postcard from a Hong Kong street in 2050, then work backwards to the three changes that would have to happen to get there.",
+    "Draw a postcard from a Hong Kong skyline in 2050, then work backwards to the three changes that would have to happen to get there.",
     "Futures thinking and planning backwards.",
     "Futures thinking"
    ]
@@ -1528,22 +1545,26 @@ var DRAW = {
   window.addEventListener("resize", function () { if (active >= 0) { moveSlider(active, true); reach(false); } });
 
   // the panel always reaches past the selected title, so the title's box runs straight into it. The extra height
-  // opens under the animation; while the panel is stuck it follows the page, and it never passes the end of the list,
-  // so nothing below moves
+  // opens under the animation; while the panel is stuck it follows the page, and it only passes the end of the list
+  // when the panel is already the taller of the two
   function reach(animate) {
     if (!slider || !tabs[active] || isPhone.matches) return;
     var col = slider.parentNode.getBoundingClientRect(), row = tabs[active].getBoundingClientRect();
     var r = parseFloat(getComputedStyle(chWrap).getPropertyValue("--r")) || 18, last = active === tabs.length - 1;
     var natural = fig.offsetHeight + panel.lastElementChild.offsetHeight;
-    // clear the join below the title and the panel's own rounded corner; the last title ends flush
-    var need = Math.min(row.bottom - col.top + (last ? 0 : 2 * r), col.height);
+    // the last title ends flush with the panel's bottom edge, unless the panel is taller than the whole list (a short
+    // stage): then the panel runs on below it and the title joins its side like any other
+    var flush = last && natural <= col.height + 0.5;
+    // clear the join below the title and the panel's own rounded corner; a flush last title needs neither
+    var need = row.bottom - col.top + (flush ? 0 : 2 * r);
+    if (!last) need = Math.min(need, col.height);
     // size it for where it sticks (just under the header), not where it happens to be, so a tall panel still sticks
-    // and keeps the animation in view
-    var top = Math.max(0, (parseFloat(getComputedStyle(panel).top) || 0) - col.top);
+    // and keeps the animation in view. A panel taller than the list has no room to slide and stays at the top
+    var top = last && !flush ? 0 : Math.max(0, (parseFloat(getComputedStyle(panel).top) || 0) - col.top);
     var extra = Math.max(0, need - top - natural);
     fig.style.transition = animate ? "" : "none";
     panel.style.setProperty("--reach", extra.toFixed(1) + "px");
-    chWrap.classList.toggle("at-last", last); // the last title always meets the panel's bottom edge
+    chWrap.classList.toggle("at-last", flush);
   }
   var reachTick = false;
   window.addEventListener("scroll", function () {
@@ -1673,8 +1694,13 @@ var DRAW = {
   // EDIT HERE: the weekly timetable, the weekend workshop, the days with no class, and the places already taken on each date.
   // The timetable is provisional; no bookings are recorded yet, so every course and workshop shows all its places.
   var BOOK = {
-    price: 4200, sessions: 8, seats: 9, months: 3,
-    off: [0, 0.10, 0.15, 0.20],          // discount for everyone in the group, by friends brought along (3 or more: 20%)
+    // the 12 challenges of each stage run in a loop, so a child can start any week and has done the full set 20 sessions later
+    plans: [
+      { sessions: 10, price: 4900, name: "Half programme" },
+      { sessions: 20, price: 8900, name: "Full programme" }
+    ],
+    seats: 9, months: 3,
+    off: [0, 0.05, 0.10, 0.15],          // referral discount on this child's booking, 5% per friend invited who books separately (+1: 5%, +2: 10%, +3 or more: 15%)
     week: [                              // day: 1 Monday ... 6 Saturday; stage: 0 Explorers, 1 Creators, 2 Changemakers
       { day: 1, from: "16:00", to: "17:30", stage: 0 },
       { day: 2, from: "16:00", to: "17:30", stage: 1 },
@@ -1685,7 +1711,7 @@ var DRAW = {
     ],
     // Saturday and Sunday afternoons: a one-off design workshop where each child teams up with a parent, priced and
     // counted per pair; taken works as below, in pairs
-    workshop: { days: [6, 0], from: "14:00", to: "16:00", price: 760, pairs: 6, taken: {} },
+    workshop: { days: [6, 0], from: "14:00", to: "16:00", price: 760, pairs: 4, taken: {} },
     closed: ["2026-10-01", "2026-12-25", "2026-12-26"],
     taken: {}                            // e.g. "2026-10-06": 4 means 4 of the 9 seats that day are booked
   };
@@ -1710,15 +1736,25 @@ var DRAW = {
       if (WS.days.indexOf(d.getDay()) >= 0) out.push(WS);
       return out;
     };
-    // a course is the same class every week for 8 sessions, skipping the days with no class
+    // a course is the same class every week for the chosen plan's sessions (10 or 20), skipping the days with no class
     var course = function (d) {
       var out = [], x = new Date(d);
-      while (out.length < BOOK.sessions) { if (BOOK.closed.indexOf(dkey(x)) < 0) out.push(new Date(x)); x.setDate(x.getDate() + 7); }
+      while (out.length < BOOK.plans[plan].sessions) { if (BOOK.closed.indexOf(dkey(x)) < 0) out.push(new Date(x)); x.setDate(x.getDate() + 7); }
       return out;
     };
     var seatsFor = function (dates) { return Math.min.apply(null, dates.map(function (x) { return BOOK.seats - (BOOK.taken[dkey(x)] || 0); })); };
-    // a course counts seats for children across all 8 weeks; a workshop counts child-and-parent pairs on its one day
-    var leftFor = function (d, s) { return isWs(s) ? WS.pairs - (WS.taken[dkey(d)] || 0) : seatsFor(course(d)); };
+    // a course counts seats for children across all its weeks; a workshop counts child-and-parent pairs on its one day
+    // DEMO: placeholder places left until real bookings come in. Delete these lines and set DEMO to false to show real counts.
+    var DEMO = true;
+    var demoLeft = function (d, s, max) {
+      var k = dkey(d) + (isWs(s) ? "w" : s.stage), h = 2166136261;
+      for (var i = 0; i < k.length; i++) { h ^= k.charCodeAt(i); h = Math.imul(h, 16777619); }
+      return 2 + ((h >>> 0) % (max - 1));          // the same date always shows the same number, between 2 and max
+    };
+    var leftFor = function (d, s) {
+      if (DEMO) return demoLeft(d, s, isWs(s) ? WS.pairs : BOOK.seats);
+      return isWs(s) ? WS.pairs - (WS.taken[dkey(d)] || 0) : seatsFor(course(d));
+    };
     var places = function (s, n) { return n + " " + (isWs(s) ? (n === 1 ? "pair" : "pairs") : (n === 1 ? "seat" : "seats")); };
     var nameOf = function (s) { return isWs(s) ? "Parent & child workshop" : GROUPS[s.stage].name; };
     var tintOf = function (s) { return isWs(s) ? "var(--family)" : STAGE_TINT[s.stage]; };
@@ -1735,7 +1771,7 @@ var DRAW = {
     var tomorrow = new Date(today); tomorrow.setDate(tomorrow.getDate() + 1);
     var firstMonth = new Date(tomorrow.getFullYear(), tomorrow.getMonth(), 1); // the months shown start from the first bookable day
     var lastMonth = new Date(firstMonth.getFullYear(), firstMonth.getMonth() + BOOK.months - 1, 1);
-    var view = new Date(firstMonth), stageSel = -1, pick = null, pickS = null, friends = 0, pairs = 1;
+    var view = new Date(firstMonth), stageSel = -1, pick = null, pickS = null, friends = 0, pairs = 1, plan = 1;
     var monthEl = document.getElementById("cal-month"), prevBtn = document.getElementById("cal-prev"), nextBtn = document.getElementById("cal-next");
     var bookPanel = document.getElementById("book-panel"), chips = document.querySelectorAll(".chip");
     // bookings start from tomorrow; a day offers the sessions that fit the chip, those with places left first
@@ -1806,7 +1842,8 @@ var DRAW = {
       return null;
     };
     var leftNow = function () { return pick ? leftFor(pick, pickS) : 0; };
-    var maxFriends = function () { return Math.max(0, leftNow() - 1); };
+    var maxFriends = function () { return Math.max(0, leftNow() - 1); };  // friends now counts brothers and sisters
+
     var stepper = function (one) {
       return '<div class="stepper"><button type="button" data-step="-1" aria-label="One ' + one + ' fewer">&minus;</button><output aria-live="polite"></output>' +
         '<button type="button" data-step="1" aria-label="One more ' + one + '">+</button></div>';
@@ -1821,15 +1858,14 @@ var DRAW = {
       }
       var s = pickS, left = leftFor(pick, s), other = alsoOn();
       var also = other ? '<button type="button" class="bp-also" data-also>Also that day: ' + nameOf(other).replace("&", "&amp;") + ", " + hours(other) + " &rarr;</button>" : "";
-      var tail = '<div class="bp-price"><p class="bp-line"></p><p class="bp-total"></p><p class="bp-save"></p></div>' +
-        '<a class="btn btn-light bp-cta" href="https://wa.me/85267533727">Request this booking on WhatsApp</a>' +
-        '<p class="bp-small">Julien confirms every booking and the seats on WhatsApp.</p>';
+      var tail = '<div class="bp-price"><p class="bp-line"></p><p class="bp-total"></p><p class="bp-save"></p><p class="bp-pay"></p></div>' +
+        '<a class="btn btn-light bp-cta" href="https://wa.me/85267533727">Request this booking on WhatsApp</a>';
       bookPanel.style.setProperty("--tint", tintOf(s));
       if (isWs(s)) {
         bookPanel.innerHTML =
           '<p class="bp-kind">Parent &amp; child &middot; Weekend workshop</p>' +
           '<h3 class="bp-title">' + DAYS[pick.getDay()] + " " + pick.getDate() + " " + MONTHS[pick.getMonth()].slice(0, 3) + ', <span>' + hours(s) + "</span></h3>" +
-          '<p class="bp-when">A special design workshop where children and parents team up to rise to the challenge.</p>' +
+          '<p class="bp-when">Team up with your child for a weekend design challenge!</p>' +
           '<p class="bp-seats"><b>' + left + "</b> " + (left === 1 ? "pair" : "pairs") + " left</p>" + also +
           '<div class="bp-row"><p>Pairs<small>One child and one parent each</small></p>' + stepper("pair") + "</div>" + tail;
         pairs = Math.max(1, Math.min(pairs, left));
@@ -1838,10 +1874,13 @@ var DRAW = {
         bookPanel.innerHTML =
           '<p class="bp-kind">' + g.name + " &middot; " + g.ages + "</p>" +
           '<h3 class="bp-title">' + DAYS[s.day] + "s, " + hours(s) + "</h3>" +
-          '<p class="bp-when">Starts ' + short(run[0]) + ", last class " + short(run[run.length - 1]) + "</p>" +
           '<p class="bp-seats"><b>' + left + "</b> " + (left === 1 ? "seat" : "seats") + " left in this group</p>" +
-          '<ol class="bp-dates" aria-label="The 8 sessions">' + run.map(function (x) { return "<li>" + x.getDate() + " " + MONTHS[x.getMonth()].slice(0, 3) + "</li>"; }).join("") + "</ol>" + also +
-          '<div class="bp-row"><p>Friends joining<small>Everyone in the group gets the discount</small></p>' + stepper("friend") + "</div>" + tail;
+          '<div class="bp-plans" role="radiogroup" aria-label="Programme">' + BOOK.plans.map(function (q, i) {
+            return '<button type="button" role="radio" data-plan="' + i + '" aria-checked="' + (i === plan) + '"><b>' + q.sessions + " sessions</b>" +
+              "<span><em>" + money(q.price) + "</em> &middot; " + money(q.price / q.sessions) + "/class</span></button>";
+          }).join("") + "</div>" +
+          '<ol class="bp-dates" aria-label="The ' + run.length + ' sessions">' + run.map(function (x) { return "<li>" + x.getDate() + " " + MONTHS[x.getMonth()].slice(0, 3) + "</li>"; }).join("") + "</ol>" + also +
+          '<div class="bp-row"><p>Invite friends for discount<small class="bp-each"></small></p>' + stepper("friend") + "</div>" + tail;
         friends = Math.min(friends, maxFriends());
       }
       price();
@@ -1850,21 +1889,29 @@ var DRAW = {
     // the price and the WhatsApp message follow the stepper; only the figures change, so focus stays put
     function price() {
       if (!pick) return;
-      var s = pickS, n, total, line, save = "", msg;
+      var s = pickS, n, total, line, save = "", pay = "", msg;
       if (isWs(s)) {
         n = pairs; total = WS.price * pairs;
         line = pairs + (pairs === 1 ? " pair" : " pairs") + " × " + money(WS.price);
         msg = "Hi Julien, I'd like to book the parent & child design workshop on " + short(pick) + " " + pick.getFullYear() + ", " + hours(s) +
           ", for " + pairs + (pairs === 1 ? " pair (one child and one parent)" : " pairs (a child and a parent each)") + ". Total " + money(total) + ".";
       } else {
-        var g = GROUPS[s.stage], run = course(pick), kids = friends + 1;
-        var rate = BOOK.off[Math.min(friends, BOOK.off.length - 1)], each = BOOK.price * (1 - rate);
-        n = friends; total = each * kids;
-        line = kids + (kids === 1 ? " student" : " students") + " × " + money(each) + (rate ? " (" + Math.round(rate * 100) + "% off)" : "");
-        save = rate ? "You save " + money(BOOK.price * kids - total) : "Bring friends and enjoy discounts";
-        msg = "Hi Julien, I'd like to book the " + g.name + " course (" + g.ages + "), " + DAYS[s.day] + "s " + hours(s) +
-          ", 8 sessions from " + short(run[0]) + " to " + short(run[run.length - 1]) + " " + run[run.length - 1].getFullYear() +
-          ", for " + kids + (kids === 1 ? " student" : " students") + (friends ? " (my child and " + friends + (friends === 1 ? " friend" : " friends") + ")" : "") +
+        var g = GROUPS[s.stage], run = course(pick);
+        // the price is for this child only; friends and siblings joining book and pay on their own, and set the discount
+        var P = BOOK.plans[plan], base = P.price, rate = BOOK.off[Math.min(friends, BOOK.off.length - 1)];
+        total = base * (1 - rate);
+        n = friends;
+        line = "Price per student for " + P.sessions + " sessions";
+        // what the saving is made of: the full-programme price against two half programmes, and the referral discount
+        var perClass = BOOK.plans[0].price / BOOK.plans[0].sessions, progPart = perClass * P.sessions - base, refPart = base * rate, parts = [];
+        if (progPart > 0.5) parts.push(money(progPart) + " full programme (vs 2 × 10 sessions)");
+        if (refPart > 0.5) parts.push(money(refPart) + " referral (" + Math.round(rate * 100) + "%, " + friends + (friends === 1 ? " friend" : " friends") + " invited)");
+        save = parts.length ? "You save " + money(progPart + refPart) + " · " + money(total / P.sessions) + "/class" : "Invite friends for a referral discount";
+        pay = rate ? "Payment is due once your invited friends are confirmed." : "";
+        bookPanel.querySelector(".bp-each").textContent = rate ? "each enjoys " + Math.round(rate * 100) + "% off" : "";
+        msg = "Hi Julien, I'd like to book the " + g.name + " " + P.name.toLowerCase() + " (" + g.ages + "), " + DAYS[s.day] + "s " + hours(s) +
+          ", " + P.sessions + " sessions from " + short(run[0]) + " to " + short(run[run.length - 1]) + " " + run[run.length - 1].getFullYear() +
+          ", for my child" + (friends ? ", with " + friends + (friends === 1 ? " friend" : " friends") + " invited (they book separately), " + Math.round(rate * 100) + "% referral discount" : "") +
           ". Total " + money(total) + ".";
       }
       bookPanel.querySelector("output").textContent = n;
@@ -1872,7 +1919,8 @@ var DRAW = {
       bookPanel.querySelector('[data-step="1"]').disabled = isWs(s) ? pairs >= leftNow() : friends >= maxFriends();
       bookPanel.querySelector(".bp-line").textContent = line;
       bookPanel.querySelector(".bp-total").textContent = money(total);
-      bookPanel.querySelector(".bp-save").textContent = save;
+      bookPanel.querySelector(".bp-save").innerHTML = save;   // built only from figures and fixed words
+      bookPanel.querySelector(".bp-pay").textContent = pay;
       bookPanel.querySelector(".bp-cta").href = "https://wa.me/85267533727?text=" + encodeURIComponent(msg);
     }
 
@@ -1885,6 +1933,8 @@ var DRAW = {
     });
     bookPanel.addEventListener("click", function (e) {
       if (e.target.closest("[data-also]")) { pickS = alsoOn(); paint(); drawPanel(); return; }
+      var pl = e.target.closest("[data-plan]");
+      if (pl) { plan = +pl.dataset.plan; drawMonth(); drawPanel(); var f = bookPanel.querySelector('[data-plan="' + plan + '"]'); if (f) f.focus(); return; }
       var b = e.target.closest("[data-step]");
       if (!b || b.disabled) return;
       if (isWs(pickS)) pairs = Math.max(1, Math.min(leftNow(), pairs + +b.dataset.step));
