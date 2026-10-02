@@ -1305,7 +1305,7 @@ var DRAW = {
   }
 
   /* ---------- hero clip ---------- */
-  var MV = "?v=23";   // bump when media files are replaced, so returning visitors get the new clips
+  var MV = "?v=24";   // bump when media files are replaced, so returning visitors get the new clips
   var hv = document.getElementById("hero-video"), wide = window.matchMedia("(min-width: 901px)");
   var heroSrc = function () { return (wide.matches ? "media/hero.mp4" : "media/hero-portrait.mp4") + MV; };
   if (hv && !reduce.matches) {
@@ -1825,7 +1825,29 @@ var DRAW = {
       var b = e.target.closest(".cal-slot[data-i]");
       if (!b || b.disabled) return;
       pick = dparse(b.dataset.date); pickS = sessionsOn(pick)[+b.dataset.i]; paint(); drawPanel();
+      if (window.matchMedia("(max-width: 900px)").matches) glideTo(bookPanel);
     });
+
+    // On phones the booking panel sits below the calendar: glide down to it with an ease-in-out.
+    var glideRaf = 0;
+    function glideTo(el) {
+      cancelAnimationFrame(glideRaf);
+      var head = document.querySelector(".site-head"), gap = (head ? head.offsetHeight : 0) + 12;
+      var from = window.scrollY, to = Math.max(0, el.getBoundingClientRect().top + from - gap), dist = to - from;
+      if (Math.abs(dist) < 4) return;
+      if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) { window.scrollTo({ top: to, behavior: "instant" }); return; }
+      var dur = Math.min(900, Math.max(450, Math.abs(dist) * 0.9)), t0 = 0;
+      var stop = function () { cancelAnimationFrame(glideRaf); off(); };
+      var off = function () { ["wheel", "touchstart", "keydown"].forEach(function (ev) { window.removeEventListener(ev, stop); }); };
+      ["wheel", "touchstart", "keydown"].forEach(function (ev) { window.addEventListener(ev, stop, { passive: true }); });
+      var step = function (now) {
+        if (!t0) t0 = now;
+        var k = Math.min(1, (now - t0) / dur), e = k < 0.5 ? 4 * k * k * k : 1 - Math.pow(-2 * k + 2, 3) / 2;
+        window.scrollTo({ top: from + dist * e, behavior: "instant" });
+        if (k < 1) glideRaf = requestAnimationFrame(step); else off();
+      };
+      glideRaf = requestAnimationFrame(step);
+    }
     bookPanel.addEventListener("click", function (e) {
       var al = e.target.closest("[data-also]");
       if (al) { pickS = alsoOn()[+al.dataset.also]; paint(); drawPanel(); return; }
