@@ -4,9 +4,9 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>WonderLab — Creative thinking academy, Mong Kok</title>
-<meta name="description" content="WonderLab is a creative thinking academy in Mong Kok, Hong Kong. Children aged 7 to 14 design, build and test their own ideas in classes of nine or fewer.">
+<meta name="description" content="WonderLab is a creative thinking academy in Mong Kok, Hong Kong. Children aged 7 to 14 design, build and test their own ideas in classes of seven or fewer.">
 <meta name="theme-color" content="#FFFFFF">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='-64 -64 128 128'%3E%3Crect x='-60' y='-60' width='120' height='120' rx='14' fill='%230D1B26'/%3E%3Crect x='-36' y='-36' width='72' height='72' fill='none' stroke='%23FFFFFF' stroke-width='9'/%3E%3C/svg%3E">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='-64 -64 128 128'%3E%3Crect x='-62' y='-62' width='124' height='124' rx='14' fill='%231A3F6E'/%3E%3Crect x='-38' y='-38' width='76' height='76' fill='none' stroke='%23FF6000' stroke-width='12'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300..700&display=swap" rel="stylesheet">
@@ -26,7 +26,11 @@
   --on-navy-soft: #9FB2BF;
   --orange: #FF6000;     /* the joyful accent: lines, dots, labels, the map pin */
   --orange-ink: #C24A00; /* the same orange, deep enough for small text on white */
-  --family: #4B2206;     /* parent & child workshops: the accent's own deep tone */
+  --family: #4B2206;
+  --dot-0: #12A594;      /* calendar dots, bright enough to tell apart: Explorers */
+  --dot-1: #3B7BEA;      /* Creators */
+  --dot-2: #0D1B26;      /* Changemakers (navy, for now) */
+  --dot-ws: #FF6000;     /* parent & child workshops */     /* parent & child workshops: the accent's own deep tone */
   --font: "Inter", "Helvetica Neue", Arial, sans-serif;
 
   --t-1: 0.86rem;
@@ -182,7 +186,7 @@ video.is-waiting { opacity: 0 !important; }
   transform: scaleX(0); transform-origin: left; transition: transform 1100ms cubic-bezier(.16,.84,.3,1) var(--bd, 0ms);
 }
 .cascade.step::before, .highlights li.cascade::before { background: var(--line); }
-.cascade.pillar::before { height: 2px; top: -2px; background: var(--orange); }
+.cascade.pillar::before { background: var(--orange); }   /* the same 1px line as the grey ones, in orange */
 .cascade.is-in::before, .highlights li.cascade.is-in::before { transform: none; }
 /* on the way back up everything tucks away again: a little quicker, last piece first, then the bar */
 .cascade:not(.is-in) .slot-in { transition-duration: 620ms; transition-timing-function: cubic-bezier(.55,0,.75,.2); transition-delay: calc(var(--bd, 0ms) + var(--sdr, 0ms)); }
@@ -323,7 +327,7 @@ video.is-waiting { opacity: 0 !important; }
 
 .steps { list-style: none; margin: 12px 0 0; padding: 0; display: grid; grid-template-columns: repeat(6, 1fr); gap: 0 clamp(14px, 2vw, 28px); }
 .step { border-top: 1px solid var(--line); padding: 12px 0; }
-.step .num { font-size: var(--t-1); font-weight: 600; color: var(--orange-ink); font-variant-numeric: tabular-nums; }
+.step .num { font-size: var(--t-1); font-weight: 600; color: var(--orange); font-variant-numeric: tabular-nums; }
 .step h3 { margin-top: 2px; font-size: 1.22rem; letter-spacing: -0.025em; }
 .step p { margin-top: 2px; color: var(--ink-soft); font-size: 0.95rem; line-height: 1.4; }
 @media (max-width: 900px) { .steps { grid-template-columns: repeat(3, 1fr); } }
@@ -352,9 +356,11 @@ video.is-waiting { opacity: 0 !important; }
 @media (max-width: 900px) { .book { grid-template-columns: 1fr; } }
 .cal { border: 1px solid var(--line); border-radius: var(--r); padding: clamp(14px, 2.2vw, 26px); }
 .cal-stages { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 18px; }
-.chip { border: 1px solid var(--line); background: none; border-radius: 999px; padding: 7px 13px; font: inherit; font-size: 0.9rem; font-weight: 500;
+.chip { flex: 1 1 auto; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px;
+  border: 1px solid var(--line); background: none; border-radius: 12px; padding: 6px 10px; font: inherit; font-size: 0.86rem; font-weight: 500; line-height: 1.2;
   color: var(--ink); cursor: pointer; transition: background-color 200ms ease, border-color 200ms ease, color 200ms ease; }
-.chip small { margin-left: 5px; font-size: 0.8rem; font-weight: 400; color: var(--ink-soft); }
+.chip small { font-size: 0.74rem; font-weight: 400; color: var(--ink-soft); white-space: nowrap; } /* the ages sit under the name, so all five fit one row on a laptop */
+@media (min-width: 901px) and (max-width: 1199px) { .chip { padding: 5px 7px; font-size: 0.8rem; } .chip small { font-size: 0.7rem; } } /* small laptops */
 .chip:hover { border-color: var(--orange); }
 .chip[data-stage="0"] { --tint: var(--teal); }
 .chip[data-stage="1"] { --tint: var(--blue); }
@@ -369,63 +375,113 @@ video.is-waiting { opacity: 0 !important; }
 .cal-nav button { width: 38px; height: 38px; border-radius: 50%; border: 1px solid var(--line); background: none; color: var(--ink); font: inherit; font-size: 1.25rem; line-height: 1; cursor: pointer; }
 .cal-nav button:hover:not(:disabled) { border-color: var(--ink); }
 .cal-nav button:disabled { opacity: 0.3; cursor: default; }
+.cal-scroll { position: relative; }
+.cal-viewport { position: relative; }
+.cal-viewport.is-turning { overflow: hidden; }
+.cal-ghost { position: absolute; left: 0; right: 0; top: 0; pointer-events: none; }
 .cal-dow, .cal-grid { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 6px; }
-.cal-dow span { padding-bottom: 6px; text-align: center; font-size: var(--t-1); color: var(--ink-soft); }
-.cal-day { position: relative; display: flex; flex-direction: column; align-items: flex-start; gap: 1px; min-width: 0; min-height: 78px; padding: 8px 9px; border: 0; border-radius: 12px;
-  background: none; color: var(--ink-soft); font: inherit; text-align: left; cursor: default; transition: background-color 200ms ease, color 200ms ease, box-shadow 200ms ease; }
-.cal-n { font-size: 0.98rem; font-weight: 500; font-variant-numeric: tabular-nums; }
-.cal-st { max-width: 100%; overflow: hidden; font-size: 0.68rem; line-height: 1.2; white-space: nowrap; text-overflow: ellipsis; }
-@media (max-width: 1099px) { .cal-st { display: none; } } /* the cells get too narrow; the chips and the panel still say which group */
-.cal-left { margin-top: auto; font-size: 0.74rem; font-variant-numeric: tabular-nums; }
-.cal-day.has-class { background: var(--paper-2); color: var(--ink); cursor: pointer; }
-.cal-day.has-class .cal-st, .cal-day.has-class .cal-left { color: var(--ink-soft); }
-.cal-day.has-class:hover { box-shadow: inset 0 0 0 1px var(--ink); }
-.cal-day.is-low .cal-left { color: var(--orange-ink); font-weight: 600; }
-.cal-day.is-full { opacity: 0.5; cursor: not-allowed; }
+.cal-dow { margin-bottom: 4px; }
+.cal-dow span { padding: 4px 0 8px; text-align: center; font-size: var(--t-1); color: var(--ink-soft); }
+.cal-mrow { grid-column: 1 / -1; padding: 16px 2px 4px; font-size: 1.05rem; font-weight: 500; letter-spacing: -0.02em; color: var(--ink); }
+.cal-mrow:first-child { padding-top: 6px; }
+.cal-day { display: flex; flex-direction: column; gap: 3px; min-width: 0; min-height: 86px; padding: 6px; border-radius: 12px; color: var(--ink-soft); }
+.cal-day.has-class { background: var(--paper-2); color: var(--ink); }
 .cal-day.is-past { opacity: 0.35; }
+.cal-n { margin-bottom: auto; padding: 0 2px 2px; font-size: 0.92rem; font-weight: 500; font-variant-numeric: tabular-nums; }
+.cal-n small { font-size: 0.72rem; font-weight: 500; color: var(--orange-ink); }
 .cal-day.is-today .cal-n { color: var(--orange-ink); }
-.cal-day.in-course { box-shadow: inset 0 0 0 2px var(--orange); }
-.cal-day.has-ws::after { content: ""; position: absolute; top: 9px; right: 9px; width: 7px; height: 7px; border-radius: 50%; background: var(--orange); } /* a workshop that afternoon */
-.cal-day[aria-pressed="true"] { background: var(--tint); color: var(--on-navy); box-shadow: none; }
-.cal-day[aria-pressed="true"] .cal-n, .cal-day[aria-pressed="true"] .cal-st, .cal-day[aria-pressed="true"] .cal-left { color: var(--on-navy); }
-.cal-note { margin: 14px 0 0; padding-left: 1.1em; font-size: 0.86rem; color: var(--ink-soft); }
+.cal-slot { display: flex; align-items: center; gap: 5px; width: 100%; min-width: 0; padding: 4px 6px; border: 0; border-radius: 8px; background: var(--paper);
+  color: var(--ink); font: inherit; font-size: 0.74rem; line-height: 1.2; text-align: left; cursor: pointer; transition: background-color 160ms ease, box-shadow 160ms ease; }
+.cal-slot .dot { flex: none; width: 8px; height: 8px; border-radius: 50%; background: var(--dot); }
+.cal-slot .t { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.cal-slot .l { margin-left: auto; color: var(--ink-soft); font-variant-numeric: tabular-nums; }
+.cal-slot.is-low .l { color: var(--orange-ink); font-weight: 600; }
+.cal-slot:hover:not(:disabled) { box-shadow: inset 0 0 0 1px var(--ink); }
+.cal-slot:focus-visible { outline: 2px solid var(--orange); outline-offset: 1px; }
+.cal-slot:disabled { opacity: 0.45; cursor: not-allowed; }
+.cal-slot.is-full .t { text-decoration: line-through; }
+.cal-slot.cal-gap { visibility: hidden; pointer-events: none; }
+.cal-info { display: flex; align-items: center; justify-content: center; padding: 4px 3px; font-size: 0.72rem; line-height: 1.2; color: var(--ink-soft);
+  font-variant-numeric: tabular-nums; white-space: nowrap; }
+.cal-info.is-low { color: var(--orange-ink); font-weight: 600; }
+@media (max-width: 600px) { .cal-info { font-size: 0.64rem; padding: 4px 1px; letter-spacing: -0.02em; } }
+.cal-slot.in-course { box-shadow: inset 0 0 0 2px var(--orange); }
+.cal-slot[aria-pressed="true"] { background: var(--tint); color: var(--on-navy); box-shadow: none; }
+.cal-slot[aria-pressed="true"] .l { color: var(--on-navy); }
+.cal-slot[aria-pressed="true"] .dot { box-shadow: 0 0 0 2px rgba(255,255,255,0.85); }
+/* the colour key doubles as the filter: All, then one button per group with its dot */
+.cal-key { display: flex; flex-wrap: nowrap; gap: 6px; margin-bottom: 16px; }
+.cal-key .chip { flex: 0 1 auto; flex-direction: row; gap: 6px; padding: 6px 11px; border-radius: 999px; font-size: 0.82rem; white-space: nowrap; }
+.cal-key .chip::before { content: ""; flex: none; width: 9px; height: 9px; border-radius: 50%; background: var(--dot); }
+.cal-key .key-all::before { display: none; }
+.cal-key .chip small { font-size: 0.72rem; }
+.cal-key { gap: 5px; }
+.cal-key .chip[aria-pressed="true"] { background: var(--paper-2); border-color: var(--dot, var(--ink)); box-shadow: inset 0 0 0 1px var(--dot, var(--ink)); color: var(--ink); }
+.cal-key .chip[aria-pressed="true"] small { color: var(--ink-soft); }
+.cal-key .key-all[aria-pressed="true"] { background: var(--ink); border-color: var(--ink); box-shadow: none; color: var(--on-navy); }
+@media (min-width: 901px) and (max-width: 1199px) { .cal-key { gap: 4px; } .cal-key .chip { gap: 5px; padding: 5px 9px; font-size: 0.78rem; } .cal-key .chip small { display: none; } }
+@media (min-width: 901px) and (max-width: 979px) { .cal-key .chip { gap: 4px; padding: 5px 7px; font-size: 0.72rem; } .cal-key .chip::before { width: 7px; height: 7px; } }
+@media (max-width: 380px) { .cal-slot { font-size: 0.6rem; padding-left: 4px; } }
+/* narrow day cells: a colour bar on the left instead of the dot, so the start time keeps the room */
+@media (min-width: 901px) and (max-width: 1199px), (max-width: 640px) {
+  .cal-slot { gap: 0; padding: 4px 3px 4px 5px; justify-content: center; box-shadow: inset 3px 0 0 var(--dot); }
+  .cal-slot .dot { display: none; }
+  .cal-slot .t { overflow: visible; }
+  .cal-slot:hover:not(:disabled) { box-shadow: inset 3px 0 0 var(--dot), inset 0 0 0 1px var(--ink); }
+  .cal-slot.in-course { box-shadow: inset 3px 0 0 var(--dot), inset 0 0 0 2px var(--orange); }
+}
+@media (max-width: 600px) { .cal-key { flex-wrap: wrap; } .cal-key .chip { padding: 6px 10px; font-size: 0.8rem; } }
+.cal-note { margin: 10px 0 0; padding-left: 1.1em; font-size: 0.84rem; color: var(--ink-soft); }
 .cal-note li + li { margin-top: 3px; }
+}
 @media (max-width: 600px) {
   .cal-dow, .cal-grid { gap: 4px; }
-  .cal-day { min-height: 52px; padding: 5px 6px; border-radius: 9px; }
-  .cal-st { display: none; }
-  .cal-left { font-size: 0.66rem; }
-  .cal-day.has-ws::after { top: 6px; right: 6px; width: 5px; height: 5px; }
+  .cal-day { min-height: 60px; padding: 4px 3px; border-radius: 9px; }
+  .cal-n { font-size: 0.82rem; }
+  .cal-slot { gap: 3px; padding: 4px 3px; font-size: 0.66rem; border-radius: 6px; letter-spacing: -0.02em; }
+  .cal-slot .dot { width: 6px; height: 6px; }
+  .cal-slot .t { overflow: visible; }
 }
-.book-panel { position: sticky; top: 92px; border-radius: var(--r); background: var(--tint, var(--navy)); color: var(--on-navy); padding: clamp(20px, 2.6vw, 30px); transition: background-color 320ms ease; }
+.book-panel { container-type: inline-size; position: sticky; top: 92px; border-radius: var(--r); background: var(--tint, var(--navy)); color: var(--on-navy); padding: clamp(20px, 2.6vw, 30px); transition: background-color 320ms ease; }
 @media (max-width: 900px) { .book-panel { position: static; } }
-.bp-kind { font-size: var(--t-1); font-weight: 500; color: var(--orange); }
+.bp-kind { font-size: var(--t0); font-weight: 500; color: var(--orange); }
 .bp-title { margin-top: 6px; font-size: var(--t2); }
 .bp-title span { white-space: nowrap; } /* a line may break after the date, never inside the hours */
+@media (min-width: 901px) { .bp-title { font-size: min(var(--t2), 8.5cqi); } } /* the longest course title fits one line */
 .bp-when { margin-top: 10px; color: var(--on-navy-soft); }
-.bp-seats { margin-top: 2px; color: #FFFFFF; }
+.bp-seats { margin-top: 2px; font-size: var(--t-1); color: #FFFFFF; }
 .bp-title + .bp-seats { margin-top: 10px; }
 .bp-seats b { color: var(--orange); font-weight: 600; }
-.bp-plans { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 18px; }
-.bp-plans button { display: flex; flex-direction: column; align-items: flex-start; gap: 2px; padding: 11px 14px; border: 1px solid rgba(237,243,246,0.3); border-radius: 14px;
+.bp-plans { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; margin-top: 18px; }
+.bp-plans button { display: flex; flex-direction: column; align-items: flex-start; gap: 2px; padding: 11px; border: 1px solid rgba(237,243,246,0.3); border-radius: 14px;
   background: none; color: var(--on-navy); font: inherit; text-align: left; cursor: pointer; }
 .bp-plans button b { font-weight: 600; color: #FFFFFF; }
-.bp-plans button span { font-size: 0.88rem; color: var(--on-navy-soft); white-space: nowrap; }
+.bp-plans button span { font-size: 0.88rem; color: var(--on-navy-soft); } /* in a narrow panel the price per class drops under the total */
+.bp-plans button span i { font-style: normal; white-space: nowrap; }
 .bp-plans button em { font-style: normal; font-weight: 600; color: #FFFFFF; }
 @media (max-width: 420px) { .bp-plans { grid-template-columns: 1fr; } }
 .bp-plans button:hover { background: rgba(237,243,246,0.08); }
 .bp-plans button[aria-checked="true"] { border-color: var(--orange); background: rgba(237,243,246,0.06); box-shadow: inset 0 0 0 1px var(--orange); }
 .bp-loop { margin-top: 10px; font-size: 0.88rem; color: var(--on-navy-soft); }
+.bp-run { margin-top: 12px; font-size: 0.95rem; color: var(--on-navy-soft); }
+.bp-run b { font-weight: 500; color: #FFFFFF; white-space: nowrap; }
 .bp-dates { list-style: none; margin: 14px 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 6px; }
 .bp-dates li { padding: 4px 10px; border: 1px solid rgba(237,243,246,0.24); border-radius: 999px; font-size: 0.82rem; font-variant-numeric: tabular-nums; }
 .bp-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: 20px; padding-top: 18px; border-top: 1px solid rgba(237,243,246,0.16); }
 .bp-row p { color: #FFFFFF; }
 .bp-row small { display: block; color: var(--on-navy-soft); font-size: 0.84rem; }
+.bp-row small b { color: var(--orange); font-weight: 600; }
 .stepper { display: inline-flex; align-items: center; gap: 6px; padding: 3px; border: 1px solid rgba(237,243,246,0.3); border-radius: 999px; }
 .stepper button { width: 34px; height: 34px; border: 0; border-radius: 50%; background: rgba(237,243,246,0.12); color: var(--on-navy); font: inherit; font-size: 1.15rem; line-height: 1; cursor: pointer; }
 .stepper button:hover:not(:disabled) { background: rgba(237,243,246,0.22); }
 .stepper button:disabled { opacity: 0.3; cursor: default; }
 .stepper output { min-width: 2ch; text-align: center; font-weight: 600; font-variant-numeric: tabular-nums; }
+@media (max-width: 520px) {
+  .bp-row { gap: 8px; }
+  .bp-row p { white-space: nowrap; font-size: min(0.94rem, 5.1cqi); }
+  .stepper { gap: 4px; }
+  .stepper button { width: 30px; height: 30px; }
+}
 .bp-price { margin-top: 18px; padding-top: 18px; border-top: 1px solid rgba(237,243,246,0.16); }
 .bp-line { color: #FFFFFF; font-size: 0.9rem; }
 .bp-total { margin-top: 4px; font-size: var(--t2); font-weight: 500; letter-spacing: -0.03em; line-height: 1.05; }
@@ -434,6 +490,7 @@ video.is-waiting { opacity: 0 !important; }
 .bp-pay { margin-top: 8px; font-size: 0.85rem; color: var(--on-navy-soft); }
 .bp-save { margin-top: 6px; color: var(--orange); font-size: 0.95rem; font-weight: 500; }
 .bp-cta { width: 100%; margin-top: 20px; }
+.bp-also + .bp-also { margin-top: 6px; }
 .bp-also { display: block; margin-top: 14px; padding: 0; border: 0; background: none; color: var(--on-navy); font: inherit; font-size: 0.92rem; text-align: left;
   text-decoration: underline; text-decoration-color: var(--orange); text-underline-offset: 3px; cursor: pointer; }
 .bp-also:hover { color: #FFFFFF; }
@@ -485,7 +542,23 @@ video.is-waiting { opacity: 0 !important; }
 footer { background: var(--navy); color: var(--on-navy-soft); padding: clamp(44px, 6vw, 84px) 0 clamp(24px, 3vw, 40px); }
 .foot-bottom { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; padding-top: 22px; border-top: 1px solid rgba(237,243,246,0.16); font-size: 0.92rem; }
 .foot-bottom .brand span { color: var(--on-navy); }
-.foot-copy { font-size: 0.78rem; }
+.foot-copy { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; font-size: 0.78rem; }
+.foot-link { padding: 0; border: 0; background: none; color: var(--on-navy); font: inherit; text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
+.foot-link:hover { color: #FFFFFF; }
+/* terms & conditions pop-up */
+.terms { width: min(720px, calc(100% - 32px)); max-height: min(86vh, 900px); padding: 0; border: 0; border-radius: 20px; background: var(--paper); color: var(--ink); box-shadow: 0 24px 80px rgba(13,27,38,0.35); }
+.terms[open] { display: flex; flex-direction: column; }
+.terms::backdrop { background: rgba(13,27,38,0.55); }
+.terms-head { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 22px 28px 16px; border-bottom: 1px solid var(--line); }
+.terms-head h2 { font-size: clamp(1.4rem, 1.1rem + 1vw, 1.9rem); }
+.terms-close { flex: none; width: 40px; height: 40px; border: 1px solid var(--line); border-radius: 50%; background: none; color: var(--ink); font: inherit; font-size: 1.5rem; line-height: 1; cursor: pointer; }
+.terms-close:hover { background: var(--paper-2); }
+.terms-body { overflow-y: auto; padding: 8px 28px 28px; font-size: 0.95rem; line-height: 1.55; }
+.terms-date { margin-top: 10px; font-size: 0.85rem; color: var(--ink-soft); }
+.terms-body h3 { margin-top: 24px; font-size: 1.05rem; letter-spacing: -0.01em; line-height: 1.3; }
+.terms-body ul { margin: 8px 0 0; padding-left: 1.15em; color: var(--ink-soft); }
+.terms-body li + li { margin-top: 6px; }
+@media (max-width: 600px) { .terms-head { padding: 18px 20px 14px; } .terms-body { padding: 4px 20px 24px; } }
 </style>
 </head>
 <body>
@@ -512,8 +585,8 @@ footer { background: var(--navy); color: var(--on-navy-soft); padding: clamp(44p
   <div class="hero-shell">
     <div class="hero-media" aria-hidden="true">
       <picture>
-        <source media="(min-width: 901px)" srcset="media/hero.jpg?v=18">
-        <img id="hero-poster" src="media/hero-portrait.jpg?v=18" alt="" width="1080" height="1920">
+        <source media="(min-width: 901px)" srcset="media/hero.jpg?v=22">
+        <img id="hero-poster" src="media/hero-portrait.jpg?v=22" alt="" width="1080" height="1920">
       </picture>
       <video id="hero-video" class="is-waiting" muted loop playsinline preload="auto"></video>
     </div>
@@ -527,8 +600,8 @@ footer { background: var(--navy); color: var(--on-navy-soft); padding: clamp(44p
   <div class="wrap">
     <div class="head" data-cascade><h2>Approach<span class="dot">.</span></h2></div>
     <div class="pillars">
-      <div class="pillar" data-cascade><h3>Small cohorts, big thinking</h3><p>Nine students at most, learning to listen, lead and work as a team.</p></div>
-      <div class="pillar" data-cascade><h3>From idea to impact</h3><p>Ideas become real prototypes, built, tested and refined.</p></div>
+      <div class="pillar" data-cascade><h3>Small cohorts, big thinking</h3><p>Seven students at most, lead and work as teams, turn curiosity into ideas.</p></div>
+      <div class="pillar" data-cascade><h3>From idea to impact</h3><p>Ideas become real prototypes, prototypes become solutions.</p></div>
       <div class="pillar" data-cascade><h3>Designing for the future</h3><p>Real-world challenges in sustainability and climate resilience.</p></div>
     </div>
     <p class="steps-label" data-cascade>Every challenge in six steps</p>
@@ -604,7 +677,7 @@ footer { background: var(--navy); color: var(--on-navy-soft); padding: clamp(44p
       <ul class="highlights">
         <li data-cascade><b>Design Director at <a href="https://www.l-e-a-d.pro" target="_blank" rel="noopener">LEAD</a></b><span>Oversees major projects ranging from cultural buildings and public installations to large-scale urban developments.</span></li>
         <li data-cascade><b>University Educator</b><span>Has taught master&rsquo;s students at CUHK and HKU since 2013.</span></li>
-        <li data-cascade><b>Award-winning projects</b><span>Led and contributed to innovative architectural and fa&ccedil;ade projects across Asia and the Middle East.</span></li>
+        <li data-cascade><b>Award-winning projects</b><span>Led innovative architectural built projects across Asia and the Middle East.</span></li>
         <li data-cascade><b>Venice Architecture Biennale</b><span>Exhibited at the 12th International Architecture Exhibition in Venice.</span></li>
       </ul>
     </div>
@@ -618,12 +691,12 @@ footer { background: var(--navy); color: var(--on-navy-soft); padding: clamp(44p
     </div>
     <div class="book fade">
       <div class="cal">
-        <div class="cal-stages" role="group" aria-label="Age group">
-          <button type="button" class="chip" data-stage="-1" aria-pressed="true">All ages</button>
-          <button type="button" class="chip" data-stage="0" aria-pressed="false">Explorers<small>7&ndash;8</small></button>
-          <button type="button" class="chip" data-stage="1" aria-pressed="false">Creators<small>9&ndash;11</small></button>
-          <button type="button" class="chip" data-stage="2" aria-pressed="false">Changemakers<small>12&ndash;14</small></button>
-          <button type="button" class="chip" data-stage="3" aria-pressed="false">Parent &amp; child<small>Weekends</small></button>
+        <div class="cal-key" role="group" aria-label="Show classes for">
+          <button type="button" class="chip key-all" data-stage="-1" aria-pressed="true">All</button>
+          <button type="button" class="chip" data-stage="0" style="--dot: var(--dot-0)" aria-pressed="false">Explorers <small>7&ndash;8</small></button>
+          <button type="button" class="chip" data-stage="1" style="--dot: var(--dot-1)" aria-pressed="false">Creators <small>9&ndash;11</small></button>
+          <button type="button" class="chip" data-stage="2" style="--dot: var(--dot-2)" aria-pressed="false">Changemakers <small>12&ndash;14</small></button>
+          <button type="button" class="chip" data-stage="3" style="--dot: var(--dot-ws)" aria-pressed="false">Parent &amp; child</button>
         </div>
         <div class="cal-head">
           <p class="cal-month" id="cal-month" aria-live="polite"></p>
@@ -632,12 +705,10 @@ footer { background: var(--navy); color: var(--on-navy-soft); padding: clamp(44p
             <button type="button" id="cal-next" aria-label="Next month">&rsaquo;</button>
           </div>
         </div>
-        <div class="cal-dow" aria-hidden="true"><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span></div>
-        <div class="cal-grid" id="cal-grid"></div>
-        <ul class="cal-note">
-          <li>Seats left are for the whole run that starts that day.</li>
-          <li>An orange dot marks a parent &amp; child workshop that afternoon.</li>
-        </ul>
+        <div class="cal-scroll" id="cal-scroll">
+          <div class="cal-dow" aria-hidden="true"><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span></div>
+          <div class="cal-viewport" id="cal-viewport"><div class="cal-grid" id="cal-grid"></div></div>
+        </div>
       </div>
       <div class="book-panel" id="book-panel" aria-live="polite"></div>
     </div>
@@ -650,10 +721,10 @@ footer { background: var(--navy); color: var(--on-navy-soft); padding: clamp(44p
   <div class="wrap">
     <div class="visit-top">
       <dl class="hours fade">
-        <div><dt>When</dt><dd>Monday to Friday, 4:00 to 5:30pm, plus weekend workshops</dd></div>
+        <div><dt>When</dt><dd>Monday to Friday, 4:00 to 5:30pm and 6:00 to 7:30pm. Saturdays, 10:00am and 2:00pm, with a parent &amp; child workshop at 4:00pm</dd></div>
         <div><dt>Where</dt><dd>Mong Kok, Kowloon, Hong Kong</dd></div>
-        <div><dt>Class size</dt><dd>Nine students at most</dd></div>
-        <div><dt>WhatsApp</dt><dd><a class="js-wa" data-msg="Hi Julien, I have a question about WonderLab." href="https://wa.me/85267533727">+852 6753 3727</a></dd></div>
+        <div><dt>Class size</dt><dd>Seven students at most; three parent &amp; child pairs on Saturdays</dd></div>
+        <div><dt>WhatsApp</dt><dd><a class="js-wa" data-msg="Hi Julien, I have a question about WonderLab." href="https://wa.me/85267533727" target="_blank" rel="noopener">Contact us</a></dd></div>
       </dl>
       <figure class="map fade">
         <svg viewBox="0 0 640 360" role="group" aria-label="Schematic map of Mong Kok in Kowloon, showing Nathan Road and the MTR from Prince Edward through Mong Kok to Yau Ma Tei, Mong Kok East on the East Rail line and Olympic to the west, with WonderLab near Mong Kok station">
@@ -709,10 +780,92 @@ footer { background: var(--navy); color: var(--on-navy-soft); padding: clamp(44p
         <svg class="js-mark" data-n="5" viewBox="-72 -72 144 144" aria-hidden="true"></svg>
         <span>WonderLab</span>
       </a>
-      <p class="foot-copy">&copy; 2026 WonderLab Hong Kong.</p>
+      <p class="foot-copy"><button type="button" class="foot-link" data-terms>Terms</button><span aria-hidden="true">&middot;</span>&copy; 2026 WonderLab Hong Kong.</p>
     </div>
   </div>
 </footer>
+
+<dialog class="terms" id="terms" aria-labelledby="terms-title">
+  <div class="terms-head">
+    <h2 id="terms-title">Terms</h2>
+    <button type="button" class="terms-close" data-close aria-label="Close">&times;</button>
+  </div>
+  <div class="terms-body">
+    <p class="terms-date">Last updated 2 October 2026</p>
+
+    <h3>1. Language</h3>
+    <ul>
+      <li>All classes are taught in English.</li>
+    </ul>
+
+    <h3>2. Booking and payment</h3>
+    <ul>
+      <li>A booking is confirmed only once WonderLab confirms it on WhatsApp and payment is received.</li>
+      <li>Payment is due before the first class. With a referral discount, payment is due once the invited friends are confirmed.</li>
+      <li>Prices are per student.</li>
+    </ul>
+
+    <h3>3. Validity of session packs</h3>
+    <ul>
+      <li>A 10-session pack must be used within 12 weeks of the first class. A 20-session pack must be used within 24 weeks.</li>
+      <li>Sessions not used by then expire. They can&rsquo;t be refunded, extended or transferred.</li>
+      <li>Packs are personal to the enrolled child.</li>
+    </ul>
+
+    <h3>4. Missed classes and make-ups</h3>
+    <ul>
+      <li>Tell WonderLab at least 24 hours before a class if your child can&rsquo;t attend. They can then make up the session in another class of the same age group that week, if there is a seat. Each child can make up at most 2 sessions per 10.</li>
+      <li>With less notice, or if your child doesn&rsquo;t come, the session counts as used.</li>
+      <li>Make-ups depend on seats being available and are not guaranteed.</li>
+    </ul>
+
+    <h3>5. Cancellation and refunds</h3>
+    <ul>
+      <li>Cancel more than 7 days before the first class for a full refund, minus a HK$200 admin fee.</li>
+      <li>After that, or once classes start, there are no refunds. Unused sessions can be moved once to another child in the same family or to a later start date, within the pack&rsquo;s validity.</li>
+      <li>If a child has to stop for a medical reason, remaining sessions are credited on a doctor&rsquo;s certificate.</li>
+      <li>Parent &amp; child workshops: no refund within 72 hours of the workshop. The booking can be moved to another workshop if a pair is available.</li>
+    </ul>
+
+    <h3>6. Cancellation by WonderLab</h3>
+    <ul>
+      <li>If WonderLab cancels a class (instructor illness, too few children booked, or venue problems), the session is rescheduled or credited.</li>
+      <li>WonderLab may change the timetable, the challenges or the instructor.</li>
+    </ul>
+
+    <h3>7. Typhoon and rainstorm warnings</h3>
+    <ul>
+      <li>Classes are cancelled if Typhoon Signal No. 8 or above, or a Black Rainstorm Warning, is in force within 2 hours of the start. Cancelled sessions are credited or rescheduled.</li>
+      <li>Under an Amber or Red Rainstorm Warning, classes go ahead, but parents can choose to keep their child home without losing the session.</li>
+    </ul>
+
+    <h3>8. Health and safety</h3>
+    <ul>
+      <li>Children who are unwell (fever or a contagious illness) must stay home. They can make up the session with notice.</li>
+      <li>Parents must declare allergies, medical conditions and special needs when enrolling.</li>
+      <li>Children use tools and materials such as craft knives, glue guns and wire under supervision. WonderLab may stop a child from using a tool if it is unsafe.</li>
+      <li>In an emergency, WonderLab will give first aid, contact the parent and, if needed, call emergency services. The parent authorises this.</li>
+    </ul>
+
+    <h3>9. Liability</h3>
+    <ul>
+      <li>Children should wear clothes suitable for making. WonderLab is not responsible for damage to clothing from paint, glue or other materials, or for lost personal items.</li>
+      <li>WonderLab&rsquo;s liability is limited to the fees paid, except where the law does not allow that limit, such as injury caused by negligence.</li>
+    </ul>
+
+    <h3>10. Photos and children&rsquo;s work</h3>
+    <ul>
+      <li>WonderLab may photograph and film classes for its own website and social media. Parents can opt in or out when enrolling. Children&rsquo;s faces are not shown without consent.</li>
+      <li>Projects can be taken home. Work left behind for more than 2 weeks may be thrown away.</li>
+    </ul>
+
+    <h3>11. General</h3>
+    <ul>
+      <li>WonderLab can update these terms. Bookings already confirmed keep the terms that applied when they were made.</li>
+      <li>These terms are governed by the laws of the Hong Kong SAR.</li>
+    </ul>
+  </div>
+</dialog>
 
 <script>
 (function () {
@@ -918,14 +1071,6 @@ var DRAW = {
       '<path class="dr dr-thin dr-brand" d="M40 146H200M45 141l-5 5 5 5M195 141l5 5-5 5"/>' +
       '<text x="120" y="164" text-anchor="middle" class="dr-note">60 cm, plastics + twine</text>' +
       '</svg>',
-    wind:
-      '<svg viewBox="0 0 240 180" aria-hidden="true">' +
-      '<path class="dr dr-thin" d="M20 168H220"/>' +
-      '<g class="dr"><circle cx="36" cy="96" r="22"/><path d="M36 96V76M36 96l17 10M36 96l-17 10M36 118V168"/></g>' +
-      '<g class="dr"><rect x="100" y="64" width="26" height="104" class="fill-paper"/><path d="M142 168V84Q142 62 164 62H168V168Z" class="fill-sky"/><rect x="186" y="92" width="26" height="76" class="fill-paper"/></g>' +
-      '<g class="dr dr-thin dr-brand dr-dash"><path d="M62 82C80 78 90 70 100 66M62 100C90 100 124 108 142 120M62 116C100 126 150 150 186 140"/></g>' +
-      '<text x="64" y="30" class="dr-note">where does the air speed up?</text>' +
-      '</svg>',
     stool:
       '<svg viewBox="0 0 240 180" aria-hidden="true">' +
       '<path class="dr dr-thin" d="M20 168H220"/>' +
@@ -969,15 +1114,6 @@ var DRAW = {
       '<path class="dr dr-thin dr-dash dr-brand" d="M20 114H220"/>' +
       '<text x="84" y="92" class="dr-note">flood! re-plan</text>' +
       '</svg>',
-    maze:
-      '<svg viewBox="0 0 240 180" aria-hidden="true">' +
-      '<g class="dr"><rect x="16" y="14" width="208" height="152" rx="6"/></g>' +
-      '<g class="dr fill-paper"><rect x="70" y="30" width="34" height="56"/><rect x="138" y="96" width="60" height="28"/><rect x="56" y="112" width="44" height="34"/><rect x="164" y="28" width="28" height="44"/></g>' +
-      '<path class="dr dr-dash dr-brand" d="M36 150C36 110 50 96 118 96S128 44 146 44 210 52 206 150"/>' +
-      '<g class="dr"><circle cx="36" cy="150" r="9" class="fill-zing"/><path d="M27 148h18" class="dr-thin"/></g>' +
-      '<g class="dr"><path d="M206 150V128l12 6-12 6"/></g>' +
-      '<text x="116" y="160" class="dr-note">"left, stop, forward"</text>' +
-      '</svg>',
     charades:
       '<svg viewBox="0 0 240 180" aria-hidden="true">' +
       '<g class="dr"><rect x="14" y="14" width="212" height="140" rx="6"/><path d="M90 154L80 172M150 154L160 172"/></g>' +
@@ -1005,311 +1141,20 @@ var DRAW = {
       '<text x="20" y="30" class="dr-note">shake test</text>' +
       '</svg>',
     bench:
-      '<svg viewBox="0 0 240 180" aria-hidden="true"><path class="dr dr-thin" d="M14 164H226"/><g class="dr"><path d="M40 118H200M50 118V164M190 118V164M40 100H200" /></g><g class="dr dr-thin"><circle cx="70" cy="70" r="9"/><path d="M70 79V104M70 104L62 118M70 104L78 118M58 90H82"/><circle cx="120" cy="92" r="7" class="fill-zing"/><path d="M120 99V110M113 104H127"/><circle cx="164" cy="64" r="9"/><path d="M164 73V100M156 86H178M178 86V116"/></g><g class="dr dr-thin fill-sky"><path d="M206 148h14v-10l-4-6h-6l-4 6z"/></g><text x="20" y="30" class="dr-note">one bench, many users</text></svg>',
+      '<svg viewBox="0 0 240 180" aria-hidden="true"><g class="dr dr-hair dr-ghost"><path d="M204 150V70M204 96l-9-9M204 88l8-8"/><path d="M178 66q-8-12 6-18q0-14 16-12q8-10 20-2q14 0 10 14q8 10-4 16q-4 8-16 4q-6 6-16 2q-14 4-16-4Z"/><path d="M14 156H226" stroke-dasharray="5 6"/><path d="M140 52q2.5-2.5 5 0q2.5-2.5 5 0M150 45q2-2 4 0q2-2 4 0"/></g><path class="dr dr-hair" d="M14 150H226"/><g class="dr dr-hair"><path d="M54 125V98M106 125V98M58 130V150M120 130V150M182 130V150M114 125V115M108 115H120"/></g><g class="dr dr-hair fill-sky"><rect x="26" y="138" width="24" height="12" rx="1"/><rect x="50" y="125" width="138" height="5" rx="1"/><rect x="50" y="100" width="60" height="5" rx="1"/><rect x="50" y="109" width="60" height="5" rx="1"/><path d="M168 150l1.5-4h9l1.5 4Z"/></g><circle cx="182" cy="138" r="2.2" class="dr dr-hair"/><g class="dr dr-hair fill-stage"><circle cx="37" cy="114" r="4.5"/></g><path class="dr dr-hair fill-zing" d="M32.5 122Q32.5 119 37 119Q41.5 119 41.5 122L41 130H33Z"/><path class="dr dr-hair" d="M34.5 130V138M39.5 130V138M41 121.5L48.5 125.5M33 121.5L29 116"/><g class="dr dr-hair fill-stage"><circle cx="72" cy="92" r="5.5"/><path d="M66 102Q66 97.5 72 97.5Q78 97.5 78 102L80 125H66Z"/><path d="M68 118H92Q96 118 96 122V125H68Z"/><path d="M90 125H96L96.5 146L103 147.5Q104 150 101 150H90L90.5 146Z"/></g><path class="dr dr-hair" d="M75 102L81 114L87 112.5M84 111q0-4 3.5-4q3.5 0 3.5 4L100 150"/><g class="dr dr-hair fill-stage"><circle cx="132" cy="93" r="5"/><path d="M126 103Q126 98.5 132 98.5Q138 98.5 138 103L138 125H126Z"/><path d="M128 118H152Q156 118 156 122V125H128Z"/><path d="M150 125H156L156.5 141L161 142Q162 144.5 159 144.5H150L150 141Z"/></g><path class="dr dr-hair fill-sky" d="M127 92.5Q127.5 87 132 87Q136.5 87 137 92.5H141.5Z"/><path class="dr dr-hair" d="M133 102L138 114L146 116M140 143Q142 145.2 144 145.2H166Q168 145.2 170 143"/><g class="dr dr-hair fill-stage"><circle cx="146" cy="147.8" r="2.2"/><circle cx="164" cy="147.8" r="2.2"/></g><g class="dr dr-hair fill-stage"><path d="M194 135Q203 133 205 141L206 150H193Q190 145 194 135Z"/><circle cx="192" cy="131" r="4.5"/><path d="M188.5 130.5H184.5Q183.5 133.5 186 134H189"/><circle cx="218" cy="100" r="5.5"/><path d="M212 111Q212 106.5 218 106.5Q224 106.5 224 111L223 130H213Z"/></g><path class="dr dr-hair" d="M193.5 127.5l2.5 6M195 140V150M205 146q5-1 6-7M215 130L214 150M221 130L222 150M213 110L208 122M223 110L226 122M208 122Q200 131 193.5 134.5"/><text x="20" y="30" class="dr-note">one bench, many users</text></svg>',
+    turbine:
+      '<svg viewBox="0 0 240 180" aria-hidden="true"><g class="dr dr-hair dr-brand dr-ghost"><path d="M58 72q20-6 40 0t40 0t40 0t40 0" stroke-dasharray="3 4"/><path d="M58 88q20-6 40 0t40 0t40 0t40 0" stroke-dasharray="3 4"/><path d="M58 104q20-6 40 0t40 0t40 0t40 0" stroke-dasharray="3 4"/><path d="M58 120q20-6 40 0t40 0t40 0t40 0" stroke-dasharray="3 4"/></g><path class="dr dr-hair" d="M14 150H226"/><path class="dr dr-hair dr-ghost" d="M22 150V170M218 150V170"/><g class="dr dr-hair fill-stage"><rect x="18" y="146" width="28" height="4" rx="1"/><path d="M30.5 146V112H33.5V146Z"/><circle cx="32" cy="96" r="18"/></g><path class="dr dr-hair fill-sky" d="M32 96Q24 90 26 82Q34 84 32 96Z" transform="rotate(20 32 96)"/><path class="dr dr-hair fill-sky" d="M32 96Q24 90 26 82Q34 84 32 96Z" transform="rotate(140 32 96)"/><path class="dr dr-hair fill-sky" d="M32 96Q24 90 26 82Q34 84 32 96Z" transform="rotate(260 32 96)"/><g class="dr dr-hair"><circle cx="32" cy="96" r="13" stroke-dasharray="2 2.5"/><circle cx="32" cy="96" r="2.5"/></g><g class="dr dr-hair fill-stage"><rect x="80" y="142" width="22" height="8" rx="1"/><path d="M89.5 142L90.5 84H93.5L94.5 142Z"/><rect x="88" y="78" width="11" height="6" rx="2"/></g><path class="dr dr-hair fill-stage" d="M88 81Q86 70 88 58Q90.5 70 88 81Z" transform="rotate(10 88 81)"/><path class="dr dr-hair fill-stage" d="M88 81Q86 70 88 58Q90.5 70 88 81Z" transform="rotate(130 88 81)"/><path class="dr dr-hair fill-stage" d="M88 81Q86 70 88 58Q90.5 70 88 81Z" transform="rotate(250 88 81)"/><circle cx="88" cy="81" r="2.2" class="dr dr-hair fill-stage"/><g class="dr dr-hair fill-stage"><rect x="134" y="142" width="22" height="8" rx="1"/><path d="M143.5 142L144.5 80H147.5L148.5 142Z"/><rect x="142" y="74" width="11" height="6" rx="2"/></g><path class="dr dr-hair fill-sky" d="M142 77L137 58Q142 53 147 58Z" transform="rotate(25 142 77)"/><path class="dr dr-hair fill-sky" d="M142 77L137 58Q142 53 147 58Z" transform="rotate(115 142 77)"/><path class="dr dr-hair fill-sky" d="M142 77L137 58Q142 53 147 58Z" transform="rotate(205 142 77)"/><path class="dr dr-hair fill-sky" d="M142 77L137 58Q142 53 147 58Z" transform="rotate(295 142 77)"/><circle cx="142" cy="77" r="2.6" class="dr dr-hair fill-stage"/><g class="dr dr-hair fill-stage"><rect x="186" y="142" width="22" height="8" rx="1"/><path d="M195.5 142V128H198.5V142Z"/><path d="M186 92Q186 88 197 88Q208 88 208 92V126Q208 130 197 130Q186 130 186 126Z"/></g><path class="dr dr-hair" d="M186 92Q186 96 197 96Q208 96 208 92M197 88V130M186 102Q197 106 197 110Q197 114 208 118"/><path class="dr dr-hair dr-ghost" d="M102 146q5 0 6 4M156 146q5 0 6 4M208 146q5 0 6 4"/><defs><radialGradient id="dr-led-glow"><stop offset="0" stop-color="#FF6000" stop-opacity="0.55"/><stop offset="1" stop-color="#FF6000" stop-opacity="0"/></radialGradient></defs><circle cx="166" cy="143" r="16" fill="url(#dr-led-glow)"/><circle cx="218" cy="143" r="8" fill="url(#dr-led-glow)" opacity="0.7"/><g class="dr dr-hair fill-zing"><path d="M108.5 150v-6a2.5 2.5 0 0 1 5 0v6Z"/><path d="M163.5 150v-6a2.5 2.5 0 0 1 5 0v6Z"/><path d="M215.5 150v-6a2.5 2.5 0 0 1 5 0v6Z"/></g><path class="dr dr-hair" d="M111 136v-3M117 140h2"/><path class="dr dr-hair" d="M166 130v-6M174 133l4-4M158 133l-4-4M177 141h5M155 141h-5M172 126l2-3M160 126l-2-3"/><path class="dr dr-hair" d="M218 133v-4M224 136l3-3M212 136l-3-3"/><text x="20" y="30" class="dr-note">which one shines brightest?</text></svg>',
+    treehouse:
+      '<svg viewBox="0 0 240 180" aria-hidden="true"><g transform="translate(22 0)"><g class="dr dr-hair dr-ghost"><circle cx="190" cy="30" r="9" stroke-dasharray="3 3"/><path d="M160 22q2.5-2.5 5 0q2.5-2.5 5 0M170 15q2-2 4 0q2-2 4 0"/><path d="M-8 164h4m4 0h4m26 0h4m4 0h4m72 0h4m4 0h4m40 0h4m4 0h4"/></g><path class="dr dr-hair" d="M-8 158H204"/><path class="dr dr-hair fill-stage" d="M110 158Q114 150 113 136L112 112H128L127 136Q126 150 132 158"/><path class="dr dr-hair dr-ghost" d="M118 150q2-8 0-16M122 128q2-6 0-12"/><path class="dr dr-hair fill-stage" d="M44 108Q30 100 40 88Q32 74 48 70Q50 56 66 58Q74 46 90 52Q100 42 116 48Q130 40 142 50Q158 44 166 56Q182 54 184 68Q200 72 194 86Q204 98 190 106Q186 118 170 114Q160 122 146 116Q136 124 120 118Q106 124 94 116Q80 122 70 114Q54 118 44 108Z"/><g class="dr dr-hair dr-ghost"><path d="M58 92q6-6 12 0M76 104q6-6 12 0M96 96q6-6 12 0M150 98q6-6 12 0M168 88q6-6 12 0M136 108q6-6 12 0M52 80q5-5 10 0M178 100q5-5 10 0"/></g><path class="dr dr-hair fill-sky" d="M78 66H174V70H78Z"/><path class="dr dr-hair" d="M144 66V56M152 66V56M160 66V56M168 66V56M174 66V56M140 56H174"/><path class="dr dr-hair fill-stage" d="M88 66V38H128V66Z"/><path class="dr dr-hair fill-sky" d="M84 40L108 20L132 40Z"/><path class="dr dr-hair" d="M108 20V8"/><path class="dr dr-hair fill-zing" d="M108 8l11 3.5l-11 3.5Z"/><circle cx="99" cy="50" r="5" class="dr dr-hair"/><path class="dr dr-hair" d="M94 50h10M99 45v10"/><path class="dr dr-hair fill-stage" d="M114 66V50H124V66Z"/><circle cx="121.5" cy="58" r="0.8" class="dr dr-hair"/><path class="dr dr-hair" d="M158 56l3-8M158 56l-3-8"/><path class="dr dr-hair fill-stage" d="M151 47l14-6l1.5 3.5l-14 6Z"/><path class="dr dr-hair" d="M98 116V158M104 116V158M98 124h6M98 132h6M98 140h6M98 148h6"/><path class="dr dr-hair" d="M150 116V140M162 116V140"/><path class="dr dr-hair fill-zing" d="M147 140H165V143H147Z"/><path class="dr dr-hair" d="M180 104V136"/><path class="dr dr-hair fill-sky" d="M175 136h10l-1.5 8h-7Z"/><path class="dr dr-hair" d="M174 68C196 70 206 92 196 110C188 126 190 146 202 154"/><path class="dr dr-hair dr-ghost" d="M174 74C192 76 200 94 191 110C183 126 186 150 198 158"/></g><text x="20" y="30" class="dr-note">treetop playroom</text></svg>',
+    beach:
+      '<svg viewBox="0 0 240 180" aria-hidden="true"><g class="dr dr-hair dr-ghost"><circle cx="200" cy="34" r="9" stroke-dasharray="3 3"/><path d="M14 70H226"/><path d="M70 50q2.5-2.5 5 0q2.5-2.5 5 0M80 43q2-2 4 0q2-2 4 0"/><path d="M28 132h2M52 168h2M90 170h2M120 160h2M108 128h2M60 126h2M24 170h2M224 168h2M130 172h2"/></g><path class="dr dr-hair dr-brand dr-ghost" d="M14 80q6-3 12 0t12 0t12 0t12 0t12 0t12 0t12 0t12 0t12 0t12 0t12 0t12 0t12 0t12 0t12 0t12 0t12 0t12 0"/><path class="dr dr-hair dr-brand" d="M14 91q6-3 12 0t12 0t12 0t12 0t12 0t12 0t12 0t12 0t12 0t12 0t12 0t12 0t12 0t12 0t12 0t12 0t12 0t12 0"/><path class="dr dr-hair dr-brand" d="M14 106Q40 100 66 106T118 106T170 106T226 104"/><path class="dr dr-hair" d="M18 124Q40 116 66 121Q74 114 82 117M46 120l-3-7M66 121l4 3"/><path class="dr dr-hair fill-sky" d="M22 138H52Q56 138 58 140.5H63V145.5H58Q56 148 52 148H22Q17 148 17 143Q17 138 22 138Z"/><path class="dr dr-hair dr-ghost" d="M27 141h18"/><path class="dr dr-hair fill-stage" d="M70 166Q66 150 74 144Q82 140 86 148Q89 158 83 168Q76 174 70 166Z"/><path class="dr dr-hair" d="M70.5 157Q75 150 78 146.5Q82 150 86.8 155"/><circle cx="78" cy="146.5" r="1" class="dr dr-hair"/><g class="dr dr-hair fill-zing"><circle cx="96" cy="140" r="3.5"/><circle cx="104" cy="152" r="3.5"/></g><g class="dr dr-hair fill-sky"><circle cx="94" cy="156" r="3.5"/><circle cx="108" cy="140" r="3.5"/></g><path class="dr dr-hair" d="M28 162a10 6 0 1 0 20 0a10 6 0 1 0 -20 0M32 162a6 3.5 0 1 0 12 0a6 3.5 0 1 0 -12 0M36 162h4M48 162q8 1 12 8"/><path class="dr dr-hair fill-stage" d="M110 166Q108 156 117 154Q126 156 124 166Z"/><path class="dr dr-hair" d="M117 166V156M113.5 165.5L112 158.5M120.5 165.5L122 158.5M114.5 166h5v2.5h-5Z"/><path class="dr dr-hair" d="M116 136Q130 112 146 104" style="stroke:var(--orange)" stroke-dasharray="3 3"/><path class="dr dr-hair" d="M140 101.5l7 2.5l-4 6" style="stroke:var(--orange)"/><path class="dr dr-hair" d="M146 160Q142 128 147 96Q150 78 147 60M218 160Q222 132 217 104Q214 84 217 62"/><path class="dr dr-hair fill-stage" d="M140 62Q160 56 182 60Q200 56 224 61L223 65Q200 60 182 64Q160 60 141 66Z"/><path class="dr dr-hair" d="M164 60.5q-1-5 3-7M206 59q2-5 6-5"/><path class="dr dr-hair" d="M164 64V84M196 63V86"/><path class="dr dr-hair fill-stage" d="M142 92Q160 70 190 80Q200 84 204 92L218 80V106L204 94Q200 102 190 106Q160 116 142 92Z"/><g class="dr dr-hair fill-zing"><circle cx="150" cy="92" r="4"/><circle cx="160" cy="98" r="4"/><circle cx="170" cy="93" r="4"/><circle cx="180" cy="86" r="4"/><circle cx="190" cy="90" r="4"/><circle cx="199" cy="94" r="4"/></g><g class="dr dr-hair fill-sky"><circle cx="160" cy="86" r="4"/><circle cx="170" cy="82" r="4"/><circle cx="170" cy="104" r="4"/><circle cx="180" cy="98" r="4"/><circle cx="190" cy="101" r="4"/></g><circle cx="148" cy="89" r="1.4" class="dr dr-hair"/><path class="dr dr-hair dr-ghost" d="M140 160q6-4 12 0M210 160q6-4 12 0"/><text x="20" y="30" class="dr-note">what the tide brings in</text></svg>',
     floating:
-      '<svg viewBox="0 0 240 180" aria-hidden="true"><g class="dr"><path d="M40 116H200L186 132H54Z" class="fill-paper"/><path d="M62 116V76h26v40M96 116V56h30v60M134 116V84h22v32M164 116V70h20v46"/><path d="M96 56l15-14 15 14" class="fill-zing"/></g><path class="dr dr-brand" d="M14 146c12-8 24 8 36 0s24 8 36 0 24 8 36 0 24 8 36 0 24 8 36 0 24 8 36 0"/><g class="dr dr-thin"><circle cx="200" cy="40" r="12" class="fill-zing"/></g><text x="20" y="30" class="dr-note">a day on the sea</text></svg>',
-    tinyflat:
-      '<svg viewBox="0 0 240 180" aria-hidden="true"><g class="dr dr-brand"><rect x="20" y="20" width="200" height="140"/><path d="M120 20V90H220M20 100H80"/></g><g class="dr dr-thin"><rect x="136" y="30" width="40" height="50" class="fill-sky"/><rect x="182" y="30" width="30" height="50" class="fill-sky"/><rect x="36" y="36" width="54" height="24"/><circle cx="190" cy="120" r="14" class="fill-zing"/><rect x="30" y="112" width="40" height="40"/></g><text x="86" y="148" class="dr-note">30 m², full size</text></svg>',
+      '<svg viewBox="0 0 240 180" aria-hidden="true"><g class="dr dr-hair dr-ghost"><circle cx="196" cy="34" r="9" stroke-dasharray="3 3"/><path d="M160 52q2.5-2.5 5 0q2.5-2.5 5 0M170 45q2-2 4 0q2-2 4 0"/><path d="M50 128V166M128 128V166M198 128V166" stroke-dasharray="2 3"/><path d="M46 166h8M124 166h8M194 166h8"/><path d="M14 170q8-3 16 0t16 0t16 0t16 0t16 0t16 0t16 0t16 0t16 0t16 0t16 0t16 0t16 0"/></g><g class="dr dr-hair fill-paper"><path d="M20 116H82L78 128H24Z"/><path d="M98 116H160L156 128H102Z"/><path d="M170 116H226L222 128H174Z"/></g><path class="dr dr-hair" d="M82 116Q90 108 98 116M160 116Q165 108 170 116M84 113.5V116M90 110.5V114M96 113.5V116M162 113.5V116M165 111V114M168 113.5V116"/><g class="dr dr-hair fill-stage"><path d="M24 116V92L33 84L42 92V116Z"/><path d="M44 116V80L54 70L64 80V116Z"/><path d="M66 116V98H80V116Z"/></g><path class="dr dr-hair" d="M28 98h10M28 106h10M48 88h12M48 96h12M48 104h12M70 104h6M33 84V78h4v4"/><path class="dr dr-hair fill-zing" d="M44 80L54 70L64 80Z"/><g class="dr dr-hair fill-stage"><path d="M102 116V96Q117 78 132 96V116Z"/><path d="M136 116V102H158V116Z"/></g><path class="dr dr-hair" d="M107 116V96M112 116V88M117 116V85M122 116V88M127 116V96M102 104H132M140 110h4M150 110h4"/><path class="dr dr-hair fill-sky" d="M133 102L139 95H155L161 102Z"/><path class="dr dr-hair" d="M150 96V62M150 62l-8-9M150 62l11 2M150 62l-2 12"/><g class="dr dr-hair fill-stage"><path d="M174 116Q174 92 194 92Q214 92 214 116Z"/><path d="M216 116L218 76H224L226 116Z"/><path d="M216 76H226L221 68Z"/></g><path class="dr dr-hair" d="M186 116V106Q194 98 202 106V116M174 104H214M219 86h4M218.5 96h5"/><rect x="218.5" y="70" width="5" height="5" class="dr dr-hair fill-zing"/><path class="dr dr-hair fill-stage" d="M30 140H54L50 146H34Z"/><path class="dr dr-hair fill-zing" d="M42 140V120L52 138Z"/><path class="dr dr-hair fill-sky" d="M42 122L33 138H42"/><path class="dr dr-hair dr-brand" d="M14 128q6-3 12 0t12 0t12 0t12 0t12 0t12 0t12 0t12 0t12 0t12 0t12 0t12 0t12 0t12 0t12 0t12 0t12 0t12 0"/><path class="dr dr-hair dr-brand dr-ghost" d="M66 146q6-3 12 0t12 0t12 0t12 0t12 0t12 0t12 0t12 0t12 0t12 0t12 0t12 0"/><g class="dr dr-hair dr-ghost"><path d="M120 36q-2-8 6-9q3-6 10-3q7-1 7 6q5 3 0 6h-21Z"/><path d="M126 46l-2 6M132 46l-2 6M138 46l-2 6"/></g><text x="20" y="30" class="dr-note">a day on the sea</text></svg>',
     postcard:
       '<svg viewBox="0 0 240 180" aria-hidden="true"><g class="dr dr-hair dr-ghost"><path d="M14 98L24 92L34 95L46 86L58 89L70 80L84 84L96 76L110 81L124 72L138 77L152 70L166 75L180 69L194 74L206 72L216 78L226 82"/><circle cx="158" cy="34" r="9" stroke-dasharray="3 3"/><path d="M18 52q2.5-2.5 5 0q2.5-2.5 5 0M26 45q2-2 4 0q2-2 4 0"/><path d="M18 160q6-3 12 0t12 0t12 0t12 0t12 0t12 0t12 0t12 0t12 0t12 0M66 165q6-3 12 0t12 0t12 0t12 0t12 0t12 0t12 0t12 0t12 0t12 0t12 0t12 0M128 141q5-3 10 0t10 0"/><path d="M14 130H226"/><path d="M118 46V126M122.5 33V126M127 46V126"/></g><path class="dr dr-hair" d="M22 93V79M22 79L22 72.5M22 79L27.6 82.2M22 79L16.4 82.2M200 73V66M200 66L200 60.5M200 66L204.8 68.8M200 66L195.2 68.8M216 78V70M216 70L216 65M216 70L220.3 72.5M216 70L211.7 72.5"/><g class="dr dr-hair fill-stage"><path d="M14 126V108H19V102H24V96H28V126Z"/><path d="M31 126V62H44V126Z"/><path d="M52 126C53 100 51 74 54 52L57.5 46L61 49C63 74 65 100 64 126Z"/><path d="M68 126V66L78 40L88 58V126Z"/><path d="M92 126V80H110V126ZM92 64V56Q101 45 110 56V64Z"/><path d="M114 126V46L116.5 42V36L119 33V27L122.5 20L126 27V33L128.5 36V42L131 46V126Z"/><path d="M140 126V92C140 72 147 58 160 50V126Z"/><path d="M164 126V82L179 73V126Z"/><path d="M183 126V104H202V126Z"/><path d="M205 126V112H226V126Z"/></g><path class="dr dr-hair" d="M31 70H44M31 78H44M31 86H44M31 94H44M31 102H44M31 110H44M31 118H44M27.5 70H31M44 78H47.5M27.5 86H31M44 94H47.5M27.5 102H31M44 110H47.5M27.5 118H31M52.5 114L63.8 104M52.6 100L63.4 90M52.6 86L62.8 76M53.2 72L62.2 62M54 58L61 52M68 104H88M68 82H88M68 126L88 104M88 126L68 104M68 104L88 82M88 104L68 82M78 40V82M78 40V34M83.5 49V44M92 64V80M94 64V80M108 64V80M110 64V80M92 88H110M92 96H110M92 104H110M92 112H110M92 120H110M101 72m-1.4 0a1.4 1.4 0 1 0 2.8 0a1.4 1.4 0 1 0 -2.8 0M102 70.6L101 65L100 70.6M101.7 73.6L107.1 75.5L102.7 71.8M99.3 71.8L94.9 75.5L100.3 73.6M122.5 20V15M145.8 66.5H160M141.5 78H160M140 90H160M140 102H160M140 114H160M168 79.5V83.5M172 77V81M176 74.5V78.5M164 96H179M164 106H179M164 116H179M183 112H202M183 119H202M205 112l5.25-4v4l5.25-4v4l5.25-4v4l5.25-4v4M205 119H226M14 126H226"/><path class="dr dr-hair fill-stage" d="M44 74H52V77.5H44ZM131 84H140V87.5H131Z"/><path class="dr dr-hair fill-stage" d="M36.5 62C36.5 60 37.7 59 38.9 59.4C39.3 58 41.5 58 41.9 59.4C43.1 59 44.3 60 43.5 62ZM28 70C28 68 28.7 67 29.4 67.4C29.6 66 30.9 66 31.1 67.4C31.8 67 32.5 68 32 70ZM43.5 78C43.5 76 44.2 75 44.9 75.4C45.1 74 46.4 74 46.6 75.4C47.3 75 48 76 47.5 78ZM28 86C28 84 28.7 83 29.4 83.4C29.6 82 30.9 82 31.1 83.4C31.8 83 32.5 84 32 86ZM43.5 94C43.5 92 44.2 91 44.9 91.4C45.1 90 46.4 90 46.6 91.4C47.3 91 48 92 47.5 94ZM28 102C28 100 28.7 99 29.4 99.4C29.6 98 30.9 98 31.1 99.4C31.8 99 32.5 100 32 102ZM43.5 110C43.5 108 44.2 107 44.9 107.4C45.1 106 46.4 106 46.6 107.4C47.3 107 48 108 47.5 110ZM28 118C28 116 28.7 115 29.4 115.4C29.6 114 30.9 114 31.1 115.4C31.8 115 32.5 116 32 118ZM15 108C15 106 15.7 105 16.4 105.4C16.6 104 17.9 104 18.1 105.4C18.8 105 19.5 106 19 108ZM19.5 102C19.5 100 20.2 99 20.9 99.4C21.1 98 22.4 98 22.6 99.4C23.3 99 24 100 23.5 102ZM24 96C24 94 24.7 93 25.4 93.4C25.6 92 26.9 92 27.1 93.4C27.8 93 28.5 94 28 96ZM45 74C45 72 46.2 71 47.4 71.4C47.8 70 50 70 50.4 71.4C51.6 71 52.8 72 52 74ZM132 84C132 82 133.2 81 134.4 81.4C134.8 80 137 80 137.4 81.4C138.6 81 139.8 82 139 84ZM141 90C141 88 141.9 87 142.7 87.4C143 86 144.6 86 144.9 87.4C145.7 87 146.6 88 146 90ZM142.3 78C142.3 76 143.2 75 144 75.4C144.3 74 145.9 74 146.2 75.4C147 75 147.9 76 147.3 78ZM146.2 66.5C146.2 64.5 147.1 63.5 147.9 63.9C148.2 62.5 149.8 62.5 150.1 63.9C150.9 63.5 151.8 64.5 151.2 66.5ZM152.6 57C152.6 55 153.5 54 154.3 54.4C154.6 53 156.2 53 156.5 54.4C157.3 54 158.2 55 157.6 57ZM184.5 104C184.5 102 185.4 101 186.2 101.4C186.5 100 188.1 100 188.4 101.4C189.2 101 190.1 102 189.5 104ZM190 104C190 102 190.9 101 191.7 101.4C192 100 193.6 100 193.9 101.4C194.7 101 195.6 102 195 104ZM195.5 104C195.5 102 196.4 101 197.2 101.4C197.5 100 199.1 100 199.4 101.4C200.2 101 201.1 102 200.5 104Z"/><path class="dr dr-hair fill-stage" d="M48.5 126V121M45.5 118a3 4 0 1 0 6 0a3 4 0 1 0 -6 0ZM90 126V121M87 118a3 4 0 1 0 6 0a3 4 0 1 0 -6 0ZM112 126V121M109 118a3 4 0 1 0 6 0a3 4 0 1 0 -6 0ZM135.5 126V121M132.5 118a3 4 0 1 0 6 0a3 4 0 1 0 -6 0ZM203.5 126V121M200.5 118a3 4 0 1 0 6 0a3 4 0 1 0 -6 0Z"/><path class="dr dr-hair fill-stage" d="M199 125V118H152C147 118 143 120.5 141 125Z"/><path class="dr dr-hair" d="M154 121.5H195" stroke-dasharray="4 2.5"/><g class="dr dr-hair"><path d="M28 147H74L69 153H33Z M35 147V141H67V147"/><path d="M33 141L36 138H66L69 141Z" class="fill-sky"/><path d="M39 144H63" stroke-dasharray="2 2"/><path d="M92 148Q108 152 126 147L122 154H97Z M104 148V128M115 148V134"/><path d="M105 130L114 128L117 145H105Z M116 135L122 134L124 146H116Z" class="fill-zing"/><path d="M156 143.5h9l-2.5 3.5h-9zM167 143.5h9l-2.5 3.5h-9zM178 143.5h9l-2.5 3.5h-9zM189 143.5h9l-2.5 3.5h-9zM200 143.5h9l-2.5 3.5h-9zM211 143.5h9l-2.5 3.5h-9zM152.5 149.5h9l-2.5 3.5h-9zM163.5 149.5h9l-2.5 3.5h-9zM174.5 149.5h9l-2.5 3.5h-9zM185.5 149.5h9l-2.5 3.5h-9zM196.5 149.5h9l-2.5 3.5h-9zM207.5 149.5h9l-2.5 3.5h-9z" class="fill-sky"/><ellipse cx="176" cy="57" rx="4" ry="1.8" class="fill-stage"/><path d="M169 53.5h5M178 53.5h5M171.5 53.5V55.6M180.5 53.5V55.6"/></g><rect x="10" y="12" width="220" height="156" rx="5" class="dr dr-hair"/><rect x="190" y="20" width="32" height="38" rx="1.5" class="dr dr-hair fill-zing"/><rect x="193.5" y="23.5" width="25" height="31" class="dr dr-hair" stroke-dasharray="1.5 2" style="stroke:#0D1B26"/><text x="206" y="42" text-anchor="middle" class="dr-note" style="fill:#0D1B26;font-size:8.5px;font-weight:700">2050</text><text x="20" y="30" class="dr-note">Hong Kong, 2050</text></svg>'
   };
 
-  var GROUPS = [
- {
-  "id": "explorers",
-  "name": "Explorers",
-  "ages": "ages 7 to 8",
-  "items": [
-   [
-    "davinci",
-    "The Da Vinci Bridge",
-    "Build a bridge that spans one metre using nothing but bamboo chopsticks, locked together the way Leonardo da Vinci designed it.",
-    "Rapid structural engineering and resilience under constraints.",
-    "Structural engineering"
-   ],
-   [
-    "tiles",
-    "The Infinite Façade",
-    "Use modular stamps and paper tessellation to prototype repeating patterns for futuristic building skins, testing depth and rhythm.",
-    "Mathematical tessellation and visual perception.",
-    "Tiling and perception"
-   ],
-   [
-    "boat",
-    "The Foil Boat Regatta",
-    "Fold squares of foil into boats and load them with coins to discover how flat and curved hulls change what they can carry.",
-    "Hydrodynamics and material efficiency.",
-    "Buoyancy and materials"
-   ],
-   [
-    "solar",
-    "The Solar Oven Bake-Off",
-    "Engineer solar cookers from pizza boxes, foil and plastic wrap, using orientation and reflection to melt marshmallows.",
-    "Passive sustainable design and thermodynamics.",
-    "Eco-design and heat"
-   ],
-   [
-    "rube",
-    "The Chain Reaction Machine",
-    "Link stations of dominoes, ramps and tracks across the room so each one sets off the next, ending in one final action like ringing a bell.",
-    "Cause-and-effect sequencing and systems thinking.",
-    "Systems thinking"
-   ],
-   [
-    "rain",
-    "The Rainwater Harvesting Roof",
-    "Design roof gutters and catchment systems from plastic cups and straws, then pour measured water to test how well they drain.",
-    "Hydrological systems and resource conservation.",
-    "Water and resources"
-   ],
-   [
-    "corridor",
-    "The Biodiversity Corridor",
-    "Map a bare urban strip and build a green corridor with vertical gardens and bird-nesting boxes that link separated spaces.",
-    "Eco-urbanism and habitat preservation.",
-    "Eco-urbanism"
-   ],
-   [
-    "mobile",
-    "The Kinetic Wind Sculpture",
-    "Build balanced mobiles from wire, string and cups that turn gently in a breeze without tangling.",
-    "Weight balancing and kinetic movement.",
-    "Balance and motion"
-   ],
-   [
-    "maze",
-    "Blindfolded Architectural Obstacle Course",
-    "Guide a blindfolded teammate through a furniture maze with words alone, and discover how spaces work for people with different abilities.",
-    "Universal design and spatial empathy.",
-    "Universal design"
-   ],
-   [
-    "bench",
-    "The Bench for Everyone",
-    "Act out how a toddler, a grandparent, a dog walker and a skateboarder use a park bench, then draw one bench that works for all of them.",
-    "Seeing a problem through many users' eyes.",
-    "Inclusive design"
-   ],
-   [
-    "floating",
-    "What If Cities Floated?",
-    "Imagine a city on the sea and draw a comic strip of one day there: where people sleep, play, shop and go when a storm comes.",
-    "Imagination, storytelling and thinking ahead.",
-    "Speculative thinking"
-   ],
-   [
-    "postcard",
-    "Postcards from 2050",
-    "Draw a postcard from a Hong Kong skyline in 2050, then work backwards to the three changes that would have to happen to get there.",
-    "Futures thinking and planning backwards.",
-    "Futures thinking"
-   ]
-  ]
- },
- {
-  "id": "creators",
-  "name": "Creators",
-  "ages": "ages 9 to 11",
-  "items": [
-   [
-    "tower",
-    "Spaghetti and Marshmallow Towers",
-    "Build the tallest freestanding tower from raw spaghetti and mini marshmallows that can hold a weight on top for 10 seconds.",
-    "Geometry and load distribution.",
-    "Structural engineering"
-   ],
-   [
-    "facade",
-    "The Infinite Façade",
-    "Craft modular geometric stamps and use paper tessellation to prototype repeating patterns for futuristic building skins, testing depth and rhythm.",
-    "Mathematical tessellation and visual perception.",
-    "Tiling and perception"
-   ],
-   [
-    "egg",
-    "The Egg Drop Challenge",
-    "Engineer a protective capsule from straws, rubber bands and tape so a raw egg survives a drop from a height.",
-    "Impact protection and iterative prototyping.",
-    "Risk and problem solving"
-   ],
-   [
-    "bridge",
-    "The Newspaper Bridge",
-    "Roll newspaper into tight tubes and use masking tape to span a 50 cm gap strong enough to hold a water bottle.",
-    "Tension and compression.",
-    "Tension and compression"
-   ],
-   [
-    "lampshade",
-    "The Shadow-Casting Lampshade",
-    "Fold, score and cut paper into lampshades, then switch on the bulb to see the patterns of light and shadow each design throws across the room.",
-    "Light, shadow and paper engineering.",
-    "Light and shadow"
-   ],
-   [
-    "truss",
-    "The Upcycled Waste-to-Resource Bridge",
-    "Using only single-use plastics and twine, teams engineer a truss bridge across 60 cm, testing its load and improving the design every 10 minutes.",
-    "Rapid structural prototyping and resilience under constraints.",
-    "Upcycled structures"
-   ],
-   [
-    "wind",
-    "The Urban Wind Corridor",
-    "Arrange dense city grids of clay and card towers, then use fans to test wind speed and carve curves that improve natural ventilation.",
-    "Microclimate design and aerodynamic architecture.",
-    "Microclimate design"
-   ],
-   [
-    "stool",
-    "The Ergonomic Upcycled Seat",
-    "Prototype low stools from stacked cardboard and old textiles, then test them on each other to find pressure points and strengthen weak spots.",
-    "Human-centred design and ergonomics.",
-    "Human-centred design"
-   ],
-   [
-    "shelter",
-    "The Rapid Disaster Shelter",
-    "In just 20 minutes, prototype a lightweight flat-pack emergency shelter from corrugated plastic that can stand up to a wind test.",
-    "Humanitarian architecture and crisis response.",
-    "Humanitarian architecture"
-   ],
-   [
-    "column",
-    "The Pillar of Strength",
-    "Fold paper into cylinders, accordions and triangles to build one column that holds up a heavy stack of books.",
-    "Compression strength and geometry.",
-    "Compression and geometry"
-   ],
-   [
-    "stilts",
-    "The Climate-Resilient Foundation Lab",
-    "Construct coastal stilt houses over a rising-tide basin and test flexible foundations against rising water and storm winds.",
-    "Climate adaptation and stability testing.",
-    "Climate adaptation"
-   ],
-   [
-    "tinyflat",
-    "The Tiny Flat Challenge",
-    "Tape a real Hong Kong flat at full size on the floor, then plan where a family of four sleeps, eats, studies and stores things.",
-    "Spatial planning at real scale.",
-    "Spatial planning"
-   ],
-   [
-    "postcard",
-    "Postcards from 2050",
-    "Draw a postcard from a Hong Kong skyline in 2050, then work backwards to the three changes that would have to happen to get there.",
-    "Futures thinking and planning backwards.",
-    "Futures thinking"
-   ],
-   [
-    "bench",
-    "The Bench for Everyone",
-    "Act out how a toddler, a grandparent, a dog walker and a skateboarder use a park bench, then draw one bench that works for all of them.",
-    "Seeing a problem through many users' eyes.",
-    "Inclusive design"
-   ]
-  ]
- },
- {
-  "id": "changemakers",
-  "name": "Changemakers",
-  "ages": "ages 12 to 14",
-  "items": [
-   [
-    "chair",
-    "The Cardboard Chair Challenge",
-    "Build a life-size chair from corrugated cardboard and duct tape that can safely hold a team member.",
-    "Full-scale structural load engineering.",
-    "Full-scale prototyping"
-   ],
-   [
-    "airport",
-    "The Airport of Tomorrow",
-    "Plan an airport for 20 aircraft stands, then redraw it so the walk from the entrance to the farthest gate gets as short as it can be. Teams test one layout against another and measure the longest walk.",
-    "Circulation planning and shortest-path thinking.",
-    "Systems and circulation"
-   ],
-   [
-    "room",
-    "Dream Room Blueprint and 3D Maquette",
-    "Sketch a floor plan on grid paper, then build a scale model in a shoebox with fabric and toothpicks, focusing on scale and light.",
-    "Interior architecture and spatial scale.",
-    "Interior architecture"
-   ],
-   [
-    "park",
-    "Community Park Redesign",
-    "Brainstorm and collage a green redesign for a dull public space, then present why it would improve community wellbeing.",
-    "User-centred design and public advocacy.",
-    "Public space design"
-   ],
-   [
-    "tensegrity",
-    "The Tensegrity Table",
-    "Build a gravity-defying table from craft sticks, rubber bands and string, where the top seems to float on tension alone.",
-    "Physics and structural counter-forces.",
-    "Physics and forces"
-   ],
-   [
-    "quake",
-    "The Disaster-Resilient Foundation Test",
-    "Build model houses on a tray of wobbling jelly or marbles, simulate earthquakes, and redesign the foundations until they stand.",
-    "Geotechnical engineering and seismic resilience.",
-    "Seismic resilience"
-   ],
-   [
-    "slots",
-    "The Cardboard Eco-Pavilion",
-    "Design and build an interlocking modular shelter big enough to sit under, using only slot-fits and tension locks, with no glue or tape.",
-    "Full-scale prototyping and sustainable material architecture.",
-    "Sustainable architecture"
-   ],
-   [
-    "windtunnel",
-    "The City Wind Tunnel",
-    "Build miniature high-rise towers from clay and card, then test how different shapes handle wind from a desktop fan.",
-    "High-rise aerodynamic engineering.",
-    "Aerodynamics"
-   ],
-   [
-    "flood",
-    "The Tape-Resistant Neighbourhood",
-    "Plan a town, then re-plan it halfway through when a simulated crisis, like a flood, changes the zoning rules.",
-    "Urban planning under sudden constraints.",
-    "Urban planning"
-   ],
-   [
-    "charades",
-    "Architectural Blueprint Charades",
-    "Draw cantilevers, floor plans and spiral staircases on a whiteboard using drafting symbols only, with no words or letters.",
-    "Spatial vocabulary and technical communication.",
-    "Technical drawing"
-   ],
-   [
-    "dome",
-    "The Zero-Waste Packaging Pavilion",
-    "Study natural patterns like honeycombs and leaves, then use clean packaging to build a self-supporting geodesic dome.",
-    "Biomimicry and structural repetition.",
-    "Biomimicry"
-   ],
-   [
-    "bench",
-    "The Bench for Everyone",
-    "Act out how a toddler, a grandparent, a dog walker and a skateboarder use a park bench, then draw one bench that works for all of them.",
-    "Seeing a problem through many users' eyes.",
-    "Inclusive design"
-   ],
-   [
-    "postcard",
-    "Postcards from 2050",
-    "Draw a postcard from a Hong Kong skyline in 2050, then work backwards to the three changes that would have to happen to get there.",
-    "Futures thinking and planning backwards.",
-    "Futures thinking"
-   ]
-  ]
- }
-];
+  var GROUPS = [{"id": "explorers", "name": "Explorers", "ages": "ages 7 to 8", "items": [["davinci", "The Da Vinci Bridge", "Build a bridge that spans 50 cm using nothing but bamboo chopsticks: no glue, just locked together the way Leonardo da Vinci designed it.", "Rapid structural engineering and resilience under constraints.", "Structural engineering"], ["tiles", "The Infinite Façade", "Craft your own repeating pattern on a stamp and design a futuristic building façade from it!", "Mathematical tiling and visual perception.", "Tiling and perception"], ["boat", "The Foil Boat Regatta", "Fold squares of foil into boats and load them with coins to discover how different hull designs change what they can carry.", "Hydrodynamics and material efficiency.", "Buoyancy and materials"], ["solar", "The Solar Oven Bake-Off", "Engineer a solar cooker from cardboard and foil, using orientation and reflection to melt marshmallows.", "Passive sustainable design and thermodynamics.", "Eco-design"], ["rube", "The Chain Reaction Machine", "Link stations of dominoes, ramps and tracks across the room so each one sets off the next, ending in one final action: ringing the bell!", "Cause-and-effect sequencing and systems thinking.", "Systems thinking"], ["rain", "The Rainwater Harvesting Roof", "Design roof gutters and catchment systems from plastic cups and straws, then pour measured water to test how well they drain.", "Hydrological systems and resource conservation.", "Water and resources"], ["mobile", "The Kinetic Wind Sculpture", "Build balanced mobiles from wire, string and cups that turn gently in a breeze without tangling.", "Weight balancing and kinetic movement.", "Balance and motion"], ["bench", "The Bench for Everyone", "Act out how a toddler, a grandparent and a skateboarder use a park bench, then draw one bench that works for all of them.", "Seeing a problem through many users' eyes.", "Inclusive design"], ["floating", "What If Cities Floated?", "Imagine a city on the sea and draw a comic strip of one day there: where people sleep, play, shop and go when a storm comes.", "Imagination, storytelling and thinking ahead.", "Speculative thinking"], ["postcard", "Postcards from 2050", "Draw a postcard from a Hong Kong skyline in 2050, then work backwards to the three changes that would have to happen to get there.", "Futures thinking and planning backwards.", "Futures thinking"]]}, {"id": "creators", "name": "Creators", "ages": "ages 9 to 11", "items": [["tower", "The Spaghetti Skyscraper", "Build the tallest freestanding tower from raw spaghetti that can hold weight on top!", "Geometry and load distribution.", "Structural engineering"], ["facade", "The Infinite Façade", "Craft your own repeating pattern on a stamp and design a futuristic building façade from it!", "Mathematical tiling and visual perception.", "Tiling and perception"], ["egg", "The Egg Drop Challenge", "Engineer a protective capsule from straws and rubber bands so a raw egg survives a drop from increasing heights!", "Impact protection and iterative prototyping.", "Risk and problem solving"], ["bridge", "The Newspaper Bridge", "Figure out ways for thin newspaper to span a 50 cm gap strong enough to hold a water bottle!", "Material efficiency, resilience under constraints, tension and compression.", "Structural engineering", "truss"], ["lampshade", "The Shadow-Casting Lampshade", "Fold, score and cut paper into lampshades, then switch on the bulb to see the patterns of light and shadow each design throws across the room.", "Light, shadow and paper engineering.", "Light and shadow"], ["treehouse", "The Dream Tree House", "Unleash your creativity to build a scaled model perched on top of the canopy, with lookouts, rope ladders, slides and secret hatches.", "Imagination, structure and designing with nature.", "Imaginative design"], ["bench", "The Bench for Everyone", "Act out how a toddler, a grandparent and a skateboarder use a park bench, then draw one bench that works for all of them.", "Seeing a problem through many users' eyes.", "Inclusive design", "bench-blue"], ["shelter", "The Rapid Disaster Shelter", "In just 20 minutes, prototype a lightweight flat-pack emergency shelter from corrugated sheets that can stand up to a wind test.", "Humanitarian architecture and crisis response.", "Humanitarian architecture"], ["column", "The Pillar of Strength", "Fold paper into cylinders, accordions and triangles to build one column that holds up a heavy stack of books.", "Compression strength and geometry.", "Compression and geometry"], ["stilts", "The Climate-Resilient Foundation Lab", "Construct coastal stilt houses over a rising-tide basin and test flexible foundations against rising water and storm winds.", "Climate adaptation and stability testing.", "Climate adaptation"], ["beach", "Treasures from the Tide", "Collect what the sea leaves behind, like bottle caps, rope, driftwood and lost flip-flops, and give it a second life as something useful or beautiful.", "Upcycling, material creativity and caring for the ocean.", "Upcycling"], ["postcard", "Postcards from 2050", "Draw a postcard from a Hong Kong skyline in 2050, then work backwards to the three changes that would have to happen to get there.", "Futures thinking and planning backwards.", "Futures thinking"]]}, {"id": "changemakers", "name": "Changemakers", "ages": "ages 12 to 14", "items": [["chair", "The Cardboard Chair Challenge", "Build a life-size chair from corrugated cardboard and duct tape that can safely hold a team member.", "Full-scale structural load engineering.", "Full-scale prototyping"], ["airport", "The Airport of Tomorrow", "Plan an airport for 20 aircraft stands so the walk from the entrance to the farthest gate gets as short as it can be. Teams test one layout against another and measure the shortest walk.", "Circulation planning and shortest-path thinking.", "Systems and circulation"], ["treehouse", "The Dream Tree House", "Unleash your creativity to build a scaled model perched on top of the canopy, with lookouts, rope ladders, slides and secret hatches.", "Imagination, structure and designing with nature.", "Imaginative design", "treehouse-dark"], ["corridor", "The Biodiversity Corridor", "Map a bare urban strip and build a green corridor with vertical gardens and bird-nesting boxes that link separated spaces.", "Eco-urbanism and habitat preservation.", "Eco-urbanism"], ["tensegrity", "The Tensegrity Table", "Build a gravity-defying table from wooden sticks and strings, where the table top floats on tension alone.", "Physics and structural counter-forces.", "Physics and forces"], ["quake", "The Disaster-Resilient Foundation Test", "Build model houses on a tray of marbles, simulate earthquakes, and redesign the foundations until they stand.", "Geotechnical engineering and seismic resilience.", "Seismic resilience"], ["dome", "The Zero-Waste Packaging Pavilion", "Study natural patterns like honeycombs and leaves, then use clean packaging to build a self-supporting geodesic dome.", "Biomimicry and structural repetition.", "Biomimicry"], ["turbine", "The Wind Harvest Glow-Off", "Generate light from your own wind: build model wind turbines with different blade designs, set them in front of a fan, and see whose design makes its LED glow the brightest.", "Renewable energy and fair testing.", "Renewable energy"], ["floating", "What If Cities Floated?", "Imagine a city on the sea and draw a comic strip of one day there: where people sleep, play, shop and go when a storm comes.", "Imagination, storytelling and thinking ahead.", "Speculative thinking"], ["bench", "The Bench for Everyone", "Act out how a toddler, a grandparent and a skateboarder use a park bench, then draw one bench that works for all of them.", "Seeing a problem through many users' eyes.", "Inclusive design", "bench-dark"], ["postcard", "Postcards from 2050", "Draw a postcard from a Hong Kong skyline in 2050, then work backwards to the three changes that would have to happen to get there.", "Futures thinking and planning backwards.", "Futures thinking"]]}];
 
   /* ---------- scroll reveals: statement lines, then blocks ---------- */
   var statement = document.querySelector(".rv-wrap");
@@ -1460,7 +1305,7 @@ var DRAW = {
   }
 
   /* ---------- hero clip ---------- */
-  var MV = "?v=18";   // bump when media files are replaced, so returning visitors get the new clips
+  var MV = "?v=23";   // bump when media files are replaced, so returning visitors get the new clips
   var hv = document.getElementById("hero-video"), wide = window.matchMedia("(min-width: 901px)");
   var heroSrc = function () { return (wide.matches ? "media/hero.mp4" : "media/hero-portrait.mp4") + MV; };
   if (hv && !reduce.matches) {
@@ -1508,7 +1353,7 @@ var DRAW = {
     box.textContent = "";
     var poster = document.createElement("img");
     poster.src = base + ".jpg" + MV; poster.alt = ""; poster.width = 960; poster.height = 720;
-    poster.onerror = function () { box.innerHTML = DRAW[key] || ""; };
+    poster.onerror = function () { box.innerHTML = DRAW[key] || DRAW[key.split("-")[0]] || ""; };
     box.appendChild(poster);
     if (reduce.matches) return null;
     var v = document.createElement("video");
@@ -1575,7 +1420,7 @@ var DRAW = {
 
   function fill(item) {
     if (isPhone.matches) return;
-    var v = figureInto(fig, item[0]);
+    var v = figureInto(fig, item[5] || item[0]);
     elKind.textContent = item[4];
     elTitle.textContent = item[1];
     elWhat.textContent = item[2];
@@ -1614,7 +1459,7 @@ var DRAW = {
       body.appendChild(kind); body.appendChild(h); body.appendChild(what); body.appendChild(skill);
       slide.appendChild(figure); slide.appendChild(body);
       track.appendChild(slide);
-      figureInto(figure, item[0]);
+      figureInto(figure, item[5] || item[0]);
       var dot = document.createElement("button");
       dot.type = "button"; dot.className = "ch-dot";
       dot.setAttribute("aria-label", "Show challenge " + (i + 1) + " of " + group.items.length + ", " + item[1]);
@@ -1699,21 +1544,22 @@ var DRAW = {
       { sessions: 10, price: 4900, name: "Half programme" },
       { sessions: 20, price: 8900, name: "Full programme" }
     ],
-    seats: 9, months: 3,
+    seats: 7, months: 3,
     off: [0, 0.05, 0.10, 0.15],          // referral discount on this child's booking, 5% per friend invited who books separately (+1: 5%, +2: 10%, +3 or more: 15%)
     week: [                              // day: 1 Monday ... 6 Saturday; stage: 0 Explorers, 1 Creators, 2 Changemakers
-      { day: 1, from: "16:00", to: "17:30", stage: 0 },
-      { day: 2, from: "16:00", to: "17:30", stage: 1 },
-      { day: 3, from: "16:00", to: "17:30", stage: 2 },
-      { day: 4, from: "16:00", to: "17:30", stage: 0 },
-      { day: 5, from: "16:00", to: "17:30", stage: 1 },
-      { day: 6, from: "10:00", to: "11:30", stage: 2 }
+      // four weekly classes for each group
+      { day: 1, from: "16:00", to: "17:30", stage: 0 }, { day: 1, from: "18:00", to: "19:30", stage: 1 },
+      { day: 2, from: "16:00", to: "17:30", stage: 1 }, { day: 2, from: "18:00", to: "19:30", stage: 2 },
+      { day: 3, from: "16:00", to: "17:30", stage: 0 }, { day: 3, from: "18:00", to: "19:30", stage: 2 },
+      { day: 4, from: "16:00", to: "17:30", stage: 0 }, { day: 4, from: "18:00", to: "19:30", stage: 1 },
+      { day: 5, from: "16:00", to: "17:30", stage: 1 }, { day: 5, from: "18:00", to: "19:30", stage: 2 },
+      { day: 6, from: "10:00", to: "11:30", stage: 0 }, { day: 6, from: "14:00", to: "15:30", stage: 2 }
     ],
-    // Saturday and Sunday afternoons: a one-off design workshop where each child teams up with a parent, priced and
+    // Saturday afternoon: a one-off design workshop where each child teams up with a parent, priced and
     // counted per pair; taken works as below, in pairs
-    workshop: { days: [6, 0], from: "14:00", to: "16:00", price: 760, pairs: 4, taken: {} },
+    workshop: { days: [6], from: "16:00", to: "17:30", price: 760, pairs: 3, taken: {} },
     closed: ["2026-10-01", "2026-12-25", "2026-12-26"],
-    taken: {}                            // e.g. "2026-10-06": 4 means 4 of the 9 seats that day are booked
+    taken: {}                            // by date and start time, e.g. "2026-10-06 16:00": 4 means 4 of the 7 seats in that class are booked
   };
   var WORKSHOP = 3;                      // the workshop's filter chip, after the three stages
 
@@ -1734,7 +1580,7 @@ var DRAW = {
       if (BOOK.closed.indexOf(dkey(d)) >= 0) return [];
       var out = BOOK.week.filter(function (c) { return c.day === d.getDay(); });
       if (WS.days.indexOf(d.getDay()) >= 0) out.push(WS);
-      return out;
+      return out.sort(function (a, b) { return a.from < b.from ? -1 : a.from > b.from ? 1 : 0; });
     };
     // a course is the same class every week for the chosen plan's sessions (10 or 20), skipping the days with no class
     var course = function (d) {
@@ -1742,18 +1588,18 @@ var DRAW = {
       while (out.length < BOOK.plans[plan].sessions) { if (BOOK.closed.indexOf(dkey(x)) < 0) out.push(new Date(x)); x.setDate(x.getDate() + 7); }
       return out;
     };
-    var seatsFor = function (dates) { return Math.min.apply(null, dates.map(function (x) { return BOOK.seats - (BOOK.taken[dkey(x)] || 0); })); };
+    var seatsFor = function (dates, s) { return Math.min.apply(null, dates.map(function (x) { return BOOK.seats - (BOOK.taken[dkey(x) + " " + s.from] || 0); })); };
     // a course counts seats for children across all its weeks; a workshop counts child-and-parent pairs on its one day
     // DEMO: placeholder places left until real bookings come in. Delete these lines and set DEMO to false to show real counts.
     var DEMO = true;
     var demoLeft = function (d, s, max) {
-      var k = dkey(d) + (isWs(s) ? "w" : s.stage), h = 2166136261;
+      var k = dkey(d) + (isWs(s) ? "w" : s.stage) + s.from, h = 2166136261;
       for (var i = 0; i < k.length; i++) { h ^= k.charCodeAt(i); h = Math.imul(h, 16777619); }
       return 2 + ((h >>> 0) % (max - 1));          // the same date always shows the same number, between 2 and max
     };
     var leftFor = function (d, s) {
       if (DEMO) return demoLeft(d, s, isWs(s) ? WS.pairs : BOOK.seats);
-      return isWs(s) ? WS.pairs - (WS.taken[dkey(d)] || 0) : seatsFor(course(d));
+      return isWs(s) ? WS.pairs - (WS.taken[dkey(d)] || 0) : seatsFor(course(d), s);
     };
     var places = function (s, n) { return n + " " + (isWs(s) ? (n === 1 ? "pair" : "pairs") : (n === 1 ? "seat" : "seats")); };
     var nameOf = function (s) { return isWs(s) ? "Parent & child workshop" : GROUPS[s.stage].name; };
@@ -1772,6 +1618,7 @@ var DRAW = {
     var firstMonth = new Date(tomorrow.getFullYear(), tomorrow.getMonth(), 1); // the months shown start from the first bookable day
     var lastMonth = new Date(firstMonth.getFullYear(), firstMonth.getMonth() + BOOK.months - 1, 1);
     var view = new Date(firstMonth), stageSel = -1, pick = null, pickS = null, friends = 0, pairs = 1, plan = 1;
+    var calScroll = document.getElementById("cal-scroll");
     var monthEl = document.getElementById("cal-month"), prevBtn = document.getElementById("cal-prev"), nextBtn = document.getElementById("cal-next");
     var bookPanel = document.getElementById("book-panel"), chips = document.querySelectorAll(".chip");
     // bookings start from tomorrow; a day offers the sessions that fit the chip, those with places left first
@@ -1781,56 +1628,104 @@ var DRAW = {
       return fit.filter(function (s) { return leftFor(d, s) > 0; }).concat(fit.filter(function (s) { return leftFor(d, s) <= 0; }));
     };
     // the other session with places on the chosen day, if any (a Saturday has the morning class and the afternoon workshop)
-    var alsoOn = function () { return pick ? bookable(pick).filter(function (s) { return s !== pickS && leftFor(pick, s) > 0; })[0] : null; };
+    var alsoOn = function () { return pick ? bookable(pick).filter(function (s) { return s !== pickS && leftFor(pick, s) > 0; }) : []; };
 
+    var dotOf = function (s) { return isWs(s) ? "var(--dot-ws)" : "var(--dot-" + s.stage + ")"; };
+    var startLabel = function (s) { var q = s.from.split(":"), h = +q[0]; return ((h + 11) % 12 + 1) + (q[1] !== "00" ? ":" + q[1] : "") + (h < 12 ? "am" : "pm"); };
+    var fits = function (s) { return stageSel < 0 || (isWs(s) ? stageSel === WORKSHOP : s.stage === stageSel); };
+
+    // one month at a time; days outside the month stay blank. Each day lists its sessions as slots: a coloured dot for
+    // the group and the start time
     function drawMonth() {
       monthEl.textContent = MONTHS[view.getMonth()] + " " + view.getFullYear();
       prevBtn.disabled = view <= firstMonth;
       nextBtn.disabled = view >= lastMonth;
       bookGrid.textContent = "";
-      for (var i = 0; i < (view.getDay() + 6) % 7; i++) bookGrid.appendChild(document.createElement("span")); // weeks start on Monday
+      for (var k = 0; k < (view.getDay() + 6) % 7; k++) bookGrid.appendChild(document.createElement("span")); // weeks start on Monday
       var count = new Date(view.getFullYear(), view.getMonth() + 1, 0).getDate();
       for (var n = 1; n <= count; n++) {
-        var d = new Date(view.getFullYear(), view.getMonth(), n), list = bookable(d), c = list[0], b = document.createElement("button");
-        var label = DAYS[d.getDay()] + " " + n + " " + MONTHS[d.getMonth()];
-        b.type = "button"; b.className = "cal-day"; b.dataset.date = dkey(d);
-        b.innerHTML = '<span class="cal-n">' + n + "</span>";
-        if (+d === +today) b.classList.add("is-today");
-        if (c) {
-          var left = leftFor(d, c), st = document.createElement("span"), note = document.createElement("span");
-          st.className = "cal-st"; note.className = "cal-left";
-          b.appendChild(st); b.appendChild(note);
-          b.classList.add("has-class");
-          if (list.some(isWs)) b.classList.add("has-ws");
-          showIn(b, d, c);
-          if (left <= 0) { b.classList.add("is-full"); b.disabled = true; }
-          b.setAttribute("aria-label", label + ": " + list.map(function (s) {
-            var l = leftFor(d, s);
-            return nameOf(s) + ", " + hours(s) + ", " + (l > 0 ? places(s, l) + " left" : "full");
-          }).join("; "));
-          if (left > 0) b.setAttribute("aria-pressed", "false");
-        } else {
-          b.disabled = true;
-          if (d <= today) b.classList.add("is-past");
-          b.setAttribute("aria-label", label + ": no class");
+        var d = new Date(view.getFullYear(), view.getMonth(), n), cell = document.createElement("div"), past = d <= today;
+        cell.className = "cal-day"; cell.dataset.date = dkey(d);
+        cell.innerHTML = '<span class="cal-n">' + n + "</span>";
+        if (+d === +today) cell.classList.add("is-today");
+        if (past) cell.classList.add("is-past");
+        var all = past ? [] : sessionsOn(d);
+        all.forEach(function (s, i) {
+          if (!fits(s)) {                             // an empty spot of the same size, so the shown slots keep their time row
+            var gap = document.createElement("span"); gap.className = "cal-slot cal-gap"; gap.setAttribute("aria-hidden", "true");
+            gap.innerHTML = '<i class="dot"></i><span class="t">' + startLabel(s) + "</span>";
+            cell.appendChild(gap); return;
+          }
+          var left = leftFor(d, s), b = document.createElement("button");
+          b.type = "button"; b.className = "cal-slot"; b.dataset.date = dkey(d); b.dataset.i = i;
+          b.style.setProperty("--dot", dotOf(s));
+          b.innerHTML = '<i class="dot"></i><span class="t">' + startLabel(s) + "</span>";
+          b.setAttribute("aria-label", DAYS[d.getDay()] + " " + d.getDate() + " " + MONTHS[d.getMonth()] + ", " + nameOf(s) + ", " + hours(s) + ", " +
+            (left > 0 ? places(s, left) + " left" : "full"));
+          b.setAttribute("aria-pressed", "false");
+          if (left <= 0) { b.disabled = true; b.classList.add("is-full"); }
+          cell.appendChild(b);
+          cell.classList.add("has-class");
+        });
+        // with one group filtered, the free spot in the cell tells the places left for that class
+        if (stageSel >= 0) {
+          var shown = all.filter(fits)[0];
+          if (shown) {
+            var left2 = leftFor(d, shown), info = document.createElement("span"), spot = cell.querySelector(".cal-gap");
+            info.className = "cal-info" + (left2 > 0 && left2 <= 2 ? " is-low" : "");
+            info.setAttribute("aria-hidden", "true");
+            info.textContent = left2 > 0 ? left2 + " left" : "Full";
+            if (spot) cell.replaceChild(info, spot); else cell.appendChild(info);
+          }
         }
-        bookGrid.appendChild(b);
+        bookGrid.appendChild(cell);
       }
       paint();
     }
 
-    // the chosen day fills with its session's colour; the rest of a chosen course gets an orange ring
+    // move a month; false when there is no month that way
+    // the two months travel together as one strip, easing in and out: the new month comes up from below for a later
+    // month, down from above for an earlier one, while the calendar eases to the new month's height
+    var calView = document.getElementById("cal-viewport"), ghost = null, turning = [], labelSwap;
+    function shift(dir) {
+      var to = new Date(view.getFullYear(), view.getMonth() + dir, 1);
+      if (to < firstMonth || to > lastMonth) return false;
+      turning.forEach(function (a) { a.finish(); }); turning = []; clearTimeout(labelSwap);
+      if (ghost) { ghost.remove(); ghost = null; calView.classList.remove("is-turning"); }
+      var oldH = bookGrid.offsetHeight, old = bookGrid.cloneNode(true), oldLabel = monthEl.textContent;
+      view = to; drawMonth();
+      if (reduce.matches || !bookGrid.animate) return true;
+      old.removeAttribute("id"); old.setAttribute("aria-hidden", "true"); old.className = "cal-grid cal-ghost";
+      Array.prototype.forEach.call(old.querySelectorAll("button"), function (b) { b.tabIndex = -1; });
+      calView.appendChild(old); ghost = old;
+      var newLabel = monthEl.textContent; monthEl.textContent = oldLabel;      // the name changes halfway, while it is faded out
+      labelSwap = setTimeout(function () { monthEl.textContent = newLabel; }, 250);
+      calView.classList.add("is-turning");
+      var newH = bookGrid.offsetHeight, gap = 24, dist = (dir > 0 ? oldH : newH) + gap;
+      var o = { duration: 533, easing: "cubic-bezier(.65,0,.35,1)" };
+      turning = [
+        old.animate([{ transform: "translateY(0)" }, { transform: "translateY(" + (-dir * dist) + "px)" }], { duration: o.duration, easing: o.easing, fill: "forwards" }),
+        bookGrid.animate([{ transform: "translateY(" + (dir * dist) + "px)" }, { transform: "translateY(0)" }], o),
+        calView.animate([{ height: oldH + "px" }, { height: newH + "px" }], o),
+        monthEl.animate([{ transform: "translateY(0)", opacity: 1 }, { transform: "translateY(" + (-dir * 8) + "px)", opacity: 0, offset: 0.4 },
+          { transform: "translateY(" + (dir * 8) + "px)", opacity: 0, offset: 0.5 }, { transform: "translateY(0)", opacity: 1 }], o)
+      ];
+      turning[1].onfinish = function () {
+        if (ghost !== old) return;                     // a newer turn has taken over
+        old.remove(); ghost = null; calView.classList.remove("is-turning"); turning = [];
+      };
+      return true;
+    }
+
+    // the chosen slot fills with its group's colour; the same class in the rest of a chosen run gets an orange outline
     function paint() {
       var run = pick && !isWs(pickS) ? course(pick).map(dkey) : [];
-      Array.prototype.forEach.call(bookGrid.querySelectorAll(".cal-day"), function (b) {
-        var on = !!pick && b.dataset.date === dkey(pick);
-        if (b.hasAttribute("aria-pressed")) {
-          var d = dparse(b.dataset.date);
-          b.setAttribute("aria-pressed", on ? "true" : "false");
-          showIn(b, d, on ? pickS : bookable(d)[0]);
-        }
-        if (on) b.style.setProperty("--tint", tintOf(pickS)); else b.style.removeProperty("--tint");
-        b.classList.toggle("in-course", run.indexOf(b.dataset.date) > 0);
+      Array.prototype.forEach.call(bookGrid.querySelectorAll(".cal-slot[data-i]"), function (b) {
+        var s = sessionsOn(dparse(b.dataset.date))[+b.dataset.i];
+        var on = !!pick && b.dataset.date === dkey(pick) && s === pickS;
+        b.setAttribute("aria-pressed", on ? "true" : "false");
+        if (on) b.style.setProperty("--tint", tintOf(s)); else b.style.removeProperty("--tint");
+        b.classList.toggle("in-course", !on && s === pickS && run.indexOf(b.dataset.date) > 0);
       });
     }
 
@@ -1856,14 +1751,14 @@ var DRAW = {
           '<p class="bp-when">Message Julien to join the waiting list.</p>';
         return;
       }
-      var s = pickS, left = leftFor(pick, s), other = alsoOn();
-      var also = other ? '<button type="button" class="bp-also" data-also>Also that day: ' + nameOf(other).replace("&", "&amp;") + ", " + hours(other) + " &rarr;</button>" : "";
+      var s = pickS, left = leftFor(pick, s), others = alsoOn();
+      var also = "";
       var tail = '<div class="bp-price"><p class="bp-line"></p><p class="bp-total"></p><p class="bp-save"></p><p class="bp-pay"></p></div>' +
-        '<a class="btn btn-light bp-cta" href="https://wa.me/85267533727">Request this booking on WhatsApp</a>';
+        '<a class="btn btn-light bp-cta" href="https://wa.me/85267533727" target="_blank" rel="noopener">Request this booking on WhatsApp</a>';
       bookPanel.style.setProperty("--tint", tintOf(s));
       if (isWs(s)) {
         bookPanel.innerHTML =
-          '<p class="bp-kind">Parent &amp; child &middot; Weekend workshop</p>' +
+          '<p class="bp-kind">Parent &amp; child &middot; Saturday workshop</p>' +
           '<h3 class="bp-title">' + DAYS[pick.getDay()] + " " + pick.getDate() + " " + MONTHS[pick.getMonth()].slice(0, 3) + ', <span>' + hours(s) + "</span></h3>" +
           '<p class="bp-when">Team up with your child for a weekend design challenge!</p>' +
           '<p class="bp-seats"><b>' + left + "</b> " + (left === 1 ? "pair" : "pairs") + " left</p>" + also +
@@ -1877,10 +1772,10 @@ var DRAW = {
           '<p class="bp-seats"><b>' + left + "</b> " + (left === 1 ? "seat" : "seats") + " left in this group</p>" +
           '<div class="bp-plans" role="radiogroup" aria-label="Programme">' + BOOK.plans.map(function (q, i) {
             return '<button type="button" role="radio" data-plan="' + i + '" aria-checked="' + (i === plan) + '"><b>' + q.sessions + " sessions</b>" +
-              "<span><em>" + money(q.price) + "</em> &middot; " + money(q.price / q.sessions) + "/class</span></button>";
+              "<span><em>" + money(q.price) + "</em>&nbsp;&middot; <i>" + money(q.price / q.sessions) + "/class</i></span></button>";
           }).join("") + "</div>" +
-          '<ol class="bp-dates" aria-label="The ' + run.length + ' sessions">' + run.map(function (x) { return "<li>" + x.getDate() + " " + MONTHS[x.getMonth()].slice(0, 3) + "</li>"; }).join("") + "</ol>" + also +
-          '<div class="bp-row"><p>Invite friends for discount<small class="bp-each"></small></p>' + stepper("friend") + "</div>" + tail;
+          '<p class="bp-run">From <b>' + short(run[0]) + "</b> to <b>" + short(run[run.length - 1]) + " " + run[run.length - 1].getFullYear() + "</b></p>" + also +
+          '<div class="bp-row"><p>Invite friends, get a discount.<small class="bp-each"></small></p>' + stepper("friend") + "</div>" + tail;
         friends = Math.min(friends, maxFriends());
       }
       price();
@@ -1906,11 +1801,11 @@ var DRAW = {
         var perClass = BOOK.plans[0].price / BOOK.plans[0].sessions, progPart = perClass * P.sessions - base, refPart = base * rate, parts = [];
         if (progPart > 0.5) parts.push(money(progPart) + " full programme (vs 2 × 10 sessions)");
         if (refPart > 0.5) parts.push(money(refPart) + " referral (" + Math.round(rate * 100) + "%, " + friends + (friends === 1 ? " friend" : " friends") + " invited)");
-        save = parts.length ? "You save " + money(progPart + refPart) + " · " + money(total / P.sessions) + "/class" : "Invite friends for a referral discount";
+        save = parts.length ? "You save " + money(progPart + refPart) + " · " + money(total / P.sessions) + "/class" : "";
         pay = rate ? "Payment is due once your invited friends are confirmed." : "";
-        bookPanel.querySelector(".bp-each").textContent = rate ? "each enjoys " + Math.round(rate * 100) + "% off" : "";
-        msg = "Hi Julien, I'd like to book the " + g.name + " " + P.name.toLowerCase() + " (" + g.ages + "), " + DAYS[s.day] + "s " + hours(s) +
-          ", " + P.sessions + " sessions from " + short(run[0]) + " to " + short(run[run.length - 1]) + " " + run[run.length - 1].getFullYear() +
+        bookPanel.querySelector(".bp-each").innerHTML = rate ? "each enjoys <b>" + Math.round(rate * 100) + "% off</b>" : "";
+        msg = "Hi Julien, I'd like to book the " + g.name + " " + P.sessions + " sessions (" + g.ages + "), " + DAYS[s.day] + "s " + hours(s) +
+          ", from " + short(run[0]) + " to " + short(run[run.length - 1]) + " " + run[run.length - 1].getFullYear() +
           ", for my child" + (friends ? ", with " + friends + (friends === 1 ? " friend" : " friends") + " invited (they book separately), " + Math.round(rate * 100) + "% referral discount" : "") +
           ". Total " + money(total) + ".";
       }
@@ -1927,12 +1822,13 @@ var DRAW = {
     function choose(p) { pick = p.d; pickS = p.s; view = new Date(pick.getFullYear(), pick.getMonth(), 1); drawMonth(); drawPanel(); }
 
     bookGrid.addEventListener("click", function (e) {
-      var b = e.target.closest(".cal-day");
-      if (!b || b.disabled || !b.classList.contains("has-class")) return;
-      pick = dparse(b.dataset.date); pickS = bookable(pick)[0]; paint(); drawPanel();
+      var b = e.target.closest(".cal-slot[data-i]");
+      if (!b || b.disabled) return;
+      pick = dparse(b.dataset.date); pickS = sessionsOn(pick)[+b.dataset.i]; paint(); drawPanel();
     });
     bookPanel.addEventListener("click", function (e) {
-      if (e.target.closest("[data-also]")) { pickS = alsoOn(); paint(); drawPanel(); return; }
+      var al = e.target.closest("[data-also]");
+      if (al) { pickS = alsoOn()[+al.dataset.also]; paint(); drawPanel(); return; }
       var pl = e.target.closest("[data-plan]");
       if (pl) { plan = +pl.dataset.plan; drawMonth(); drawPanel(); var f = bookPanel.querySelector('[data-plan="' + plan + '"]'); if (f) f.focus(); return; }
       var b = e.target.closest("[data-step]");
@@ -1941,8 +1837,8 @@ var DRAW = {
       else friends = Math.max(0, Math.min(maxFriends(), friends + +b.dataset.step));
       price();
     });
-    prevBtn.addEventListener("click", function () { view.setMonth(view.getMonth() - 1); drawMonth(); });
-    nextBtn.addEventListener("click", function () { view.setMonth(view.getMonth() + 1); drawMonth(); });
+    prevBtn.addEventListener("click", function () { shift(-1); });
+    nextBtn.addEventListener("click", function () { shift(1); });
     Array.prototype.forEach.call(chips, function (chip) {
       chip.addEventListener("click", function () {
         stageSel = +chip.dataset.stage;
@@ -1954,6 +1850,16 @@ var DRAW = {
     });
     var first = firstOpen();
     if (first) choose(first); else { drawMonth(); drawPanel(); }
+  }
+
+  /* ---------- terms & conditions pop-up, opened from the footer link ---------- */
+  var termsBox = document.getElementById("terms");
+  if (termsBox && termsBox.showModal) {
+    Array.prototype.forEach.call(document.querySelectorAll("[data-terms]"), function (b) {
+      b.addEventListener("click", function () { termsBox.showModal(); termsBox.querySelector(".terms-body").scrollTop = 0; });
+    });
+    termsBox.querySelector("[data-close]").addEventListener("click", function () { termsBox.close(); });
+    termsBox.addEventListener("click", function (e) { if (e.target === termsBox) termsBox.close(); }); // a click on the backdrop closes it
   }
 })();
 </script>
