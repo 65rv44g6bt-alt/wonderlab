@@ -7,6 +7,7 @@
 <meta name="description" content="WonderLab is a creative thinking academy in Mong Kok, Hong Kong. Children aged 7 to 14 design, build and test their own ideas in classes of seven or fewer.">
 <meta name="theme-color" content="#FFFFFF">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='-64 -64 128 128'%3E%3Crect x='-62' y='-62' width='124' height='124' rx='14' fill='%231A3F6E'/%3E%3Crect x='-38' y='-38' width='76' height='76' fill='none' stroke='%23FF6000' stroke-width='12'/%3E%3C/svg%3E">
+<script id="wl-motion" src="media/wl-motion.js?v=1" async></script> <!-- live challenge animations: bump ?v= when rebuilt -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300..700&display=swap" rel="stylesheet">
@@ -27,6 +28,12 @@
   --orange: #FF6000;     /* the joyful accent: lines, dots, labels, the map pin */
   --orange-ink: #C24A00; /* the same orange, deep enough for small text on white */
   --family: #4B2206;
+  --st-0: #1F3A1D;       /* stage colours, the flat tones of the booking lights (LEAF_LOOKS): Explorers green */
+  --st-1: #0E2A4F;       /* Creators blue */
+  --st-2: #3E1003;       /* Changemakers honey */
+  --st-0-line: #5C8F33;  /* the same hues bright enough to outline a card on white */
+  --st-1-line: #2B9BBD;
+  --st-2-line: #D08A16;
   --dot-0: #12A594;      /* calendar dots, bright enough to tell apart: Explorers */
   --dot-1: #3B7BEA;      /* Creators */
   --dot-2: #0D1B26;      /* Changemakers (navy, for now) */
@@ -211,12 +218,15 @@ video.is-waiting { opacity: 0 !important; }
   background: var(--paper); border: 1px solid var(--line); border-radius: var(--r); padding: 20px;
   font: inherit; color: var(--ink); transition: background-color 220ms ease, color 220ms ease, border-color 220ms ease;
 }
-.stage:hover { border-color: var(--orange); }
+#stage-tabs .stage:nth-child(1):hover { border-color: var(--st-0-line); }
+#stage-tabs .stage:nth-child(2):hover { border-color: var(--st-1-line); }
+#stage-tabs .stage:nth-child(3):hover { border-color: var(--st-2-line); }
 .stage:focus-visible { outline: none; } /* the filled card already marks the chosen stage */
 .stage[aria-selected="true"] { background: var(--navy); border-color: var(--navy); color: var(--on-navy); }
-#stage-tabs .stage:nth-child(1)[aria-selected="true"] { background: var(--teal); border-color: var(--teal); }
-#stage-tabs .stage:nth-child(2)[aria-selected="true"] { background: var(--blue); border-color: var(--blue); }
-#stage-tabs .stage:nth-child(3)[aria-selected="true"] { background: var(--navy); border-color: var(--navy); }
+/* the chosen card is a window onto its stage's still (the same image as the challenge panels, see .paper-green) */
+#stage-tabs .stage:nth-child(1)[aria-selected="true"] { background: url("media/challenges/leaf-green-wide.jpg") right top / 200% auto no-repeat, var(--st-0); border-color: var(--st-0); }
+#stage-tabs .stage:nth-child(2)[aria-selected="true"] { background: url("media/challenges/leaf-blue-wide.jpg") right top / 200% auto no-repeat, var(--st-1); border-color: var(--st-1); }
+#stage-tabs .stage:nth-child(3)[aria-selected="true"] { background: url("media/challenges/leaf-honey-wide.jpg") right top / 200% auto no-repeat, var(--st-2); border-color: var(--st-2); }
 .stage[aria-selected="true"] .s-ages, .stage[aria-selected="true"] .s-focus { color: var(--on-navy-soft); }
 .s-ages { font-size: var(--t-1); color: var(--ink-soft); font-weight: 500; }
 .s-name { font-size: var(--t2); font-weight: 500; letter-spacing: -0.03em; line-height: 1.05; }
@@ -258,21 +268,21 @@ video.is-waiting { opacity: 0 !important; }
     transition: transform 460ms cubic-bezier(.22,.9,.24,1), height 460ms cubic-bezier(.22,.9,.24,1), background-color 320ms ease;
   }
   .ch-slider::before, .ch-slider::after {
-    content: ""; position: absolute; right: 0; width: calc(var(--r) + 2px); height: calc(var(--r) + 3px);
-    background-color: var(--stage); transition: background-color 320ms ease, opacity 260ms ease;
+    content: ""; position: absolute; right: 0; background-color: var(--stage); transition: background-color 320ms ease;
   }
-  .ch-slider::before { top: calc(-1 * var(--r));
-    -webkit-mask: radial-gradient(circle at 0 0, transparent calc(var(--r) - 0.5px), #000 var(--r)); mask: radial-gradient(circle at 0 0, transparent calc(var(--r) - 0.5px), #000 var(--r)); }
-  .ch-slider::after { bottom: calc(-1 * var(--r));
-    -webkit-mask: radial-gradient(circle at 0 100%, transparent calc(var(--r) - 0.5px), #000 var(--r)); mask: radial-gradient(circle at 0 100%, transparent calc(var(--r) - 0.5px), #000 var(--r)); }
-  .challenges.at-first .ch-slider::before { opacity: 0; }
+  /* the joins and the panel's two left corners share one radius each, eased from the box's distance to the panel's top
+     and bottom (--jt, --jb: half that distance, at most --r, set on every frame by joinSync). Sliding to the first or
+     last title, the join and the corner shrink together to a square edge, flush with the panel; leaving it, they grow
+     back. Nothing switches mid-slide, so no step and no piece sticking out past the panel */
+  .ch-slider::before { top: calc(-1 * var(--jt, var(--r))); width: calc(var(--jt, var(--r)) + 2px); height: calc(var(--jt, var(--r)) + 3px);
+    -webkit-mask: radial-gradient(circle at 0 0, transparent calc(var(--jt, var(--r)) - 0.5px), #000 var(--jt, var(--r))); mask: radial-gradient(circle at 0 0, transparent calc(var(--jt, var(--r)) - 0.5px), #000 var(--jt, var(--r))); }
+  .ch-slider::after { bottom: calc(-1 * var(--jb, var(--r))); width: calc(var(--jb, var(--r)) + 2px); height: calc(var(--jb, var(--r)) + 3px);
+    -webkit-mask: radial-gradient(circle at 0 100%, transparent calc(var(--jb, var(--r)) - 0.5px), #000 var(--jb, var(--r))); mask: radial-gradient(circle at 0 100%, transparent calc(var(--jb, var(--r)) - 0.5px), #000 var(--jb, var(--r))); }
+  .challenges .ch-panel { border-top-left-radius: var(--jt, var(--r)); border-bottom-left-radius: var(--jb, var(--r)); transition: background-color 320ms ease; }
   .challenges.at-first .ch-list { border-top-color: transparent; }
-  .challenges.at-first .ch-panel { border-top-left-radius: 0; }
   /* the panel grows (below the animation) until it reaches past the selected title; for the last title it ends
      flush with it, like the first title at the top */
   .ch-figure { margin-bottom: var(--reach, 0px); transition: margin-bottom 460ms cubic-bezier(.22,.9,.24,1); }
-  .challenges.at-last .ch-slider::after { opacity: 0; }
-  .challenges.at-last .ch-panel { border-bottom-left-radius: 0; }
   .challenges.no-anim .ch-slider, .challenges.no-anim .ch-slider::before, .challenges.no-anim .ch-slider::after, .challenges.no-anim .ch-panel, .challenges.no-anim .ch-tab { transition: none; }
 }
 .ch-tab[aria-selected="true"] small { color: var(--on-navy-soft); }
@@ -280,11 +290,12 @@ video.is-waiting { opacity: 0 !important; }
 .ch-list li:has(+ li > .ch-tab[aria-selected="true"]) > .ch-tab { border-bottom-color: transparent; }
 .ch-panel { position: sticky; top: 92px; border-radius: var(--r); overflow: hidden; background: var(--stage); transition: background-color 320ms ease, border-radius 260ms ease; }
 .ch-figure { position: relative; aspect-ratio: 4 / 3; background: var(--stage); overflow: hidden; }
-.ch-figure video, .ch-figure img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;
+.ch-figure video, .ch-figure img, .ch-figure svg.wl-live { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;
   --edge: linear-gradient(90deg, transparent, #000 22px, #000 calc(100% - 22px), transparent), linear-gradient(180deg, transparent, #000 18px, #000 calc(100% - 18px), transparent);
   -webkit-mask-image: var(--edge); -webkit-mask-composite: source-in; mask-image: var(--edge); mask-composite: intersect; }
 .ch-figure video { transition: opacity 260ms ease; }
 .ch-figure svg { width: 82%; margin: 0 auto; color: var(--on-navy); }
+.ch-figure svg.wl-live { width: 100%; max-width: none; margin: 0; }
 .ch-body { padding: clamp(18px, 2.4vw, 28px); color: var(--on-navy); }
 .ch-kind { font-size: var(--t-1); font-weight: 500; }
 .ch-body h3 { margin-top: 6px; font-size: var(--t2); }
@@ -293,6 +304,54 @@ video.is-waiting { opacity: 0 !important; }
 .ch-skill { margin-top: 14px; padding-top: 14px; border-top: 1px solid rgba(237,243,246,0.16); font-size: 0.98rem; color: var(--on-navy-soft); }
 .ch-body .ch-skill { color: #FFFFFF; }
 .ch-skill b { color: var(--orange); font-weight: 500; }
+/* every challenge of a stage sits on that stage's paper (STAGE_PAPER in the script): a still of the booking panel's
+   light for the same stage (leafLight, one frame of each look over green01, rendered once): green for Explorers, blue
+   for Creators, honey for Changemakers. Each image is the still with a mirrored copy on its left (leaf-<name>-wide.jpg);
+   the panel shows the real half, fitted to its width from the top, and the selected title's box the mirrored half. The
+   clips are drawn in the glass theme straight over it. The stills are already capped for white text like the booking
+   light, so the tint is light; a scrim under the text keeps it readable lower down. */
+.paper-green { --paper-img: url("media/challenges/leaf-green-wide.jpg"); --paper-base: #1F3A1D; --paper-ink: 8, 20, 7; --paper-tint-a: 0.08; }
+.paper-blue { --paper-img: url("media/challenges/leaf-blue-wide.jpg"); --paper-base: #0E2A4F; --paper-ink: 4, 14, 30; --paper-tint-a: 0.08; }
+.paper-honey { --paper-img: url("media/challenges/leaf-honey-wide.jpg"); --paper-base: #3E1003; --paper-ink: 30, 8, 0; --paper-tint-a: 0.08; }
+.ch-panel.paper-honey, .ch-slide.paper-honey { --orange: #FFD48A; } /* on honey the orange accents turn light gold, as on the booking panel */
+.paper-green, .paper-blue, .paper-honey { --paper-tint: linear-gradient(rgba(var(--paper-ink), var(--paper-tint-a)), rgba(var(--paper-ink), var(--paper-tint-a)));
+  --paper-scrim: linear-gradient(180deg, rgba(var(--paper-ink), 0) 0, rgba(var(--paper-ink), 0.34) 26px, rgba(var(--paper-ink), 0.5) 80px, rgba(var(--paper-ink), 0.58) 100%); }
+.ch-slide.is-paper { background: var(--paper-tint), var(--paper-img) right top / 200% auto no-repeat, var(--paper-base); }
+.ch-slide.is-paper .ch-figure { background: transparent; }
+.ch-slide.is-paper .ch-body { background: var(--paper-scrim); text-shadow: 0 1px 10px rgba(var(--paper-ink), 0.55); }
+.ch-slide.is-paper .ch-body { flex: 1; } /* a card taller than its text keeps the scrim to the bottom */
+/* the desktop panel fades its paper in and out on the same beat as the selected title's box, rather than swapping it
+   while the content is hidden: the paper (::before) and the text scrim (::after, as tall as the text: --scrim-h, set on
+   .challenges by reach) are layers under the content, so the scrim does not dip with the text either. An element
+   leaving its paper keeps paper-<name>, so the image is still there while it fades out (setPaper) */
+.ch-panel { isolation: isolate; }
+.ch-panel .ch-figure { background: transparent; } /* the panel's own stage colour shows through */
+.ch-panel::before, .ch-panel::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; z-index: -1; opacity: 0; pointer-events: none; transition: opacity 320ms ease; }
+.ch-panel::before { top: 0; background: var(--paper-tint), var(--paper-img) right top / 200% auto no-repeat, var(--paper-base); }
+.ch-panel::after { height: var(--scrim-h, 45%); background: var(--paper-scrim); }
+.ch-panel.is-paper::before, .ch-panel.is-paper::after { opacity: 1; }
+.ch-panel .ch-body { transition: opacity 240ms ease, transform 420ms cubic-bezier(.22,.9,.24,1), text-shadow 320ms ease; }
+.ch-panel.is-paper .ch-body { text-shadow: 0 1px 10px rgba(var(--paper-ink), 0.55); }
+/* the selected title's box is a window onto the panel's paper, not a copy of it: paperSync() places the same image,
+   tint and text scrim in panel coordinates on every frame the box moves (--gx/--gy: the image's left edge and the
+   panel's top, --gw: twice the panel width, --ph: the panel's height), so the paper stands still while the box slides
+   over it and the two match pixel for pixel where they meet; the box shows the mirrored half */
+@media (min-width: 901px) {
+  /* the box's paper is its own layer (.ch-slider-paper) so it can fade like the panel's; the two small corner joins swap */
+  .ch-slider-paper { position: absolute; inset: 0; border-radius: inherit; opacity: 0; transition: opacity 320ms ease; }
+  .ch-slider-paper, .challenges.is-paper .ch-slider::before, .challenges.is-paper .ch-slider::after {
+    background-image: var(--paper-tint), var(--paper-scrim), var(--paper-img); background-repeat: no-repeat;
+    background-size: auto, 100% var(--scrim-h, 0px), var(--gw, 200%) auto;
+  }
+  .ch-slider-paper { background-position: 0 0, 0 calc(var(--gy, 0px) + var(--ph, 0px) - var(--scrim-h, 0px)), var(--gx, 0px) var(--gy, 0px); }
+  .challenges.is-paper .ch-slider-paper { opacity: 1; }
+  .challenges.is-paper .ch-slider, .challenges.is-paper .ch-slider::before, .challenges.is-paper .ch-slider::after { background-color: var(--paper-base); }
+  .challenges.no-anim .ch-slider-paper, .challenges.no-anim .ch-panel::before, .challenges.no-anim .ch-panel::after { transition: none; }
+  .challenges.is-paper .ch-slider::before { background-position: 0 0, 0 calc(var(--gy, 0px) + var(--ph, 0px) - var(--scrim-h, 0px) + var(--jt, var(--r))),
+    calc(var(--gx, 0px) - var(--sw, 0px) + var(--jt, var(--r)) + 2px) calc(var(--gy, 0px) + var(--jt, var(--r))); }
+  .challenges.is-paper .ch-slider::after { background-position: 0 0, 0 calc(var(--gy, 0px) + var(--ph, 0px) - var(--scrim-h, 0px) - var(--sh, 0px) + 3px),
+    calc(var(--gx, 0px) - var(--sw, 0px) + var(--jb, var(--r)) + 2px) calc(var(--gy, 0px) - var(--sh, 0px) + 3px); }
+}
 .ch-panel.is-swapping .ch-figure > * { opacity: 0; }
 .ch-panel.is-swapping .ch-body { opacity: 0; transform: translateY(10px); }
 .ch-figure > * { transition: opacity 240ms ease; }
@@ -332,6 +391,66 @@ video.is-waiting { opacity: 0 !important; }
 .step p { margin-top: 2px; color: var(--ink-soft); font-size: 0.95rem; line-height: 1.4; }
 @media (max-width: 900px) { .steps { grid-template-columns: repeat(3, 1fr); } }
 @media (max-width: 560px) { .steps { grid-template-columns: 1fr 1fr; } }
+/* approach on phones: the three pillars and the six steps become one column of tabs that magnify as they pass the
+   middle of the screen, like a dock under the pointer but driven by the scroll (apDock in the script). The column is
+   pinned (.ap-stage) while the page scrolls through it; the tab nearest the middle is full size and pours out its
+   text from under its title, the others shrink and fade with their distance. Built by the script only on phones with
+   motion allowed; otherwise the pillars and steps show as they are */
+/* approach on phones, the six steps: a nautilus shell (media/approach-shell.jpg, from grahic design/Backgrounds/06_fibo2,
+   at 70% over white) pinned full screen while the page scrolls through it, under the title "Every challenge in six
+   steps". A black dashed line (rounded dashes) follows the shell from its open end at the top round the rim and in to
+   the centre; each step's orange dot and number light as the line reaches it. The step then shows large beside its dot
+   (icon, number, title, text) and, as the line moves on, shrinks into a list at the top right (number and title). The
+   shell drifts slowly up meanwhile. The line is the dashed path seen through a mask: a solid copy of the same path drawn
+   on with the scroll (apShell in the script). Phones with motion allowed only; otherwise the steps show as they are */
+.ap-shell { display: none; }
+@media (max-width: 900px) {
+  #approach.has-shell .steps-label, #approach.has-shell .steps { display: none; }
+  #approach.has-shell .ap-shell { display: block; position: relative; margin: 28px calc(50% - 50vw) 0; height: calc(100svh - var(--ap-top, 72px) + 5 * 30svh); }
+  .ap-shell-stage { position: sticky; top: var(--ap-top, 72px); height: calc(100svh - var(--ap-top, 72px)); overflow: hidden; background: #FFFFFF; }
+  .ap-shell-layer { position: absolute; left: 0; right: 0; top: calc(-1 * var(--ap-drift, 48px)); bottom: calc(-1 * var(--ap-drift, 48px)); will-change: transform; }
+  .ap-shell-layer > svg { position: absolute; inset: 0; width: 100%; height: 100%; display: block; max-width: none; }
+  .ap-line { fill: none; stroke: var(--ink); stroke-width: 5.5; stroke-dasharray: 7 13; stroke-linecap: round; }
+  .ap-mask { fill: none; stroke: #FFFFFF; stroke-width: 16; stroke-linecap: round; }
+  .ap-dot { fill: var(--orange); transform-box: fill-box; transform-origin: center; transform: scale(0); transition: transform 420ms cubic-bezier(.3,1.7,.5,1); }
+  .ap-dot.is-on { transform: scale(1); }
+  .ap-dot.is-now { transform: scale(1.4); }
+  .ap-tip { fill: var(--ink); }
+  .ap-title { position: absolute; left: 20px; right: 20px; top: 16px; font-size: clamp(1.2rem, 6.1vw, 1.8rem); font-weight: 500; letter-spacing: -0.035em; line-height: 1.1; white-space: nowrap; color: var(--ink); }
+  /* each dot's number, beside it */
+  .ap-num { position: absolute; left: 0; top: 0; width: 22px; text-align: center; font-size: 0.8rem; font-weight: 700; font-variant-numeric: tabular-nums; color: var(--orange);
+    text-shadow: 0 0 6px rgba(255, 255, 255, 0.95); opacity: 0; transition: opacity 300ms ease; }
+  .ap-num.is-on { opacity: 1; }
+  /* a step, large: icon and number, the title, the text. The script places it beside its dot, then shrinks it away */
+  .ap-card { position: absolute; left: 0; top: 0; width: 214px; transform-origin: 0 0; will-change: transform, opacity; color: var(--ink); pointer-events: none;
+    visibility: hidden; text-shadow: 0 0 14px rgba(255, 255, 255, 0.95), 0 0 3px rgba(255, 255, 255, 0.85); }
+  .ap-card.is-on { visibility: visible; animation: ap-card-in 420ms cubic-bezier(.16,.84,.3,1); }
+  @keyframes ap-card-in { from { opacity: 0; filter: blur(4px); } }
+  .ap-card svg { display: inline-block; vertical-align: -8px; width: 30px; height: 30px; margin-right: 8px; fill: none; stroke: var(--ink); stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+  .ap-card-k { font-size: 1rem; font-weight: 700; font-variant-numeric: tabular-nums; color: var(--orange); }
+  .ap-card h4 { margin: 4px 0 0; padding: 0; font-size: clamp(2.2rem, 10vw, 2.8rem); font-weight: 500; letter-spacing: -0.04em; line-height: 1; }
+  .ap-card p { margin: 6px 0 0; font-size: 1.05rem; line-height: 1.3; color: var(--ink); }
+  /* the steps passed: number and title, top right */
+  .ap-list { position: absolute; right: 20px; top: 60px; margin: 0; padding: 0; list-style: none; text-align: right; pointer-events: none; }
+  .ap-li { font-size: 1.02rem; font-weight: 500; letter-spacing: -0.015em; line-height: 1.5; color: var(--ink); opacity: 0; white-space: nowrap; text-shadow: 0 0 8px rgba(255, 255, 255, 0.95); }
+  .ap-li span { color: var(--orange); font-weight: 700; font-variant-numeric: tabular-nums; }
+}
+.ap-dock { display: none; }
+@media (max-width: 900px) {
+  #approach.has-dock .pillars { display: none; }
+  #approach.has-dock .ap-dock { display: block; position: relative; height: calc(100svh - var(--ap-top, 72px) + (var(--ap-n, 10) - 1) * 22svh); }
+  .ap-stage { position: sticky; top: var(--ap-top, 72px); height: calc(100svh - var(--ap-top, 72px)); overflow: hidden; }
+  .ap-item { position: absolute; left: 0; right: 0; top: 0; transform-origin: 0 0; will-change: transform, opacity;
+    padding-top: 14px; border-top: 1px solid var(--line); cursor: pointer; -webkit-tap-highlight-color: transparent; }
+  .ap-item.is-pillar { border-top-color: var(--orange); }
+  .ap-item.is-label { border-top: 0; cursor: default; }
+  .ap-kick { font-size: 0.95rem; font-weight: 600; color: var(--orange); font-variant-numeric: tabular-nums; }
+  .ap-item h3 { margin-top: 2px; font-size: clamp(2rem, 9vw, 2.6rem); font-weight: 500; letter-spacing: -0.035em; line-height: 1.04; color: var(--ink); }
+  .ap-item.is-label h3 { font-size: 1.15rem; font-weight: 600; letter-spacing: -0.01em; color: var(--ink-soft); }
+  .ap-para { overflow: hidden; padding-bottom: 0.2em; }
+  .ap-para > p { padding-top: 10px; max-width: 28ch; font-size: 1.15rem; line-height: 1.4; color: var(--ink-soft); will-change: transform, opacity; }
+}
+
 
 /* tutor */
 .tutor { display: grid; grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr); gap: clamp(26px, 5vw, 72px); align-items: start; }
@@ -362,9 +481,9 @@ video.is-waiting { opacity: 0 !important; }
 .chip small { font-size: 0.74rem; font-weight: 400; color: var(--ink-soft); white-space: nowrap; } /* the ages sit under the name, so all five fit one row on a laptop */
 @media (min-width: 901px) and (max-width: 1199px) { .chip { padding: 5px 7px; font-size: 0.8rem; } .chip small { font-size: 0.7rem; } } /* small laptops */
 .chip:hover { border-color: var(--orange); }
-.chip[data-stage="0"] { --tint: var(--teal); }
-.chip[data-stage="1"] { --tint: var(--blue); }
-.chip[data-stage="2"] { --tint: var(--navy); }
+.chip[data-stage="0"] { --tint: var(--st-0); }
+.chip[data-stage="1"] { --tint: var(--st-1); }
+.chip[data-stage="2"] { --tint: var(--st-2); }
 .chip[data-stage="3"] { --tint: var(--family); }
 .chip[aria-pressed="true"] { background: var(--tint, var(--ink)); border-color: var(--tint, var(--ink)); color: var(--on-navy); }
 .chip[aria-pressed="true"] small { color: var(--on-navy-soft); }
@@ -442,8 +561,17 @@ video.is-waiting { opacity: 0 !important; }
   .cal-slot .dot { width: 6px; height: 6px; }
   .cal-slot .t { overflow: visible; }
 }
-.book-panel { container-type: inline-size; position: sticky; top: 92px; border-radius: var(--r); background: var(--tint, var(--navy)); color: var(--on-navy); padding: clamp(20px, 2.6vw, 30px); transition: background-color 320ms ease; }
-@media (max-width: 900px) { .book-panel { position: static; } }
+.book-panel { container-type: inline-size; position: sticky; top: 92px; isolation: isolate; border-radius: var(--r); background: var(--tint, var(--navy)); color: var(--on-navy); padding: clamp(20px, 2.6vw, 30px); transition: background-color 320ms ease; }
+@media (max-width: 900px) { .book-panel { position: relative; top: auto; } }
+/* each stage's panel has light through leaves moving across it (leafLight below): green01 for Explorers, graded blue
+   for Creators and honey for Changemakers. The canvas sits under the text; its brightness is capped so white text
+   stays at 6:1 or better anywhere, the soft text turns to a translucent white that takes the colour of the light, and
+   on honey the orange accents turn light gold so they do not sink into the orange light */
+.bp-light { position: absolute; inset: 0; z-index: -1; width: 100%; height: 100%; border-radius: inherit; opacity: 0; transition: opacity 360ms ease; pointer-events: none; }
+.book-panel.has-light .bp-light.is-on { opacity: 1; }
+.book-panel.has-light { --on-navy-soft: rgba(255, 255, 255, 0.78); }
+.book-panel.has-light .bp-kind, .book-panel.has-light .bp-seats b, .book-panel.has-light .bp-row small b { text-shadow: 0 1px 10px rgba(0, 0, 0, 0.45); }
+.book-panel.look-honey { --orange: #FFD48A; }
 .bp-kind { font-size: var(--t0); font-weight: 500; color: var(--orange); }
 .bp-title { margin-top: 6px; font-size: var(--t2); }
 .bp-title span { white-space: nowrap; } /* a line may break after the date, never inside the hours */
@@ -485,10 +613,9 @@ video.is-waiting { opacity: 0 !important; }
 .bp-price { margin-top: 18px; padding-top: 18px; border-top: 1px solid rgba(237,243,246,0.16); }
 .bp-line { color: #FFFFFF; font-size: 0.9rem; }
 .bp-total { margin-top: 4px; font-size: var(--t2); font-weight: 500; letter-spacing: -0.03em; line-height: 1.05; }
-.bp-line:empty, .bp-save:empty, .bp-pay:empty, .bp-each:empty { display: none; }
-.bp-save small { display: block; margin-top: 2px; font-size: 0.8rem; font-weight: 400; opacity: 0.85; }
+.bp-total small { font-size: 0.9rem; font-weight: 400; letter-spacing: 0; color: #FFFFFF; white-space: nowrap; } /* · (HK$X/class), on the total's line */
+.bp-line:empty, .bp-pay:empty, .bp-each:empty { display: none; }
 .bp-pay { margin-top: 8px; font-size: 0.85rem; color: var(--on-navy-soft); }
-.bp-save { margin-top: 6px; color: var(--orange); font-size: 0.95rem; font-weight: 500; }
 .bp-cta { width: 100%; margin-top: 20px; }
 .bp-also + .bp-also { margin-top: 6px; }
 .bp-also { display: block; margin-top: 14px; padding: 0; border: 0; background: none; color: var(--on-navy); font: inherit; font-size: 0.92rem; text-align: left;
@@ -644,7 +771,7 @@ footer { background: var(--navy); color: var(--on-navy-soft); padding: clamp(44p
 
     <div class="challenges" id="challenges" role="tabpanel" aria-labelledby="stage-explorers">
       <div class="ch-col">
-        <div class="ch-slider" id="ch-slider" aria-hidden="true"></div>
+        <div class="ch-slider" id="ch-slider" aria-hidden="true"><span class="ch-slider-paper"></span></div>
         <ul class="ch-list" role="tablist" aria-label="Challenges" id="ch-list"></ul>
       </div>
       <div class="ch-carousel" id="ch-carousel">
@@ -710,7 +837,7 @@ footer { background: var(--navy); color: var(--on-navy-soft); padding: clamp(44p
           <div class="cal-viewport" id="cal-viewport"><div class="cal-grid" id="cal-grid"></div></div>
         </div>
       </div>
-      <div class="book-panel" id="book-panel" aria-live="polite"></div>
+      <div class="book-panel" id="book-panel"><canvas class="bp-light" aria-hidden="true"></canvas><div class="bp-body" id="book-body" aria-live="polite"></div></div>
     </div>
   </div>
 </section>
@@ -1054,6 +1181,16 @@ var DRAW = {
       '<g class="dr dr-thin dr-brand"><circle cx="40" cy="120" r="12"/><path d="M180 132l14-24 14 24z"/></g>' +
       '<text x="20" y="30" class="dr-note">paper only</text>' +
       '</svg>',
+    stringtower:
+      '<svg viewBox="0 0 240 180" aria-hidden="true">' +
+      '<path class="dr dr-thin" d="M20 168H220"/>' +
+      '<g class="dr fill-paper"><path d="M96 160h48v8h-48z"/></g>' +
+      '<path class="dr dr-thin" d="M120 160V18"/>' +
+      '<g class="dr"><path d="M120 152c-34-4-34-38 0-42"/><path d="M120 128c34-4 34-38 0-42"/><path d="M120 104c-34-4-34-38 0-42"/><path d="M120 80c34-4 34-38 0-42"/></g>' +
+      '<path class="dr fill-zing" d="M110 14h20v6h-20z"/>' +
+      '<path class="dr dr-thin dr-brand" d="M168 40v-22M162 24l6-6 6 6"/>' +
+      '<text x="20" y="30" class="dr-note">pull: it stands</text>' +
+      '</svg>',
     mobile:
       '<svg viewBox="0 0 240 180" aria-hidden="true">' +
       '<g class="dr"><path d="M120 8V30M56 30H184"/><path d="M76 30V56M36 56H116M36 56V88M116 56V80M184 30V96"/></g>' +
@@ -1154,7 +1291,7 @@ var DRAW = {
       '<svg viewBox="0 0 240 180" aria-hidden="true"><g class="dr dr-hair dr-ghost"><path d="M14 98L24 92L34 95L46 86L58 89L70 80L84 84L96 76L110 81L124 72L138 77L152 70L166 75L180 69L194 74L206 72L216 78L226 82"/><circle cx="158" cy="34" r="9" stroke-dasharray="3 3"/><path d="M18 52q2.5-2.5 5 0q2.5-2.5 5 0M26 45q2-2 4 0q2-2 4 0"/><path d="M18 160q6-3 12 0t12 0t12 0t12 0t12 0t12 0t12 0t12 0t12 0t12 0M66 165q6-3 12 0t12 0t12 0t12 0t12 0t12 0t12 0t12 0t12 0t12 0t12 0t12 0M128 141q5-3 10 0t10 0"/><path d="M14 130H226"/><path d="M118 46V126M122.5 33V126M127 46V126"/></g><path class="dr dr-hair" d="M22 93V79M22 79L22 72.5M22 79L27.6 82.2M22 79L16.4 82.2M200 73V66M200 66L200 60.5M200 66L204.8 68.8M200 66L195.2 68.8M216 78V70M216 70L216 65M216 70L220.3 72.5M216 70L211.7 72.5"/><g class="dr dr-hair fill-stage"><path d="M14 126V108H19V102H24V96H28V126Z"/><path d="M31 126V62H44V126Z"/><path d="M52 126C53 100 51 74 54 52L57.5 46L61 49C63 74 65 100 64 126Z"/><path d="M68 126V66L78 40L88 58V126Z"/><path d="M92 126V80H110V126ZM92 64V56Q101 45 110 56V64Z"/><path d="M114 126V46L116.5 42V36L119 33V27L122.5 20L126 27V33L128.5 36V42L131 46V126Z"/><path d="M140 126V92C140 72 147 58 160 50V126Z"/><path d="M164 126V82L179 73V126Z"/><path d="M183 126V104H202V126Z"/><path d="M205 126V112H226V126Z"/></g><path class="dr dr-hair" d="M31 70H44M31 78H44M31 86H44M31 94H44M31 102H44M31 110H44M31 118H44M27.5 70H31M44 78H47.5M27.5 86H31M44 94H47.5M27.5 102H31M44 110H47.5M27.5 118H31M52.5 114L63.8 104M52.6 100L63.4 90M52.6 86L62.8 76M53.2 72L62.2 62M54 58L61 52M68 104H88M68 82H88M68 126L88 104M88 126L68 104M68 104L88 82M88 104L68 82M78 40V82M78 40V34M83.5 49V44M92 64V80M94 64V80M108 64V80M110 64V80M92 88H110M92 96H110M92 104H110M92 112H110M92 120H110M101 72m-1.4 0a1.4 1.4 0 1 0 2.8 0a1.4 1.4 0 1 0 -2.8 0M102 70.6L101 65L100 70.6M101.7 73.6L107.1 75.5L102.7 71.8M99.3 71.8L94.9 75.5L100.3 73.6M122.5 20V15M145.8 66.5H160M141.5 78H160M140 90H160M140 102H160M140 114H160M168 79.5V83.5M172 77V81M176 74.5V78.5M164 96H179M164 106H179M164 116H179M183 112H202M183 119H202M205 112l5.25-4v4l5.25-4v4l5.25-4v4l5.25-4v4M205 119H226M14 126H226"/><path class="dr dr-hair fill-stage" d="M44 74H52V77.5H44ZM131 84H140V87.5H131Z"/><path class="dr dr-hair fill-stage" d="M36.5 62C36.5 60 37.7 59 38.9 59.4C39.3 58 41.5 58 41.9 59.4C43.1 59 44.3 60 43.5 62ZM28 70C28 68 28.7 67 29.4 67.4C29.6 66 30.9 66 31.1 67.4C31.8 67 32.5 68 32 70ZM43.5 78C43.5 76 44.2 75 44.9 75.4C45.1 74 46.4 74 46.6 75.4C47.3 75 48 76 47.5 78ZM28 86C28 84 28.7 83 29.4 83.4C29.6 82 30.9 82 31.1 83.4C31.8 83 32.5 84 32 86ZM43.5 94C43.5 92 44.2 91 44.9 91.4C45.1 90 46.4 90 46.6 91.4C47.3 91 48 92 47.5 94ZM28 102C28 100 28.7 99 29.4 99.4C29.6 98 30.9 98 31.1 99.4C31.8 99 32.5 100 32 102ZM43.5 110C43.5 108 44.2 107 44.9 107.4C45.1 106 46.4 106 46.6 107.4C47.3 107 48 108 47.5 110ZM28 118C28 116 28.7 115 29.4 115.4C29.6 114 30.9 114 31.1 115.4C31.8 115 32.5 116 32 118ZM15 108C15 106 15.7 105 16.4 105.4C16.6 104 17.9 104 18.1 105.4C18.8 105 19.5 106 19 108ZM19.5 102C19.5 100 20.2 99 20.9 99.4C21.1 98 22.4 98 22.6 99.4C23.3 99 24 100 23.5 102ZM24 96C24 94 24.7 93 25.4 93.4C25.6 92 26.9 92 27.1 93.4C27.8 93 28.5 94 28 96ZM45 74C45 72 46.2 71 47.4 71.4C47.8 70 50 70 50.4 71.4C51.6 71 52.8 72 52 74ZM132 84C132 82 133.2 81 134.4 81.4C134.8 80 137 80 137.4 81.4C138.6 81 139.8 82 139 84ZM141 90C141 88 141.9 87 142.7 87.4C143 86 144.6 86 144.9 87.4C145.7 87 146.6 88 146 90ZM142.3 78C142.3 76 143.2 75 144 75.4C144.3 74 145.9 74 146.2 75.4C147 75 147.9 76 147.3 78ZM146.2 66.5C146.2 64.5 147.1 63.5 147.9 63.9C148.2 62.5 149.8 62.5 150.1 63.9C150.9 63.5 151.8 64.5 151.2 66.5ZM152.6 57C152.6 55 153.5 54 154.3 54.4C154.6 53 156.2 53 156.5 54.4C157.3 54 158.2 55 157.6 57ZM184.5 104C184.5 102 185.4 101 186.2 101.4C186.5 100 188.1 100 188.4 101.4C189.2 101 190.1 102 189.5 104ZM190 104C190 102 190.9 101 191.7 101.4C192 100 193.6 100 193.9 101.4C194.7 101 195.6 102 195 104ZM195.5 104C195.5 102 196.4 101 197.2 101.4C197.5 100 199.1 100 199.4 101.4C200.2 101 201.1 102 200.5 104Z"/><path class="dr dr-hair fill-stage" d="M48.5 126V121M45.5 118a3 4 0 1 0 6 0a3 4 0 1 0 -6 0ZM90 126V121M87 118a3 4 0 1 0 6 0a3 4 0 1 0 -6 0ZM112 126V121M109 118a3 4 0 1 0 6 0a3 4 0 1 0 -6 0ZM135.5 126V121M132.5 118a3 4 0 1 0 6 0a3 4 0 1 0 -6 0ZM203.5 126V121M200.5 118a3 4 0 1 0 6 0a3 4 0 1 0 -6 0Z"/><path class="dr dr-hair fill-stage" d="M199 125V118H152C147 118 143 120.5 141 125Z"/><path class="dr dr-hair" d="M154 121.5H195" stroke-dasharray="4 2.5"/><g class="dr dr-hair"><path d="M28 147H74L69 153H33Z M35 147V141H67V147"/><path d="M33 141L36 138H66L69 141Z" class="fill-sky"/><path d="M39 144H63" stroke-dasharray="2 2"/><path d="M92 148Q108 152 126 147L122 154H97Z M104 148V128M115 148V134"/><path d="M105 130L114 128L117 145H105Z M116 135L122 134L124 146H116Z" class="fill-zing"/><path d="M156 143.5h9l-2.5 3.5h-9zM167 143.5h9l-2.5 3.5h-9zM178 143.5h9l-2.5 3.5h-9zM189 143.5h9l-2.5 3.5h-9zM200 143.5h9l-2.5 3.5h-9zM211 143.5h9l-2.5 3.5h-9zM152.5 149.5h9l-2.5 3.5h-9zM163.5 149.5h9l-2.5 3.5h-9zM174.5 149.5h9l-2.5 3.5h-9zM185.5 149.5h9l-2.5 3.5h-9zM196.5 149.5h9l-2.5 3.5h-9zM207.5 149.5h9l-2.5 3.5h-9z" class="fill-sky"/><ellipse cx="176" cy="57" rx="4" ry="1.8" class="fill-stage"/><path d="M169 53.5h5M178 53.5h5M171.5 53.5V55.6M180.5 53.5V55.6"/></g><rect x="10" y="12" width="220" height="156" rx="5" class="dr dr-hair"/><rect x="190" y="20" width="32" height="38" rx="1.5" class="dr dr-hair fill-zing"/><rect x="193.5" y="23.5" width="25" height="31" class="dr dr-hair" stroke-dasharray="1.5 2" style="stroke:#0D1B26"/><text x="206" y="42" text-anchor="middle" class="dr-note" style="fill:#0D1B26;font-size:8.5px;font-weight:700">2050</text><text x="20" y="30" class="dr-note">Hong Kong, 2050</text></svg>'
   };
 
-  var GROUPS = [{"id": "explorers", "name": "Explorers", "ages": "ages 7 to 8", "items": [["davinci", "The Da Vinci Bridge", "Build a bridge that spans 50 cm using nothing but bamboo chopsticks: no glue, just locked together the way Leonardo da Vinci designed it.", "Rapid structural engineering and resilience under constraints.", "Structural engineering"], ["tiles", "The Infinite Façade", "Craft your own repeating pattern on a stamp and design a futuristic building façade from it!", "Mathematical tiling and visual perception.", "Tiling and perception"], ["boat", "The Foil Boat Regatta", "Fold squares of foil into boats and load them with coins to discover how different hull designs change what they can carry.", "Hydrodynamics and material efficiency.", "Buoyancy and materials"], ["solar", "The Solar Oven Bake-Off", "Engineer a solar cooker from cardboard and foil, using orientation and reflection to melt marshmallows.", "Passive sustainable design and thermodynamics.", "Eco-design"], ["rube", "The Chain Reaction Machine", "Link stations of dominoes, ramps and tracks across the room so each one sets off the next, ending in one final action: ringing the bell!", "Cause-and-effect sequencing and systems thinking.", "Systems thinking"], ["rain", "The Rainwater Harvesting Roof", "Design roof gutters and catchment systems from plastic cups and straws, then pour measured water to test how well they drain.", "Hydrological systems and resource conservation.", "Water and resources"], ["mobile", "The Kinetic Wind Sculpture", "Build balanced mobiles from wire, string and cups that turn gently in a breeze without tangling.", "Weight balancing and kinetic movement.", "Balance and motion"], ["bench", "The Bench for Everyone", "Act out how a toddler, a grandparent and a skateboarder use a park bench, then draw one bench that works for all of them.", "Seeing a problem through many users' eyes.", "Inclusive design"], ["floating", "What If Cities Floated?", "Imagine a city on the sea and draw a comic strip of one day there: where people sleep, play, shop and go when a storm comes.", "Imagination, storytelling and thinking ahead.", "Speculative thinking"], ["postcard", "Postcards from 2050", "Draw a postcard from a Hong Kong skyline in 2050, then work backwards to the three changes that would have to happen to get there.", "Futures thinking and planning backwards.", "Futures thinking"]]}, {"id": "creators", "name": "Creators", "ages": "ages 9 to 11", "items": [["tower", "The Spaghetti Skyscraper", "Build the tallest freestanding tower from raw spaghetti that can hold weight on top!", "Geometry and load distribution.", "Structural engineering"], ["facade", "The Infinite Façade", "Craft your own repeating pattern on a stamp and design a futuristic building façade from it!", "Mathematical tiling and visual perception.", "Tiling and perception"], ["egg", "The Egg Drop Challenge", "Engineer a protective capsule from straws and rubber bands so a raw egg survives a drop from increasing heights!", "Impact protection and iterative prototyping.", "Risk and problem solving"], ["bridge", "The Newspaper Bridge", "Figure out ways for thin newspaper to span a 50 cm gap strong enough to hold a water bottle!", "Material efficiency, resilience under constraints, tension and compression.", "Structural engineering", "truss"], ["lampshade", "The Shadow-Casting Lampshade", "Fold, score and cut paper into lampshades, then switch on the bulb to see the patterns of light and shadow each design throws across the room.", "Light, shadow and paper engineering.", "Light and shadow"], ["treehouse", "The Dream Tree House", "Unleash your creativity to build a scaled model perched on top of the canopy, with lookouts, rope ladders, slides and secret hatches.", "Imagination, structure and designing with nature.", "Imaginative design"], ["bench", "The Bench for Everyone", "Act out how a toddler, a grandparent and a skateboarder use a park bench, then draw one bench that works for all of them.", "Seeing a problem through many users' eyes.", "Inclusive design", "bench-blue"], ["shelter", "The Rapid Disaster Shelter", "In just 20 minutes, prototype a lightweight flat-pack emergency shelter from corrugated sheets that can stand up to a wind test.", "Humanitarian architecture and crisis response.", "Humanitarian architecture"], ["column", "The Pillar of Strength", "Fold paper into cylinders, accordions and triangles to build one column that holds up a heavy stack of books.", "Compression strength and geometry.", "Compression and geometry"], ["stilts", "The Climate-Resilient Foundation Lab", "Construct coastal stilt houses over a rising-tide basin and test flexible foundations against rising water and storm winds.", "Climate adaptation and stability testing.", "Climate adaptation"], ["beach", "Treasures from the Tide", "Collect what the sea leaves behind, like bottle caps, rope, driftwood and lost flip-flops, and give it a second life as something useful or beautiful.", "Upcycling, material creativity and caring for the ocean.", "Upcycling"], ["postcard", "Postcards from 2050", "Draw a postcard from a Hong Kong skyline in 2050, then work backwards to the three changes that would have to happen to get there.", "Futures thinking and planning backwards.", "Futures thinking"]]}, {"id": "changemakers", "name": "Changemakers", "ages": "ages 12 to 14", "items": [["chair", "The Cardboard Chair Challenge", "Build a life-size chair from corrugated cardboard and duct tape that can safely hold a team member.", "Full-scale structural load engineering.", "Full-scale prototyping"], ["airport", "The Airport of Tomorrow", "Plan an airport for 20 aircraft stands so the walk from the entrance to the farthest gate gets as short as it can be. Teams test one layout against another and measure the shortest walk.", "Circulation planning and shortest-path thinking.", "Systems and circulation"], ["treehouse", "The Dream Tree House", "Unleash your creativity to build a scaled model perched on top of the canopy, with lookouts, rope ladders, slides and secret hatches.", "Imagination, structure and designing with nature.", "Imaginative design", "treehouse-dark"], ["corridor", "The Biodiversity Corridor", "Map a bare urban strip and build a green corridor with vertical gardens and bird-nesting boxes that link separated spaces.", "Eco-urbanism and habitat preservation.", "Eco-urbanism"], ["tensegrity", "The Tensegrity Table", "Build a gravity-defying table from wooden sticks and strings, where the table top floats on tension alone.", "Physics and structural counter-forces.", "Physics and forces"], ["quake", "The Disaster-Resilient Foundation Test", "Build model houses on a tray of marbles, simulate earthquakes, and redesign the foundations until they stand.", "Geotechnical engineering and seismic resilience.", "Seismic resilience"], ["dome", "The Zero-Waste Packaging Pavilion", "Study natural patterns like honeycombs and leaves, then use clean packaging to build a self-supporting geodesic dome.", "Biomimicry and structural repetition.", "Biomimicry"], ["turbine", "The Wind Harvest Glow-Off", "Generate light from your own wind: build model wind turbines with different blade designs, set them in front of a fan, and see whose design makes its LED glow the brightest.", "Renewable energy and fair testing.", "Renewable energy"], ["floating", "What If Cities Floated?", "Imagine a city on the sea and draw a comic strip of one day there: where people sleep, play, shop and go when a storm comes.", "Imagination, storytelling and thinking ahead.", "Speculative thinking"], ["bench", "The Bench for Everyone", "Act out how a toddler, a grandparent and a skateboarder use a park bench, then draw one bench that works for all of them.", "Seeing a problem through many users' eyes.", "Inclusive design", "bench-dark"], ["postcard", "Postcards from 2050", "Draw a postcard from a Hong Kong skyline in 2050, then work backwards to the three changes that would have to happen to get there.", "Futures thinking and planning backwards.", "Futures thinking"]]}];
+  var GROUPS = [{"id": "explorers", "name": "Explorers", "ages": "ages 7 to 8", "items": [["davinci", "The Da Vinci Bridge", "Build a bridge that spans 50 cm using nothing but bamboo chopsticks: no glue, just locked together the way Leonardo da Vinci designed it.", "Rapid structural engineering and resilience under constraints.", "Structural engineering"], ["tiles", "The Infinite Façade", "Craft your own repeating pattern on a stamp and design a futuristic building façade from it!", "Mathematical tiling and visual perception.", "Tiling and perception"], ["boat", "The Foil Boat Regatta", "Fold squares of foil into boats and load them with coins to discover how different hull designs change what they can carry.", "Hydrodynamics and material efficiency.", "Buoyancy and materials"], ["solar", "The Solar Oven Bake-Off", "Engineer a solar cooker from cardboard and foil, using orientation and reflection to melt marshmallows.", "Passive sustainable design and thermodynamics.", "Eco-design"], ["rube", "The Chain Reaction Machine", "Link stations of dominoes, ramps and tracks across the room so each one sets off the next, ending in one final action: ringing the bell!", "Cause-and-effect sequencing and systems thinking.", "Systems thinking"], ["rain", "The Rainwater Harvesting Roof", "Design roof gutters and catchment systems from plastic cups and straws, then pour measured water to test how well they drain.", "Hydrological systems and resource conservation.", "Water and resources"], ["stringtower", "The Tensegrity Tower", "Bend card strips into arches, thread them all on one string, then pull it tight: a floppy pile snaps up into a tower that stands on tension alone.", "Tension, compression and how forces balance.", "Tension and compression"], ["fractal", "The Fractal Tree", "Fold a sheet of paper, cut it and push the flap through to make a step, then repeat with cuts half as long, again and again, until a pop-up fractal grows out of a single page!", "Self-similar patterns, halving and paper engineering.", "Fractal geometry"], ["bench", "The Bench for Everyone", "Act out how a toddler, a grandparent and a skateboarder use a park bench, then draw one bench that works for all of them.", "Seeing a problem through many users' eyes.", "Inclusive design"], ["floating", "What If Cities Floated?", "Imagine a city on the sea and draw a comic strip of one day there: where people sleep, play, shop and go when a storm comes.", "Imagination, storytelling and thinking ahead.", "Speculative thinking"], ["postcard", "Postcards from 2050", "Draw a postcard from a Hong Kong skyline in 2050, then work backwards to the three changes that would have to happen to get there.", "Futures thinking and planning backwards.", "Futures thinking"]]}, {"id": "creators", "name": "Creators", "ages": "ages 9 to 11", "items": [["tower", "The Spaghetti Skyscraper", "Build the tallest freestanding tower from raw spaghetti that can hold weight on top!", "Geometry and load distribution.", "Structural engineering"], ["facade", "The Infinite Façade", "Craft your own repeating pattern on a stamp and design a futuristic building façade from it!", "Mathematical tiling and visual perception.", "Tiling and perception"], ["egg", "The Egg Drop Challenge", "Engineer a protective capsule from straws and rubber bands so a raw egg survives a drop from increasing heights!", "Impact protection and iterative prototyping.", "Risk and problem solving"], ["bridge", "The Newspaper Bridge", "Figure out ways for thin newspaper to span a 50 cm gap strong enough to hold a water bottle!", "Material efficiency, resilience under constraints, tension and compression.", "Structural engineering", "truss"], ["lampshade", "The Shadow-Casting Lampshade", "Fold, score and cut paper into lampshades, then switch on the bulb to see the patterns of light and shadow each design throws across the room.", "Light, shadow and paper engineering.", "Light and shadow"], ["treehouse", "The Dream Tree House", "Unleash your creativity to build a scaled model perched on top of the canopy, with lookouts, rope ladders, slides and secret hatches.", "Imagination, structure and designing with nature.", "Imaginative design", "treehouse-green"], ["bench", "The Bench for Everyone", "Act out how a toddler, a grandparent and a skateboarder use a park bench, then draw one bench that works for all of them.", "Seeing a problem through many users' eyes.", "Inclusive design", "bench-blue"], ["shelter", "The Rapid Disaster Shelter", "In just 20 minutes, prototype a lightweight flat-pack emergency shelter from corrugated sheets that can stand up to a wind test.", "Humanitarian architecture and crisis response.", "Humanitarian architecture"], ["column", "The Pillar of Strength", "Fold paper into cylinders, accordions and triangles to build one column that holds up a heavy stack of books.", "Compression strength and geometry.", "Compression and geometry"], ["stilts", "The Climate-Resilient Foundation Lab", "Construct coastal stilt houses over a rising-tide basin and test flexible foundations against rising water and storm winds.", "Climate adaptation and stability testing.", "Climate adaptation"], ["beach", "Treasures from the Tide", "Collect what the sea leaves behind, like bottle caps, rope, driftwood and lost flip-flops, and give it a second life as something useful or beautiful.", "Upcycling, material creativity and caring for the ocean.", "Upcycling"], ["postcard", "Postcards from 2050", "Draw a postcard from a Hong Kong skyline in 2050, then work backwards to the three changes that would have to happen to get there.", "Futures thinking and planning backwards.", "Futures thinking"]]}, {"id": "changemakers", "name": "Changemakers", "ages": "ages 12 to 14", "items": [["chair", "The Cardboard Chair Challenge", "Build a life-size chair from corrugated cardboard and duct tape that can safely hold a team member.", "Full-scale structural load engineering.", "Full-scale prototyping"], ["airport", "The Airport of Tomorrow", "Plan an airport for 20 aircraft stands so the walk from the entrance to the farthest gate gets as short as it can be. Teams test one layout against another and measure the shortest walk.", "Circulation planning and shortest-path thinking.", "Systems and circulation"], ["treehouse", "The Dream Tree House", "Unleash your creativity to build a scaled model perched on top of the canopy, with lookouts, rope ladders, slides and secret hatches.", "Imagination, structure and designing with nature.", "Imaginative design", "treehouse-green"], ["corridor", "The Biodiversity Corridor", "Map a bare urban strip and build a green corridor with vertical gardens and bird-nesting boxes that link separated spaces.", "Eco-urbanism and habitat preservation.", "Eco-urbanism"], ["tensegrity", "The Tensegrity Table", "Build a gravity-defying table from wooden sticks and strings, where the table top floats on tension alone.", "Physics and structural counter-forces.", "Physics and forces"], ["quake", "The Disaster-Resilient Foundation Test", "Build model houses on a tray of marbles, simulate earthquakes, and redesign the foundations until they stand.", "Geotechnical engineering and seismic resilience.", "Seismic resilience"], ["dome", "The Zero-Waste Packaging Pavilion", "Study natural patterns like honeycombs and leaves, then use clean packaging to build a self-supporting geodesic dome.", "Biomimicry and structural repetition.", "Biomimicry"], ["turbine", "The Wind Harvest Glow-Off", "Generate light from your own wind: build model wind turbines with different blade designs, set them in front of a fan, and see whose design makes its LED glow the brightest.", "Renewable energy and fair testing.", "Renewable energy"], ["floating", "What If Cities Floated?", "Imagine a city on the sea and draw a comic strip of one day there: where people sleep, play, shop and go when a storm comes.", "Imagination, storytelling and thinking ahead.", "Speculative thinking"], ["bench", "The Bench for Everyone", "Act out how a toddler, a grandparent and a skateboarder use a park bench, then draw one bench that works for all of them.", "Seeing a problem through many users' eyes.", "Inclusive design", "bench-dark"], ["postcard", "Postcards from 2050", "Draw a postcard from a Hong Kong skyline in 2050, then work backwards to the three changes that would have to happen to get there.", "Futures thinking and planning backwards.", "Futures thinking"]]}];
 
   /* ---------- scroll reveals: statement lines, then blocks ---------- */
   var statement = document.querySelector(".rv-wrap");
@@ -1226,6 +1363,295 @@ var DRAW = {
     block.style.setProperty("--out", (pieces.length * 90) + "ms"); // the bar retracts once its text is tucked away
     casIO.observe(block);
   });
+
+
+  /* ---------- approach on phones: tabs that magnify as they pass the middle of the screen ----------
+     The three pillars are copied into one column (.ap-dock) that is pinned while the page
+     scrolls through it: scrolling moves a focus along the column, one tab per 22% of the screen height. Each tab's
+     scale follows a bell curve of its distance from the focus (full size at the middle, MIN at the edges); the tabs are
+     stacked at their scaled heights, so they never overlap, and the column slides so the focus sits mid-screen. The
+     focused tab's text pours down from under its title as it arrives and tucks back as it leaves, both ways. A tap on a
+     tab scrolls it to the middle. Phones only, and only with motion allowed */
+  (function apDock() {
+    var sec = document.getElementById("approach");
+    if (!sec || !sec.querySelector(".steps")) return;
+    var phone = window.matchMedia("(max-width: 900px)"), MIN = 0.56, WIDTH = 0.62, GAP = 18, EDGE = 20;
+    var dock = null, stage, items = [], on = false, raf = 0, top = 72;
+    function build() {
+      dock = document.createElement("div"); dock.className = "ap-dock";
+      stage = document.createElement("div"); stage.className = "ap-stage"; dock.appendChild(stage);
+      var src = [];
+      sec.querySelectorAll(".pillar").forEach(function (p) { src.push({ kind: "pillar", h: p.querySelector("h3").textContent, t: p.querySelector("p").textContent }); });
+      items = src.map(function (d, i) {
+        var el = document.createElement("div"), it = { el: el, head: 0, body: 0, para: null, inner: null };
+        el.className = "ap-item is-" + d.kind;
+        if (d.k) { var k = document.createElement("p"); k.className = "ap-kick"; k.textContent = d.k; el.appendChild(k); }
+        var h = document.createElement("h3"); h.textContent = d.h; el.appendChild(h);
+        if (d.t) {
+          it.para = document.createElement("div"); it.para.className = "ap-para";
+          it.inner = document.createElement("p"); it.inner.textContent = d.t; it.para.appendChild(it.inner); el.appendChild(it.para);
+        }
+        if (d.kind !== "label") el.addEventListener("click", function () { focusOn(i); });
+        stage.appendChild(el);
+        return it;
+      });
+      dock.style.setProperty("--ap-n", items.length);
+      sec.querySelector(".pillars").after(dock);
+    }
+    function measure() {
+      var head = document.querySelector(".site-head");
+      top = head ? head.offsetHeight : 72;
+      dock.style.setProperty("--ap-top", top + "px");
+      items.forEach(function (it) {
+        it.el.style.transform = "none";
+        if (it.para) { it.para.style.height = ""; it.inner.style.transform = "none"; }
+        it.body = it.para ? it.para.offsetHeight : 0;
+        it.head = it.el.offsetHeight - it.body;
+      });
+    }
+    function span() { return Math.max(1, dock.offsetHeight - stage.clientHeight); }
+    // the focus, as a fractional tab index, from how far the page has scrolled through the dock
+    function focusAt() { return Math.min(1, Math.max(0, (top - dock.getBoundingClientRect().top) / span())) * (items.length - 1); }
+    function update() {
+      raf = 0;
+      if (!on) return;
+      var f = focusAt(), H = stage.clientHeight, y = 0, pos = [];
+      items.forEach(function (it, i) {
+        var u = i - f, b = Math.exp(-u * u / (2 * WIDTH * WIDTH)), sc = MIN + (1 - MIN) * b;
+        var a = Math.min(1, Math.max(0, (b - 0.55) / 0.4)); a = a * a * (3 - 2 * a); // the text opens over the last stretch
+        var h = (it.head + a * it.body) * sc;
+        pos.push({ y: y, s: sc, a: a, b: b, h: h, u: u });
+        y += h + GAP * sc;
+      });
+      // the focus sits mid-screen, except near the ends: the column never leaves a gap above its first tab or below
+      // its last, so at the top the magnified tab starts high and travels down to the middle, and at the bottom it
+      // travels on below the middle to the last tab
+      var k = Math.min(items.length - 2, Math.floor(f)), t = f - k;
+      var c0 = pos[k].y + pos[k].h / 2, c1 = pos[k + 1].y + pos[k + 1].h / 2, off = H / 2 - (c0 + (c1 - c0) * t);
+      var hi = EDGE, lo = H - EDGE - (y - GAP * pos[pos.length - 1].s);
+      off = lo <= hi ? Math.min(hi, Math.max(lo, off)) : (H - y) / 2;
+      items.forEach(function (it, i) {
+        var p = pos[i], o = Math.exp(-p.u * p.u / (2 * 1.6 * 1.6));
+        it.el.style.transform = "translate3d(0," + (p.y + off).toFixed(1) + "px,0) scale(" + p.s.toFixed(4) + ")";
+        it.el.style.opacity = (0.32 + 0.68 * o).toFixed(3);
+        if (it.para) {
+          // the text's box opens to its share of the height and the text pours down into it from under the title
+          it.para.style.height = (p.a * it.body).toFixed(1) + "px";
+          it.inner.style.transform = "translate3d(0," + ((p.a - 1) * 0.6 * it.body).toFixed(1) + "px,0)";
+          it.inner.style.opacity = (p.a * p.a * p.a).toFixed(3); // the text shows once it has nearly arrived
+        }
+      });
+    }
+    function kick() { if (!raf) raf = requestAnimationFrame(update); }
+    function focusOn(i) {
+      var y = window.scrollY + dock.getBoundingClientRect().top - top + span() * i / (items.length - 1);
+      window.scrollTo({ top: Math.round(y), behavior: "smooth" });
+    }
+    function sync() {
+      var want = phone.matches && !reduce.matches;
+      if (want && !dock) build();
+      if (!dock) return;
+      on = want;
+      sec.classList.toggle("has-dock", on);
+      if (on) { measure(); update(); }
+    }
+    window.addEventListener("scroll", kick, { passive: true });
+    var lastW = window.innerWidth;
+    window.addEventListener("resize", function () {
+      if (window.innerWidth !== lastW) { lastW = window.innerWidth; if (on) measure(); } // a phone's toolbars only change the height
+      kick();
+    });
+    phone.addEventListener("change", sync);
+    if (reduce.addEventListener) reduce.addEventListener("change", sync);
+    sync();
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () { if (on) { measure(); update(); } });
+  })();
+
+  /* ---------- approach on phones, the six steps: a dashed line grows along the shell's spiral ----------
+     The line starts at the top, at the shell's open end, follows the rim round and winds in to the centre, where the
+     sixth step sits. It starts as soon as the shell comes up from the bottom of the screen and reaches step 1 just as the
+     shell is pinned under the header. The page then scrolls through five equal stretches, one per step: for the first
+     30% of a stretch the step just reached rests, shown large beside its dot (icon, number, title, text); over the rest
+     the line travels on to the next step while the large step shrinks into its line of the list at the top right
+     (number and title). The last step stays large. Meanwhile the shell drifts slowly up (from +DRIFT to -DRIFT px),
+     so more of its lower part shows, with the line and the dots on it; the line passes behind the text showing.
+     SPIRAL is the line in the photo's pixels (843 x 1264): a smoothed curve along the outer rim, then a logarithmic
+     spiral fitted to the inner whorls; MARKS are the steps' places along it (fractions of its length). The view crops
+     the photo like a cover image kept to its left edge, where the shell is */
+  (function apShell() {
+    var sec = document.getElementById("approach");
+    if (!sec || !sec.querySelector(".steps")) return;
+    var SPIRAL = "M0.0,232.0 L4.3,233.2 L9.3,234.5 L14.9,235.9 L20.9,237.4 L27.4,239.1 L34.2,240.8 L41.4,242.6 L48.7,244.5 L56.2,246.5 L63.7,248.6 L71.2,250.7 L78.1,253.5 L85.2,255.8 L92.2,258.1 L99.2,260.5 L106.1,263.0 L113.0,265.5 L119.8,268.1 L126.5,270.8 L133.3,273.6 L140.0,276.4 L146.6,279.3 L153.3,282.3 L160.0,285.4 L166.7,288.6 L173.3,291.9 L180.0,295.2 L186.7,298.7 L193.3,302.3 L200.0,305.9 L206.7,309.7 L213.3,313.6 L220.0,317.6 L226.7,321.7 L233.3,325.8 L240.0,330.1 L246.7,334.4 L253.3,338.8 L260.0,343.2 L266.7,347.6 L273.4,352.1 L280.1,356.5 L286.8,361.0 L293.5,365.4 L300.2,369.8 L306.9,374.3 L313.7,378.7 L320.5,383.1 L327.3,387.4 L334.0,391.8 L340.8,396.2 L347.5,400.5 L354.2,404.9 L360.9,409.2 L367.5,413.5 L374.0,417.8 L380.4,422.1 L386.7,426.3 L392.9,430.5 L399.0,434.6 L405.0,438.7 L410.8,442.8 L416.6,446.8 L422.3,450.9 L427.8,454.8 L433.3,458.8 L438.7,462.8 L444.0,466.8 L449.3,470.8 L454.5,474.8 L459.6,478.8 L464.7,482.9 L469.8,487.1 L474.8,491.3 L479.9,495.6 L484.8,499.9 L489.8,504.3 L494.7,508.7 L499.6,513.2 L504.5,517.8 L509.3,522.4 L514.0,527.0 L518.7,531.7 L523.3,536.4 L527.8,541.1 L532.3,545.9 L536.7,550.6 L540.9,555.4 L545.1,560.2 L549.2,565.0 L553.2,569.8 L557.0,574.7 L560.8,579.5 L564.5,584.4 L568.1,589.3 L571.6,594.2 L575.0,599.1 L578.4,604.1 L581.6,609.1 L584.8,614.2 L587.9,619.4 L590.9,624.6 L593.8,629.9 L596.6,635.2 L599.4,640.7 L602.1,646.2 L604.7,651.8 L607.2,657.5 L609.7,663.2 L612.1,669.0 L614.4,674.9 L616.6,680.9 L618.7,686.9 L620.8,693.0 L622.8,699.1 L624.6,705.2 L626.5,711.5 L628.2,717.7 L629.8,724.0 L631.4,730.4 L632.9,736.8 L634.3,743.3 L635.7,749.8 L636.9,756.3 L638.1,762.9 L639.2,769.5 L640.2,776.2 L641.0,782.9 L641.8,789.6 L642.5,796.3 L643.0,803.1 L643.4,809.8 L643.7,816.5 L643.9,823.3 L643.9,830.0 L643.8,836.7 L643.5,843.5 L643.2,850.2 L642.7,856.9 L642.0,863.7 L641.3,870.4 L640.4,877.1 L639.4,883.8 L638.2,890.5 L637.0,897.1 L635.7,903.7 L634.2,910.3 L632.6,916.8 L630.9,923.3 L629.1,929.8 L627.2,936.2 L625.2,942.6 L623.0,948.9 L620.8,955.2 L618.4,961.5 L615.9,967.7 L613.4,973.8 L610.7,979.8 L607.9,985.7 L605.0,991.6 L602.1,997.3 L599.0,1002.8 L595.9,1008.2 L592.7,1013.4 L589.4,1018.5 L586.0,1023.4 L582.5,1028.1 L578.9,1032.7 L575.3,1037.1 L571.5,1041.4 L567.7,1045.5 L563.8,1049.6 L559.8,1053.5 L555.7,1057.4 L551.5,1061.3 L547.2,1065.1 L542.9,1068.9 L538.4,1072.7 L533.9,1076.5 L529.2,1080.3 L524.5,1084.1 L519.6,1087.9 L514.7,1091.8 L509.6,1095.6 L504.5,1099.4 L499.3,1103.2 L494.0,1107.0 L488.7,1110.7 L483.3,1114.3 L477.8,1117.9 L472.3,1121.3 L466.7,1124.6 L461.1,1127.9 L455.4,1130.9 L449.7,1133.9 L444.0,1136.7 L438.2,1139.4 L432.4,1142.0 L426.6,1144.5 L420.7,1146.8 L414.8,1149.0 L408.8,1151.2 L402.8,1153.2 L396.8,1155.0 L390.7,1156.8 L384.5,1158.5 L378.4,1160.1 L372.2,1161.6 L365.9,1163.1 L359.6,1164.4 L353.3,1165.6 L346.9,1166.8 L340.4,1167.8 L334.0,1168.8 L327.5,1169.7 L320.9,1170.4 L314.4,1171.0 L307.8,1171.5 L301.2,1171.9 L294.7,1172.1 L288.2,1172.1 L281.6,1171.9 L275.2,1171.6 L268.7,1171.1 L262.3,1170.4 L255.9,1169.5 L249.5,1168.3 L243.2,1167.1 L236.9,1165.6 L230.7,1163.9 L224.5,1162.1 L218.3,1160.1 L212.1,1157.9 L206.0,1155.6 L199.9,1153.2 L193.9,1150.6 L188.0,1147.9 L182.0,1145.1 L176.2,1142.2 L170.3,1139.2 L164.6,1136.0 L158.8,1132.7 L153.2,1129.3 L147.5,1125.8 L142.0,1122.2 L136.5,1118.5 L131.0,1114.6 L125.7,1110.6 L120.4,1106.5 L115.2,1102.2 L110.1,1097.8 L105.2,1093.3 L100.3,1088.6 L95.6,1083.8 L90.9,1078.8 L86.4,1073.7 L82.0,1068.5 L77.7,1063.1 L73.6,1057.6 L69.5,1051.9 L65.6,1046.2 L61.8,1040.2 L58.1,1034.2 L54.6,1028.1 L51.1,1021.9 L47.9,1015.5 L44.7,1009.1 L41.8,1002.5 L38.9,995.9 L36.2,989.1 L33.7,982.2 L31.3,975.3 L29.1,968.2 L27.0,961.0 L25.1,953.8 L23.3,946.5 L21.7,939.1 L20.1,931.8 L18.7,924.4 L17.5,917.0 L16.3,909.6 L15.3,902.2 L14.4,895.0 L13.6,887.7 L12.9,880.6 L12.3,873.4 L11.8,866.4 L11.5,859.4 L11.2,852.5 L11.1,845.6 L11.1,838.8 L11.2,832.0 L11.4,825.3 L11.7,818.7 L12.1,812.2 L12.6,805.7 L13.3,799.3 L14.0,793.0 L14.8,786.8 L15.8,780.7 L16.8,774.7 L18.0,768.8 L19.3,763.0 L20.6,757.3 L22.1,751.6 L23.7,746.1 L25.4,740.7 L27.2,735.3 L29.1,730.1 L31.1,724.9 L33.2,719.9 L35.4,715.0 L37.8,710.2 L40.2,705.6 L42.8,701.0 L45.4,696.6 L48.2,692.3 L51.0,688.1 L54.0,684.0 L57.1,680.1 L60.3,676.2 L63.7,672.5 L67.2,668.8 L70.9,665.3 L74.7,661.8 L78.7,658.3 L82.9,655.0 L87.3,651.7 L92.0,648.4 L96.8,645.1 L101.8,642.0 L107.1,638.8 L112.5,635.7 L118.2,632.7 L124.0,629.7 L130.0,626.8 L136.2,624.0 L142.6,621.4 L149.2,618.9 L155.9,616.6 L162.9,614.5 L170.0,612.6 L177.4,611.0 L185.0,609.7 L192.9,608.7 L201.1,607.9 L209.6,607.4 L215.6,604.9 L225.4,605.3 L235.5,606.0 L245.7,606.9 L255.8,607.9 L265.7,609.0 L275.2,610.1 L284.0,611.2 L292.0,612.2 L299.0,613.1 L304.8,613.7 L309.3,614.0 L312.2,614.0 L330.4,622.3 L347.4,632.3 L363.2,643.7 L377.4,656.4 L390.2,670.3 L401.3,685.2 L410.8,700.9 L418.5,717.2 L424.5,734.0 L428.7,751.0 L431.2,768.1 L431.9,785.2 L430.9,801.9 L428.3,818.3 L424.2,834.0 L418.5,849.1 L411.5,863.3 L403.3,876.6 L393.9,888.7 L383.5,899.8 L372.2,909.5 L360.1,918.0 L347.5,925.1 L334.4,930.9 L320.9,935.2 L307.4,938.2 L293.7,939.7 L280.2,939.9 L267.0,938.8 L254.1,936.3 L241.7,932.7 L229.9,927.9 L218.8,922.0 L208.5,915.1 L199.1,907.4 L190.6,898.9 L183.1,889.7 L176.7,880.0 L171.3,869.8 L167.1,859.3 L164.0,848.6 L162.0,837.7 L161.0,826.9 L161.2,816.2 L162.4,805.8 L164.7,795.6 L167.8,785.9 L171.9,776.7 L176.8,768.0 L182.5,760.0 L188.8,752.7 L195.8,746.2 L203.2,740.5 L211.1,735.6 L219.2,731.6 L227.7,728.5 L236.2,726.3 L244.9,724.9 L253.4,724.4 L261.9,724.8 L270.2,726.0 L278.2,728.0 L285.8,730.8 L293.0,734.2 L299.7,738.3 L305.9,743.0 L311.6,748.2 L316.6,753.8 L320.9,759.8 L324.6,766.2 L327.6,772.7 L329.9,779.5 L331.4,786.3 L332.3,793.2 L332.5,800.0 L332.0,806.7 L330.8,813.2 L329.1,819.5 L326.7,825.5 L323.8,831.1 L320.4,836.3 L316.6,841.1 L312.3,845.5 L307.8,849.3 L302.9,852.6 L297.8,855.4 L292.5,857.6 L287.1,859.2 L281.7,860.3 L276.2,860.8 L270.8,860.8 L265.5,860.3 L260.4,859.2 L255.5,857.7 L250.8,855.7 L246.4,853.2 L242.3,850.4 L238.6,847.3 L235.3,843.8 L232.3,840.1 L229.8,836.2 L227.7,832.1 L226.1,827.8 L224.9,823.5 L224.2,819.2 L223.9,814.9 L224.1,810.6 L224.6,806.4 L225.6,802.4 L226.9,798.5 L228.6,794.8 L230.6,791.4 L232.9,788.3 L235.5,785.4 L238.3,782.8 L241.4,780.6 L244.5,778.7 L247.8,777.1 L251.2,776.0 L254.7,775.1 L258.1,774.6 L261.5,774.5 L264.9,774.7 L268.2,775.3 L271.4,776.1 L274.4,777.3 L277.3,778.7 L280.0,780.4 L282.4,782.3 L284.6,784.4 L286.6,786.7 L288.3,789.1 L289.7,791.7 L290.9,794.3 L291.7,797.0 L292.3,799.8 L292.6,802.5 L292.6,805.2 L292.4,807.9 L291.9,810.5 L291.1,813.0 L290.1,815.4 L289.0,817.6 L287.6,819.7 L286.0,821.6 L284.3,823.3 L282.4,824.8 L280.4,826.1", MARKS = [0.0588, 0.498, 0.5745, 0.727, 0.7892, 1.0], DRIFT = 48, REST = 0.3, SHRINK = 0.35;
+    // little line icons, 24 x 24: a brief, a pencil, building blocks, a test weight, a turn-around arrow, a speech bubble
+    var ICONS = [
+      '<rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 8h6M9 12h6M9 16h3.5"/>',
+      '<path d="M4 20l1.2-4.6L15.8 4.8a2 2 0 0 1 2.8 0l.6.6a2 2 0 0 1 0 2.8L8.6 18.8z"/><path d="M14 6.6l3.4 3.4"/>',
+      '<rect x="3.5" y="13" width="7.5" height="7.5" rx="1"/><rect x="13" y="13" width="7.5" height="7.5" rx="1"/><rect x="8.25" y="4.5" width="7.5" height="7.5" rx="1"/>',
+      '<path d="M9.2 8a2.8 2.8 0 1 1 5.6 0"/><path d="M6.5 9h11l2.5 11.5H4z"/>',
+      '<path d="M19.5 12a7.5 7.5 0 1 1-2.2-5.3"/><path d="M19.5 4v4.5H15"/>',
+      '<path d="M4 5.5h16v10.5H10l-4.5 3.5V16H4z"/><path d="M8 9.5h8M8 12.5h5"/>'
+    ];
+    var phone = window.matchMedia("(max-width: 900px)");
+    var box = null, stage, layer, svg, mask, tip, knock, title, dots = [], nums = [], cards = [], items = [], steps;
+    var T = 1, S = 1, OY = 0, P = [], home = [], top = 72, on = false, raf = 0;
+    function el(tag, cls, parent) { var e = document.createElement(tag); if (cls) e.className = cls; if (parent) parent.appendChild(e); return e; }
+    function build() {
+      steps = Array.prototype.map.call(sec.querySelectorAll(".step"), function (st) {
+        var ps = st.querySelectorAll(":scope > p");
+        return { k: ps[0].textContent, h: st.querySelector("h3").textContent, t: ps[1].textContent };
+      });
+      var NS = "http://www.w3.org/2000/svg";
+      box = el("div", "ap-shell");
+      stage = el("div", "ap-shell-stage", box);
+      layer = el("div", "ap-shell-layer", stage); // drifts with the photo
+      svg = document.createElementNS(NS, "svg");
+      svg.setAttribute("viewBox", "0 0 843 1264"); svg.setAttribute("preserveAspectRatio", "xMinYMid slice"); svg.setAttribute("aria-hidden", "true");
+      svg.innerHTML = '<image href="media/approach-shell.jpg" x="0" y="0" width="843" height="1264" opacity="0.7"/>' +
+        '<defs><mask id="ap-reveal" maskUnits="userSpaceOnUse" x="-60" y="-60" width="963" height="1384"><path class="ap-mask" d="' + SPIRAL + '"/><g class="ap-knock"></g></mask></defs>' +
+        '<path class="ap-line" d="' + SPIRAL + '" mask="url(#ap-reveal)"/><circle class="ap-tip" r="6"/>';
+      layer.appendChild(svg);
+      mask = svg.querySelector(".ap-mask"); tip = svg.querySelector(".ap-tip"); knock = svg.querySelector(".ap-knock");
+      MARKS.forEach(function () {
+        var c = document.createElementNS(NS, "circle");
+        c.setAttribute("class", "ap-dot"); c.setAttribute("r", "10");
+        svg.appendChild(c); dots.push(c);
+      });
+      title = el("h3", "ap-title", stage);
+      title.textContent = (sec.querySelector(".steps-label") || {}).textContent || "";
+      var list = el("ol", "ap-list", stage); // the steps already passed, top right
+      steps.forEach(function (st, k) {
+        var num = el("span", "ap-num", layer); num.textContent = st.k; nums.push(num);
+        var card = el("div", "ap-card", stage);
+        card.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true">' + (ICONS[k] || "") + '</svg><span class="ap-card-k"></span><h4></h4><p></p>';
+        card.querySelector(".ap-card-k").textContent = st.k;
+        card.querySelector("h4").textContent = st.h;
+        card.querySelector("p").textContent = st.t;
+        cards.push(card);
+        var li = el("li", "ap-li", list);
+        li.innerHTML = "<span></span>";
+        li.firstChild.textContent = st.k;
+        li.appendChild(document.createTextNode(" " + st.h));
+        items.push(li);
+      });
+      sec.querySelector(".steps").after(box);
+    }
+    // the path can only be measured once it is displayed; the dots follow the photo's crop. The layer is the stage plus
+    // DRIFT above and below, so the photo covers the stage wherever it has drifted to. Each dot's number sits just
+    // outside it, away from the shell's centre. Each large step gets a place beside its dot (P, in layer pixels):
+    // the first of right, below, left, above that stays on screen, under the title, clear of the list and of its dot and the ones before
+    function measure() {
+      T = mask.getTotalLength() || 1;
+      mask.style.strokeDasharray = T.toFixed(1) + " " + T.toFixed(1);
+      var W = layer.clientWidth, H = layer.clientHeight, s = Math.max(W / 843, H / 1264), oy = (H - 1264 * s) / 2;
+      S = s; OY = oy;
+      var cx = 266 * s, cy = 808 * s + oy, M = 20, G = 18, list = items[0].parentNode;
+      var listL = list.offsetLeft - 12, listB = list.offsetTop + list.offsetHeight + 10, titleB = title.offsetTop + title.offsetHeight + 10;
+      P = []; home = [];
+      function dotAt(j) { var q = mask.getPointAtLength(MARKS[j] * T); return { x: q.x * s, y: q.y * s + oy }; }
+      dots.forEach(function (c, k) {
+        var q = mask.getPointAtLength(MARKS[k] * T), x = q.x * s, y = q.y * s + oy;
+        c.setAttribute("cx", q.x.toFixed(1)); c.setAttribute("cy", q.y.toFixed(1));
+        var dx = x - cx, dy = y - cy, l = Math.hypot(dx, dy);
+        if (l < 20) { dx = 0.7; dy = -0.7; l = 1; } // the centre: up and to the right
+        var nx = x + dx / l * 20, ny = y + dy / l * 20;
+        nums[k].style.left = (Math.min(W - 26, Math.max(4, nx - 11))).toFixed(1) + "px";
+        nums[k].style.top = (ny - 9).toFixed(1) + "px";
+        // the large step's place, judged at the drift it has when the step is reached
+        var card = cards[k], w = card.offsetWidth, h = card.offsetHeight, ys = y - DRIFT + driftAt(k); // in stage pixels
+        var C = [[x + G, ys - h / 2], [x - w / 2, ys + G], [x - G - w, ys - h / 2], [x - w / 2, ys - G - h],
+                 [x + G, ys + G], [x - G - w, ys + G], [x + G, ys - G - h], [x - G - w, ys - G - h]];
+        var pick = null, cost = Infinity;
+        for (var i = 0; i < C.length; i++) {
+          var L = Math.min(W - M - w, Math.max(M, C[i][0])), Tt = C[i][1], c = i;
+          if (Tt < titleB || Tt + h > stage.clientHeight - 24) continue;
+          if (!(L + w < listL || Tt > listB)) continue;
+          for (var j = 0; j <= k; j++) { // never its own dot or the one before; older ones only if nothing else fits
+            var dj = dotAt(j), yj = dj.y - DRIFT + driftAt(k);
+            if (dj.x > L - 10 && dj.x < L + w + 10 && yj > Tt - 10 && yj < Tt + h + 10) c += j >= k - 1 ? 1e6 : 100;
+          }
+          if (c < cost) { cost = c; pick = [L, Tt]; }
+        }
+        if (cost >= 1e6) pick = null;
+        if (!pick) pick = [Math.min(W - M - w, Math.max(M, x + G)), Math.max(titleB, Math.min(stage.clientHeight - 24 - h, ys + G))];
+        P[k] = { x: pick[0], y: pick[1] + DRIFT - driftAt(k) }; // back in layer pixels: it moves with the photo
+        home[k] = { x: list.offsetLeft + items[k].offsetLeft, y: list.offsetTop + items[k].offsetTop, w: items[k].offsetWidth, h: items[k].offsetHeight };
+      });
+    }
+    function ease(t) { return t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2; }
+    function clamp(v) { return Math.min(1, Math.max(0, v)); }
+    // the drift at the moment step k is reached (step 1 at the end of the entry, step k + 1 at the start of stretch k)
+    function driftAt(k) { return DRIFT - 2 * DRIFT * (1 + k / (MARKS.length - 1)) / 2; }
+    function state() {
+      var vh = window.innerHeight, r = box.getBoundingClientRect(), span = Math.max(1, box.offsetHeight - stage.clientHeight);
+      var enter = clamp((vh - r.top) / Math.max(1, vh - top)), p = clamp((top - r.top) / span);
+      return { enter: enter, p: p, seg: p * (MARKS.length - 1) };
+    }
+    function update() {
+      raf = 0;
+      if (!on) return;
+      var st = state(), n = MARKS.length - 1, f, seg = st.seg;
+      if (st.p <= 0) f = MARKS[0] * ease(st.enter);
+      else if (st.p >= 1) f = 1;
+      else {
+        var i = Math.min(n - 1, Math.floor(seg)), t = ease(clamp((seg - i - REST) / (1 - REST)));
+        f = MARKS[i] + (MARKS[i + 1] - MARKS[i]) * t;
+      }
+      mask.style.strokeDashoffset = (T * (1 - f)).toFixed(1);
+      var q = mask.getPointAtLength(f * T);
+      tip.setAttribute("cx", q.x.toFixed(1)); tip.setAttribute("cy", q.y.toFixed(1));
+      tip.style.opacity = f > 0.001 && f < 0.999 ? "1" : "0";
+      var reached = 0;
+      MARKS.forEach(function (m, k) { if (f >= m - 1e-4) reached = k + 1; });
+      dots.forEach(function (d, k) { d.classList.toggle("is-on", k < reached); d.classList.toggle("is-now", k === reached - 1 && reached < MARKS.length); nums[k].classList.toggle("is-on", k < reached); });
+      // the slow drift up, over the whole run from entry to the last step
+      var d = DRIFT - 2 * DRIFT * (st.enter + st.p) / 2;
+      layer.style.transform = "translate3d(0," + d.toFixed(1) + "px,0)";
+      // each step: large beside its dot, then shrinking into its line of the list
+      var cut = [];
+      cards.forEach(function (card, k) {
+        var shown = k < reached, u = k < n ? ease(clamp((seg - k - REST) / SHRINK)) : 0;
+        if (k === 0 && st.p <= 0) u = 0;
+        card.classList.toggle("is-on", shown);
+        var b = P[k], hm = home[k], sc = 1 + (hm.h / card.offsetHeight * 1.6 - 1) * u; // shrinks to about the list's size
+        sc = Math.max(0.3, Math.min(1, sc));
+        var bx = b.x, by = b.y - DRIFT + d; // its place, in stage pixels, as the photo drifts
+        var x = bx + (hm.x + hm.w - card.offsetWidth * sc - bx) * u, y = by + (hm.y - 4 - by) * u;
+        card.style.transform = "translate3d(" + x.toFixed(1) + "px," + y.toFixed(1) + "px,0) scale(" + sc.toFixed(3) + ")";
+        card.style.opacity = shown ? (1 - clamp((u - 0.55) / 0.4)).toFixed(3) : "";
+        items[k].style.opacity = shown ? clamp((u - 0.5) / 0.4).toFixed(3) : "0";
+        if (shown && u < 0.9) cut.push([x - 6, y - 4, card.offsetWidth * sc + 12, card.offsetHeight * sc + 8]);
+        if (shown && u > 0.5) cut.push([hm.x - 6, hm.y - 3, hm.w + 12, hm.h + 6]);
+      });
+      // the line passes behind the text showing: those boxes are cut out of its mask (in the photo's pixels)
+      var html = cut.map(function (c) {
+        return '<rect x="' + (c[0] / S).toFixed(1) + '" y="' + ((c[1] + DRIFT - d - OY) / S).toFixed(1) + '" width="' + (c[2] / S).toFixed(1) + '" height="' + (c[3] / S).toFixed(1) + '" rx="' + (10 / S).toFixed(1) + '" fill="#000"/>';
+      }).join("");
+      if (html !== knock.__cut) { knock.innerHTML = html; knock.__cut = html; }
+    }
+    function kick() { if (!raf) raf = requestAnimationFrame(update); }
+    function sync() {
+      var want = phone.matches && !reduce.matches;
+      if (want && !box) build();
+      if (!box) return;
+      on = want;
+      sec.classList.toggle("has-shell", on);
+      if (on) {
+        var head = document.querySelector(".site-head");
+        top = head ? head.offsetHeight : 72;
+        box.style.setProperty("--ap-top", top + "px");
+        box.style.setProperty("--ap-drift", DRIFT + "px");
+        measure();
+        update();
+      }
+    }
+    window.addEventListener("scroll", kick, { passive: true });
+    var lastW = window.innerWidth;
+    window.addEventListener("resize", function () { if (on && window.innerWidth !== lastW) { lastW = window.innerWidth; measure(); } kick(); });
+    phone.addEventListener("change", sync);
+    if (reduce.addEventListener) reduce.addEventListener("change", sync);
+    sync();
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () { if (on) { measure(); update(); } });
+  })();
 
   /* ---------- closing line: Dream, Sketch, Build, Break take turns in one slot before "it." ---------- */
   var rollLine = document.querySelector(".vl-roll");
@@ -1305,7 +1731,7 @@ var DRAW = {
   }
 
   /* ---------- hero clip ---------- */
-  var MV = "?v=24";   // bump when media files are replaced, so returning visitors get the new clips
+  var MV = "?v=25";   // bump when media files are replaced, so returning visitors get the new clips
   var hv = document.getElementById("hero-video"), wide = window.matchMedia("(min-width: 901px)");
   var heroSrc = function () { return (wide.matches ? "media/hero.mp4" : "media/hero-portrait.mp4") + MV; };
   if (hv && !reduce.matches) {
@@ -1348,41 +1774,193 @@ var DRAW = {
     if (next !== null) { e.preventDefault(); go(next); }
   }
 
-  function figureInto(box, key) {
-    var base = "media/challenges/" + key;
+  /* ---------- live challenge animations ----------
+     The challenge clips are drawn live in the page by the motion engine and the same scene scripts the videos were
+     rendered from (media/wl-motion.js, built from WonderLab/motion with build-live.py), so the lines stay sharp at any
+     size and the background is the page's own. Every clip is drawn in the glass theme (white lines, frosted faces,
+     clear background) over its stage's paper (STAGE_PAPER); without a paper it falls back to its stage theme. The
+     pencil tree house keeps its pencil look, in washes of the paper's colour (sketch-<paper>).
+     CLIPS: key -> [scene, stage theme, loop seconds, frame (camera framing), still t (reduced motion)].
+     A key without a clip keeps its line drawing (DRAW). */
+  var CLIPS = {
+    davinci: ["davinci", "teal", 16, { zoom: 0.8 }],
+    tiles: ["tiles", "teal", 16],
+    boat: ["hullsAll", "teal", 14, { cy: 0.56, zoom: 1.05 }],
+    solar: ["solar", "teal", 12],
+    rube: ["rube", "teal", 14],
+    rain: ["rain", "teal", 11],
+    stringtower: ["stringtower", "teal", 12],
+    fractal: ["fractal", "teal", 16],
+    bench: ["bench", "teal", 6],
+    tower: ["towersAll", "blue", 12.5, { cx: 0.43, cy: 0.74, zoom: 0.93 }],
+    facade: ["facade", "blue", 16],
+    egg: ["egg", "blue", 12],
+    truss: ["truss", "blue", 6],
+    lampshade: ["lampshade", "blue", 14],
+    "treehouse-green": ["treehouse-sketch", "sketch", 10], // pencil sketch, on its own engine (WLS)
+    "bench-blue": ["bench", "blue", 6],
+    shelter: ["shelter", "blue", 6],
+    column: ["column", "blue", 6],
+    stilts: ["stilts", "blue", 6],
+    chair: ["chair2", "dark", 8],
+    airport: ["airport", "dark", 24, { cy: 0.42 }],
+    corridor: ["corridor", "dark", 6],
+    tensegrity: ["tensegrity", "dark", 10],
+    quake: ["quake", "dark", 6],
+    dome: ["dome", "dark", 6],
+    turbine: ["turbine", "dark", 10],
+    "bench-dark": ["bench", "dark", 6]
+  };
+  var STAGE_PAPER = ["green", "blue", "honey"]; // stage -> paper (see .paper-green)
+  // the pencil tree house on the blue and honey papers: the engine's sketch-green with its washes and leaves moved to
+  // each paper's hue (same lightness), added to the sketch engine once it has loaded
+  var SKETCH_THEMES = {"sketch-blue": {"sketch": true, "bg": "#2A495F", "grid": "rgba(242,240,230,0.0)", "line": "#F4F2E8", "soft": "rgba(244,242,232,0.5)", "shadow": "rgba(4,16,24,0.5)", "tone": "#0E212F", "fillOp": 0.86, "mats": {"paper": "#27475F", "foil": "#2B4F68", "zing": "#F6E9C2", "sky": "#132838", "brand": "#5895C1", "water": "#27475F", "ink": "#193243", "wood": "#284A63"}, "leaves": ["#1C4765", "#3C7BA8", "#86BFE8"], "vine": "#A8D1EF"}, "sketch-honey": {"sketch": true, "bg": "#624327", "grid": "rgba(242,240,230,0.0)", "line": "#F4F2E8", "soft": "rgba(244,242,232,0.5)", "shadow": "rgba(25,13,3,0.5)", "tone": "#301D0C", "fillOp": 0.86, "mats": {"paper": "#624124", "foil": "#6D4727", "zing": "#F6E9C2", "sky": "#3B240F", "brand": "#C78851", "water": "#624124", "ink": "#462B16", "wood": "#684424"}, "leaves": ["#6A3E17", "#AF6E35", "#EEB380"], "vine": "#F3C9A4"}};
+
+  var players = [];
+  var seenIO = window.IntersectionObserver ? new IntersectionObserver(function (es) {
+    es.forEach(function (e) {
+      var p = e.target.__player;
+      if (!p) return;
+      p.seen = e.isIntersecting;
+      if (p.seen && !p.drawn) p.still(); // drawn the first time it comes into view
+    });
+    kick();
+  }, { rootMargin: "120px" }) : null;
+  var liveRaf = 0;
+  function kick() { if (!liveRaf) liveRaf = requestAnimationFrame(tick); }
+  // one loop for every playing clip: time runs at the clip's own pace, and a clip is redrawn at up to 30 fps, fewer
+  // when its frames are costly on this device (it keeps time either way). Clips off screen or hidden are not drawn
+  function tick(now) {
+    liveRaf = 0;
+    var any = false;
+    players = players.filter(function (p) {
+      if (p.svg.isConnected) return true;
+      if (seenIO) seenIO.unobserve(p.svg);
+      return false;
+    });
+    players.forEach(function (p) {
+      if (!p.playing || !p.seen || document.hidden) { p.last = 0; return; }
+      any = true;
+      if (p.last) p.t = (p.t + (now - p.last) / (p.dur * 1000)) % 1;
+      p.last = now;
+      if (now - p.drawnAt >= p.gap) p.draw(now);
+    });
+    if (any) kick();
+  }
+  function Live(box, key, c, paper) {
+    var p = this;
+    p.c = c; p.scene = c[0]; p.dur = c[2]; p.frame = { w: 960, h: 720 };
+    for (var k in (c[3] || {})) p.frame[k] = c[3][k];
+    p.theme = c[1] === "sketch" ? "sketch-" + (paper || "green") : paper ? "glass" : c[1];
+    p.t = c[4] || 0.7; p.fresh = true; p.drawn = false; p.playing = false; p.seen = !seenIO; p.last = 0; p.drawnAt = -1e9; p.gap = 1000 / 30; p.cost = 0;
+    p.svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+    p.svg.setAttribute("viewBox", "0 0 960 720");
+    p.svg.setAttribute("preserveAspectRatio", "xMidYMid slice");
+    p.svg.setAttribute("class", "wl-live");
+    p.svg.setAttribute("aria-hidden", "true");
+    p.svg.__player = p;
+    box.__player = p;
+    box.appendChild(p.svg);
+    players.push(p);
+    if (seenIO) seenIO.observe(p.svg);
+    if (p.seen) p.still();
+  }
+  function engineFor(p) { return p.theme.indexOf("sketch") === 0 ? window.WLS : window.WL; }
+  Live.prototype.draw = function (now) {
+    var eng = engineFor(this);
+    if (!eng) return;
+    var t0 = performance.now();
+    eng.render(this.svg, this.scene, this.t, this.theme, this.frame);
+    var ms = performance.now() - t0;
+    this.cost = this.cost ? this.cost * 0.8 + ms * 0.2 : ms;
+    this.gap = Math.min(1000 / 12, Math.max(1000 / 30, this.cost * 2.5));
+    this.drawnAt = now || performance.now();
+    this.drawn = true;
+  };
+  // the frame shown before a clip plays, and the only one with reduced motion: the build, finished
+  Live.prototype.still = function () { if (!this.playing) this.draw(); };
+  Live.prototype.play = function () {
+    if (reduce.matches || this.playing) return;
+    if (this.fresh) { this.fresh = false; this.t = 0; } // a clip starts from the top the first time, then resumes
+    this.playing = true; this.last = 0; this.drawnAt = -1e9;
+    kick();
+  };
+  Live.prototype.pause = function () { this.playing = false; };
+  // the engine arrives after the page script: draw every clip already on the page
+  (function () {
+    var tag = document.getElementById("wl-motion");
+    var ready = function () {
+      if (window.WLS) for (var n in SKETCH_THEMES) WLS.THEMES[n] = SKETCH_THEMES[n];
+      players.forEach(function (p) { if (p.seen) { p.drawnAt = -1e9; p.draw(); } }); kick(); };
+    if (window.WL) ready(); else if (tag) tag.addEventListener("load", ready);
+  })();
+  if (reduce.addEventListener) reduce.addEventListener("change", function () { players.forEach(function (p) { if (reduce.matches) { p.pause(); p.t = p.c[4] || 0.7; p.still(); } }); });
+
+  function figureInto(box, key, paper) {
     box.textContent = "";
-    var poster = document.createElement("img");
-    poster.src = base + ".jpg" + MV; poster.alt = ""; poster.width = 960; poster.height = 720;
-    poster.onerror = function () { box.innerHTML = DRAW[key] || DRAW[key.split("-")[0]] || ""; };
-    box.appendChild(poster);
-    if (reduce.matches) return null;
-    var v = document.createElement("video");
-    v.className = "is-waiting";
-    v.muted = true; v.loop = true; v.playsInline = true;
-    v.setAttribute("muted", ""); v.setAttribute("playsinline", ""); v.setAttribute("aria-hidden", "true");
-    v.preload = "none"; v.width = 960; v.height = 720;
-    v.dataset.src = base + ".mp4" + MV;
-    v.addEventListener("playing", function () { v.classList.remove("is-waiting"); });
-    box.appendChild(v);
-    return v;
+    box.__player = null;
+    var c = CLIPS[key];
+    if (!c) { box.innerHTML = DRAW[key] || DRAW[key.split("-")[0]] || ""; return null; }
+    return new Live(box, key, c, paper);
   }
 
+  // play one clip and pause the others in scope (the desktop panel, or the phone carousel)
   function playOnly(v, scope) {
-    Array.prototype.forEach.call((scope || document).querySelectorAll("video:not(#hero-video)"), function (o) { if (o !== v) o.pause(); });
-    if (!v) return;
-    var go = function () { var p = v.play(); if (p && p.catch) p.catch(function () {}); };
-    if (!v.src) { v.src = v.dataset.src; v.addEventListener("loadeddata", go, { once: true }); }
-    go();
+    players.forEach(function (p) { if (p !== v && (!scope || scope.contains(p.svg))) p.pause(); });
+    if (v) v.play();
   }
 
   /* the selected title's box slides to the chosen row (instant when a stage is switched) */
   var slider = document.getElementById("ch-slider");
+  function paperOf() { return STAGE_PAPER[GROUPS.indexOf(group)] || ""; }
+  // leaving a paper only drops is-paper: paper-<name> stays, so its image is still there while the layers fade out
+  function setPaper(el, name) {
+    if (!name) { el.classList.remove("is-paper"); return; }
+    Array.prototype.slice.call(el.classList).forEach(function (c) { if (c.indexOf("paper-") === 0 && c !== "paper-" + name) el.classList.remove(c); });
+    el.classList.add("is-paper", "paper-" + name);
+  }
+  // line the selected title's box up with the panel's image: where the slider is headed, against where the panel is
+  function paperSync() {
+    if (!slider || !tabs[active] || isPhone.matches) return;
+    var s = slider.getBoundingClientRect(), p = panel.getBoundingClientRect(), W = p.width, st = slider.style;
+    st.setProperty("--gw", (2 * W).toFixed(2) + "px");
+    st.setProperty("--gx", (p.left - W - s.left).toFixed(2) + "px");
+    st.setProperty("--gy", (p.top - s.top).toFixed(2) + "px");
+    st.setProperty("--ph", p.height.toFixed(2) + "px");
+    st.setProperty("--sw", s.width.toFixed(2) + "px");
+    st.setProperty("--sh", s.height.toFixed(2) + "px");
+    joinSync(s, p);
+  }
+  // the joins' radius from where the box is now (mid-slide included): half its distance to the panel's top and bottom
+  // edges, at most --r. The list's top rule hides while the box sits on it
+  var joinLast = "", joinMoved = false;
+  function joinSync(s, p) {
+    var sig = [s.top, s.height, p.top, p.height].map(function (v) { return v.toFixed(1); }).join();
+    joinMoved = sig !== joinLast; joinLast = sig;
+    var r = parseFloat(getComputedStyle(chWrap).getPropertyValue("--r")) || 18;
+    var jt = Math.max(0, Math.min(r, (s.top - p.top) / 2)), jb = Math.max(0, Math.min(r, (p.bottom - s.bottom) / 2));
+    chWrap.style.setProperty("--jt", jt.toFixed(2) + "px");
+    chWrap.style.setProperty("--jb", jb.toFixed(2) + "px");
+    chWrap.classList.toggle("at-first", s.top - slider.parentNode.getBoundingClientRect().top < 1);
+  }
+  // while the box slides and the panel grows, keep the paper pinned to the panel on every frame
+  var followUntil = 0;
+  function follow(ms) {
+    var running = followUntil > 0;
+    followUntil = Math.max(followUntil, performance.now() + ms);
+    if (running) return;
+    (function tick() {
+      paperSync();
+      // and on past that while the box or the panel is still moving (a slow frame rate stretches the transitions)
+      if (performance.now() < followUntil || joinMoved) requestAnimationFrame(tick); else followUntil = 0;
+    })();
+  }
+
   function moveSlider(i, instant) {
     if (!slider || !tabs[i] || isPhone.matches) return;
     var col = slider.parentNode.getBoundingClientRect(), r = tabs[i].getBoundingClientRect();
     var top = i === 0 ? 0 : r.top - col.top, h = r.bottom - col.top - top;
     if (instant) { chWrap.classList.add("no-anim"); }
-    chWrap.classList.toggle("at-first", i === 0);
     slider.style.transform = "translateY(" + top.toFixed(2) + "px)";
     slider.style.height = h.toFixed(2) + "px";
     if (instant) { void slider.offsetWidth; chWrap.classList.remove("no-anim"); void slider.offsetWidth; }
@@ -1410,6 +1988,8 @@ var DRAW = {
     fig.style.transition = animate ? "" : "none";
     panel.style.setProperty("--reach", extra.toFixed(1) + "px");
     chWrap.classList.toggle("at-last", flush);
+    chWrap.style.setProperty("--scrim-h", panel.lastElementChild.offsetHeight + "px");
+    paperSync();
   }
   var reachTick = false;
   window.addEventListener("scroll", function () {
@@ -1420,7 +2000,8 @@ var DRAW = {
 
   function fill(item) {
     if (isPhone.matches) return;
-    var v = figureInto(fig, item[5] || item[0]);
+    var v = figureInto(fig, item[5] || item[0], paperOf(item));
+    setPaper(panel, paperOf(item));
     elKind.textContent = item[4];
     elTitle.textContent = item[1];
     elWhat.textContent = item[2];
@@ -1436,7 +2017,10 @@ var DRAW = {
     if (focus) tabs[i].focus();
     moveSlider(i, instant);
     active = i;
+    setPaper(chWrap, paperOf(group.items[i]));
+    setPaper(panel, paperOf(group.items[i])); // the panel fades to its new paper together with the box, not after the swap
     reach(!instant);
+    if (!instant) follow(560); // the box slides and the panel grows for 460 ms
     clearTimeout(swapTimer);
     var item = group.items[i];
     if (instant || reduce.matches) { fill(item); return; }
@@ -1449,6 +2033,7 @@ var DRAW = {
     group.items.forEach(function (item, i) {
       var slide = document.createElement("article");
       slide.className = "ch-slide";
+      setPaper(slide, paperOf(item));
       var figure = document.createElement("div"); figure.className = "ch-figure";
       var body = document.createElement("div"); body.className = "ch-body";
       var kind = document.createElement("p"); kind.className = "ch-kind"; kind.textContent = item[4];
@@ -1459,7 +2044,7 @@ var DRAW = {
       body.appendChild(kind); body.appendChild(h); body.appendChild(what); body.appendChild(skill);
       slide.appendChild(figure); slide.appendChild(body);
       track.appendChild(slide);
-      figureInto(figure, item[5] || item[0]);
+      figureInto(figure, item[5] || item[0], paperOf(item));
       var dot = document.createElement("button");
       dot.type = "button"; dot.className = "ch-dot";
       dot.setAttribute("aria-label", "Show challenge " + (i + 1) + " of " + group.items.length + ", " + item[1]);
@@ -1482,7 +2067,7 @@ var DRAW = {
       current = best;
       countEl.textContent = (best + 1) + " / " + group.items.length;
       Array.prototype.forEach.call(dotsBox.children, function (d, j) { d.setAttribute("aria-current", j === best ? "true" : "false"); });
-      track.__active = track.children[best].querySelector("video");
+      track.__active = track.children[best].querySelector(".ch-figure").__player || null;
       playOnly(track.__active, track);
     }
     var raf = 0;
@@ -1497,7 +2082,7 @@ var DRAW = {
     }
   }
 
-  var STAGE_TINT = ["var(--teal)", "var(--blue)", "var(--navy)"];
+  var STAGE_TINT = ["var(--st-0)", "var(--st-1)", "var(--st-2)"];
 
   function selectGroup(g, focus) {
     group = GROUPS[g];
@@ -1534,6 +2119,168 @@ var DRAW = {
     if (isPhone.matches) { fig.textContent = ""; buildCarousel(); }
     else { playOnly(null, track); fill(group.items[Math.max(0, active)]); moveSlider(Math.max(0, active), true); }
   });
+
+  /* ---------- leaf light: sunlight through leaves moving across a grainy wall (green01), behind the booking panel ----------
+     From grahic design/green01-leaflight.html (and its -blue and -honey copies). The photo is split once on the GPU into
+     its light (an edge-keeping blur) and its grain; every frame the grain stays put and only the light moves: a slow
+     swaying canopy bends it, patches breathe brighter and dimmer, and pockets of sun open in the shade. A look either
+     keeps the photo's greens or grades the light's brightness through its own colours; every look is capped (maxLum,
+     relative luminance, eased in above a knee) so white text on it stays at 6:1 or better. Starts when the panel comes
+     near, pauses off screen, shows one still frame with reduced motion, and leaves the flat colour without WebGL. */
+  var LEAF_LOOKS = {
+    green: { flat: "#1F3A1D", maxLum: 0.12 },
+    blue: { flat: "#0E2A4F", maxLum: 0.12, cols: ["#081C38", "#0E2A4F", "#33AACB", "#A2E8F3"], stops: [0.08, 0.22, 0.64, 0.98] },
+    honey: { flat: "#3E1003", maxLum: 0.12, cols: ["#1E0600", "#4A1203", "#8A2B08", "#CC600F", "#E8A626"], stops: [0.08, 0.2, 0.36, 0.56, 0.86] }
+  };
+  var LEAF_SET = { speed: 4, sway: 3, breathe: 1.8, focus: [0.5, 0.35], maxDpr: 1.5, fps: 30 };
+  function leafLight(box, canvas, src) {
+    if (!box || !canvas || !window.IntersectionObserver) return null;
+    var gl = canvas.getContext("webgl", { alpha: false, antialias: false, depth: false, stencil: false });
+    if (!gl) return null;
+    var o = LEAF_SET, VS = "attribute vec2 aPos; varying vec2 vT; varying vec2 vP;" +
+      "void main(){ vT = aPos * 0.5 + 0.5; vP = vec2(vT.x, 1.0 - vT.y); gl_Position = vec4(aPos, 0.0, 1.0); }";
+    // one-off: the light layer is the photo at half size through an edge-keeping blur, so grain goes and shadow edges stay
+    var DOWN = "precision highp float; uniform sampler2D uSrc; varying vec2 vT; void main(){ gl_FragColor = texture2D(uSrc, vT); }";
+    var BLUR = "precision highp float; uniform sampler2D uSrc; uniform vec2 uStep; varying vec2 vT;" +
+      "void main(){ vec3 c0 = texture2D(uSrc, vT).rgb, s = vec3(0.0); float l0 = dot(c0, vec3(0.3, 0.59, 0.11)), n = 0.0;" +
+      "  for (int i = -18; i <= 18; i++) { vec3 c = texture2D(uSrc, vT + uStep * float(i)).rgb; float d = dot(c, vec3(0.3, 0.59, 0.11)) - l0;" +
+      "    float w = exp(-float(i * i) / 72.0) * exp(-d * d / 0.005); s += w * c; n += w; }" +
+      "  gl_FragColor = vec4(s / n, 1.0); }";
+    var MAIN = [
+      "precision highp float;",
+      "uniform sampler2D uImg, uLow; uniform vec4 uMap; uniform float uT, uSway, uBreathe, uAsp, uMaxLum, uGrade; uniform vec3 uCol[5]; uniform float uStop[5]; uniform int uN; varying vec2 vP;",
+      "float hash(vec2 p) { vec3 p3 = fract(vec3(p.xyx) * 0.1031); p3 += dot(p3, p3.yzx + 33.33); return fract((p3.x + p3.y) * p3.z); }",
+      "float noise(vec2 p) { vec2 i = floor(p), f = fract(p), u = f * f * (3.0 - 2.0 * f);",
+      "  return mix(mix(hash(i), hash(i + vec2(1.0, 0.0)), u.x), mix(hash(i + vec2(0.0, 1.0)), hash(i + vec2(1.0, 1.0)), u.x), u.y); }",
+      "float fbm(vec2 p) { float s = 0.0, a = 0.5; for (int i = 0; i < 4; i++) { s += a * noise(p); p = p * 2.03 + vec2(17.1, 9.2); a *= 0.5; } return s; }",
+      "float soft(vec2 p) { return 0.67 * noise(p) + 0.33 * noise(p * 2.03 + vec2(17.1, 9.2)); }",
+      "void main() {",
+      "  vec2 uv = uMap.xy + vP * uMap.zw, q = vec2(uv.x, uv.y * uAsp); float t = uT; vec3 W = vec3(0.3, 0.59, 0.11);",
+      "  float gust = 0.5 + 0.5 * sin(t * 0.11 + fbm(q * 0.7 + t * 0.015) * 3.0);",
+      "  vec2 drift = vec2(fbm(q * 1.3 + vec2(t * 0.03, 0.0)), fbm(q * 1.3 + vec2(5.2, -t * 0.026))) - 0.5;",
+      "  vec2 sway = vec2(sin(t * 0.37 + q.y * 2.3 + fbm(q * 0.9) * 4.0), 0.6 * cos(t * 0.29 + q.x * 1.9 + fbm(q * 0.9 + 3.1) * 4.0));",
+      "  vec2 w = (drift * 0.13 + sway * 0.012 * (0.35 + gust)) * uSway; w.y /= uAsp;",
+      "  vec3 base = texture2D(uImg, uv).rgb, low = texture2D(uLow, uv).rgb, grain = base / max(low, vec3(0.035)) - 1.0;",
+      "  vec2 m = uv + w; m = 1.0 - abs(1.0 - mod(m, 2.0));",  // mirrored at the photo's edges: big movement never smears them
+      "  vec3 lit = texture2D(uLow, clamp(m, vec2(0.002), vec2(0.998))).rgb;",
+      "  float spot = smoothstep(0.2, 0.5, dot(lit, W)), b = fbm(q * 1.7 + vec2(-t * 0.021, t * 0.017));",
+      "  lit *= 1.0 + (b - 0.5) * 0.75 * uBreathe * spot;",
+      "  float open = smoothstep(0.6, 0.86, soft(q * 2.6 + vec2(t * 0.011, -t * 0.008) + drift * 1.2)) * (1.0 - spot);",
+      "  lit += vec3(0.4, 0.44, 0.15) * open * 0.6 * uBreathe;",
+      "  lit *= 1.0 + 0.025 * (noise(q * 26.0 + vec2(t * 0.6, -t * 0.4)) - 0.5) * spot * uSway;",
+      "  float sun0 = smoothstep(0.12, 0.45, dot(low, W)), sun1 = smoothstep(0.12, 0.45, dot(lit, W));",
+      "  vec3 detail = 1.0 + grain * (0.6 + 0.4 * sun1) / (0.6 + 0.4 * sun0), c;",
+      "  if (uGrade > 0.5) {",                         // the light's brightness picks the colour; the grain goes on top as brightness
+      "    float L = dot(clamp(lit, 0.0, 1.0), W); vec3 g = uCol[0];",
+      "    for (int i = 1; i < 5; i++) { if (i >= uN) break; g = mix(g, uCol[i], smoothstep(uStop[i - 1], uStop[i], L)); }",
+      "    c = g * dot(detail, W);",
+      "  } else c = detail * lit;",
+      "  c = clamp(c, 0.0, 1.0);",
+      "  float Y = dot(pow(c, vec3(2.2)), vec3(0.2126, 0.7152, 0.0722)), knee = uMaxLum * 0.5;",  // text-safe cap, eased in
+      "  if (Y > knee) { float Yn = knee + (uMaxLum - knee) * (1.0 - exp(-(Y - knee) / (uMaxLum - knee))); c *= pow(Yn / Y, 1.0 / 2.2); }",
+      "  gl_FragColor = vec4(c, 1.0);",
+      "}"
+    ].join("\n");
+    function shader(type, s) { var h = gl.createShader(type); gl.shaderSource(h, s); gl.compileShader(h); if (!gl.getShaderParameter(h, gl.COMPILE_STATUS)) throw new Error(gl.getShaderInfoLog(h)); return h; }
+    function program(fs) { var p = gl.createProgram(); gl.attachShader(p, shader(gl.VERTEX_SHADER, VS)); gl.attachShader(p, shader(gl.FRAGMENT_SHADER, fs)); gl.linkProgram(p); if (!gl.getProgramParameter(p, gl.LINK_STATUS)) throw new Error(gl.getProgramInfoLog(p)); return p; }
+    function texture(w, h, data) {
+      var t = gl.createTexture(); gl.bindTexture(gl.TEXTURE_2D, t);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE); gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR); gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+      if (data) gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB, gl.UNSIGNED_BYTE, data);
+      else gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, w, h, 0, gl.RGBA, gl.UNSIGNED_BYTE, null);
+      return t;
+    }
+    function draw(p) { var a = gl.getAttribLocation(p, "aPos"); gl.enableVertexAttribArray(a); gl.vertexAttribPointer(a, 2, gl.FLOAT, false, 0, 0); gl.drawArrays(gl.TRIANGLES, 0, 3); }
+    function rgb(h) { return [1, 3, 5].map(function (i) { return parseInt(h.substr(i, 2), 16) / 255; }); }
+
+    var prog = null, uni = {}, iw = 1, ih = 1, cur = null, seen = false, running = false, clock = 120, last = 0, started = false, asData = false;
+    function start() {
+      if (started) return; started = true;
+      var img = new Image();
+      img.onload = function () {
+        var tImg;
+        try { tImg = texture(0, 0, img); }
+        catch (e) {
+          // opened straight from disk (file://), the browser keeps a local image out of WebGL: take the same photo as
+          // data from media/green01.js instead (a data image is never blocked)
+          if (!asData && location.protocol === "file:") {
+            asData = true;
+            var sc = document.createElement("script");
+            sc.src = src.replace(/\.jpg$/, ".js");
+            sc.onload = function () { if (window.WL_GREEN01) img.src = window.WL_GREEN01; };
+            document.head.appendChild(sc);
+          }
+          return;
+        }
+        try {
+          iw = img.naturalWidth; ih = img.naturalHeight;
+          gl.bindBuffer(gl.ARRAY_BUFFER, gl.createBuffer());
+          gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 3, -1, -1, 3]), gl.STATIC_DRAW);
+          var lw = Math.round(iw / 2), lh = Math.round(ih / 2), down = program(DOWN), blur = program(BLUR);
+          var fb = [0, 1, 2].map(function () { var t = texture(lw, lh), f = gl.createFramebuffer(); gl.bindFramebuffer(gl.FRAMEBUFFER, f); gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, t, 0); return { t: t, f: f }; });
+          gl.viewport(0, 0, lw, lh);
+          [[down, tImg, fb[0], null], [blur, fb[0].t, fb[1], [1 / lw, 0]], [blur, fb[1].t, fb[2], [0, 1 / lh]]].forEach(function (s) {
+            gl.useProgram(s[0]); gl.bindFramebuffer(gl.FRAMEBUFFER, s[2].f); gl.activeTexture(gl.TEXTURE0); gl.bindTexture(gl.TEXTURE_2D, s[1]);
+            gl.uniform1i(gl.getUniformLocation(s[0], "uSrc"), 0); if (s[3]) gl.uniform2fv(gl.getUniformLocation(s[0], "uStep"), s[3]); draw(s[0]);
+          });
+          gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+          prog = program(MAIN); gl.useProgram(prog);
+          ["uImg", "uLow", "uMap", "uT", "uSway", "uBreathe", "uAsp", "uMaxLum", "uGrade", "uCol", "uStop", "uN"].forEach(function (n) { uni[n] = gl.getUniformLocation(prog, n); });
+          gl.activeTexture(gl.TEXTURE0); gl.bindTexture(gl.TEXTURE_2D, tImg); gl.uniform1i(uni.uImg, 0);
+          gl.activeTexture(gl.TEXTURE1); gl.bindTexture(gl.TEXTURE_2D, fb[2].t); gl.uniform1i(uni.uLow, 1);
+          gl.uniform1f(uni.uAsp, ih / iw); gl.uniform1f(uni.uSway, o.sway); gl.uniform1f(uni.uBreathe, o.breathe);
+        } catch (e) { prog = null; return; }  // the flat colour stays
+        new ResizeObserver(resize).observe(box);
+        resize(); api.look(cur); go();
+      };
+      img.src = src;
+    }
+    function resize() {
+      if (!prog) return;
+      var d = Math.min(window.devicePixelRatio || 1, o.maxDpr), w = Math.max(1, Math.round(box.clientWidth * d)), h = Math.max(1, Math.round(box.clientHeight * d));
+      if (canvas.width !== w || canvas.height !== h) { canvas.width = w; canvas.height = h; }
+      var s = Math.max(w / iw, h / ih), su = w / (iw * s), sv = h / (ih * s);  // cover, kept around the focus point
+      gl.useProgram(prog); gl.uniform4f(uni.uMap, (1 - su) * o.focus[0], (1 - sv) * o.focus[1], su, sv); gl.viewport(0, 0, w, h);
+      paint();
+    }
+    function paint() { if (!prog || !cur) return; gl.uniform1f(uni.uT, clock); draw(prog); }
+    function frame(now) {
+      if (!running) return;
+      var dt = Math.min(0.1, (now - last) / 1000);
+      if (dt >= 1 / o.fps - 0.002) { clock += dt * o.speed; last = now; paint(); }  // slow light needs no more than ~30 fps
+      requestAnimationFrame(frame);
+    }
+    function go() {
+      var want = !!prog && !!cur && seen && !reduce.matches && document.visibilityState !== "hidden";
+      if (want && !running) { running = true; last = performance.now(); requestAnimationFrame(frame); }
+      else if (!want) running = false;
+    }
+    new IntersectionObserver(function (es) { es.forEach(function (e) { if (e.isIntersecting) start(); }); }, { rootMargin: "800px 0px" }).observe(box);
+    new IntersectionObserver(function (es) { es.forEach(function (e) { seen = e.isIntersecting; go(); }); }, { rootMargin: "60px 0px" }).observe(box);
+    document.addEventListener("visibilitychange", go);
+    if (reduce.addEventListener) reduce.addEventListener("change", go);
+
+    var api = {
+      // switch to a look by name (or null: no light, the panel's flat colour shows)
+      look: function (name) {
+        var L = name ? LEAF_LOOKS[name] : null;
+        cur = name || null;
+        canvas.classList.toggle("is-on", !!(L && prog));
+        if (L && prog) {
+          gl.useProgram(prog);
+          var cols = L.cols || [], flat = [];
+          for (var i = 0; i < 5; i++) flat = flat.concat(rgb(cols[Math.min(i, cols.length - 1)] || "#000000"));
+          gl.uniform1f(uni.uGrade, cols.length ? 1 : 0); gl.uniform3fv(uni.uCol, flat);
+          var st = (L.stops || [0, 0, 0, 0, 0]).slice(); while (st.length < 5) st.push(st[st.length - 1]);
+          gl.uniform1fv(uni.uStop, st); gl.uniform1i(uni.uN, cols.length); gl.uniform1f(uni.uMaxLum, L.maxLum || 1);
+          paint();
+        }
+        go();
+      }
+    };
+    return api;
+  }
 
   /* ---------- bookings: a calendar of classes and weekend workshops with the places left, and the price ---------- */
   // EDIT HERE: the weekly timetable, the weekend workshop, the days with no class, and the places already taken on each date.
@@ -1620,7 +2367,17 @@ var DRAW = {
     var view = new Date(firstMonth), stageSel = -1, pick = null, pickS = null, friends = 0, pairs = 1, plan = 1;
     var calScroll = document.getElementById("cal-scroll");
     var monthEl = document.getElementById("cal-month"), prevBtn = document.getElementById("cal-prev"), nextBtn = document.getElementById("cal-next");
-    var bookPanel = document.getElementById("book-panel"), chips = document.querySelectorAll(".chip");
+    var bookPanel = document.getElementById("book-panel"), bookBody = document.getElementById("book-body"), chips = document.querySelectorAll(".chip");
+    // the light behind the panel: a look per stage (the workshop keeps its flat colour)
+    var LOOKS = ["green", "blue", "honey"], lightOf = function (s) { return isWs(s) ? null : LOOKS[s.stage]; };
+    var panelLight = leafLight(bookPanel, bookPanel.querySelector(".bp-light"), "media/green01.jpg");
+    function lookFor(s) {
+      var k = s ? lightOf(s) : null;
+      ["green", "blue", "honey"].forEach(function (n) { bookPanel.classList.toggle("look-" + n, k === n); });
+      bookPanel.classList.toggle("has-light", !!k);
+      bookPanel.style.setProperty("--tint", k ? LEAF_LOOKS[k].flat : s ? tintOf(s) : "var(--navy)");
+      if (panelLight) panelLight.look(k);
+    }
     // bookings start from tomorrow; a day offers the sessions that fit the chip, those with places left first
     var bookable = function (d) {
       if (d <= today) return [];
@@ -1746,18 +2503,18 @@ var DRAW = {
 
     function drawPanel() {
       if (!pick) {
-        bookPanel.style.removeProperty("--tint");
-        bookPanel.innerHTML = '<p class="bp-kind">No seats</p><h3 class="bp-title">Every class is full for now.</h3>' +
+        lookFor(null);
+        bookBody.innerHTML = '<p class="bp-kind">No seats</p><h3 class="bp-title">Every class is full for now.</h3>' +
           '<p class="bp-when">Message Julien to join the waiting list.</p>';
         return;
       }
       var s = pickS, left = leftFor(pick, s), others = alsoOn();
       var also = "";
-      var tail = '<div class="bp-price"><p class="bp-line"></p><p class="bp-total"></p><p class="bp-save"></p><p class="bp-pay"></p></div>' +
+      var tail = '<div class="bp-price"><p class="bp-line"></p><p class="bp-total"></p><p class="bp-pay"></p></div>' +
         '<a class="btn btn-light bp-cta" href="https://wa.me/85267533727" target="_blank" rel="noopener">Request this booking on WhatsApp</a>';
-      bookPanel.style.setProperty("--tint", tintOf(s));
+      lookFor(s);
       if (isWs(s)) {
-        bookPanel.innerHTML =
+        bookBody.innerHTML =
           '<p class="bp-kind">Parent &amp; child &middot; Saturday workshop</p>' +
           '<h3 class="bp-title">' + DAYS[pick.getDay()] + " " + pick.getDate() + " " + MONTHS[pick.getMonth()].slice(0, 3) + ', <span>' + hours(s) + "</span></h3>" +
           '<p class="bp-when">Team up with your child for a weekend design challenge!</p>' +
@@ -1766,7 +2523,7 @@ var DRAW = {
         pairs = Math.max(1, Math.min(pairs, left));
       } else {
         var g = GROUPS[s.stage], run = course(pick);
-        bookPanel.innerHTML =
+        bookBody.innerHTML =
           '<p class="bp-kind">' + g.name + " &middot; " + g.ages + "</p>" +
           '<h3 class="bp-title">' + DAYS[s.day] + "s, " + hours(s) + "</h3>" +
           '<p class="bp-seats"><b>' + left + "</b> " + (left === 1 ? "seat" : "seats") + " left in this group</p>" +
@@ -1784,7 +2541,7 @@ var DRAW = {
     // the price and the WhatsApp message follow the stepper; only the figures change, so focus stays put
     function price() {
       if (!pick) return;
-      var s = pickS, n, total, line, save = "", pay = "", msg;
+      var s = pickS, n, total, line, each = "", pay = "", msg;
       if (isWs(s)) {
         n = pairs; total = WS.price * pairs;
         line = pairs + (pairs === 1 ? " pair" : " pairs") + " × " + money(WS.price);
@@ -1797,11 +2554,7 @@ var DRAW = {
         total = base * (1 - rate);
         n = friends;
         line = "Price per student for " + P.sessions + " sessions";
-        // what the saving is made of: the full-programme price against two half programmes, and the referral discount
-        var perClass = BOOK.plans[0].price / BOOK.plans[0].sessions, progPart = perClass * P.sessions - base, refPart = base * rate, parts = [];
-        if (progPart > 0.5) parts.push(money(progPart) + " full programme (vs 2 × 10 sessions)");
-        if (refPart > 0.5) parts.push(money(refPart) + " referral (" + Math.round(rate * 100) + "%, " + friends + (friends === 1 ? " friend" : " friends") + " invited)");
-        save = parts.length ? "You save " + money(progPart + refPart) + " · " + money(total / P.sessions) + "/class" : "";
+        each = " · (" + money(total / P.sessions) + "/class)";
         pay = rate ? "Payment is due once your invited friends are confirmed." : "";
         bookPanel.querySelector(".bp-each").innerHTML = rate ? "each enjoys <b>" + Math.round(rate * 100) + "% off</b>" : "";
         msg = "Hi Julien, I'd like to book the " + g.name + " " + P.sessions + " sessions (" + g.ages + "), " + DAYS[s.day] + "s " + hours(s) +
@@ -1813,8 +2566,9 @@ var DRAW = {
       bookPanel.querySelector('[data-step="-1"]').disabled = isWs(s) ? pairs <= 1 : friends <= 0;
       bookPanel.querySelector('[data-step="1"]').disabled = isWs(s) ? pairs >= leftNow() : friends >= maxFriends();
       bookPanel.querySelector(".bp-line").textContent = line;
-      bookPanel.querySelector(".bp-total").textContent = money(total);
-      bookPanel.querySelector(".bp-save").innerHTML = save;   // built only from figures and fixed words
+      var tot = bookPanel.querySelector(".bp-total");
+      tot.textContent = money(total);
+      if (each) { var sm = document.createElement("small"); sm.textContent = each; tot.appendChild(sm); }
       bookPanel.querySelector(".bp-pay").textContent = pay;
       bookPanel.querySelector(".bp-cta").href = "https://wa.me/85267533727?text=" + encodeURIComponent(msg);
     }
