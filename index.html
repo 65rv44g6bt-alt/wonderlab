@@ -232,13 +232,26 @@ video.is-waiting { opacity: 0 !important; }
 .s-name { font-size: var(--t2); font-weight: 500; letter-spacing: -0.03em; line-height: 1.05; }
 .s-verb { font-size: 1rem; }
 .s-focus { font-size: 0.97rem; color: var(--ink-soft); line-height: 1.45; }
-@media (max-width: 760px) {
-  .stages { grid-template-columns: 1fr; }
-  .stage { flex-direction: row; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 4px 12px; padding: 14px 16px; }
-  .stage .s-ages { order: 2; }
-  .stage .s-name { order: 1; font-size: 1.3rem; }
-  .stage .s-focus { display: none; }
-  .s-verb { flex-basis: 100%; color: var(--ink-soft); }
+/* phones: the three age groups side by side, each its name over its ages. The chosen one runs down into the block of
+   challenges below it, on the same paper, and two small inverted fillets round its foot into the block's top edge
+   (joinTabs in the script places the paper so it runs on without a seam: --pw the block's width, --pd the block's
+   top below the row, --tx/--ty/--th the box's place and height) */
+@media (max-width: 900px) {
+  .stages { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 7px; align-items: end; margin: 0 -8px; }
+  .stage { gap: 4px; padding: 16px 8px 17px; margin-bottom: 10px; border-radius: 16px; min-width: 0; position: relative; }
+  .stage .s-name { order: 1; font-size: clamp(0.94rem, 3.95vw, 1.35rem); letter-spacing: -0.035em; white-space: nowrap; }
+  .stage .s-ages { order: 2; font-size: clamp(0.74rem, 3.2vw, 0.9rem); }
+  .stage .s-verb, .stage .s-focus { display: none; }
+  #stage-tabs .stage[aria-selected="true"] { z-index: 1; margin-bottom: -1px; padding-bottom: 28px; border: 0; border-radius: 16px 16px 0 0;
+    background: var(--paper-tint), var(--paper-img) calc(-1 * var(--pw, 100vw) - var(--tx, 0px)) calc(-1 * var(--ty, 0px)) / calc(2 * var(--pw, 100vw)) auto no-repeat, var(--paper-base, var(--navy)) !important; }
+  #stage-tabs .stage[aria-selected="true"]::before, #stage-tabs .stage[aria-selected="true"]::after {
+    content: ""; position: absolute; bottom: 0; width: 16px; height: 16px; pointer-events: none;
+    background: var(--paper-tint), var(--paper-img) 0 0 / calc(2 * var(--pw, 100vw)) auto no-repeat, var(--paper-base, var(--navy)); }
+  #stage-tabs .stage[aria-selected="true"]::before { left: -16px; background-position: 0 0, calc(-1 * var(--pw, 100vw) - var(--tx, 0px) + 16px) calc(16px - var(--ty, 0px) - var(--th, 0px)), 0 0;
+    -webkit-mask: radial-gradient(circle at 0 0, transparent 15.5px, #000 16px); mask: radial-gradient(circle at 0 0, transparent 15.5px, #000 16px); }
+  #stage-tabs .stage[aria-selected="true"]::after { right: -16px; background-position: 0 0, calc(-1 * var(--pw, 100vw) - var(--tx, 0px) - var(--tw, 0px)) calc(16px - var(--ty, 0px) - var(--th, 0px)), 0 0;
+    -webkit-mask: radial-gradient(circle at 100% 0, transparent 15.5px, #000 16px); mask: radial-gradient(circle at 100% 0, transparent 15.5px, #000 16px); }
+  /* both fillets always; at the screen's edge the outer one runs off it by a few pixels */
 }
 
 .challenges { --ch-gap: clamp(20px, 4vw, 56px); display: grid; grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr); gap: var(--ch-gap); align-items: start; margin-top: clamp(24px, 3vw, 40px); }
@@ -370,10 +383,31 @@ video.is-waiting { opacity: 0 !important; }
 .fill-paper { fill: var(--navy-2); }
 .dr-note { fill: var(--on-navy-soft); stroke: none; font: 500 11px var(--font); letter-spacing: 0; }
 .ch-carousel { display: none; }
+/* phones: one full-width block on the stage's paper: the animation and its text, then the list of challenge titles.
+   The animation and its text sit in the list just above the chosen title (placePanel); choosing another title moves
+   them there and a mask slides down to reveal the new challenge (selectItem). The swipe carousel below is no longer used */
 @media (max-width: 900px) {
-  .challenges { display: flex; flex-direction: column; }
-  .ch-list, .ch-panel { display: none; }
-  .ch-carousel { display: block; }
+  .challenges { display: flex; flex-direction: column; gap: 0; margin: 0 calc(50% - 50vw); background: var(--stage); transition: background-color 320ms ease; }
+  /* the paper starts at the top of the age boxes (--pd above the block); the photo (214vw tall at this width) fades
+     into its base colour where the list runs on below it */
+  .challenges.is-paper { background: var(--paper-tint), linear-gradient(180deg, transparent calc(214vw - var(--pd, 0px) - 300px), var(--paper-base) calc(214vw - var(--pd, 0px))),
+    var(--paper-img) calc(-1 * var(--pw, 100vw)) calc(-1 * var(--pd, 0px)) / calc(2 * var(--pw, 100vw)) auto no-repeat, var(--paper-base); }
+  .ch-panel-slot { list-style: none; margin: 0 -20px; } /* the animation and its text, just above the chosen title */
+  .ch-panel .ch-kind { text-align: right; }
+  .ch-carousel { display: none !important; }
+  .ch-panel { display: block; order: 0; position: relative; top: auto; border-radius: 0; background: transparent; overflow: hidden; }
+  .ch-panel::before, .ch-panel::after { display: none; } /* the paper is the block's own */
+  .ch-panel .ch-figure { margin-bottom: 0; }
+  .ch-panel .ch-body { padding: 16px 20px 8px; background: none; }
+  .ch-col { order: 1; padding: 0 20px 26px; }
+  .ch-list { display: block; border-top: 0; }
+  .ch-tab { padding: 13px 0; min-height: 48px; color: rgba(237, 243, 246, 0.7); border-bottom-color: rgba(237, 243, 246, 0.16); border-radius: 0; }
+  .ch-tab small { color: rgba(237, 243, 246, 0.5); }
+  .ch-tab:hover { color: #FFFFFF; }
+  .ch-tab[aria-selected="true"] { color: #FFFFFF; padding-left: 16px; padding-right: 0; border-bottom-color: rgba(237, 243, 246, 0.16); }
+  .ch-tab[aria-selected="true"] small { color: rgba(237, 243, 246, 0.75); }
+  .ch-tab[aria-selected="true"]::before { content: ""; position: absolute; left: 0; top: 50%; width: 4px; height: 20px; margin-top: -10px; border-radius: 2px; background: var(--orange); }
+  .ch-list li:has(+ li > .ch-tab[aria-selected="true"]) > .ch-tab { border-bottom-color: rgba(237, 243, 246, 0.16); }
   .ch-track { display: grid; grid-auto-flow: column; grid-auto-columns: 88%; gap: 12px; overflow-x: auto; scroll-snap-type: x mandatory; overscroll-behavior-x: contain; scrollbar-width: none; }
   .ch-track::-webkit-scrollbar { display: none; }
   .ch-slide { scroll-snap-align: center; scroll-snap-stop: always; border-radius: var(--r); overflow: hidden; background: var(--stage); display: flex; flex-direction: column; }
@@ -398,11 +432,11 @@ video.is-waiting { opacity: 0 !important; }
    motion allowed; otherwise the pillars and steps show as they are */
 /* approach on phones, the six steps: a nautilus shell (media/approach-shell.jpg, from grahic design/Backgrounds/06_fibo2,
    at 70% over white) pinned full screen while the page scrolls through it, under the title "Every challenge in six
-   steps". A black dashed line (rounded dashes) follows the shell from its open end at the top round the rim and in to
-   the centre; each step's orange dot and number light as the line reaches it. The step then shows large beside its dot
-   (icon, number, title, text) and, as the line moves on, shrinks into a list at the top right (number and title). The
-   shell drifts slowly up meanwhile. The line is the dashed path seen through a mask: a solid copy of the same path drawn
-   on with the scroll (apShell in the script). Phones with motion allowed only; otherwise the steps show as they are */
+   steps". A white dashed line (rounded dashes) grows steadily with the scroll from the shell's open end at the top,
+   round the rim and in towards the centre; each step's white dot lights as the line reaches it, and its label (icon
+   and title, then the text) grows beside the dot as the line arrives and shrinks back to icon and title as it moves on.
+   The shell drifts slowly up meanwhile. The line is the dashed path seen through a mask: a solid copy of the same path
+   drawn on with the scroll (apShell in the script). Phones with motion allowed only; otherwise the steps show as they are */
 .ap-shell { display: none; }
 @media (max-width: 900px) {
   #approach.has-shell .steps-label, #approach.has-shell .steps { display: none; }
@@ -410,30 +444,18 @@ video.is-waiting { opacity: 0 !important; }
   .ap-shell-stage { position: sticky; top: var(--ap-top, 72px); height: calc(100svh - var(--ap-top, 72px)); overflow: hidden; background: #FFFFFF; }
   .ap-shell-layer { position: absolute; left: 0; right: 0; top: calc(-1 * var(--ap-drift, 48px)); bottom: calc(-1 * var(--ap-drift, 48px)); will-change: transform; }
   .ap-shell-layer > svg { position: absolute; inset: 0; width: 100%; height: 100%; display: block; max-width: none; }
-  .ap-line { fill: none; stroke: var(--ink); stroke-width: 5.5; stroke-dasharray: 7 13; stroke-linecap: round; }
-  .ap-mask { fill: none; stroke: #FFFFFF; stroke-width: 16; stroke-linecap: round; }
-  .ap-dot { fill: var(--orange); transform-box: fill-box; transform-origin: center; transform: scale(0); transition: transform 420ms cubic-bezier(.3,1.7,.5,1); }
+  .ap-line { fill: none; stroke: #FFFFFF; stroke-width: 7; stroke-dasharray: 8 14; stroke-linecap: round; }
+  .ap-mask { fill: none; stroke: #FFFFFF; stroke-width: 18; stroke-linecap: round; }
+  .ap-dot { fill: #FFFFFF; transform-box: fill-box; transform-origin: center; transform: scale(0); transition: transform 420ms cubic-bezier(.3,1.7,.5,1); }
   .ap-dot.is-on { transform: scale(1); }
-  .ap-dot.is-now { transform: scale(1.4); }
-  .ap-tip { fill: var(--ink); }
-  .ap-title { position: absolute; left: 20px; right: 20px; top: 16px; font-size: clamp(1.2rem, 6.1vw, 1.8rem); font-weight: 500; letter-spacing: -0.035em; line-height: 1.1; white-space: nowrap; color: var(--ink); }
-  /* each dot's number, beside it */
-  .ap-num { position: absolute; left: 0; top: 0; width: 22px; text-align: center; font-size: 0.8rem; font-weight: 700; font-variant-numeric: tabular-nums; color: var(--orange);
-    text-shadow: 0 0 6px rgba(255, 255, 255, 0.95); opacity: 0; transition: opacity 300ms ease; }
-  .ap-num.is-on { opacity: 1; }
-  /* a step, large: icon and number, the title, the text. The script places it beside its dot, then shrinks it away */
-  .ap-card { position: absolute; left: 0; top: 0; width: 214px; transform-origin: 0 0; will-change: transform, opacity; color: var(--ink); pointer-events: none;
-    visibility: hidden; text-shadow: 0 0 14px rgba(255, 255, 255, 0.95), 0 0 3px rgba(255, 255, 255, 0.85); }
-  .ap-card.is-on { visibility: visible; animation: ap-card-in 420ms cubic-bezier(.16,.84,.3,1); }
-  @keyframes ap-card-in { from { opacity: 0; filter: blur(4px); } }
-  .ap-card svg { display: inline-block; vertical-align: -8px; width: 30px; height: 30px; margin-right: 8px; fill: none; stroke: var(--ink); stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
-  .ap-card-k { font-size: 1rem; font-weight: 700; font-variant-numeric: tabular-nums; color: var(--orange); }
-  .ap-card h4 { margin: 4px 0 0; padding: 0; font-size: clamp(2.2rem, 10vw, 2.8rem); font-weight: 500; letter-spacing: -0.04em; line-height: 1; }
-  .ap-card p { margin: 6px 0 0; font-size: 1.05rem; line-height: 1.3; color: var(--ink); }
-  /* the steps passed: number and title, top right */
-  .ap-list { position: absolute; right: 20px; top: 60px; margin: 0; padding: 0; list-style: none; text-align: right; pointer-events: none; }
-  .ap-li { font-size: 1.02rem; font-weight: 500; letter-spacing: -0.015em; line-height: 1.5; color: var(--ink); opacity: 0; white-space: nowrap; text-shadow: 0 0 8px rgba(255, 255, 255, 0.95); }
-  .ap-li span { color: var(--orange); font-weight: 700; font-variant-numeric: tabular-nums; }
+  .ap-tip { fill: #FFFFFF; }
+  .ap-title { position: absolute; left: 20px; right: 20px; top: 16px; z-index: 1; font-size: clamp(1.8rem, 7.3vw, 2.7rem); font-weight: 500; letter-spacing: -0.035em; line-height: 1.1; white-space: nowrap; color: var(--ink); }
+  /* a step: icon and title on one line, the text under them; placed beside its dot and scaled by the script */
+  .ap-card { position: absolute; left: 0; top: 0; width: max-content; max-width: 340px; color: var(--ink); opacity: 0; will-change: transform, opacity; pointer-events: none; }
+  .ap-card-h { display: flex; align-items: center; gap: 12px; }
+  .ap-card svg { flex: none; width: 56px; height: 56px; fill: none; stroke: var(--ink); stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+  .ap-card h4 { margin: 0; padding: 0; font-size: clamp(3.96rem, 18vw, 5.04rem); font-weight: 500; letter-spacing: -0.04em; line-height: 1; white-space: nowrap; }
+  .ap-card p { margin: 8px 0 0; max-width: 300px; font-size: 1.2rem; line-height: 1.3; color: var(--ink); }
 }
 .ap-dock { display: none; }
 @media (max-width: 900px) {
@@ -701,7 +723,7 @@ footer { background: var(--navy); color: var(--on-navy-soft); padding: clamp(44p
       <a href="#approach">Approach</a>
       <a href="#programme">Programme</a>
       <a href="#tutor">Tutor</a>
-      <a class="btn btn-ink" href="#bookings">Bookings</a>
+      <a href="#bookings">Bookings</a>
     </nav>
   </div>
 </header>
@@ -1468,20 +1490,21 @@ var DRAW = {
   })();
 
   /* ---------- approach on phones, the six steps: a dashed line grows along the shell's spiral ----------
-     The line starts at the top, at the shell's open end, follows the rim round and winds in to the centre, where the
-     sixth step sits. It starts as soon as the shell comes up from the bottom of the screen and reaches step 1 just as the
-     shell is pinned under the header. The page then scrolls through five equal stretches, one per step: for the first
-     30% of a stretch the step just reached rests, shown large beside its dot (icon, number, title, text); over the rest
-     the line travels on to the next step while the large step shrinks into its line of the list at the top right
-     (number and title). The last step stays large. Meanwhile the shell drifts slowly up (from +DRIFT to -DRIFT px),
-     so more of its lower part shows, with the line and the dots on it; the line passes behind the text showing.
+     The line starts at the top, at the shell's open end, follows the rim round and winds inwards, ending half a turn
+     short of the centre, a little after the sixth step (20 dashes, as step 2 is after step 1), so step 6 also shrinks
+     back before the end. It grows steadily with the scroll, with no pauses, from the moment the
+     shell's top edge is halfway down the screen until the end of the pinned run. Each step's white dot lights as the
+     line reaches it. Each step's label (icon and title on one line, the text under them) sits beside its dot and comes
+     in as the line approaches: it grows to full size as the line arrives, then shrinks back to icon and title as the
+     line moves on, and stays, in full black. Meanwhile the shell drifts slowly up (from +DRIFT to -DRIFT px), so more of its lower part
+     shows, with the line, the dots and the labels on it.
      SPIRAL is the line in the photo's pixels (843 x 1264): a smoothed curve along the outer rim, then a logarithmic
      spiral fitted to the inner whorls; MARKS are the steps' places along it (fractions of its length). The view crops
      the photo like a cover image kept to its left edge, where the shell is */
   (function apShell() {
     var sec = document.getElementById("approach");
     if (!sec || !sec.querySelector(".steps")) return;
-    var SPIRAL = "M0.0,232.0 L4.3,233.2 L9.3,234.5 L14.9,235.9 L20.9,237.4 L27.4,239.1 L34.2,240.8 L41.4,242.6 L48.7,244.5 L56.2,246.5 L63.7,248.6 L71.2,250.7 L78.1,253.5 L85.2,255.8 L92.2,258.1 L99.2,260.5 L106.1,263.0 L113.0,265.5 L119.8,268.1 L126.5,270.8 L133.3,273.6 L140.0,276.4 L146.6,279.3 L153.3,282.3 L160.0,285.4 L166.7,288.6 L173.3,291.9 L180.0,295.2 L186.7,298.7 L193.3,302.3 L200.0,305.9 L206.7,309.7 L213.3,313.6 L220.0,317.6 L226.7,321.7 L233.3,325.8 L240.0,330.1 L246.7,334.4 L253.3,338.8 L260.0,343.2 L266.7,347.6 L273.4,352.1 L280.1,356.5 L286.8,361.0 L293.5,365.4 L300.2,369.8 L306.9,374.3 L313.7,378.7 L320.5,383.1 L327.3,387.4 L334.0,391.8 L340.8,396.2 L347.5,400.5 L354.2,404.9 L360.9,409.2 L367.5,413.5 L374.0,417.8 L380.4,422.1 L386.7,426.3 L392.9,430.5 L399.0,434.6 L405.0,438.7 L410.8,442.8 L416.6,446.8 L422.3,450.9 L427.8,454.8 L433.3,458.8 L438.7,462.8 L444.0,466.8 L449.3,470.8 L454.5,474.8 L459.6,478.8 L464.7,482.9 L469.8,487.1 L474.8,491.3 L479.9,495.6 L484.8,499.9 L489.8,504.3 L494.7,508.7 L499.6,513.2 L504.5,517.8 L509.3,522.4 L514.0,527.0 L518.7,531.7 L523.3,536.4 L527.8,541.1 L532.3,545.9 L536.7,550.6 L540.9,555.4 L545.1,560.2 L549.2,565.0 L553.2,569.8 L557.0,574.7 L560.8,579.5 L564.5,584.4 L568.1,589.3 L571.6,594.2 L575.0,599.1 L578.4,604.1 L581.6,609.1 L584.8,614.2 L587.9,619.4 L590.9,624.6 L593.8,629.9 L596.6,635.2 L599.4,640.7 L602.1,646.2 L604.7,651.8 L607.2,657.5 L609.7,663.2 L612.1,669.0 L614.4,674.9 L616.6,680.9 L618.7,686.9 L620.8,693.0 L622.8,699.1 L624.6,705.2 L626.5,711.5 L628.2,717.7 L629.8,724.0 L631.4,730.4 L632.9,736.8 L634.3,743.3 L635.7,749.8 L636.9,756.3 L638.1,762.9 L639.2,769.5 L640.2,776.2 L641.0,782.9 L641.8,789.6 L642.5,796.3 L643.0,803.1 L643.4,809.8 L643.7,816.5 L643.9,823.3 L643.9,830.0 L643.8,836.7 L643.5,843.5 L643.2,850.2 L642.7,856.9 L642.0,863.7 L641.3,870.4 L640.4,877.1 L639.4,883.8 L638.2,890.5 L637.0,897.1 L635.7,903.7 L634.2,910.3 L632.6,916.8 L630.9,923.3 L629.1,929.8 L627.2,936.2 L625.2,942.6 L623.0,948.9 L620.8,955.2 L618.4,961.5 L615.9,967.7 L613.4,973.8 L610.7,979.8 L607.9,985.7 L605.0,991.6 L602.1,997.3 L599.0,1002.8 L595.9,1008.2 L592.7,1013.4 L589.4,1018.5 L586.0,1023.4 L582.5,1028.1 L578.9,1032.7 L575.3,1037.1 L571.5,1041.4 L567.7,1045.5 L563.8,1049.6 L559.8,1053.5 L555.7,1057.4 L551.5,1061.3 L547.2,1065.1 L542.9,1068.9 L538.4,1072.7 L533.9,1076.5 L529.2,1080.3 L524.5,1084.1 L519.6,1087.9 L514.7,1091.8 L509.6,1095.6 L504.5,1099.4 L499.3,1103.2 L494.0,1107.0 L488.7,1110.7 L483.3,1114.3 L477.8,1117.9 L472.3,1121.3 L466.7,1124.6 L461.1,1127.9 L455.4,1130.9 L449.7,1133.9 L444.0,1136.7 L438.2,1139.4 L432.4,1142.0 L426.6,1144.5 L420.7,1146.8 L414.8,1149.0 L408.8,1151.2 L402.8,1153.2 L396.8,1155.0 L390.7,1156.8 L384.5,1158.5 L378.4,1160.1 L372.2,1161.6 L365.9,1163.1 L359.6,1164.4 L353.3,1165.6 L346.9,1166.8 L340.4,1167.8 L334.0,1168.8 L327.5,1169.7 L320.9,1170.4 L314.4,1171.0 L307.8,1171.5 L301.2,1171.9 L294.7,1172.1 L288.2,1172.1 L281.6,1171.9 L275.2,1171.6 L268.7,1171.1 L262.3,1170.4 L255.9,1169.5 L249.5,1168.3 L243.2,1167.1 L236.9,1165.6 L230.7,1163.9 L224.5,1162.1 L218.3,1160.1 L212.1,1157.9 L206.0,1155.6 L199.9,1153.2 L193.9,1150.6 L188.0,1147.9 L182.0,1145.1 L176.2,1142.2 L170.3,1139.2 L164.6,1136.0 L158.8,1132.7 L153.2,1129.3 L147.5,1125.8 L142.0,1122.2 L136.5,1118.5 L131.0,1114.6 L125.7,1110.6 L120.4,1106.5 L115.2,1102.2 L110.1,1097.8 L105.2,1093.3 L100.3,1088.6 L95.6,1083.8 L90.9,1078.8 L86.4,1073.7 L82.0,1068.5 L77.7,1063.1 L73.6,1057.6 L69.5,1051.9 L65.6,1046.2 L61.8,1040.2 L58.1,1034.2 L54.6,1028.1 L51.1,1021.9 L47.9,1015.5 L44.7,1009.1 L41.8,1002.5 L38.9,995.9 L36.2,989.1 L33.7,982.2 L31.3,975.3 L29.1,968.2 L27.0,961.0 L25.1,953.8 L23.3,946.5 L21.7,939.1 L20.1,931.8 L18.7,924.4 L17.5,917.0 L16.3,909.6 L15.3,902.2 L14.4,895.0 L13.6,887.7 L12.9,880.6 L12.3,873.4 L11.8,866.4 L11.5,859.4 L11.2,852.5 L11.1,845.6 L11.1,838.8 L11.2,832.0 L11.4,825.3 L11.7,818.7 L12.1,812.2 L12.6,805.7 L13.3,799.3 L14.0,793.0 L14.8,786.8 L15.8,780.7 L16.8,774.7 L18.0,768.8 L19.3,763.0 L20.6,757.3 L22.1,751.6 L23.7,746.1 L25.4,740.7 L27.2,735.3 L29.1,730.1 L31.1,724.9 L33.2,719.9 L35.4,715.0 L37.8,710.2 L40.2,705.6 L42.8,701.0 L45.4,696.6 L48.2,692.3 L51.0,688.1 L54.0,684.0 L57.1,680.1 L60.3,676.2 L63.7,672.5 L67.2,668.8 L70.9,665.3 L74.7,661.8 L78.7,658.3 L82.9,655.0 L87.3,651.7 L92.0,648.4 L96.8,645.1 L101.8,642.0 L107.1,638.8 L112.5,635.7 L118.2,632.7 L124.0,629.7 L130.0,626.8 L136.2,624.0 L142.6,621.4 L149.2,618.9 L155.9,616.6 L162.9,614.5 L170.0,612.6 L177.4,611.0 L185.0,609.7 L192.9,608.7 L201.1,607.9 L209.6,607.4 L215.6,604.9 L225.4,605.3 L235.5,606.0 L245.7,606.9 L255.8,607.9 L265.7,609.0 L275.2,610.1 L284.0,611.2 L292.0,612.2 L299.0,613.1 L304.8,613.7 L309.3,614.0 L312.2,614.0 L330.4,622.3 L347.4,632.3 L363.2,643.7 L377.4,656.4 L390.2,670.3 L401.3,685.2 L410.8,700.9 L418.5,717.2 L424.5,734.0 L428.7,751.0 L431.2,768.1 L431.9,785.2 L430.9,801.9 L428.3,818.3 L424.2,834.0 L418.5,849.1 L411.5,863.3 L403.3,876.6 L393.9,888.7 L383.5,899.8 L372.2,909.5 L360.1,918.0 L347.5,925.1 L334.4,930.9 L320.9,935.2 L307.4,938.2 L293.7,939.7 L280.2,939.9 L267.0,938.8 L254.1,936.3 L241.7,932.7 L229.9,927.9 L218.8,922.0 L208.5,915.1 L199.1,907.4 L190.6,898.9 L183.1,889.7 L176.7,880.0 L171.3,869.8 L167.1,859.3 L164.0,848.6 L162.0,837.7 L161.0,826.9 L161.2,816.2 L162.4,805.8 L164.7,795.6 L167.8,785.9 L171.9,776.7 L176.8,768.0 L182.5,760.0 L188.8,752.7 L195.8,746.2 L203.2,740.5 L211.1,735.6 L219.2,731.6 L227.7,728.5 L236.2,726.3 L244.9,724.9 L253.4,724.4 L261.9,724.8 L270.2,726.0 L278.2,728.0 L285.8,730.8 L293.0,734.2 L299.7,738.3 L305.9,743.0 L311.6,748.2 L316.6,753.8 L320.9,759.8 L324.6,766.2 L327.6,772.7 L329.9,779.5 L331.4,786.3 L332.3,793.2 L332.5,800.0 L332.0,806.7 L330.8,813.2 L329.1,819.5 L326.7,825.5 L323.8,831.1 L320.4,836.3 L316.6,841.1 L312.3,845.5 L307.8,849.3 L302.9,852.6 L297.8,855.4 L292.5,857.6 L287.1,859.2 L281.7,860.3 L276.2,860.8 L270.8,860.8 L265.5,860.3 L260.4,859.2 L255.5,857.7 L250.8,855.7 L246.4,853.2 L242.3,850.4 L238.6,847.3 L235.3,843.8 L232.3,840.1 L229.8,836.2 L227.7,832.1 L226.1,827.8 L224.9,823.5 L224.2,819.2 L223.9,814.9 L224.1,810.6 L224.6,806.4 L225.6,802.4 L226.9,798.5 L228.6,794.8 L230.6,791.4 L232.9,788.3 L235.5,785.4 L238.3,782.8 L241.4,780.6 L244.5,778.7 L247.8,777.1 L251.2,776.0 L254.7,775.1 L258.1,774.6 L261.5,774.5 L264.9,774.7 L268.2,775.3 L271.4,776.1 L274.4,777.3 L277.3,778.7 L280.0,780.4 L282.4,782.3 L284.6,784.4 L286.6,786.7 L288.3,789.1 L289.7,791.7 L290.9,794.3 L291.7,797.0 L292.3,799.8 L292.6,802.5 L292.6,805.2 L292.4,807.9 L291.9,810.5 L291.1,813.0 L290.1,815.4 L289.0,817.6 L287.6,819.7 L286.0,821.6 L284.3,823.3 L282.4,824.8 L280.4,826.1", MARKS = [0.0588, 0.498, 0.5745, 0.727, 0.7892, 1.0], DRIFT = 48, REST = 0.3, SHRINK = 0.35;
+    var SPIRAL = "M0.0,232.0 L4.3,233.2 L9.3,234.5 L14.9,235.9 L20.9,237.4 L27.4,239.1 L34.2,240.8 L41.4,242.6 L48.7,244.5 L56.2,246.5 L63.7,248.6 L71.2,250.7 L78.1,253.5 L85.2,255.8 L92.2,258.1 L99.2,260.5 L106.1,263.0 L113.0,265.5 L119.8,268.1 L126.5,270.8 L133.3,273.6 L140.0,276.4 L146.6,279.3 L153.3,282.3 L160.0,285.4 L166.7,288.6 L173.3,291.9 L180.0,295.2 L186.7,298.7 L193.3,302.3 L200.0,305.9 L206.7,309.7 L213.3,313.6 L220.0,317.6 L226.7,321.7 L233.3,325.8 L240.0,330.1 L246.7,334.4 L253.3,338.8 L260.0,343.2 L266.7,347.6 L273.4,352.1 L280.1,356.5 L286.8,361.0 L293.5,365.4 L300.2,369.8 L306.9,374.3 L313.7,378.7 L320.5,383.1 L327.3,387.4 L334.0,391.8 L340.8,396.2 L347.5,400.5 L354.2,404.9 L360.9,409.2 L367.5,413.5 L374.0,417.8 L380.4,422.1 L386.7,426.3 L392.9,430.5 L399.0,434.6 L405.0,438.7 L410.8,442.8 L416.6,446.8 L422.3,450.9 L427.8,454.8 L433.3,458.8 L438.7,462.8 L444.0,466.8 L449.3,470.8 L454.5,474.8 L459.6,478.8 L464.7,482.9 L469.8,487.1 L474.8,491.3 L479.9,495.6 L484.8,499.9 L489.8,504.3 L494.7,508.7 L499.6,513.2 L504.5,517.8 L509.3,522.4 L514.0,527.0 L518.7,531.7 L523.3,536.4 L527.8,541.1 L532.3,545.9 L536.7,550.6 L540.9,555.4 L545.1,560.2 L549.2,565.0 L553.2,569.8 L557.0,574.7 L560.8,579.5 L564.5,584.4 L568.1,589.3 L571.6,594.2 L575.0,599.1 L578.4,604.1 L581.6,609.1 L584.8,614.2 L587.9,619.4 L590.9,624.6 L593.8,629.9 L596.6,635.2 L599.4,640.7 L602.1,646.2 L604.7,651.8 L607.2,657.5 L609.7,663.2 L612.1,669.0 L614.4,674.9 L616.6,680.9 L618.7,686.9 L620.8,693.0 L622.8,699.1 L624.6,705.2 L626.5,711.5 L628.2,717.7 L629.8,724.0 L631.4,730.4 L632.9,736.8 L634.3,743.3 L635.7,749.8 L636.9,756.3 L638.1,762.9 L639.2,769.5 L640.2,776.2 L641.0,782.9 L641.8,789.6 L642.5,796.3 L643.0,803.1 L643.4,809.8 L643.7,816.5 L643.9,823.3 L643.9,830.0 L643.8,836.7 L643.5,843.5 L643.2,850.2 L642.7,856.9 L642.0,863.7 L641.3,870.4 L640.4,877.1 L639.4,883.8 L638.2,890.5 L637.0,897.1 L635.7,903.7 L634.2,910.3 L632.6,916.8 L630.9,923.3 L629.1,929.8 L627.2,936.2 L625.2,942.6 L623.0,948.9 L620.8,955.2 L618.4,961.5 L615.9,967.7 L613.4,973.8 L610.7,979.8 L607.9,985.7 L605.0,991.6 L602.1,997.3 L599.0,1002.8 L595.9,1008.2 L592.7,1013.4 L589.4,1018.5 L586.0,1023.4 L582.5,1028.1 L578.9,1032.7 L575.3,1037.1 L571.5,1041.4 L567.7,1045.5 L563.8,1049.6 L559.8,1053.5 L555.7,1057.4 L551.5,1061.3 L547.2,1065.1 L542.9,1068.9 L538.4,1072.7 L533.9,1076.5 L529.2,1080.3 L524.5,1084.1 L519.6,1087.9 L514.7,1091.8 L509.6,1095.6 L504.5,1099.4 L499.3,1103.2 L494.0,1107.0 L488.7,1110.7 L483.3,1114.3 L477.8,1117.9 L472.3,1121.3 L466.7,1124.6 L461.1,1127.9 L455.4,1130.9 L449.7,1133.9 L444.0,1136.7 L438.2,1139.4 L432.4,1142.0 L426.6,1144.5 L420.7,1146.8 L414.8,1149.0 L408.8,1151.2 L402.8,1153.2 L396.8,1155.0 L390.7,1156.8 L384.5,1158.5 L378.4,1160.1 L372.2,1161.6 L365.9,1163.1 L359.6,1164.4 L353.3,1165.6 L346.9,1166.8 L340.4,1167.8 L334.0,1168.8 L327.5,1169.7 L320.9,1170.4 L314.4,1171.0 L307.8,1171.5 L301.2,1171.9 L294.7,1172.1 L288.2,1172.1 L281.6,1171.9 L275.2,1171.6 L268.7,1171.1 L262.3,1170.4 L255.9,1169.5 L249.5,1168.3 L243.2,1167.1 L236.9,1165.6 L230.7,1163.9 L224.5,1162.1 L218.3,1160.1 L212.1,1157.9 L206.0,1155.6 L199.9,1153.2 L193.9,1150.6 L188.0,1147.9 L182.0,1145.1 L176.2,1142.2 L170.3,1139.2 L164.6,1136.0 L158.8,1132.7 L153.2,1129.3 L147.5,1125.8 L142.0,1122.2 L136.5,1118.5 L131.0,1114.6 L125.7,1110.6 L120.4,1106.5 L115.2,1102.2 L110.1,1097.8 L105.2,1093.3 L100.3,1088.6 L95.6,1083.8 L90.9,1078.8 L86.4,1073.7 L82.0,1068.5 L77.7,1063.1 L73.6,1057.6 L69.5,1051.9 L65.6,1046.2 L61.8,1040.2 L58.1,1034.2 L54.6,1028.1 L51.1,1021.9 L47.9,1015.5 L44.7,1009.1 L41.8,1002.5 L38.9,995.9 L36.2,989.1 L33.7,982.2 L31.3,975.3 L29.1,968.2 L27.0,961.0 L25.1,953.8 L23.3,946.5 L21.7,939.1 L20.1,931.8 L18.7,924.4 L17.5,917.0 L16.3,909.6 L15.3,902.2 L14.4,895.0 L13.6,887.7 L12.9,880.6 L12.3,873.4 L11.8,866.4 L11.5,859.4 L11.2,852.5 L11.1,845.6 L11.1,838.8 L11.2,832.0 L11.4,825.3 L11.7,818.7 L12.1,812.2 L12.6,805.7 L13.3,799.3 L14.0,793.0 L14.8,786.8 L15.8,780.7 L16.8,774.7 L18.0,768.8 L19.3,763.0 L20.6,757.3 L22.1,751.6 L23.7,746.1 L25.4,740.7 L27.2,735.3 L29.1,730.1 L31.1,724.9 L33.2,719.9 L35.4,715.0 L37.8,710.2 L40.2,705.6 L42.8,701.0 L45.4,696.6 L48.2,692.3 L51.0,688.1 L54.0,684.0 L57.1,680.1 L60.3,676.2 L63.7,672.5 L67.2,668.8 L70.9,665.3 L74.7,661.8 L78.7,658.3 L82.9,655.0 L87.3,651.7 L92.0,648.4 L96.8,645.1 L101.8,642.0 L107.1,638.8 L112.5,635.7 L118.2,632.7 L124.0,629.7 L130.0,626.8 L136.2,624.0 L142.6,621.4 L149.2,618.9 L155.9,616.6 L162.9,614.5 L170.0,612.6 L177.4,611.0 L185.0,609.7 L192.9,608.7 L201.1,607.9 L209.6,607.4 L215.6,604.9 L225.4,605.3 L235.5,606.0 L245.7,606.9 L255.8,607.9 L265.7,609.0 L275.2,610.1 L284.0,611.2 L292.0,612.2 L299.0,613.1 L304.8,613.7 L309.3,614.0 L312.2,614.0 L330.4,622.3 L347.4,632.3 L363.2,643.7 L377.4,656.4 L390.2,670.3 L401.3,685.2 L410.8,700.9 L418.5,717.2 L424.5,734.0 L428.7,751.0 L431.2,768.1 L431.9,785.2 L430.9,801.9 L428.3,818.3 L424.2,834.0 L418.5,849.1 L411.5,863.3 L403.3,876.6 L393.9,888.7 L383.5,899.8 L372.2,909.5 L360.1,918.0 L347.5,925.1 L334.4,930.9 L320.9,935.2 L307.4,938.2 L293.7,939.7 L280.2,939.9 L267.0,938.8 L254.1,936.3 L241.7,932.7 L229.9,927.9 L218.8,922.0 L208.5,915.1 L199.1,907.4 L190.6,898.9 L183.1,889.7 L176.7,880.0 L171.3,869.8 L167.1,859.3 L164.0,848.6 L162.0,837.7 L161.0,826.9 L161.2,816.2 L162.4,805.8 L164.7,795.6 L167.8,785.9 L171.9,776.7 L176.8,768.0 L182.5,760.0 L188.8,752.7 L195.8,746.2 L203.2,740.5 L211.1,735.6 L219.2,731.6 L227.7,728.5 L236.2,726.3 L244.9,724.9 L253.4,724.4 L261.9,724.8 L270.2,726.0 L278.2,728.0 L285.8,730.8 L293.0,734.2 L299.7,738.3 L305.9,743.0 L311.6,748.2 L316.6,753.8 L320.9,759.8 L324.6,766.2 L327.6,772.7 L329.9,779.5 L331.4,786.3 L332.3,793.2 L332.5,800.0 L332.0,806.7 L330.8,813.2 L329.1,819.5 L326.7,825.5 L323.8,831.1 L320.4,836.3 L316.6,841.1 L312.3,845.5 L307.8,849.3 L302.9,852.6 L297.8,855.4 L292.5,857.6 L287.1,859.2 L281.7,860.3 L276.2,860.8 L270.8,860.8 L265.5,860.3 L260.4,859.2 L255.5,857.7 L250.8,855.7 L246.4,853.2 L242.3,850.4 L238.6,847.3 L235.3,843.8 L232.3,840.1 L229.8,836.2 L227.7,832.1 L226.1,827.8 L224.9,823.5 L224.2,819.2 L223.9,814.9 L224.1,810.6 L224.6,806.4 L225.6,802.4 L226.9,798.5 L228.6,794.8 L230.6,791.4 L232.9,788.3 L235.5,785.4 L238.3,782.8 L241.4,780.6 L244.4,778.8", MARKS = [0.0603, 0.1658, 0.4777, 0.7135, 0.8096, 0.9399], DRIFT = 48, SMALL = 0.375, LEAD = 0.55, TRAIL = 0.45;
     // little line icons, 24 x 24: a brief, a pencil, building blocks, a test weight, a turn-around arrow, a speech bubble
     var ICONS = [
       '<rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 8h6M9 12h6M9 16h3.5"/>',
@@ -1492,25 +1515,25 @@ var DRAW = {
       '<path d="M4 5.5h16v10.5H10l-4.5 3.5V16H4z"/><path d="M8 9.5h8M8 12.5h5"/>'
     ];
     var phone = window.matchMedia("(max-width: 900px)");
-    var box = null, stage, layer, svg, mask, tip, knock, title, dots = [], nums = [], cards = [], items = [], steps;
-    var T = 1, S = 1, OY = 0, P = [], home = [], top = 72, on = false, raf = 0;
+    var box = null, stage, layer, svg, mask, tip, title, dots = [], cards = [], subs = [], steps;
+    var T = 1, top = 72, on = false, raf = 0;
     function el(tag, cls, parent) { var e = document.createElement(tag); if (cls) e.className = cls; if (parent) parent.appendChild(e); return e; }
     function build() {
       steps = Array.prototype.map.call(sec.querySelectorAll(".step"), function (st) {
         var ps = st.querySelectorAll(":scope > p");
-        return { k: ps[0].textContent, h: st.querySelector("h3").textContent, t: ps[1].textContent };
+        return { h: st.querySelector("h3").textContent, t: ps[1].textContent };
       });
       var NS = "http://www.w3.org/2000/svg";
       box = el("div", "ap-shell");
       stage = el("div", "ap-shell-stage", box);
-      layer = el("div", "ap-shell-layer", stage); // drifts with the photo
+      layer = el("div", "ap-shell-layer", stage); // drifts with the photo, the labels on it
       svg = document.createElementNS(NS, "svg");
       svg.setAttribute("viewBox", "0 0 843 1264"); svg.setAttribute("preserveAspectRatio", "xMinYMid slice"); svg.setAttribute("aria-hidden", "true");
       svg.innerHTML = '<image href="media/approach-shell.jpg" x="0" y="0" width="843" height="1264" opacity="0.7"/>' +
-        '<defs><mask id="ap-reveal" maskUnits="userSpaceOnUse" x="-60" y="-60" width="963" height="1384"><path class="ap-mask" d="' + SPIRAL + '"/><g class="ap-knock"></g></mask></defs>' +
-        '<path class="ap-line" d="' + SPIRAL + '" mask="url(#ap-reveal)"/><circle class="ap-tip" r="6"/>';
+        '<defs><mask id="ap-reveal" maskUnits="userSpaceOnUse" x="-60" y="-60" width="963" height="1384"><path class="ap-mask" d="' + SPIRAL + '"/></mask></defs>' +
+        '<path class="ap-line" d="' + SPIRAL + '" mask="url(#ap-reveal)"/><circle class="ap-tip" r="7"/>';
       layer.appendChild(svg);
-      mask = svg.querySelector(".ap-mask"); tip = svg.querySelector(".ap-tip"); knock = svg.querySelector(".ap-knock");
+      mask = svg.querySelector(".ap-mask"); tip = svg.querySelector(".ap-tip");
       MARKS.forEach(function () {
         var c = document.createElementNS(NS, "circle");
         c.setAttribute("class", "ap-dot"); c.setAttribute("r", "10");
@@ -1518,115 +1541,82 @@ var DRAW = {
       });
       title = el("h3", "ap-title", stage);
       title.textContent = (sec.querySelector(".steps-label") || {}).textContent || "";
-      var list = el("ol", "ap-list", stage); // the steps already passed, top right
       steps.forEach(function (st, k) {
-        var num = el("span", "ap-num", layer); num.textContent = st.k; nums.push(num);
-        var card = el("div", "ap-card", stage);
-        card.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true">' + (ICONS[k] || "") + '</svg><span class="ap-card-k"></span><h4></h4><p></p>';
-        card.querySelector(".ap-card-k").textContent = st.k;
+        var card = el("div", "ap-card", layer);
+        card.innerHTML = '<div class="ap-card-h"><svg viewBox="0 0 24 24" aria-hidden="true">' + (ICONS[k] || "") + '</svg><h4></h4></div><p></p>';
         card.querySelector("h4").textContent = st.h;
         card.querySelector("p").textContent = st.t;
-        cards.push(card);
-        var li = el("li", "ap-li", list);
-        li.innerHTML = "<span></span>";
-        li.firstChild.textContent = st.k;
-        li.appendChild(document.createTextNode(" " + st.h));
-        items.push(li);
+        cards.push(card); subs.push(card.querySelector("p"));
       });
       sec.querySelector(".steps").after(box);
     }
     // the path can only be measured once it is displayed; the dots follow the photo's crop. The layer is the stage plus
-    // DRIFT above and below, so the photo covers the stage wherever it has drifted to. Each dot's number sits just
-    // outside it, away from the shell's centre. Each large step gets a place beside its dot (P, in layer pixels):
-    // the first of right, below, left, above that stays on screen, under the title, clear of the list and of its dot and the ones before
+    // DRIFT above and below, so the photo covers the stage wherever it has drifted to. Each label goes beside its dot
+    // (right, left, below or above), wherever it fits at full size and, once small, overlaps no other label or dot
+    // and stays clear of the title; it grows and shrinks from the side next to the dot
     function measure() {
       T = mask.getTotalLength() || 1;
       mask.style.strokeDasharray = T.toFixed(1) + " " + T.toFixed(1);
-      var W = layer.clientWidth, H = layer.clientHeight, s = Math.max(W / 843, H / 1264), oy = (H - 1264 * s) / 2;
-      S = s; OY = oy;
-      var cx = 266 * s, cy = 808 * s + oy, M = 20, G = 18, list = items[0].parentNode;
-      var listL = list.offsetLeft - 12, listB = list.offsetTop + list.offsetHeight + 10, titleB = title.offsetTop + title.offsetHeight + 10;
-      P = []; home = [];
-      function dotAt(j) { var q = mask.getPointAtLength(MARKS[j] * T); return { x: q.x * s, y: q.y * s + oy }; }
-      dots.forEach(function (c, k) {
-        var q = mask.getPointAtLength(MARKS[k] * T), x = q.x * s, y = q.y * s + oy;
-        c.setAttribute("cx", q.x.toFixed(1)); c.setAttribute("cy", q.y.toFixed(1));
-        var dx = x - cx, dy = y - cy, l = Math.hypot(dx, dy);
-        if (l < 20) { dx = 0.7; dy = -0.7; l = 1; } // the centre: up and to the right
-        var nx = x + dx / l * 20, ny = y + dy / l * 20;
-        nums[k].style.left = (Math.min(W - 26, Math.max(4, nx - 11))).toFixed(1) + "px";
-        nums[k].style.top = (ny - 9).toFixed(1) + "px";
-        // the large step's place, judged at the drift it has when the step is reached
-        var card = cards[k], w = card.offsetWidth, h = card.offsetHeight, ys = y - DRIFT + driftAt(k); // in stage pixels
-        var C = [[x + G, ys - h / 2], [x - w / 2, ys + G], [x - G - w, ys - h / 2], [x - w / 2, ys - G - h],
-                 [x + G, ys + G], [x - G - w, ys + G], [x + G, ys - G - h], [x - G - w, ys - G - h]];
-        var pick = null, cost = Infinity;
-        for (var i = 0; i < C.length; i++) {
-          var L = Math.min(W - M - w, Math.max(M, C[i][0])), Tt = C[i][1], c = i;
-          if (Tt < titleB || Tt + h > stage.clientHeight - 24) continue;
-          if (!(L + w < listL || Tt > listB)) continue;
-          for (var j = 0; j <= k; j++) { // never its own dot or the one before; older ones only if nothing else fits
-            var dj = dotAt(j), yj = dj.y - DRIFT + driftAt(k);
-            if (dj.x > L - 10 && dj.x < L + w + 10 && yj > Tt - 10 && yj < Tt + h + 10) c += j >= k - 1 ? 1e6 : 100;
-          }
-          if (c < cost) { cost = c; pick = [L, Tt]; }
-        }
-        if (cost >= 1e6) pick = null;
-        if (!pick) pick = [Math.min(W - M - w, Math.max(M, x + G)), Math.max(titleB, Math.min(stage.clientHeight - 24 - h, ys + G))];
-        P[k] = { x: pick[0], y: pick[1] + DRIFT - driftAt(k) }; // back in layer pixels: it moves with the photo
-        home[k] = { x: list.offsetLeft + items[k].offsetLeft, y: list.offsetTop + items[k].offsetTop, w: items[k].offsetWidth, h: items[k].offsetHeight };
+      var W = layer.clientWidth, H = layer.clientHeight, s = Math.max(W / 843, H / 1264), oy = (H - 1264 * s) / 2, M = 16, G = 16;
+      var P = MARKS.map(function (m) { var q = mask.getPointAtLength(m * T); return { x: q.x * s, y: q.y * s + oy, q: q }; });
+      var titleB = title.offsetTop + title.offsetHeight + 8 + DRIFT, placed = [];
+      function overlap(a, b) { return Math.max(0, Math.min(a.r, b.r) - Math.max(a.l, b.l)) * Math.max(0, Math.min(a.b, b.b) - Math.max(a.t, b.t)); }
+      P.forEach(function (p, k) {
+        dots[k].setAttribute("cx", p.q.x.toFixed(1)); dots[k].setAttribute("cy", p.q.y.toFixed(1));
+        var card = cards[k], w = card.offsetWidth, h = card.offsetHeight, head = card.firstChild.offsetHeight, x = p.x, y = p.y;
+        // where it could go: [left, top, origin x, origin y] at full size; it scales about the origin
+        var C = [[x + G, y - head / 2, 0, head / 2], [x - G - w, y - head / 2, w, head / 2],
+                 [x - 24, y + G, 24, 0], [x - w + 24, y + G, w - 24, 0], [x - 24, y - G - head, 24, head], [x - w + 24, y - G - head, w - 24, head]];
+        var lc = Math.min(W - M - w, Math.max(M, x - w / 2)); // a wide label: under or over its dot, kept on screen
+        C.push([lc, y + G, x - lc, 0], [lc, y - G - head, x - lc, head]);
+        var best = null, cost = Infinity;
+        C.forEach(function (c, i) {
+          var l = c[0], t = c[1];
+          if (l < M - 1 || l + w > W - M + 1) return; // it must fit at full size
+          var ox = l + c[2], oy2 = t + c[3];
+          var small = { l: ox - c[2] * SMALL, t: oy2 - c[3] * SMALL, r: ox + (w - c[2]) * SMALL, b: oy2 + (head - c[3]) * SMALL };
+          var big = { l: l, t: t, r: l + w, b: t + h };
+          var cst = i * 10 + (big.t < titleB ? 5000 : 0) + (big.b > H - DRIFT - 12 ? 5000 : 0); // under the title, above the screen's foot
+          placed.forEach(function (o) { cst += overlap(small, o) * 4 + overlap(big, o) * 0.5; });
+          P.forEach(function (d, j) { if (d.x > small.l - 8 && d.x < small.r + 8 && d.y > small.t - 8 && d.y < small.b + 8) cst += j === k ? 1e6 : 3000; });
+          if (cst < cost) { cost = cst; best = { l: l, t: t, ox: c[2], oy: c[3], small: small }; }
+        });
+        if (!best) best = { l: Math.min(W - M - w, Math.max(M, x - w / 2)), t: y + G, ox: Math.max(0, Math.min(w, x - Math.min(W - M - w, Math.max(M, x - w / 2)))), oy: 0 };
+        if (best.small) placed.push(best.small);
+        card.style.left = best.l.toFixed(1) + "px"; card.style.top = best.t.toFixed(1) + "px";
+        card.style.transformOrigin = best.ox.toFixed(1) + "px " + best.oy.toFixed(1) + "px";
       });
     }
-    function ease(t) { return t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2; }
     function clamp(v) { return Math.min(1, Math.max(0, v)); }
-    // the drift at the moment step k is reached (step 1 at the end of the entry, step k + 1 at the start of stretch k)
-    function driftAt(k) { return DRIFT - 2 * DRIFT * (1 + k / (MARKS.length - 1)) / 2; }
-    function state() {
-      var vh = window.innerHeight, r = box.getBoundingClientRect(), span = Math.max(1, box.offsetHeight - stage.clientHeight);
-      var enter = clamp((vh - r.top) / Math.max(1, vh - top)), p = clamp((top - r.top) / span);
-      return { enter: enter, p: p, seg: p * (MARKS.length - 1) };
-    }
+    function smooth(v) { v = clamp(v); return v * v * (3 - 2 * v); }
     function update() {
       raf = 0;
       if (!on) return;
-      var st = state(), n = MARKS.length - 1, f, seg = st.seg;
-      if (st.p <= 0) f = MARKS[0] * ease(st.enter);
-      else if (st.p >= 1) f = 1;
-      else {
-        var i = Math.min(n - 1, Math.floor(seg)), t = ease(clamp((seg - i - REST) / (1 - REST)));
-        f = MARKS[i] + (MARKS[i + 1] - MARKS[i]) * t;
-      }
+      var vh = window.innerHeight, r = box.getBoundingClientRect(), span = Math.max(1, box.offsetHeight - stage.clientHeight);
+      // the whole run: from the shell's top edge at the bottom of the screen to the end of the pinned scroll
+      // starts once the shell's top edge is halfway down the screen, so the first steps are seen arriving
+      var from = top + 0.5 * (vh - top), g = clamp((from - r.top) / Math.max(1, from - top + span)), f = g;
       mask.style.strokeDashoffset = (T * (1 - f)).toFixed(1);
       var q = mask.getPointAtLength(f * T);
       tip.setAttribute("cx", q.x.toFixed(1)); tip.setAttribute("cy", q.y.toFixed(1));
       tip.style.opacity = f > 0.001 && f < 0.999 ? "1" : "0";
-      var reached = 0;
-      MARKS.forEach(function (m, k) { if (f >= m - 1e-4) reached = k + 1; });
-      dots.forEach(function (d, k) { d.classList.toggle("is-on", k < reached); d.classList.toggle("is-now", k === reached - 1 && reached < MARKS.length); nums[k].classList.toggle("is-on", k < reached); });
-      // the slow drift up, over the whole run from entry to the last step
-      var d = DRIFT - 2 * DRIFT * (st.enter + st.p) / 2;
-      layer.style.transform = "translate3d(0," + d.toFixed(1) + "px,0)";
-      // each step: large beside its dot, then shrinking into its line of the list
-      var cut = [];
-      cards.forEach(function (card, k) {
-        var shown = k < reached, u = k < n ? ease(clamp((seg - k - REST) / SHRINK)) : 0;
-        if (k === 0 && st.p <= 0) u = 0;
-        card.classList.toggle("is-on", shown);
-        var b = P[k], hm = home[k], sc = 1 + (hm.h / card.offsetHeight * 1.6 - 1) * u; // shrinks to about the list's size
-        sc = Math.max(0.3, Math.min(1, sc));
-        var bx = b.x, by = b.y - DRIFT + d; // its place, in stage pixels, as the photo drifts
-        var x = bx + (hm.x + hm.w - card.offsetWidth * sc - bx) * u, y = by + (hm.y - 4 - by) * u;
-        card.style.transform = "translate3d(" + x.toFixed(1) + "px," + y.toFixed(1) + "px,0) scale(" + sc.toFixed(3) + ")";
-        card.style.opacity = shown ? (1 - clamp((u - 0.55) / 0.4)).toFixed(3) : "";
-        items[k].style.opacity = shown ? clamp((u - 0.5) / 0.4).toFixed(3) : "0";
-        if (shown && u < 0.9) cut.push([x - 6, y - 4, card.offsetWidth * sc + 12, card.offsetHeight * sc + 8]);
-        if (shown && u > 0.5) cut.push([hm.x - 6, hm.y - 3, hm.w + 12, hm.h + 6]);
+      // the slow drift up
+      layer.style.transform = "translate3d(0," + (DRIFT - 2 * DRIFT * g).toFixed(1) + "px,0)";
+      var bigs = [];
+      MARKS.forEach(function (m, k) {
+        dots[k].classList.toggle("is-on", f >= m - 1e-4);
+        // the label comes in over the LEAD part of the way from the step before, peaks on arrival, and goes back to
+        // icon and title over the TRAIL part of the way to the next step (the last one, of the way to the end of the line)
+        var before = m - (k ? MARKS[k - 1] : 0), after = (k < MARKS.length - 1 ? MARKS[k + 1] : 1) - m;
+        var up = smooth((f - (m - LEAD * before)) / (LEAD * before)), down = after ? smooth((f - m) / (TRAIL * after)) : 0;
+        var big = up * (1 - down), shown = f > m - LEAD * before;
+        var card = cards[k];
+        bigs[k] = big;
+        card.__shown = shown ? Math.min(1, up * 3) : 0;
+        card.style.transform = "scale(" + (SMALL + (1 - SMALL) * big).toFixed(3) + ")";
+        subs[k].style.opacity = smooth((big - 0.6) / 0.4).toFixed(3);
       });
-      // the line passes behind the text showing: those boxes are cut out of its mask (in the photo's pixels)
-      var html = cut.map(function (c) {
-        return '<rect x="' + (c[0] / S).toFixed(1) + '" y="' + ((c[1] + DRIFT - d - OY) / S).toFixed(1) + '" width="' + (c[2] / S).toFixed(1) + '" height="' + (c[3] / S).toFixed(1) + '" rx="' + (10 / S).toFixed(1) + '" fill="#000"/>';
-      }).join("");
-      if (html !== knock.__cut) { knock.innerHTML = html; knock.__cut = html; }
+      cards.forEach(function (card) { card.style.opacity = card.__shown.toFixed(3); });
     }
     function kick() { if (!raf) raf = requestAnimationFrame(update); }
     function sync() {
@@ -1999,7 +1989,6 @@ var DRAW = {
   }, { passive: true });
 
   function fill(item) {
-    if (isPhone.matches) return;
     var v = figureInto(fig, item[5] || item[0], paperOf(item));
     setPaper(panel, paperOf(item));
     elKind.textContent = item[4];
@@ -2016,6 +2005,7 @@ var DRAW = {
     panel.setAttribute("aria-labelledby", tabs[i].id);
     if (focus) tabs[i].focus();
     moveSlider(i, instant);
+    var prev = active;
     active = i;
     setPaper(chWrap, paperOf(group.items[i]));
     setPaper(panel, paperOf(group.items[i])); // the panel fades to its new paper together with the box, not after the swap
@@ -2023,12 +2013,61 @@ var DRAW = {
     if (!instant) follow(560); // the box slides and the panel grows for 460 ms
     clearTimeout(swapTimer);
     var item = group.items[i];
-    if (instant || reduce.matches) { fill(item); return; }
+    var before = tabs[i].getBoundingClientRect().top;
+    placePanel(i);
+    if (instant || reduce.matches) { fill(item); if (!instant && isPhone.matches) bringPanel(i, before); return; }
+    if (isPhone.matches) { bringPanel(i, before); slideTo(item); return; }
     panel.classList.add("is-swapping");
     swapTimer = setTimeout(function () { fill(item); panel.classList.remove("is-swapping"); }, 170);
   }
 
+  // phones: the new challenge (animation and text) is revealed by a mask sliding down over it, top to bottom
+  var slideAnims = [];
+  function slideTo(item) {
+    slideAnims.forEach(function (a) { a.cancel(); }); slideAnims = [];
+    fill(item);
+    if (!panel.animate) return;
+    slideAnims = [panel.animate([{ clipPath: "inset(0 0 100% 0)" }, { clipPath: "inset(0 0 0% 0)" }], { duration: 640, easing: "cubic-bezier(.65,0,.25,1)" })];
+  }
+
+  // phones: the animation and its text go in the list, just above the chosen title; elsewhere they go back beside it
+  var panelHome = panel.parentNode, panelNext = panel.nextSibling, panelSlot = document.createElement("li");
+  panelSlot.className = "ch-panel-slot"; panelSlot.setAttribute("role", "presentation");
+  function placePanel(i) {
+    if (!isPhone.matches) { if (panel.parentNode !== panelHome) panelHome.insertBefore(panel, panelNext); if (panelSlot.parentNode) panelSlot.parentNode.removeChild(panelSlot); return; }
+    if (panel.parentNode !== panelSlot) panelSlot.appendChild(panel);
+    if (tabs[i]) list.insertBefore(panelSlot, tabs[i].parentNode);
+  }
+  // the chosen title stays where it was on screen as the block opens above it, then the page glides so the animation
+  // sits just under the header
+  function bringPanel(i, before) {
+    var html = document.documentElement, was = html.style.scrollBehavior;
+    html.style.scrollBehavior = "auto";
+    window.scrollBy(0, tabs[i].getBoundingClientRect().top - before);
+    html.style.scrollBehavior = was;
+    var head = document.querySelector(".site-head"), hh = head ? head.offsetHeight : 72;
+    window.scrollTo({ top: Math.round(window.scrollY + panel.getBoundingClientRect().top - hh - 6), behavior: reduce.matches ? "auto" : "smooth" });
+  }
+  // phones: the chosen age box and the block share one paper, placed from the box row's top
+  var stagesRow = document.getElementById("stage-tabs");
+  function joinTabs() {
+    if (!isPhone.matches || !stagesRow) return;
+    var b = chWrap.getBoundingClientRect(), row = stagesRow.getBoundingClientRect(), W = chWrap.offsetWidth;
+    [chWrap, stagesRow].forEach(function (e) { e.style.setProperty("--pw", W + "px"); });
+    chWrap.style.setProperty("--pd", (b.top - row.top).toFixed(1) + "px");
+    stageTabs.forEach(function (t) {
+      var r = t.getBoundingClientRect();
+      t.style.setProperty("--tx", (r.left - b.left).toFixed(1) + "px");
+      t.style.setProperty("--ty", (r.top - row.top).toFixed(1) + "px");
+      t.style.setProperty("--th", r.height.toFixed(1) + "px");
+      t.style.setProperty("--tw", r.width.toFixed(1) + "px");
+    });
+  }
+  window.addEventListener("resize", joinTabs);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(joinTabs);
+
   function buildCarousel() {
+    return; // the swipe carousel is no longer used: phones show the panel and the list (see slideTo)
     track.textContent = ""; dotsBox.textContent = "";
     group.items.forEach(function (item, i) {
       var slide = document.createElement("article");
@@ -2107,7 +2146,9 @@ var DRAW = {
     });
     buildCarousel();
     active = -1;
+    setPaper(stagesRow, STAGE_PAPER[g] || "");
     selectItem(0, false, true);
+    joinTabs();
   }
 
   stageTabs.forEach(function (t, g) {
@@ -2116,8 +2157,10 @@ var DRAW = {
   });
   selectGroup(0, false);
   isPhone.addEventListener("change", function () {
-    if (isPhone.matches) { fig.textContent = ""; buildCarousel(); }
-    else { playOnly(null, track); fill(group.items[Math.max(0, active)]); moveSlider(Math.max(0, active), true); }
+    placePanel(Math.max(0, active));
+    joinTabs();
+    fill(group.items[Math.max(0, active)]);
+    if (!isPhone.matches) moveSlider(Math.max(0, active), true);
   });
 
   /* ---------- leaf light: sunlight through leaves moving across a grainy wall (green01), behind the booking panel ----------
