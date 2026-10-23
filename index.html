@@ -27,7 +27,7 @@
   --on-navy-soft: #9FB2BF;
   --orange: #FF6000;     /* the joyful accent: lines, dots, labels, the map pin */
   --orange-ink: #C24A00; /* the same orange, deep enough for small text on white */
-  --family: #45392F;     /* parent & child workshops: the tutor's stone (the booking box's colour on wide screens) */
+  --family: #433A31;     /* parent & child workshops: the tutor's stone (the booking box's colour on wide screens) */
   --st-0: #0E2A4F;       /* stage colours, the flat tones of the booking lights (LEAF_LOOKS): Explorers blue */
   --st-1: #1F3A1D;       /* Creators green */
   --st-2: #3E1003;       /* Changemakers honey */
@@ -37,7 +37,7 @@
   --dot-0: #3B7BEA;      /* calendar dots, bright enough to tell apart: Explorers (blue) */
   --dot-1: #51811A;      /* Creators (green): their run's green, brighter and more saturated so it reads at dot size */
   --dot-2: #FF6000;      /* Changemakers: orange */
-  --dot-ws: #625448;     /* parent & child workshops: the tutor's stone */
+  --dot-ws: #5F564B;     /* parent & child workshops: the tutor's stone */
   --font: "Inter", "Helvetica Neue", Arial, sans-serif;
 
   --t-1: 0.86rem;
@@ -172,54 +172,6 @@ p { margin: 0; }
   .hero-statement { font-size: clamp(1rem, 0.55rem + 1.1vw, 1.7rem); }
   .hero-statement .big { font-size: clamp(2.2rem, 0.8rem + 4.2vw, 5rem); }
 }
-/* phones: the hero is a 39.8 s film on the EP1 DragonSkin track (heroFilm in the script; times there are track time,
-   the typing pre-roll runs from -3.8 to 0). It plays once, muted, on load; "Play with sound" restarts it from the
-   beginning with sound. No loop. It ends on the logo and WonderLab in the middle; on the first scroll they glide into the
-   bar (whose own logo and name wait hidden until then) and the statement rises in. Desktop keeps its clip. */
-.h9 { display: none; }
-@media (max-width: 900px) {
-  .hero.h9-on { background: #142F44; }
-  .hero.h9-on .hero-media { display: none; }
-  .hero.h9-on .wrap { pointer-events: none; }
-  .hero.h9-on .hero-statement a { pointer-events: auto; }
-  .hero.h9-on:not(.h9-docked) .hero-statement .rv-line { transform: translateY(105%); opacity: 0; transition: none; }
-  .site-head.h9-wait .brand { visibility: hidden; }
-  .site-head.at-top.h9-pass { pointer-events: none; }
-  .site-head.at-top.h9-pass .brand { pointer-events: auto; }
-  .h9 { display: block; position: absolute; inset: 0; overflow: hidden; background: #142F44; z-index: 0; }
-}
-.h9-stage { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); overflow: hidden; background: #142F44;
-  color: #F4F2EE; font-weight: 500; letter-spacing: -0.035em; --u: 3.9px; }
-.h9-layer { position: absolute; inset: 0; }
-.h9-slide { position: absolute; inset: 0; background-size: cover; background-position: center; background-color: #142F44; will-change: transform; }
-.h9-slide::after, .h9-learn-bg::after { content: ""; position: absolute; top: 0; bottom: 0; right: -60px; width: 60px; pointer-events: none;
-  background: linear-gradient(90deg, rgba(4, 12, 18, 0.38), rgba(4, 12, 18, 0)); }
-.h9-scrim { position: absolute; left: 0; right: 0; top: 0; height: 62%; pointer-events: none; opacity: 0;
-  background: linear-gradient(180deg, rgba(20, 47, 68, 0.82) 0%, rgba(20, 47, 68, 0.55) 34%, rgba(20, 47, 68, 0) 100%); }
-.h9-typer { position: absolute; left: calc(var(--u) * 6.5); right: calc(var(--u) * 6.5); top: 40%; font-size: calc(var(--u) * 8.6); line-height: 1.08; }
-.h9-typer .o { color: #FF6000; }
-.h9-cw { position: relative; display: inline-block; width: 0; height: 1em; vertical-align: baseline; }
-.h9-cur { position: absolute; left: 0.03em; bottom: -0.16em; width: 0.075em; height: 1.02em; background: #FF6000; }
-.h9-m { display: block; overflow: hidden; padding-bottom: 0.12em; margin-bottom: -0.12em; }
-.h9-m > span { display: block; will-change: transform; }
-.h9-cap { position: absolute; left: calc(var(--u) * 6.5); right: calc(var(--u) * 6.5); top: calc(var(--u) * 24); font-size: calc(var(--u) * 9); line-height: 1.06; }
-.h9-learn-bg { position: absolute; inset: 0; background: #142F44; will-change: transform; }
-.h9-learn { position: absolute; left: calc(var(--u) * 6.5); right: calc(var(--u) * 4); top: 40%; font-size: calc(var(--u) * 10.4); line-height: 1.08; will-change: transform; }
-.h9-wm { position: relative; display: inline-block; overflow: hidden; vertical-align: top; height: 1.2em; }
-.h9-wm > span { position: absolute; left: 0; top: 0; color: #FF6000; white-space: nowrap; will-change: transform; }
-.h9-ch { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; mix-blend-mode: lighten; display: none; }
-.h9-brand { position: absolute; left: 50%; top: 47%; transform: translate(-50%, -50%); align-items: center; gap: 0.25em;
-  font-size: calc(var(--u) * 11.6); letter-spacing: -0.035em; white-space: nowrap; display: none; }
-.h9-mark { width: 1.5em; height: 1.5em; overflow: visible; color: #F4F2EE; flex: none; }
-.h9-word .h { visibility: hidden; }
-.h9-play { position: absolute; z-index: 5; display: inline-flex; align-items: center; gap: 0.5em; pointer-events: auto;
-  font: 500 13px/1 Inter, "Helvetica Neue", Arial, sans-serif; letter-spacing: -0.01em; color: #F4F2EE;
-  background: rgba(20, 47, 68, 0.55); border: 1px solid rgba(244, 242, 238, 0.4); border-radius: 999px; padding: 0.75em 1.05em; cursor: pointer;
-  -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); }
-.h9-play svg { width: 1.15em; height: 1.15em; }
-.hero.h9-docked .h9-play { padding: 0.72em; }   /* once the bar has its name back, the button keeps only its icon */
-.hero.h9-docked .h9-play .lbl { display: none; }
-.h9-fly { position: fixed; z-index: 45; display: flex; align-items: center; font-weight: 500; letter-spacing: -0.035em; white-space: nowrap; color: #F4F2EE; transform-origin: 0 0; pointer-events: none; }
 .hero-top { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
 video.is-waiting { opacity: 0 !important; }
 
@@ -577,6 +529,8 @@ video.is-waiting { opacity: 0 !important; }
 }
 
 
+/* the grain is paper-grain-a.png: the paper's light and dark specks as white and black at low opacity, drawn over
+   each strip's colour with no blend mode, so it shows the same while the strips move (Safari, iPhone) */
 /* phones: the challenges as a stack of torn paper strips (after grahic design/Backgrounds/10_titles). Each title is a
    strip of drawing paper, its grain showing (paper-grain.png), running the full width; its foot is finely torn (data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%2740%27 height=%274%27 viewBox=%270 0 40 4%27%3E%3Cpath d=%27M0 0H40L40 1.9L39.78 3.4L39.01 3.26L38.04 3.01L37.49 3.4L36.88 3.14L36.11 3.25L35.27 2.91L34.18 2.49L33.11 2.58L32.22 2.22L31.52 2.05L30.54 1.8L30.03 2.19L29.19 2.37L28.14 2.51L27.58 2.64L26.72 2.93L25.88 2.88L24.94 3.13L24.17 3.08L23.07 3.09L22.56 2.89L21.86 3.32L21.16 2.87L20.47 2.92L19.45 3.0L18.87 2.62L18.11 2.32L17.18 2.66L16.24 2.59L15.21 2.36L14.62 1.94L14.02 1.69L13.54 1.36L12.78 1.64L11.97 1.78L10.92 1.82L9.94 2.16L9.25 2.47L8.72 2.06L8.06 2.07L7.21 2.48L6.28 2.15L5.8 1.7L5.2 1.94L4.7 1.68L4.01 1.6L3.41 2.05L2.62 2.04L1.66 1.76L0.9 2.02L0.0 1.9Z%27 fill=%27black%27/%3E%3C/svg%3E,
    a repeating edge used as a mask) and lies 4px over the strip below, and the torn edge casts its own soft shadow on
@@ -590,7 +544,7 @@ video.is-waiting { opacity: 0 !important; }
   .challenges, .challenges.is-paper { background: transparent; }
   /* the chosen age box is the top of the first strip (--strip0, from the script), its grain and all */
   #stage-tabs .stage[aria-selected="true"], #stage-tabs .stage[aria-selected="true"]::before, #stage-tabs .stage[aria-selected="true"]::after {
-    background: url("media/paper-grain.png") 0 0 / 320px auto, var(--strip0, #888) !important; background-blend-mode: soft-light, normal; }
+    background: url("media/paper-grain-a.png") 0 0 / 320px auto, var(--strip0, #888) !important; }
   #stage-tabs .stage[aria-selected="true"] { color: var(--strip0-ink, #FFFFFF); }
   #stage-tabs .stage[aria-selected="true"] .s-ages { color: var(--strip0-soft, rgba(255, 255, 255, 0.75)); }
   .ch-col { padding: 0 20px; }
@@ -600,7 +554,7 @@ video.is-waiting { opacity: 0 !important; }
   .ch-list > li.ch-panel-slot { display: flex; flex-direction: column; justify-content: flex-end; } /* opens from its foot */
   .ch-list > li::before { content: ""; position: absolute; left: 0; right: 0; top: calc(-1 * var(--ga, 0px)); bottom: calc(-1 * var(--gb, 0px) - 4px);
     z-index: var(--zi, -1); pointer-events: none;
-    background: url("media/paper-grain.png") 0 calc(var(--grain-y, 0px) + var(--ga, 0px)) / 320px auto, var(--strip, #555); background-blend-mode: soft-light, normal;
+    background: url("media/paper-grain-a.png") 0 calc(var(--grain-y, 0px) + var(--ga, 0px)) / 320px auto, var(--strip, #555);
     -webkit-mask: linear-gradient(#000 0 0) left top / 100% calc(100% - 4px) no-repeat, url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%2740%27 height=%274%27 viewBox=%270 0 40 4%27%3E%3Cpath d=%27M0 0H40L40 1.9L39.78 3.4L39.01 3.26L38.04 3.01L37.49 3.4L36.88 3.14L36.11 3.25L35.27 2.91L34.18 2.49L33.11 2.58L32.22 2.22L31.52 2.05L30.54 1.8L30.03 2.19L29.19 2.37L28.14 2.51L27.58 2.64L26.72 2.93L25.88 2.88L24.94 3.13L24.17 3.08L23.07 3.09L22.56 2.89L21.86 3.32L21.16 2.87L20.47 2.92L19.45 3.0L18.87 2.62L18.11 2.32L17.18 2.66L16.24 2.59L15.21 2.36L14.62 1.94L14.02 1.69L13.54 1.36L12.78 1.64L11.97 1.78L10.92 1.82L9.94 2.16L9.25 2.47L8.72 2.06L8.06 2.07L7.21 2.48L6.28 2.15L5.8 1.7L5.2 1.94L4.7 1.68L4.01 1.6L3.41 2.05L2.62 2.04L1.66 1.76L0.9 2.02L0.0 1.9Z%27 fill=%27black%27/%3E%3C/svg%3E") var(--tear-y, 0px) bottom / 40px 4px repeat-x;
     mask: linear-gradient(#000 0 0) left top / 100% calc(100% - 4px) no-repeat, url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%2740%27 height=%274%27 viewBox=%270 0 40 4%27%3E%3Cpath d=%27M0 0H40L40 1.9L39.78 3.4L39.01 3.26L38.04 3.01L37.49 3.4L36.88 3.14L36.11 3.25L35.27 2.91L34.18 2.49L33.11 2.58L32.22 2.22L31.52 2.05L30.54 1.8L30.03 2.19L29.19 2.37L28.14 2.51L27.58 2.64L26.72 2.93L25.88 2.88L24.94 3.13L24.17 3.08L23.07 3.09L22.56 2.89L21.86 3.32L21.16 2.87L20.47 2.92L19.45 3.0L18.87 2.62L18.11 2.32L17.18 2.66L16.24 2.59L15.21 2.36L14.62 1.94L14.02 1.69L13.54 1.36L12.78 1.64L11.97 1.78L10.92 1.82L9.94 2.16L9.25 2.47L8.72 2.06L8.06 2.07L7.21 2.48L6.28 2.15L5.8 1.7L5.2 1.94L4.7 1.68L4.01 1.6L3.41 2.05L2.62 2.04L1.66 1.76L0.9 2.02L0.0 1.9Z%27 fill=%27black%27/%3E%3C/svg%3E") var(--tear-y, 0px) bottom / 40px 4px repeat-x; }
   .ch-list > li::after { content: ""; position: absolute; left: 0; right: 0; height: 10px; bottom: calc(-1 * var(--gb, 0px) - 7px);
@@ -649,18 +603,18 @@ video.is-waiting { opacity: 0 !important; }
    foot (STONE in the script, --t-*), each finely torn along its foot with its shadow on the next (as .ch-list); the
    text is warm white on the dark strips and a deep brown ink on the light ones. The name rises into the photo's fade */
 @media (max-width: 860px) {
-  .tutor { gap: 0; --tutor-ground: #2B2118; }
+  .tutor { gap: 0; --tutor-ground: #29221A; }
   .tutor-photo { position: relative; max-width: none; border-radius: var(--r) var(--r) 0 0; background: var(--tutor-ground); }
   .tutor-photo picture { display: block; }
   .tutor-photo img { aspect-ratio: 760 / 762; }
   .tutor-photo::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 46%; pointer-events: none;
-    background: linear-gradient(180deg, rgba(43,33,24, 0) 0%, rgba(43,33,24, 0.55) 45%, var(--tutor-ground) 100%); }
+    background: linear-gradient(180deg, rgba(41,34,26, 0) 0%, rgba(41,34,26, 0.55) 45%, var(--tutor-ground) 100%); }
   .tutor-body { position: relative; z-index: 1; margin-top: -64px; padding: 0; border-radius: 0 0 var(--r) var(--r); overflow: hidden; isolation: isolate; background: none; }
   .tutor-body .highlights { display: block; margin: 0; gap: 0; }
   .t-strip, .tutor-body .highlights li.t-strip { position: relative; margin: 0; padding: 16px 20px 18px; border-top: 0; color: var(--t-ink); }
   .t-strip::before, .tutor-body .highlights li.t-strip::before, .tutor-body .highlights li.t-strip.cascade::before {
     content: ""; position: absolute; left: 0; right: 0; top: 0; bottom: -4px; height: auto; z-index: var(--zi, -1); pointer-events: none; transform: none; transition: none;
-    background: url("media/paper-grain.png") 0 var(--gy, 0px) / 320px auto, var(--t-bg); background-blend-mode: soft-light, normal;
+    background: url("media/paper-grain-a.png") 0 var(--gy, 0px) / 320px auto, var(--t-bg);
     -webkit-mask: linear-gradient(#000 0 0) left top / 100% calc(100% - 4px) no-repeat, url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%2740%27 height=%274%27 viewBox=%270 0 40 4%27%3E%3Cpath d=%27M0 0H40L40 1.9L39.78 3.4L39.01 3.26L38.04 3.01L37.49 3.4L36.88 3.14L36.11 3.25L35.27 2.91L34.18 2.49L33.11 2.58L32.22 2.22L31.52 2.05L30.54 1.8L30.03 2.19L29.19 2.37L28.14 2.51L27.58 2.64L26.72 2.93L25.88 2.88L24.94 3.13L24.17 3.08L23.07 3.09L22.56 2.89L21.86 3.32L21.16 2.87L20.47 2.92L19.45 3.0L18.87 2.62L18.11 2.32L17.18 2.66L16.24 2.59L15.21 2.36L14.62 1.94L14.02 1.69L13.54 1.36L12.78 1.64L11.97 1.78L10.92 1.82L9.94 2.16L9.25 2.47L8.72 2.06L8.06 2.07L7.21 2.48L6.28 2.15L5.8 1.7L5.2 1.94L4.7 1.68L4.01 1.6L3.41 2.05L2.62 2.04L1.66 1.76L0.9 2.02L0.0 1.9Z%27 fill=%27black%27/%3E%3C/svg%3E") var(--tx, 0px) bottom / 40px 4px repeat-x;
     mask: linear-gradient(#000 0 0) left top / 100% calc(100% - 4px) no-repeat, url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%2740%27 height=%274%27 viewBox=%270 0 40 4%27%3E%3Cpath d=%27M0 0H40L40 1.9L39.78 3.4L39.01 3.26L38.04 3.01L37.49 3.4L36.88 3.14L36.11 3.25L35.27 2.91L34.18 2.49L33.11 2.58L32.22 2.22L31.52 2.05L30.54 1.8L30.03 2.19L29.19 2.37L28.14 2.51L27.58 2.64L26.72 2.93L25.88 2.88L24.94 3.13L24.17 3.08L23.07 3.09L22.56 2.89L21.86 3.32L21.16 2.87L20.47 2.92L19.45 3.0L18.87 2.62L18.11 2.32L17.18 2.66L16.24 2.59L15.21 2.36L14.62 1.94L14.02 1.69L13.54 1.36L12.78 1.64L11.97 1.78L10.92 1.82L9.94 2.16L9.25 2.47L8.72 2.06L8.06 2.07L7.21 2.48L6.28 2.15L5.8 1.7L5.2 1.94L4.7 1.68L4.01 1.6L3.41 2.05L2.62 2.04L1.66 1.76L0.9 2.02L0.0 1.9Z%27 fill=%27black%27/%3E%3C/svg%3E") var(--tx, 0px) bottom / 40px 4px repeat-x; }
   .t-strip::after { content: ""; position: absolute; left: 0; right: 0; height: 10px; bottom: -7px; z-index: var(--zs, -2); pointer-events: none;
@@ -800,7 +754,7 @@ video.is-waiting { opacity: 0 !important; }
   .book-panel.has-strips .bp-body { isolation: isolate; }
   .bp-strip { position: relative; padding: 18px 20px 20px; }
   .bp-strip::before { content: ""; position: absolute; left: 0; right: 0; top: 0; bottom: -4px; z-index: var(--zi, -1); pointer-events: none;
-    background: url("media/paper-grain.png") 0 var(--gy, 0px) / 320px auto, var(--b-bg); background-blend-mode: soft-light, normal;
+    background: url("media/paper-grain-a.png") 0 var(--gy, 0px) / 320px auto, var(--b-bg);
     -webkit-mask: linear-gradient(#000 0 0) left top / 100% calc(100% - 4px) no-repeat, url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%2740%27 height=%274%27 viewBox=%270 0 40 4%27%3E%3Cpath d=%27M0 0H40L40 1.9L39.78 3.4L39.01 3.26L38.04 3.01L37.49 3.4L36.88 3.14L36.11 3.25L35.27 2.91L34.18 2.49L33.11 2.58L32.22 2.22L31.52 2.05L30.54 1.8L30.03 2.19L29.19 2.37L28.14 2.51L27.58 2.64L26.72 2.93L25.88 2.88L24.94 3.13L24.17 3.08L23.07 3.09L22.56 2.89L21.86 3.32L21.16 2.87L20.47 2.92L19.45 3.0L18.87 2.62L18.11 2.32L17.18 2.66L16.24 2.59L15.21 2.36L14.62 1.94L14.02 1.69L13.54 1.36L12.78 1.64L11.97 1.78L10.92 1.82L9.94 2.16L9.25 2.47L8.72 2.06L8.06 2.07L7.21 2.48L6.28 2.15L5.8 1.7L5.2 1.94L4.7 1.68L4.01 1.6L3.41 2.05L2.62 2.04L1.66 1.76L0.9 2.02L0.0 1.9Z%27 fill=%27black%27/%3E%3C/svg%3E") var(--tx, 0px) bottom / 40px 4px repeat-x;
     mask: linear-gradient(#000 0 0) left top / 100% calc(100% - 4px) no-repeat, url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%2740%27 height=%274%27 viewBox=%270 0 40 4%27%3E%3Cpath d=%27M0 0H40L40 1.9L39.78 3.4L39.01 3.26L38.04 3.01L37.49 3.4L36.88 3.14L36.11 3.25L35.27 2.91L34.18 2.49L33.11 2.58L32.22 2.22L31.52 2.05L30.54 1.8L30.03 2.19L29.19 2.37L28.14 2.51L27.58 2.64L26.72 2.93L25.88 2.88L24.94 3.13L24.17 3.08L23.07 3.09L22.56 2.89L21.86 3.32L21.16 2.87L20.47 2.92L19.45 3.0L18.87 2.62L18.11 2.32L17.18 2.66L16.24 2.59L15.21 2.36L14.62 1.94L14.02 1.69L13.54 1.36L12.78 1.64L11.97 1.78L10.92 1.82L9.94 2.16L9.25 2.47L8.72 2.06L8.06 2.07L7.21 2.48L6.28 2.15L5.8 1.7L5.2 1.94L4.7 1.68L4.01 1.6L3.41 2.05L2.62 2.04L1.66 1.76L0.9 2.02L0.0 1.9Z%27 fill=%27black%27/%3E%3C/svg%3E") var(--tx, 0px) bottom / 40px 4px repeat-x; }
   .bp-strip::after { content: ""; position: absolute; left: 0; right: 0; height: 10px; bottom: -7px; z-index: var(--zs, -2); pointer-events: none;
@@ -913,6 +867,24 @@ video.is-waiting { opacity: 0 !important; }
 .map-go:focus-visible { outline: none; }
 .map-go:focus-visible circle:first-child { stroke: var(--orange); stroke-width: 2; }
 @media (max-width: 860px) { .visit-top { grid-template-columns: 1fr; } }
+/* phones: the navy close (details, map, closing line, footer) fits on one screen under the bar: tighter type and
+   spacing, the closing line small enough that "Shape the world of tomorrow." stays on one line */
+@media (max-width: 860px) {
+  .visit { padding-top: 26px; }
+  .visit-top { gap: 14px; }
+  .hours div { grid-template-columns: 5.6rem 1fr; gap: 10px; padding: 8px 0; }
+  .hours dt { font-size: 0.8rem; line-height: 1.35; padding-top: 1px; }
+  .hours dd { font-size: 0.9rem; line-height: 1.32; }
+  .visit .visit-line { margin-top: 20px; font-size: clamp(1.25rem, 6.4vw, 1.75rem); line-height: 1.08; letter-spacing: -0.035em; }
+  .vl-shape { white-space: nowrap; }
+  .visit-sub { margin-top: 6px; font-size: 0.86rem; }
+  footer { padding: 18px 0 16px; }
+  .foot-bottom { align-items: center; padding-top: 12px; gap: 8px 12px; }
+  .foot-bottom .brand { gap: 8px; }
+  .foot-bottom .brand svg { width: 26px; height: 26px; }
+  .foot-bottom .brand span { font-size: 1rem; }
+  .foot-copy { font-size: 0.72rem; gap: 6px; }
+}
 
 footer { background: var(--navy); color: var(--on-navy-soft); padding: clamp(44px, 6vw, 84px) 0 clamp(24px, 3vw, 40px); }
 .foot-bottom { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; padding-top: 22px; border-top: 1px solid rgba(237,243,246,0.16); font-size: 0.92rem; }
@@ -964,24 +936,6 @@ footer { background: var(--navy); color: var(--on-navy-soft); padding: clamp(44p
         <img id="hero-poster" src="media/hero-portrait.jpg?v=22" alt="" width="1080" height="1920">
       </picture>
       <video id="hero-video" class="is-waiting" muted loop playsinline preload="auto"></video>
-    </div>
-    <div class="h9" id="h9" aria-hidden="true">
-      <div class="h9-stage" id="h9-stage">
-        <div class="h9-typer" id="h9-typer"></div>
-        <div class="h9-typer" id="h9-ready" style="display:none"><span class="h9-m"><span>To be future&#8209;ready</span></span></div>
-        <div class="h9-layer" id="h9-slides" style="z-index:0"></div>
-        <div class="h9-scrim" id="h9-scrim"></div>
-        <div class="h9-cap" id="h9-capA" style="display:none"><span class="h9-m"><span>To be future&#8209;ready</span></span></div>
-        <div class="h9-cap" id="h9-capB" style="display:none"><span class="h9-m"><span>is to observe</span></span><span class="h9-m"><span>what nature</span></span><span class="h9-m"><span>already drew</span></span></div>
-        <div class="h9-learn-bg" id="h9-learn-bg" style="display:none"></div>
-        <video class="h9-ch" id="h9-ch" muted playsinline preload="none"></video>
-        <div class="h9-learn" id="h9-learn" style="display:none"><span class="h9-m"><span>learn how to</span></span><span class="h9-m"><span><span class="h9-wm" id="h9-wm"><span>adapt</span><span>imagine</span><span>learn</span></span></span></span></div>
-        <div class="h9-brand" id="h9-brand"></div>
-      </div>
-      <button class="h9-play" id="h9-play" type="button" aria-label="Play the introduction with sound">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z"/><path d="M15.5 9a4 4 0 0 1 0 6"/><path d="M18 6.5a7.5 7.5 0 0 1 0 11"/></svg>
-        <span class="lbl">Play with sound</span>
-      </button>
     </div>
     <div class="wrap">
       <h1 class="hero-statement rv-wrap" data-lines="<span class='big'>We&rsquo;re WonderLab</span>|A creative thinking academy where young minds|take on meaningful design challenges|that build confidence, creativity and|the courage to bring ideas to life."></h1>
@@ -1783,6 +1737,32 @@ var DRAW = {
       '<path d="M19.5 12a7.5 7.5 0 1 1-2.2-5.3"/><path d="M19.5 4v4.5H15"/>',
       '<path d="M4 5.5h16v10.5H10l-4.5 3.5V16H4z"/><path d="M8 9.5h8M8 12.5h5"/>'
     ];
+    // the spiral as points, with the length along it to each one: ptAt(l) is the point at length l, upTo(l) the path
+    // from the start to there
+    var PT = (function () {
+      var xs = [], ys = [], cum = [0];
+      SPIRAL.replace(/[ML]\s*(-?[\d.]+)[ ,](-?[\d.]+)/g, function (m, x, y) { xs.push(+x); ys.push(+y); return m; });
+      for (var i = 1; i < xs.length; i++) cum.push(cum[i - 1] + Math.hypot(xs[i] - xs[i - 1], ys[i] - ys[i - 1]));
+      return { xs: xs, ys: ys, cum: cum, total: cum[cum.length - 1] };
+    })();
+    function seg(l) {         // the index of the point the length l has passed, and how far it is to the next
+      var c = PT.cum, lo = 0, hi = c.length - 1;
+      l = Math.max(0, Math.min(PT.total, l));
+      while (hi - lo > 1) { var mid = (lo + hi) >> 1; if (c[mid] <= l) lo = mid; else hi = mid; }
+      var d = c[hi] - c[lo];
+      return { i: lo, f: d > 0 ? (l - c[lo]) / d : 0 };
+    }
+    function ptAt(l) {
+      var g = seg(l), i = g.i, j = Math.min(i + 1, PT.xs.length - 1);
+      return { x: PT.xs[i] + (PT.xs[j] - PT.xs[i]) * g.f, y: PT.ys[i] + (PT.ys[j] - PT.ys[i]) * g.f };
+    }
+    function upTo(l) {
+      if (l <= 0) return "";
+      var g = seg(l), out = "M" + PT.xs[0].toFixed(1) + "," + PT.ys[0].toFixed(1);
+      for (var k = 1; k <= g.i; k++) out += "L" + PT.xs[k].toFixed(1) + "," + PT.ys[k].toFixed(1);
+      var p = ptAt(l);
+      return out + "L" + p.x.toFixed(2) + "," + p.y.toFixed(2);
+    }
     var phone = window.matchMedia("(max-width: 900px)");
     var box = null, stage, layer, svg, mask, tip, title, dots = [], cards = [], subs = [], steps;
     var T = 1, L = 1, AT = [], top = 72, on = false, raf = 0, shown = -1, vel = 0, last = 0, END = 0.55;
@@ -1809,10 +1789,9 @@ var DRAW = {
         '<image href="media/approach-shell.jpg" x="0" y="0" width="843" height="1264"/>' +
         '<image href="media/approach-shell.jpg" x="-1686" y="0" width="843" height="1264" transform="scale(-1 1)"/>' +
         '<rect x="0" y="' + Y0 + '" width="1686" height="' + (Y1 - Y0) + '" fill="url(#ap-veil)"/>' +
-        '<defs><mask id="ap-reveal" maskUnits="userSpaceOnUse" x="-60" y="-60" width="963" height="1384"><path class="ap-mask" d="' + SPIRAL + '"/></mask></defs>' +
-        '<path class="ap-line" d="' + SPIRAL + '" mask="url(#ap-reveal)"/><circle class="ap-tip" r="7"/>';
+        '<path class="ap-line" d=""/><circle class="ap-tip" r="7"/>';
       layer.appendChild(svg);
-      mask = svg.querySelector(".ap-mask"); tip = svg.querySelector(".ap-tip");
+      mask = svg.querySelector(".ap-line"); tip = svg.querySelector(".ap-tip");
       MARKS.forEach(function () {
         var c = document.createElementNS(NS, "circle");
         c.setAttribute("class", "ap-dot"); c.setAttribute("r", "10");
@@ -1835,17 +1814,16 @@ var DRAW = {
     // fits beside its dot, and the box's height follows it. The line, its dashes and the dots keep their on-screen sizes
     // whatever the scale. The line ends at STOP, on the inner whorl
     function measure() {
-      T = mask.getTotalLength() || 1; L = T * STOP;
-      mask.style.strokeDasharray = L.toFixed(1) + " " + (T + 20).toFixed(1);
+      T = PT.total || 1; L = T * STOP;
       var W = stage.clientWidth, M = 12, G = 12;
-      var a0 = MARKS[0] * T, a1 = MARKS[MARKS.length - 1] * T, y0 = mask.getPointAtLength(a0).y, y1 = mask.getPointAtLength(a1).y, n = MARKS.length;
+      var a0 = MARKS[0] * T, a1 = MARKS[MARKS.length - 1] * T, y0 = ptAt(a0).y, y1 = ptAt(a1).y, n = MARKS.length;
       AT = MARKS.map(function (m, k) {
         if (k === 0) return a0; if (k === n - 1) return a1;
         var want = y0 + (y1 - y0) * k / (n - 1);
-        for (var l = a0; l < a1; l += 1) if (mask.getPointAtLength(l).y >= want) return l;
+        for (var l = a0; l < a1; l += 1) if (ptAt(l).y >= want) return l;
         return m * T;
       });
-      var Q = AT.map(function (l) { return mask.getPointAtLength(l); });
+      var Q = AT.map(function (l) { return ptAt(l); });
       var sc = W / 843;
       Q.forEach(function (q, k) { sc = Math.min(sc, (W - M - G - cards[k].offsetWidth) / Math.max(1, q.x)); });
       var H = Math.round((Y1 - Y0) * sc), u = 1 / sc; // u: one screen pixel in the photo's units
@@ -1855,7 +1833,6 @@ var DRAW = {
       svg.style.width = (vw * sc).toFixed(1) + "px"; svg.style.height = H + "px";
       var line = svg.querySelector(".ap-line");
       line.style.strokeWidth = (4 * u).toFixed(2); line.style.strokeDasharray = (4.6 * u).toFixed(2) + " " + (8 * u).toFixed(2);
-      mask.style.strokeWidth = (12 * u).toFixed(2);
       tip.setAttribute("r", (4.4 * u).toFixed(2));
       Q.forEach(function (q, k) {
         dots[k].setAttribute("cx", q.x.toFixed(1)); dots[k].setAttribute("cy", q.y.toFixed(1)); dots[k].setAttribute("r", (4.8 * u).toFixed(2));
@@ -1885,8 +1862,8 @@ var DRAW = {
       shown = clamp(shown + vel * dt);
       if (Math.abs(g - shown) < 0.0006 && Math.abs(vel) < 0.002) { shown = g; vel = 0; last = 0; } else kick();
       var len = shown * L;
-      mask.style.strokeDashoffset = (L - len).toFixed(1);
-      var q = mask.getPointAtLength(len);
+      mask.setAttribute("d", upTo(len));
+      var q = ptAt(len);
       tip.setAttribute("cx", q.x.toFixed(1)); tip.setAttribute("cy", q.y.toFixed(1));
       tip.style.opacity = shown > 0.001 && shown < 0.999 ? "1" : "0";
       // each step's dot pops up as the line reaches it, then its label, one after the other
@@ -1925,7 +1902,7 @@ var DRAW = {
 
   /* ---------- the tutor box's paper strips (phones; see the CSS): name and roles, the introduction, each highlight ---------- */
   (function tutorStrips() {
-    var STONE = [{"bg": "#2B2118", "ink": "#FEF9F5", "soft": "#DDD4CD"}, {"bg": "#45392F", "ink": "#FEF9F5", "soft": "#DDD4CD"}, {"bg": "#625448", "ink": "#FEF9F5", "soft": "#DDD4CD"}, {"bg": "#AE9A8B", "ink": "#2D1B0A", "soft": "#422E1D"}, {"bg": "#C9B5A5", "ink": "#2D1B0A", "soft": "#422E1D"}, {"bg": "#E3D0C1", "ink": "#2D1B0A", "soft": "#422E1D"}];
+    var STONE = [{"bg": "#29221A", "ink": "#FDFAF6", "soft": "#DBD5CF"}, {"bg": "#433A31", "ink": "#FDFAF6", "soft": "#DBD5CF"}, {"bg": "#5F564B", "ink": "#FDFAF6", "soft": "#DBD5CF"}, {"bg": "#AA9C8F", "ink": "#291D0E", "soft": "#3E3021"}, {"bg": "#C5B7A9", "ink": "#291D0E", "soft": "#3E3021"}, {"bg": "#DFD2C5", "ink": "#291D0E", "soft": "#3E3021"}];
     var body = document.querySelector(".tutor-body");
     if (!body) return;
     var h2 = body.querySelector("h2"), roles = body.querySelectorAll(":scope > .tutor-role"), intro = body.querySelector(":scope > p:not(.tutor-role)");
@@ -2069,324 +2046,17 @@ var DRAW = {
     onScroll();
   }
 
-  /* ---------- the phones' hero film (see .h9): typing, biomimicry pairs, the challenges on the beat, the logo ---------- */
-  (function heroFilm() {
-    var hero = document.querySelector(".hero"), box = document.getElementById("h9"), stage = document.getElementById("h9-stage");
-    var head = document.querySelector(".site-head"), headBrand = head && head.querySelector(".brand");
-    if (!hero || !box || !headBrand || reduce.matches || !window.matchMedia("(max-width: 900px)").matches) return;
-    hero.classList.add("h9-on"); head.classList.add("h9-pass");
-    var PRE = 3.8, END = 36.0, M = "media/hero916/";
-
-    // the stage fills the hero on phones held upright; otherwise a 9:16 box in the middle. --u is 1% of its width
-    var play = document.getElementById("h9-play");
-    function fit() {
-      var vw = box.clientWidth, vh = box.clientHeight, w, h;
-      if (vw / vh <= 9 / 16 + 0.001) { w = vw; h = vh; } else { h = vh; w = Math.round(vh * 9 / 16); }
-      stage.style.width = w + "px"; stage.style.height = h + "px"; stage.style.setProperty("--u", (w / 100) + "px");
-      // the button sits at the right of the bar's row
-      var hh = head.offsetHeight || 76;
-      play.style.right = Math.max(16, (vw - w) / 2 + 16) + "px"; play.style.top = (hh / 2) + "px"; play.style.transform = "translateY(-50%)";
-    }
-    fit(); window.addEventListener("resize", fit);
-
-    function bez(x1, y1, x2, y2) {
-      return function (x) {
-        if (x <= 0) return 0; if (x >= 1) return 1;
-        var t = x;
-        for (var i = 0; i < 8; i++) {
-          var cx = 3 * x1 * t * (1 - t) * (1 - t) + 3 * x2 * t * t * (1 - t) + t * t * t - x;
-          var d = 3 * x1 * (1 - t) * (1 - t) + 6 * (x2 - x1) * t * (1 - t) + 3 * (1 - x2) * t * t;
-          if (Math.abs(d) < 1e-6) break; t -= cx / d; t = Math.min(1, Math.max(0, t));
-        }
-        return 3 * y1 * t * (1 - t) * (1 - t) + 3 * y2 * t * t * (1 - t) + t * t * t;
-      };
-    }
-    var OUT = bez(0.22, 0.9, 0.24, 1), INOUT = bez(0.65, 0, 0.25, 1);
-    function prog(t, a, d) { return Math.min(1, Math.max(0, (t - a) / d)); }
-
-    /* typing: "The future is not something we enter." in the pre-roll, erased to "The future is ", retyped on the track */
-    var L1 = "The future is not something we enter.", KEEP = "The future is ", L2 = "something we create.";
-    var seed = 7; function rnd() { seed = (seed * 16807) % 2147483647; return (seed - 1) / 2147483646; }
-    function spread(text, a, b) {
-      var w = [], sum = 0;
-      for (var i = 0; i < text.length; i++) { var v = 0.7 + rnd() * 0.6 + (text[i - 1] === " " ? 0.45 : 0); w.push(v); sum += v; }
-      var out = [], acc = 0;
-      for (var j = 0; j < text.length; j++) { out.push(a + (b - a) * (acc / (sum - w[w.length - 1]))); acc += w[j]; }
-      return out;
-    }
-    var K1 = spread(L1, -3.45, -1.55), DEL = [], K2 = spread(L2, 1.63, 3.00), WL = "WonderLab", KW = [];
-    for (var d0 = 0; d0 < L1.length - KEEP.length; d0++) DEL.push(-0.70 + d0 * 0.028);
-    for (var k0 = 0; k0 < WL.length; k0++) KW.push(31.65 + 0.06 + k0 * 0.0855);
-    var KEYS = [];
-    K1.forEach(function (t, i) { KEYS.push([t, L1[i] === " " ? "space" : "key"]); });
-    DEL.forEach(function (t) { KEYS.push([t, "del"]); });
-    K2.forEach(function (t, i) { KEYS.push([t, L2[i] === " " ? "space" : "key"]); });
-    KW.forEach(function (t) { KEYS.push([t, "key"]); });
-    function typedText(t) {
-      if (t < K1[0]) return "";
-      if (t < DEL[0]) { var n = 0; while (n < K1.length && K1[n] <= t) n++; return L1.slice(0, n); }
-      if (t < K2[0]) { var m = 0; while (m < DEL.length && DEL[m] <= t) m++; return L1.slice(0, L1.length - m); }
-      var q = 0; while (q < K2.length && K2[q] <= t) q++; return KEEP + L2.slice(0, q);
-    }
-    function cursorOn(t) {
-      if (t >= -0.05 && t < 1.63) { if (t < 0.14) return true; return (t >= 0.14 && t < 0.51) || (t >= 0.88 && t < 1.25) || t >= 1.45; } // on the first two cello notes
-      var typing = (t >= K1[0] && t < K1[K1.length - 1] + 0.25) || (t >= DEL[0] && t < DEL[DEL.length - 1] + 0.2) || (t >= K2[0] && t < K2[K2.length - 1] + 0.2);
-      return typing || Math.floor((t + 10) / 0.5) % 2 === 0;
-    }
-    function esc(x) { return x.replace(/&/g, "&amp;").replace(/</g, "&lt;"); }
-    var typer = document.getElementById("h9-typer"), lastTyped = null, LEAD = KEEP + "something we ";
-    function drawTyper(t) {
-      var show = t < 3.90;
-      typer.style.display = show ? "" : "none";
-      if (!show) return;
-      var x = typedText(t), on = cursorOn(t), key = x + "|" + on;
-      if (key === lastTyped) return; lastTyped = key;
-      var plain = x, orange = "";
-      if (x.indexOf(LEAD) === 0 && x.length > LEAD.length) { plain = LEAD; orange = x.slice(LEAD.length); }
-      typer.innerHTML = esc(plain) + (orange ? '<span class="o">' + esc(orange) + '</span>' : "") + '<span class="h9-cw">' + (on ? '<span class="h9-cur"></span>' : "") + '</span>';
-    }
-
-    /* the images, each sliding in from the left over the one before: 3 pairs one per beat, 10 flips one per half-beat,
-       then the roots and their diagram (the diagrams are white lines on the hero's blue) */
-    var IMG = [[5.39, "shell", 0.5], [6.18, "stairs", 0.5], [6.90, "seastar", 0.5], [7.64, "daxing", 0.5], [8.41, "nest", 0.5], [9.17, "stadium", 0.5],
-      [9.91, "honeycomb", 0.3], [10.285, "hexpavilion", 0.3], [10.66, "mud", 0.3], [11.03, "tiledroof", 0.3], [11.40, "succulent", 0.3],
-      [11.77, "spiralpavilion", 0.3], [12.14, "wing", 0.3], [12.525, "canopy", 0.3], [12.91, "urchin", 0.3], [13.28, "radialdome", 0.3],
-      [13.65, "roots", 0.42], [15.14, "columns", 0.5]];
-    var slidesEl = document.getElementById("h9-slides");
-    IMG.forEach(function (x, i) {
-      var el = document.createElement("div"); el.className = "h9-slide"; el.style.zIndex = String(i + 1); el.style.display = "none";
-      el.style.backgroundImage = "url(" + M + x[1] + ".jpg)"; slidesEl.appendChild(el); x.el = el;
-      var pre = new Image(); pre.src = M + x[1] + ".jpg";
-    });
-    function drawSlides(t) {
-      var top = -1;
-      for (var i = 0; i < IMG.length; i++) if (t >= IMG[i][0]) top = i;
-      for (var j = 0; j < IMG.length; j++) {
-        var x = IMG[j], el = x.el, vis = (j === top || (j === top - 1 && t < IMG[top][0] + IMG[top][2] + 0.02)) && t < 18.13;
-        if (!vis) { if (el.style.display !== "none") el.style.display = "none"; continue; }
-        el.style.display = "";
-        el.style.transform = "translate3d(" + ((OUT(prog(t, x[0], x[2])) - 1) * 100).toFixed(3) + "%,0,0)";
-      }
-    }
-
-    /* words rising through their masks (the same easing in and out, so one line rolls into the next) */
-    function rise(el, t, tin, tout, din, dout) {
-      var y;
-      if (t < tin) y = 110;
-      else if (tout == null || t < tout) y = 110 * (1 - OUT(prog(t, tin, din || 0.55)));
-      else y = -110 * OUT(prog(t, tout, dout || 0.5));
-      el.style.transform = "translate3d(0," + y.toFixed(2) + "%,0)";
-    }
-    var ready = document.getElementById("h9-ready"), readyIn = ready.querySelector(".h9-m > span");
-    var capA = document.getElementById("h9-capA"), capAIn = capA.querySelector(".h9-m > span");
-    var capB = document.getElementById("h9-capB"), capBIn = capB.querySelectorAll(".h9-m > span"), scrim = document.getElementById("h9-scrim");
-    function drawWords(t) {
-      ready.style.display = (t >= 3.90 && t < 5.9) ? "" : "none"; rise(readyIn, t, 3.90, null, 0.55);
-      capA.style.display = (t >= 9.91 && t < 13.5) ? "" : "none"; rise(capAIn, t, 9.91, 12.91, 0.5, 0.5);
-      capB.style.display = (t >= 12.91 && t < 17.2) ? "" : "none";
-      rise(capBIn[0], t, 12.91, null, 0.5); rise(capBIn[1], t, 13.65, null, 0.5); rise(capBIn[2], t, 15.14, null, 0.5);
-      var lp = OUT(prog(t, 16.65, 0.5));
-      scrim.style.opacity = String(t < 9.91 ? 0 : t < 16.65 ? Math.min(1, (t - 9.91) / 0.3) : Math.max(0, 1 - lp));
-    }
-
-    /* learn how to adapt / imagine / learn: a blue panel slides in with the words; only the last word flips */
-    var learnBg = document.getElementById("h9-learn-bg"), learn = document.getElementById("h9-learn"), learnLines = learn.querySelectorAll(".h9-learn > .h9-m > span");
-    var wm = document.getElementById("h9-wm"), words = wm.children, FLIP = [16.65, 17.39, 18.13];
-    function drawLearn(t) {
-      var on = t >= 16.65 && t < 31.65;
-      learnBg.style.display = on ? "" : "none";
-      learn.style.display = (t >= 16.65 && t < 19.5) ? "" : "none";
-      if (!on) return;
-      var p = OUT(prog(t, 16.65, 0.5));
-      learnBg.style.transform = "translate3d(" + ((p - 1) * 100).toFixed(3) + "%,0,0)";
-      learn.style.transform = "translate3d(" + ((p - 1) * stage.clientWidth).toFixed(1) + "px,0,0)";
-      var outY = (-110 * OUT(prog(t, 18.90, 0.5))).toFixed(2) + "%";
-      learnLines[0].style.transform = learnLines[1].style.transform = "translate3d(0," + outY + ",0)";
-      var cur = 0; for (var i = 0; i < FLIP.length; i++) if (t >= FLIP[i]) cur = i;
-      wm.style.width = words[cur].offsetWidth + "px";
-      for (var j = 0; j < words.length; j++) {
-        var y;
-        if (j === cur) y = cur === 0 ? 0 : 130 * (1 - OUT(prog(t, FLIP[j], 0.38)));
-        else if (j === cur - 1) y = -130 * OUT(prog(t, FLIP[cur], 0.38));
-        else y = j < cur ? -130 : 130;
-        words[j].style.transform = "translate3d(0," + y.toFixed(2) + "%,0)";
-      }
-    }
-
-    /* the challenges: one clip cut on the beat (6 x 2 beats from 18.13, then one per cello note from 27.14) */
-    var ch = document.getElementById("h9-ch"), CH0 = 18.13, CH1 = 31.65;
-    [["challenges-916.mp4", "video/mp4"], ["challenges-916.webm", "video/webm"]].forEach(function (v) {
-      var so = document.createElement("source"); so.src = M + v[0]; so.type = v[1]; ch.appendChild(so);
-    });
-    ch.preload = "auto"; ch.load();
-    function drawChallenges(t, still) {
-      var on = t >= CH0 && t < CH1;
-      ch.style.display = on ? "block" : "none";
-      if (!on) { if (!ch.paused) ch.pause(); if (t < CH0 && ch.readyState >= 1 && ch.currentTime > 0.01) ch.currentTime = 0; return; }
-      var want = t - CH0;
-      if (still) { if (!ch.paused) ch.pause(); if (FROZEN != null && Math.abs(ch.currentTime - want) > 0.02) ch.currentTime = want; return; }
-      if (ch.paused) { var pr = ch.play(); if (pr && pr.catch) pr.catch(function () {}); }
-      if (Math.abs(ch.currentTime - want) > 0.12) ch.currentTime = want;
-    }
-
-    /* the end: a hard cut on the last cello note, WonderLab typed, then the square turns and the logo unfolds (34-35) */
-    var brand = document.getElementById("h9-brand"), SQ = [47, 44.65, 42.4175, 40.296625, 38.28179375];
-    function markSVG() {
-      var x = '<svg class="h9-mark" viewBox="-72 -72 144 144" aria-hidden="true">';
-      SQ.forEach(function (r, i) { x += '<path class="sq" d="M' + (-r) + ' ' + (-r) + 'H' + r + 'V' + r + 'H' + (-r) + 'Z" fill="none" stroke="currentColor" stroke-width="3.4" transform="rotate(' + (12 * (i + 1)) + ')"/>'; });
-      return x + '<rect class="fr" x="-50" y="-50" width="100" height="100" rx="3" fill="none" stroke="#FF6000" stroke-width="9"/></svg>';
-    }
-    brand.innerHTML = markSVG() + '<span class="h9-word">' + WL.split("").map(function (c) { return '<span class="c">' + c + '</span>'; }).join("") + '</span>';
-    // the same proportions as the bar's logo and name, so the glide into the bar is a pure scale
-    var hs = headBrand.querySelector("svg"), hn = headBrand.querySelector(".brand-roll") || headBrand.querySelector("span");
-    function matchBar() {
-      var fs = parseFloat(getComputedStyle(hn).fontSize) || 32, sw = hs.getBoundingClientRect().width || 48, gap = parseFloat(getComputedStyle(headBrand).columnGap) || 12;
-      brand.style.gap = (gap / fs) + "em";
-      var mk = brand.querySelector(".h9-mark"); mk.style.width = mk.style.height = (sw / fs) + "em";
-    }
-    matchBar();
-    var bMark = brand.querySelector(".h9-mark"), bSq = bMark.querySelectorAll(".sq"), bFr = bMark.querySelector(".fr"), bChars = brand.querySelectorAll(".h9-word .c");
-    var curEl = document.createElement("span"); curEl.className = "h9-cw"; curEl.innerHTML = '<span class="h9-cur"></span>';
-    function drawEnd(t) {
-      var on = t >= CH1;
-      brand.style.display = on ? "flex" : "none";
-      if (!on) return;
-      var n = 0; while (n < KW.length && KW[n] <= t) n++;
-      for (var i = 0; i < bChars.length; i++) bChars[i].classList.toggle("h", i >= n);
-      var showCur = t < 34.0 && (t < KW[KW.length - 1] + 0.2 || Math.floor((t - 32.40) / 0.5) % 2 === 1);
-      if (showCur) { var ref = bChars[n] || null; if (curEl.parentNode !== bChars[0].parentNode || curEl.nextSibling !== ref) bChars[0].parentNode.insertBefore(curEl, ref); }
-      else if (curEl.parentNode) curEl.parentNode.removeChild(curEl);
-      var r = INOUT(prog(t, 34.0, 1.0));
-      bFr.setAttribute("transform", "rotate(" + (90 * r).toFixed(2) + ")");
-      for (var j = 0; j < bSq.length; j++) { bSq[j].setAttribute("transform", "rotate(" + (12 * (j + 1) * r).toFixed(2) + ")"); bSq[j].setAttribute("opacity", Math.min(1, r * 1.6).toFixed(3)); }
-    }
-
-    /* sound: the track (Web Audio, so it starts on cue) and typing clicks made on the fly */
-    var actx = null, master = null, trackBuf = null, trackSrc = null, decoding = null, fallback = null, noise = null;
-    var audioURL = document.createElement("audio").canPlayType('audio/mp4; codecs="mp4a.40.2"') ? M + "dragonskin.m4a" : M + "dragonskin.mp3";
-    var trackBytes = null;
-    function decode() {
-      if (decoding) return decoding;
-      trackBytes = trackBytes || fetch(audioURL).then(function (r) { return r.ok ? r.arrayBuffer() : null; }).catch(function () { return null; });
-      decoding = trackBytes.then(function (ab) {
-        if (!ab) return null;
-        return new Promise(function (res) { actx.decodeAudioData(ab.slice(0), res, function () { res(null); }); });
-      }).then(function (buf) {
-        if (buf) return buf;
-        return fetch(M + "dragonskin.mp3").then(function (r) { return r.arrayBuffer(); }).then(function (ab) {
-          return new Promise(function (res) { actx.decodeAudioData(ab, res, function () { res(null); }); });
-        }).catch(function () { return null; });
-      }).then(function (b) { trackBuf = b; return b; });
-      return decoding;
-    }
-    function click(at, kind) {
-      if (!noise) {
-        noise = actx.createBuffer(1, Math.floor(actx.sampleRate * 0.06), actx.sampleRate);
-        var c0 = noise.getChannelData(0); for (var i = 0; i < c0.length; i++) c0[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / c0.length, 3);
-      }
-      var vol = kind === "del" ? 0.16 : kind === "space" ? 0.3 : 0.24, f = kind === "del" ? 3400 : kind === "space" ? 1500 : 2300 + Math.random() * 900;
-      var src = actx.createBufferSource(); src.buffer = noise; src.playbackRate.value = 0.9 + Math.random() * 0.25;
-      var bp = actx.createBiquadFilter(); bp.type = "bandpass"; bp.frequency.value = f; bp.Q.value = 1.1;
-      var g = actx.createGain(); g.gain.setValueAtTime(vol, at); g.gain.exponentialRampToValueAtTime(0.001, at + 0.05);
-      src.connect(bp); bp.connect(g); g.connect(master); src.start(at); src.stop(at + 0.07);
-      var o = actx.createOscillator(); o.type = "sine"; o.frequency.setValueAtTime(kind === "space" ? 110 : 150, at); o.frequency.exponentialRampToValueAtTime(70, at + 0.03);
-      var og = actx.createGain(); og.gain.setValueAtTime(vol * 0.8, at); og.gain.exponentialRampToValueAtTime(0.001, at + 0.035);
-      o.connect(og); og.connect(master); o.start(at); o.stop(at + 0.04);
-    }
-
-    /* the clock (track time) */
-    var mode = "muted", t0 = 0, running = true, docked = false, landing = false;
-    var FROZEN = null;   // for checking: window.__h9.freeze(t) holds the film at t
-    function now() { if (FROZEN != null) return FROZEN; return mode === "sound" ? actx.currentTime - t0 - PRE : (performance.now() - t0) / 1000 - PRE; }
-    function startSound() {
-      if (!actx) { var AC = window.AudioContext || window.webkitAudioContext; if (!AC) return; actx = new AC(); master = actx.createGain(); master.connect(actx.destination); }
-      if (actx.resume) actx.resume();
-      if (trackSrc) { try { trackSrc.stop(); } catch (e) {} trackSrc = null; }
-      if (fallback) fallback.pause();
-      master.gain.cancelScheduledValues(actx.currentTime); master.gain.setValueAtTime(1, actx.currentTime);
-      mode = "sound"; t0 = actx.currentTime + 0.06; running = true; undock();
-      KEYS.forEach(function (k) { click(t0 + PRE + k[0], k[1]); });
-      var mine = t0;
-      decode().then(function (buf) {
-        if (mine !== t0) return;
-        if (!buf) {        // e.g. opened from the disk (file://): play the track as a media element instead
-          fallback = fallback || new Audio(audioURL);
-          setTimeout(function () {
-            if (mine !== t0) return;
-            fallback.currentTime = Math.max(0, actx.currentTime - (t0 + PRE)); fallback.volume = 1;
-            var pr = fallback.play(); if (pr && pr.catch) pr.catch(function () {});
-          }, Math.max(0, (t0 + PRE - actx.currentTime) * 1000));
-          return;
-        }
-        var s2 = actx.createBufferSource(); s2.buffer = buf; s2.connect(master);
-        var at = t0 + PRE, late = actx.currentTime - at;
-        if (late > 0) s2.start(actx.currentTime, late); else s2.start(at);
-        trackSrc = s2;
-      });
-    }
-    function render() {
-      var t = now();
-      if (t >= END) { t = END; running = false; }
-      if (docked) t = END;
-      drawTyper(t); drawSlides(t); drawWords(t); drawLearn(t); drawChallenges(t, !running || docked || FROZEN != null); drawEnd(t);
-    }
-    var visible = true;
-    new IntersectionObserver(function (en) { visible = en[0].isIntersecting; }).observe(hero);
-    (function loop() { if (visible || running) render(); requestAnimationFrame(loop); })();
-    play.addEventListener("click", function () { window.scrollTo(0, 0); startSound(); });
-
-    /* first scroll: the logo and WonderLab glide into the bar; the statement rises in */
-    function dock(instant) {
-      if (docked) return; docked = true;
-      if (mode === "sound" && actx) { master.gain.setValueAtTime(master.gain.value, actx.currentTime); master.gain.linearRampToValueAtTime(0, actx.currentTime + 0.5); }
-      if (fallback && !fallback.paused) { var v0 = performance.now(); (function fade() { var q = 1 - (performance.now() - v0) / 500; if (q <= 0) { fallback.pause(); return; } fallback.volume = q; requestAnimationFrame(fade); })(); }
-      render();
-      hero.classList.add("h9-docked");
-      if (instant) { brand.style.visibility = "hidden"; head.classList.remove("h9-wait"); return; }
-      matchBar();
-      var from = brand.getBoundingClientRect(), to = headBrand.getBoundingClientRect();
-      var fly = document.createElement("div"); fly.className = "h9-fly"; fly.innerHTML = brand.innerHTML;
-      fly.style.fontSize = getComputedStyle(brand).fontSize; fly.style.gap = brand.style.gap;
-      fly.style.left = from.left + "px"; fly.style.top = from.top + "px"; document.body.appendChild(fly);
-      Array.prototype.forEach.call(fly.querySelectorAll(".c"), function (c) { c.classList.remove("h"); });
-      var fc = fly.querySelector(".h9-cw"); if (fc) fc.remove();
-      brand.style.visibility = "hidden"; landing = true;
-      var k = to.width / from.width, start = performance.now();
-      (function step() {
-        var p = INOUT(Math.min(1, (performance.now() - start) / 600)), fr = brand.getBoundingClientRect(), tt = headBrand.getBoundingClientRect();
-        var x = (fr.left + (tt.left - fr.left) * p) - from.left, y = (fr.top + (tt.top - fr.top) * p) - from.top, sc = 1 + (k - 1) * p;
-        fly.style.transform = "translate(" + x.toFixed(1) + "px," + y.toFixed(1) + "px) scale(" + sc.toFixed(4) + ")";
-        if (p < 1 && landing) requestAnimationFrame(step); else { head.classList.remove("h9-wait"); fly.remove(); landing = false; }
-      })();
-    }
-    function undock() {
-      landing = false;
-      Array.prototype.forEach.call(document.querySelectorAll(".h9-fly"), function (f) { f.remove(); });
-      if (!docked) return; docked = false;
-      brand.style.visibility = ""; head.classList.add("h9-wait"); hero.classList.remove("h9-docked");
-    }
-    if (window.scrollY > 4 || (location.hash && location.hash !== "#top")) { dock(true); }
-    else {
-      head.classList.add("h9-wait"); t0 = performance.now();
-      window.addEventListener("scroll", function () { if (window.scrollY > 2) dock(); }, { passive: true });
-      window.addEventListener("wheel", function (e) { if (e.deltaY > 0) dock(); }, { passive: true });
-      window.addEventListener("touchmove", function () { dock(); }, { passive: true });
-    }
-    window.__h9 = { freeze: function (t) { FROZEN = t; }, at: function (t) { mode = "muted"; t0 = performance.now() - (t + PRE) * 1000; running = true; }, state: function () { return { mode: mode, t: now(), docked: docked, decoded: !!trackBuf, started: !!trackSrc }; } };
-  })();
-
   /* ---------- hero clip ---------- */
   var MV = "?v=25";   // bump when media files are replaced, so returning visitors get the new clips
   var hv = document.getElementById("hero-video"), wide = window.matchMedia("(min-width: 901px)");
   var heroSrc = function () { return (wide.matches ? "media/hero.mp4" : "media/hero-portrait.mp4") + MV; };
   if (hv && !reduce.matches) {
-    // phones have the film (heroFilm) instead, so the clip only loads on wide screens
     hv.addEventListener("playing", function () { hv.classList.remove("is-waiting"); });
-    var startHero = function () { if (!hv.getAttribute("src")) return; if (hv.paused) { var p = hv.play(); if (p && p.catch) p.catch(function () {}); } };
-    var loadHero = function () { if (!wide.matches && document.querySelector(".hero.h9-on")) { hv.pause(); return; } hv.classList.add("is-waiting"); hv.src = heroSrc(); startHero(); };
-    wide.addEventListener("change", loadHero);
-    hv.addEventListener("loadeddata", startHero);
-    loadHero();
+    hv.src = heroSrc();
+    wide.addEventListener("change", function () { hv.classList.add("is-waiting"); hv.src = heroSrc(); var p = hv.play(); if (p && p.catch) p.catch(function () {}); });
+    var startHero = function () { if (hv.paused) { var p = hv.play(); if (p && p.catch) p.catch(function () {}); } };
+    hv.addEventListener("loadeddata", startHero, { once: true });
+    startHero();
     document.addEventListener("visibilitychange", function () { if (document.visibilityState === "visible") startHero(); });
   }
 
@@ -3373,7 +3043,7 @@ var DRAW = {
     };
 
     // phones: the panel's pieces gathered into paper strips in the class's colours (see .bp-strip)
-    var bpPhone = window.matchMedia("(max-width: 900px)"), FAMILY_RUN = ["#7D6D60", "#625448", "#45392F", "#2B2118"]; // the tutor's stone
+    var bpPhone = window.matchMedia("(max-width: 900px)"), FAMILY_RUN = ["#7A6F63", "#5F564B", "#433A31", "#29221A"]; // the tutor's stone
     function bpStrips(s) {
       var on = bpPhone.matches && !!s;
       bookPanel.classList.toggle("has-strips", on);
