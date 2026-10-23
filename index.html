@@ -572,13 +572,15 @@ video.is-waiting { opacity: 0 !important; }
   #stage-tabs .stage[aria-selected="true"] { color: var(--strip0-ink, #FFFFFF); }
   #stage-tabs .stage[aria-selected="true"] .s-ages { color: var(--strip0-soft, rgba(255, 255, 255, 0.75)); }
   .ch-col { padding: 0 20px; }
-  .ch-list { overflow-anchor: none; isolation: isolate; }
+  .ch-list { overflow-anchor: none; isolation: isolate; position: relative; }
+  .ch-list::before { content: ""; position: absolute; top: 0; bottom: 0; left: -20px; right: -20px; z-index: 0; pointer-events: none;
+    background: url("media/paper-grain-b.png") 0 0 / 160px auto; transform: translateZ(0); }
   .ch-list > li, .ch-list > li.ch-panel-slot, .ch-list > li.ch-body-slot { position: relative; margin: 0 -20px; color: var(--strip-ink, #FFFFFF); }
   .ch-list > li.ch-body-slot { display: flow-root; } /* its height is the same whether or not it is clipped (a swap) */
   .ch-list > li.ch-panel-slot { display: flex; flex-direction: column; justify-content: flex-end; } /* opens from its foot */
   .ch-list > li::before { content: ""; position: absolute; left: 0; right: 0; top: calc(-1 * var(--ga, 0px)); bottom: calc(-1 * var(--gb, 0px) - 4px);
     z-index: var(--zi, -1); pointer-events: none;
-    background: url("media/paper-grain-b.png") 0 calc(var(--grain-y, 0px) + var(--ga, 0px)) / 160px auto, var(--strip, #555);
+    background: var(--strip, #555);
     -webkit-mask: linear-gradient(#000 0 0) left top / 100% calc(100% - 4px) no-repeat, url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%2740%27 height=%274%27 viewBox=%270 0 40 4%27%3E%3Cpath d=%27M0 0H40L40 1.9L39.78 3.4L39.01 3.26L38.04 3.01L37.49 3.4L36.88 3.14L36.11 3.25L35.27 2.91L34.18 2.49L33.11 2.58L32.22 2.22L31.52 2.05L30.54 1.8L30.03 2.19L29.19 2.37L28.14 2.51L27.58 2.64L26.72 2.93L25.88 2.88L24.94 3.13L24.17 3.08L23.07 3.09L22.56 2.89L21.86 3.32L21.16 2.87L20.47 2.92L19.45 3.0L18.87 2.62L18.11 2.32L17.18 2.66L16.24 2.59L15.21 2.36L14.62 1.94L14.02 1.69L13.54 1.36L12.78 1.64L11.97 1.78L10.92 1.82L9.94 2.16L9.25 2.47L8.72 2.06L8.06 2.07L7.21 2.48L6.28 2.15L5.8 1.7L5.2 1.94L4.7 1.68L4.01 1.6L3.41 2.05L2.62 2.04L1.66 1.76L0.9 2.02L0.0 1.9Z%27 fill=%27black%27/%3E%3C/svg%3E") var(--tear-y, 0px) bottom / 40px 4px repeat-x;
     mask: linear-gradient(#000 0 0) left top / 100% calc(100% - 4px) no-repeat, url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%2740%27 height=%274%27 viewBox=%270 0 40 4%27%3E%3Cpath d=%27M0 0H40L40 1.9L39.78 3.4L39.01 3.26L38.04 3.01L37.49 3.4L36.88 3.14L36.11 3.25L35.27 2.91L34.18 2.49L33.11 2.58L32.22 2.22L31.52 2.05L30.54 1.8L30.03 2.19L29.19 2.37L28.14 2.51L27.58 2.64L26.72 2.93L25.88 2.88L24.94 3.13L24.17 3.08L23.07 3.09L22.56 2.89L21.86 3.32L21.16 2.87L20.47 2.92L19.45 3.0L18.87 2.62L18.11 2.32L17.18 2.66L16.24 2.59L15.21 2.36L14.62 1.94L14.02 1.69L13.54 1.36L12.78 1.64L11.97 1.78L10.92 1.82L9.94 2.16L9.25 2.47L8.72 2.06L8.06 2.07L7.21 2.48L6.28 2.15L5.8 1.7L5.2 1.94L4.7 1.68L4.01 1.6L3.41 2.05L2.62 2.04L1.66 1.76L0.9 2.02L0.0 1.9Z%27 fill=%27black%27/%3E%3C/svg%3E") var(--tear-y, 0px) bottom / 40px 4px repeat-x; }
   .ch-list > li::after { content: ""; position: absolute; left: 0; right: 0; height: 10px; bottom: calc(-1 * var(--gb, 0px) - 7px);
