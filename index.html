@@ -23,6 +23,7 @@
   --blue: #0E2A4F;      /* Creators */
   --stage: var(--navy); /* the selected stage tints the challenge panel */
   --navy-2: #16293A;
+  --deep: #142F44;       /* the first and last screens: the hero, the close (visit) and the footer */
   --on-navy: #EDF3F6;
   --on-navy-soft: #9FB2BF;
   --orange: #FF6000;     /* the joyful accent: lines, dots, labels, the map pin */
@@ -146,12 +147,13 @@ p { margin: 0; }
 #programme .head .sec-mark rect, .site-head.at-programme .brand svg rect { stroke: var(--prog-accent, var(--orange)); transition: stroke 320ms ease; }
 
 /* hero */
-.hero { position: relative; margin-top: -76px; height: 100svh; min-height: 560px; padding: 0; overflow: hidden; background: var(--navy); color: var(--on-navy); }
+.hero { position: relative; margin-top: -76px; height: 100svh; min-height: 560px; padding: 0; overflow: hidden; background: var(--deep); color: var(--on-navy); }
 .hero-media { position: absolute; inset: 0; }
 .hero-media img, .hero-media video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center 46%; }
 
 .hero-media video { position: absolute; inset: 0; transition: opacity 500ms ease; }
-.hero-media::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(13,27,38,0.2) 0%, rgba(13,27,38,0) 35%, rgba(13,27,38,0.72) 78%, rgba(13,27,38,0.92) 100%); }
+.hero-media img, .hero-media video { mix-blend-mode: lighten; } /* the clip's own darker ground gives way to the hero's blue */
+.hero-media::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(20,47,68,0.2) 0%, rgba(20,47,68,0) 35%, rgba(20,47,68,0.72) 78%, rgba(20,47,68,0.92) 100%); }
 .hero .wrap { position: relative; z-index: 1; height: 100%; display: flex; align-items: flex-end; padding-top: 76px; padding-bottom: clamp(32px, 6vw, 72px); }
 .hero-statement { font-size: clamp(1.1rem, 0.7rem + 1.5vw, 2.05rem); font-weight: 500; letter-spacing: -0.03em; line-height: 1.2; color: var(--on-navy); max-width: none; }
 .hero-statement .big { display: block; font-size: clamp(2.4rem, 1rem + 5.6vw, 6rem); line-height: 0.95; letter-spacing: -0.05em; margin-bottom: 0.12em; }
@@ -159,13 +161,19 @@ p { margin: 0; }
   .hero-statement { max-width: none; }
   .hero-media img, .hero-media video { object-fit: contain; object-position: center 32%; }
 }
+/* the hero reel, drawn live by the motion engine (heroReel in the script): three stacked layers that the clips take
+   turns on, so neighbours can crossfade. They are placed by the script: contained in a 9:16 frame on phones (like the
+   portrait clip was), covering the 16:9 box on wide screens. The poster shows until the first frame is drawn */
+.hero-reel { position: absolute; inset: 0; }
+.hero-reel svg { position: absolute; display: block; overflow: visible; }
+.hero-media.is-live picture { visibility: hidden; }
 .hero-shell { height: 100%; }
 @media (min-width: 901px) {
   .hero { margin-top: 0; height: auto; min-height: 0; overflow: visible; background: none; padding: clamp(12px, 1.6vw, 24px) 0 0; }
   .hero-shell {
     position: relative; height: auto; aspect-ratio: 16 / 9; max-height: calc(100svh - 110px);
     width: calc(100% - 2 * var(--gutter)); max-width: calc(var(--max) - 2 * var(--gutter)); margin: 0 auto;
-    border-radius: var(--r); overflow: hidden; background: var(--navy); color: var(--on-navy);
+    border-radius: var(--r); overflow: hidden; background: var(--deep); color: var(--on-navy);
   }
   .hero-media img, .hero-media video { object-fit: cover; object-position: center; }
   .hero .wrap { max-width: none; padding: 0 clamp(24px, 3.4vw, 48px) clamp(22px, 3.2vw, 44px); }
@@ -397,6 +405,22 @@ video.is-waiting { opacity: 0 !important; }
   .challenges.is-paper .ch-slider::after { background-position: 0 0, 0 calc(var(--gy, 0px) + var(--ph, 0px) - var(--scrim-h, 0px) - var(--sh, 0px) + 3px),
     calc(var(--gx, 0px) - var(--sw, 0px) + var(--jb, var(--r)) + 2px) calc(var(--gy, 0px) - var(--sh, 0px) + 3px); }
 }
+/* wide screens: each age group's paper is the third strip of its run with white text (as on phones), flat, for the
+   chosen age card, the selected title's box, the challenge panel and the booking panel (no leaf light, no grain) */
+@media (min-width: 901px) {
+  .paper-blue { --paper-base: #1F3852; }
+  .paper-green { --paper-base: #233923; }
+  .paper-honey { --paper-base: #6B330C; }
+  .ch-panel::before { background: var(--paper-base); }
+  .ch-panel::after { display: none; }
+  .ch-panel.is-paper .ch-body { text-shadow: none; }
+  .ch-slider-paper, .challenges.is-paper .ch-slider::before, .challenges.is-paper .ch-slider::after { background-image: none; }
+  #stage-tabs .stage:nth-child(1)[aria-selected="true"] { background: #1F3852; border-color: #1F3852; }
+  #stage-tabs .stage:nth-child(2)[aria-selected="true"] { background: #233923; border-color: #233923; }
+  #stage-tabs .stage:nth-child(3)[aria-selected="true"] { background: #6B330C; border-color: #6B330C; }
+  .book-panel { background: var(--tint, var(--navy)); }
+  .book-panel .bp-light { display: none; }
+}
 .ch-panel.is-swapping .ch-figure > * { opacity: 0; }
 .ch-panel.is-swapping .ch-body { opacity: 0; transform: translateY(10px); }
 .ch-figure > * { transition: opacity 240ms ease; }
@@ -529,7 +553,7 @@ video.is-waiting { opacity: 0 !important; }
 }
 
 
-/* the grain is paper-grain-a.png: the paper's light and dark specks as white and black at low opacity, drawn over
+/* the grain is paper-grain-b.png (finer and softer than the first): the paper's light and dark specks as white and black at low opacity, drawn over
    each strip's colour with no blend mode, so it shows the same while the strips move (Safari, iPhone) */
 /* phones: the challenges as a stack of torn paper strips (after grahic design/Backgrounds/10_titles). Each title is a
    strip of drawing paper, its grain showing (paper-grain.png), running the full width; its foot is finely torn (data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%2740%27 height=%274%27 viewBox=%270 0 40 4%27%3E%3Cpath d=%27M0 0H40L40 1.9L39.78 3.4L39.01 3.26L38.04 3.01L37.49 3.4L36.88 3.14L36.11 3.25L35.27 2.91L34.18 2.49L33.11 2.58L32.22 2.22L31.52 2.05L30.54 1.8L30.03 2.19L29.19 2.37L28.14 2.51L27.58 2.64L26.72 2.93L25.88 2.88L24.94 3.13L24.17 3.08L23.07 3.09L22.56 2.89L21.86 3.32L21.16 2.87L20.47 2.92L19.45 3.0L18.87 2.62L18.11 2.32L17.18 2.66L16.24 2.59L15.21 2.36L14.62 1.94L14.02 1.69L13.54 1.36L12.78 1.64L11.97 1.78L10.92 1.82L9.94 2.16L9.25 2.47L8.72 2.06L8.06 2.07L7.21 2.48L6.28 2.15L5.8 1.7L5.2 1.94L4.7 1.68L4.01 1.6L3.41 2.05L2.62 2.04L1.66 1.76L0.9 2.02L0.0 1.9Z%27 fill=%27black%27/%3E%3C/svg%3E,
@@ -544,7 +568,7 @@ video.is-waiting { opacity: 0 !important; }
   .challenges, .challenges.is-paper { background: transparent; }
   /* the chosen age box is the top of the first strip (--strip0, from the script), its grain and all */
   #stage-tabs .stage[aria-selected="true"], #stage-tabs .stage[aria-selected="true"]::before, #stage-tabs .stage[aria-selected="true"]::after {
-    background: url("media/paper-grain-a.png") 0 0 / 320px auto, var(--strip0, #888) !important; }
+    background: url("media/paper-grain-b.png") 0 0 / 160px auto, var(--strip0, #888) !important; }
   #stage-tabs .stage[aria-selected="true"] { color: var(--strip0-ink, #FFFFFF); }
   #stage-tabs .stage[aria-selected="true"] .s-ages { color: var(--strip0-soft, rgba(255, 255, 255, 0.75)); }
   .ch-col { padding: 0 20px; }
@@ -554,7 +578,7 @@ video.is-waiting { opacity: 0 !important; }
   .ch-list > li.ch-panel-slot { display: flex; flex-direction: column; justify-content: flex-end; } /* opens from its foot */
   .ch-list > li::before { content: ""; position: absolute; left: 0; right: 0; top: calc(-1 * var(--ga, 0px)); bottom: calc(-1 * var(--gb, 0px) - 4px);
     z-index: var(--zi, -1); pointer-events: none;
-    background: url("media/paper-grain-a.png") 0 calc(var(--grain-y, 0px) + var(--ga, 0px)) / 320px auto, var(--strip, #555);
+    background: url("media/paper-grain-b.png") 0 calc(var(--grain-y, 0px) + var(--ga, 0px)) / 160px auto, var(--strip, #555);
     -webkit-mask: linear-gradient(#000 0 0) left top / 100% calc(100% - 4px) no-repeat, url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%2740%27 height=%274%27 viewBox=%270 0 40 4%27%3E%3Cpath d=%27M0 0H40L40 1.9L39.78 3.4L39.01 3.26L38.04 3.01L37.49 3.4L36.88 3.14L36.11 3.25L35.27 2.91L34.18 2.49L33.11 2.58L32.22 2.22L31.52 2.05L30.54 1.8L30.03 2.19L29.19 2.37L28.14 2.51L27.58 2.64L26.72 2.93L25.88 2.88L24.94 3.13L24.17 3.08L23.07 3.09L22.56 2.89L21.86 3.32L21.16 2.87L20.47 2.92L19.45 3.0L18.87 2.62L18.11 2.32L17.18 2.66L16.24 2.59L15.21 2.36L14.62 1.94L14.02 1.69L13.54 1.36L12.78 1.64L11.97 1.78L10.92 1.82L9.94 2.16L9.25 2.47L8.72 2.06L8.06 2.07L7.21 2.48L6.28 2.15L5.8 1.7L5.2 1.94L4.7 1.68L4.01 1.6L3.41 2.05L2.62 2.04L1.66 1.76L0.9 2.02L0.0 1.9Z%27 fill=%27black%27/%3E%3C/svg%3E") var(--tear-y, 0px) bottom / 40px 4px repeat-x;
     mask: linear-gradient(#000 0 0) left top / 100% calc(100% - 4px) no-repeat, url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%2740%27 height=%274%27 viewBox=%270 0 40 4%27%3E%3Cpath d=%27M0 0H40L40 1.9L39.78 3.4L39.01 3.26L38.04 3.01L37.49 3.4L36.88 3.14L36.11 3.25L35.27 2.91L34.18 2.49L33.11 2.58L32.22 2.22L31.52 2.05L30.54 1.8L30.03 2.19L29.19 2.37L28.14 2.51L27.58 2.64L26.72 2.93L25.88 2.88L24.94 3.13L24.17 3.08L23.07 3.09L22.56 2.89L21.86 3.32L21.16 2.87L20.47 2.92L19.45 3.0L18.87 2.62L18.11 2.32L17.18 2.66L16.24 2.59L15.21 2.36L14.62 1.94L14.02 1.69L13.54 1.36L12.78 1.64L11.97 1.78L10.92 1.82L9.94 2.16L9.25 2.47L8.72 2.06L8.06 2.07L7.21 2.48L6.28 2.15L5.8 1.7L5.2 1.94L4.7 1.68L4.01 1.6L3.41 2.05L2.62 2.04L1.66 1.76L0.9 2.02L0.0 1.9Z%27 fill=%27black%27/%3E%3C/svg%3E") var(--tear-y, 0px) bottom / 40px 4px repeat-x; }
   .ch-list > li::after { content: ""; position: absolute; left: 0; right: 0; height: 10px; bottom: calc(-1 * var(--gb, 0px) - 7px);
@@ -614,7 +638,7 @@ video.is-waiting { opacity: 0 !important; }
   .t-strip, .tutor-body .highlights li.t-strip { position: relative; margin: 0; padding: 16px 20px 18px; border-top: 0; color: var(--t-ink); }
   .t-strip::before, .tutor-body .highlights li.t-strip::before, .tutor-body .highlights li.t-strip.cascade::before {
     content: ""; position: absolute; left: 0; right: 0; top: 0; bottom: -4px; height: auto; z-index: var(--zi, -1); pointer-events: none; transform: none; transition: none;
-    background: url("media/paper-grain-a.png") 0 var(--gy, 0px) / 320px auto, var(--t-bg);
+    background: url("media/paper-grain-b.png") 0 var(--gy, 0px) / 160px auto, var(--t-bg);
     -webkit-mask: linear-gradient(#000 0 0) left top / 100% calc(100% - 4px) no-repeat, url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%2740%27 height=%274%27 viewBox=%270 0 40 4%27%3E%3Cpath d=%27M0 0H40L40 1.9L39.78 3.4L39.01 3.26L38.04 3.01L37.49 3.4L36.88 3.14L36.11 3.25L35.27 2.91L34.18 2.49L33.11 2.58L32.22 2.22L31.52 2.05L30.54 1.8L30.03 2.19L29.19 2.37L28.14 2.51L27.58 2.64L26.72 2.93L25.88 2.88L24.94 3.13L24.17 3.08L23.07 3.09L22.56 2.89L21.86 3.32L21.16 2.87L20.47 2.92L19.45 3.0L18.87 2.62L18.11 2.32L17.18 2.66L16.24 2.59L15.21 2.36L14.62 1.94L14.02 1.69L13.54 1.36L12.78 1.64L11.97 1.78L10.92 1.82L9.94 2.16L9.25 2.47L8.72 2.06L8.06 2.07L7.21 2.48L6.28 2.15L5.8 1.7L5.2 1.94L4.7 1.68L4.01 1.6L3.41 2.05L2.62 2.04L1.66 1.76L0.9 2.02L0.0 1.9Z%27 fill=%27black%27/%3E%3C/svg%3E") var(--tx, 0px) bottom / 40px 4px repeat-x;
     mask: linear-gradient(#000 0 0) left top / 100% calc(100% - 4px) no-repeat, url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%2740%27 height=%274%27 viewBox=%270 0 40 4%27%3E%3Cpath d=%27M0 0H40L40 1.9L39.78 3.4L39.01 3.26L38.04 3.01L37.49 3.4L36.88 3.14L36.11 3.25L35.27 2.91L34.18 2.49L33.11 2.58L32.22 2.22L31.52 2.05L30.54 1.8L30.03 2.19L29.19 2.37L28.14 2.51L27.58 2.64L26.72 2.93L25.88 2.88L24.94 3.13L24.17 3.08L23.07 3.09L22.56 2.89L21.86 3.32L21.16 2.87L20.47 2.92L19.45 3.0L18.87 2.62L18.11 2.32L17.18 2.66L16.24 2.59L15.21 2.36L14.62 1.94L14.02 1.69L13.54 1.36L12.78 1.64L11.97 1.78L10.92 1.82L9.94 2.16L9.25 2.47L8.72 2.06L8.06 2.07L7.21 2.48L6.28 2.15L5.8 1.7L5.2 1.94L4.7 1.68L4.01 1.6L3.41 2.05L2.62 2.04L1.66 1.76L0.9 2.02L0.0 1.9Z%27 fill=%27black%27/%3E%3C/svg%3E") var(--tx, 0px) bottom / 40px 4px repeat-x; }
   .t-strip::after { content: ""; position: absolute; left: 0; right: 0; height: 10px; bottom: -7px; z-index: var(--zs, -2); pointer-events: none;
@@ -754,7 +778,7 @@ video.is-waiting { opacity: 0 !important; }
   .book-panel.has-strips .bp-body { isolation: isolate; }
   .bp-strip { position: relative; padding: 18px 20px 20px; }
   .bp-strip::before { content: ""; position: absolute; left: 0; right: 0; top: 0; bottom: -4px; z-index: var(--zi, -1); pointer-events: none;
-    background: url("media/paper-grain-a.png") 0 var(--gy, 0px) / 320px auto, var(--b-bg);
+    background: url("media/paper-grain-b.png") 0 var(--gy, 0px) / 160px auto, var(--b-bg);
     -webkit-mask: linear-gradient(#000 0 0) left top / 100% calc(100% - 4px) no-repeat, url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%2740%27 height=%274%27 viewBox=%270 0 40 4%27%3E%3Cpath d=%27M0 0H40L40 1.9L39.78 3.4L39.01 3.26L38.04 3.01L37.49 3.4L36.88 3.14L36.11 3.25L35.27 2.91L34.18 2.49L33.11 2.58L32.22 2.22L31.52 2.05L30.54 1.8L30.03 2.19L29.19 2.37L28.14 2.51L27.58 2.64L26.72 2.93L25.88 2.88L24.94 3.13L24.17 3.08L23.07 3.09L22.56 2.89L21.86 3.32L21.16 2.87L20.47 2.92L19.45 3.0L18.87 2.62L18.11 2.32L17.18 2.66L16.24 2.59L15.21 2.36L14.62 1.94L14.02 1.69L13.54 1.36L12.78 1.64L11.97 1.78L10.92 1.82L9.94 2.16L9.25 2.47L8.72 2.06L8.06 2.07L7.21 2.48L6.28 2.15L5.8 1.7L5.2 1.94L4.7 1.68L4.01 1.6L3.41 2.05L2.62 2.04L1.66 1.76L0.9 2.02L0.0 1.9Z%27 fill=%27black%27/%3E%3C/svg%3E") var(--tx, 0px) bottom / 40px 4px repeat-x;
     mask: linear-gradient(#000 0 0) left top / 100% calc(100% - 4px) no-repeat, url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%2740%27 height=%274%27 viewBox=%270 0 40 4%27%3E%3Cpath d=%27M0 0H40L40 1.9L39.78 3.4L39.01 3.26L38.04 3.01L37.49 3.4L36.88 3.14L36.11 3.25L35.27 2.91L34.18 2.49L33.11 2.58L32.22 2.22L31.52 2.05L30.54 1.8L30.03 2.19L29.19 2.37L28.14 2.51L27.58 2.64L26.72 2.93L25.88 2.88L24.94 3.13L24.17 3.08L23.07 3.09L22.56 2.89L21.86 3.32L21.16 2.87L20.47 2.92L19.45 3.0L18.87 2.62L18.11 2.32L17.18 2.66L16.24 2.59L15.21 2.36L14.62 1.94L14.02 1.69L13.54 1.36L12.78 1.64L11.97 1.78L10.92 1.82L9.94 2.16L9.25 2.47L8.72 2.06L8.06 2.07L7.21 2.48L6.28 2.15L5.8 1.7L5.2 1.94L4.7 1.68L4.01 1.6L3.41 2.05L2.62 2.04L1.66 1.76L0.9 2.02L0.0 1.9Z%27 fill=%27black%27/%3E%3C/svg%3E") var(--tx, 0px) bottom / 40px 4px repeat-x; }
   .bp-strip::after { content: ""; position: absolute; left: 0; right: 0; height: 10px; bottom: -7px; z-index: var(--zs, -2); pointer-events: none;
@@ -773,7 +797,7 @@ video.is-waiting { opacity: 0 !important; }
 .book-panel.has-light .bp-light.is-on { opacity: 1; }
 .book-panel.has-light { --on-navy-soft: rgba(255, 255, 255, 0.78); }
 .book-panel.has-light .bp-kind, .book-panel.has-light .bp-seats b, .book-panel.has-light .bp-row small b { text-shadow: 0 1px 10px rgba(0, 0, 0, 0.45); }
-.book-panel.look-honey { --orange: #FFD48A; }
+.book-panel.look-honey, .book-panel.look-family { --orange: #FFD48A; }
 .bp-kind { font-size: var(--t0); font-weight: 500; color: var(--orange); }
 .bp-title { margin-top: 6px; font-size: var(--t2); }
 .bp-title span { white-space: nowrap; } /* a line may break after the date, never inside the hours */
@@ -826,7 +850,7 @@ video.is-waiting { opacity: 0 !important; }
 .bp-small { margin-top: 10px; font-size: 0.85rem; color: var(--on-navy-soft); }
 
 /* visit */
-.visit { background: var(--navy); color: var(--on-navy); padding: clamp(64px, 8vw, 120px) 0 0; }
+.visit { background: var(--deep); color: var(--on-navy); padding: clamp(64px, 8vw, 120px) 0 0; }
 .visit-top { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(28px, 5vw, 72px); align-items: start; }
 /* details on the left, the map beside them, the closing line underneath */
 .visit h2 { font-size: var(--t3); }
@@ -886,7 +910,7 @@ video.is-waiting { opacity: 0 !important; }
   .foot-copy { font-size: 0.72rem; gap: 6px; }
 }
 
-footer { background: var(--navy); color: var(--on-navy-soft); padding: clamp(44px, 6vw, 84px) 0 clamp(24px, 3vw, 40px); }
+footer { background: var(--deep); color: var(--on-navy-soft); padding: clamp(44px, 6vw, 84px) 0 clamp(24px, 3vw, 40px); }
 .foot-bottom { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; padding-top: 22px; border-top: 1px solid rgba(237,243,246,0.16); font-size: 0.92rem; }
 .foot-bottom .brand span { color: var(--on-navy); }
 .foot-copy { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; font-size: 0.78rem; }
@@ -935,7 +959,7 @@ footer { background: var(--navy); color: var(--on-navy-soft); padding: clamp(44p
         <source media="(min-width: 901px)" srcset="media/hero.jpg?v=22">
         <img id="hero-poster" src="media/hero-portrait.jpg?v=22" alt="" width="1080" height="1920">
       </picture>
-      <video id="hero-video" class="is-waiting" muted loop playsinline preload="auto"></video>
+      <div class="hero-reel" id="hero-reel"><svg></svg><svg></svg><svg></svg></div>
     </div>
     <div class="wrap">
       <h1 class="hero-statement rv-wrap" data-lines="<span class='big'>We&rsquo;re WonderLab</span>|A creative thinking academy where young minds|take on meaningful design challenges|that build confidence, creativity and|the courage to bring ideas to life."></h1>
@@ -2046,19 +2070,114 @@ var DRAW = {
     onScroll();
   }
 
-  /* ---------- hero clip ---------- */
-  var MV = "?v=25";   // bump when media files are replaced, so returning visitors get the new clips
-  var hv = document.getElementById("hero-video"), wide = window.matchMedia("(min-width: 901px)");
-  var heroSrc = function () { return (wide.matches ? "media/hero.mp4" : "media/hero-portrait.mp4") + MV; };
-  if (hv && !reduce.matches) {
-    hv.addEventListener("playing", function () { hv.classList.remove("is-waiting"); });
-    hv.src = heroSrc();
-    wide.addEventListener("change", function () { hv.classList.add("is-waiting"); hv.src = heroSrc(); var p = hv.play(); if (p && p.catch) p.catch(function () {}); });
-    var startHero = function () { if (hv.paused) { var p = hv.play(); if (p && p.catch) p.catch(function () {}); } };
-    hv.addEventListener("loadeddata", startHero, { once: true });
-    startHero();
-    document.addEventListener("visibilitychange", function () { if (document.visibilityState === "visible") startHero(); });
-  }
+  /* ---------- hero reel, drawn live (after WonderLab/motion/hero/reel.js; the mp4s were rendered from it) ----------
+     The best stretch of each challenge animation: each clip plays scene time a..b over d seconds with a slow push-in,
+     and crossfades into the next over XF seconds; the last crossfades back into the first, so it loops (44 s). Drawn in
+     "deep", the engine's navy theme moved onto the hero's blue (#142F44). Framing as in the reel: z zoom, ox/oy the
+     focus as offsets from the frame's centre, or track: [ox, oy] pairs across the clip. Landscape: 1920 x 1080 with the
+     whole reel 1.4 times smaller; portrait: 1080 x 1920 */
+  (function heroReel() {
+    var media = document.querySelector(".hero-media"), box = document.getElementById("hero-reel");
+    if (!media || !box || reduce.matches) return;   // reduced motion keeps the poster
+    var layers = Array.prototype.slice.call(box.querySelectorAll("svg"));
+    var REEL = [
+      { n: "davinci", a: 0.36, b: 0.9, d: 6.82, z: 0.7,
+        track: [[0.019,-0.005],[0.018,-0.034],[0.015,-0.072],[0.011,-0.101],[0.008,-0.118],[0.007,-0.125],[0.001,-0.168],[0.000,-0.177],[0.000,-0.177]] },
+      { n: "hullsAll", a: 0.35, b: 0.8, d: 4.76, z: 1.35, ox: 0.02, oy: 0.1 },
+      { n: "facade", a: 0.5, b: 0.9, d: 5.03, z: 1.0, ox: 0, oy: 0 },
+      { n: "egg", a: 0.3, b: 0.86, d: 4.19, z: 1.05, ox: 0.015, oy: 0.2 },
+      { n: "treehouse", a: 0.2, b: 0.78, d: 4.63, z: 0.78, ox: 0, oy: 0.22 },
+      { n: "chair2", a: 0.3, b: 0.89, d: 3.99, z: 1.2, ox: -0.07, oy: 0.08 },
+      { n: "towersAll", a: 0.4, b: 0.82, d: 3.97, z: 1.0, ox: 0.03, oy: 0.22 },
+      { n: "airport", a: 0.508, b: 0.645, d: 3.97, z: 1.2, ox: 0, oy: -0.1 },
+      { n: "rube", a: 0.2, b: 0.7, d: 4.63, z: 0.95, track: [[-0.2,0.16],[-0.11,0.16],[0,0.16],[0.08,0.16],[0.12,0.16]] },
+      { n: "solar", a: 0.36, b: 0.86, d: 4.19, z: 0.9, ox: 0, oy: 0.2 },
+      { n: "tensegrity", a: 0.5, b: 0.9, d: 4.42, z: 0.85, ox: 0, oy: 0.1 }
+    ];
+    var XF = 0.6, PUSH = 0.06, START = [], acc = 0;
+    REEL.forEach(function (r) { START.push(acc); acc += r.d - XF; });
+    var TOTAL = acc;
+    function layerOf(i) { var k = i % 3; return i === REEL.length - 1 && k === 0 ? 1 : k; }
+    function smooth(x) { x = Math.max(0, Math.min(1, x)); return x * x * (3 - 2 * x); }
+    function offset(r, u) {
+      if (!r.track) return [r.ox, r.oy];
+      var n = r.track.length - 1, f = Math.min(n - 1e-9, Math.max(0, u) * n), i = Math.floor(f), k = f - i;
+      return [r.track[i][0] + (r.track[i + 1][0] - r.track[i][0]) * k, r.track[i][1] + (r.track[i + 1][1] - r.track[i][1]) * k];
+    }
+    // the engine's navy theme, its fills moved by the same step as its ground (#0D1B26 -> #142F44)
+    function deepTheme() {
+      if (!window.WL || WL.THEMES.deep) return;
+      var D = WL.THEMES.dark, out = {}, k;
+      function shift(h) {
+        if (typeof h !== "string" || h[0] !== "#" || h.length !== 7) return h;
+        var c = [1, 3, 5].map(function (i) { return parseInt(h.substr(i, 2), 16); }), d = [7, 20, 30];
+        if (c[0] + c[1] + c[2] > 400) return h;           // light accents (lines, zing, brand) stay as they are
+        return "#" + c.map(function (v, j) { return ("0" + Math.min(255, v + d[j]).toString(16)).slice(-2); }).join("");
+      }
+      for (k in D) out[k] = D[k];
+      out.bg = "#142F44"; out.tone = shift(D.tone); out.mats = {};
+      for (k in D.mats) out.mats[k] = shift(D.mats[k]);
+      WL.THEMES.deep = out;
+    }
+    // phones: the portrait frame, contained and set 32% of the way down (as the portrait clip was); wide: the landscape
+    // frame covering the box
+    var wide = window.matchMedia("(min-width: 901px)"), frame = null;
+    function place() {
+      var W = media.clientWidth, H = media.clientHeight;
+      if (!W || !H) return;
+      var portrait = !wide.matches, fw = portrait ? 1080 : 1920, fh = portrait ? 1920 : 1080;
+      var k = portrait ? Math.min(W / fw, H / fh) : Math.max(W / fw, H / fh), w = fw * k, h = fh * k;
+      var x = (W - w) / 2, y = portrait ? (H - h) * 0.32 : (H - h) / 2;
+      var SH = 1.4, vb = portrait ? "0 0 1080 1920" : [960 - 960 * SH, 540 - 540 * SH, 1920 * SH, 1080 * SH].join(" ");
+      layers.forEach(function (L) {
+        L.setAttribute("viewBox", vb); L.setAttribute("preserveAspectRatio", "xMidYMid meet");
+        L.style.left = x.toFixed(1) + "px"; L.style.top = y.toFixed(1) + "px"; L.style.width = w.toFixed(1) + "px"; L.style.height = h.toFixed(1) + "px";
+      });
+      frame = { w: fw, h: fh, portrait: portrait };
+    }
+    function draw(time) {
+      var used = [false, false, false];
+      REEL.forEach(function (r, i) {
+        var lt = time - START[i];
+        if (lt < 0) lt += TOTAL;
+        if (lt < 0 || lt > r.d) return;
+        var u = lt / r.d, op = smooth(lt / XF) * smooth((r.d - lt) / XF);
+        var t = r.a + (r.b - r.a) * u, zoom = r.z * (1 + PUSH * u);
+        var o = offset(r, u), cx = 0.5 + o[0], cy = frame.portrait ? 0.46 + o[1] * (608 / 1920) : 0.5 + o[1];
+        var L = layers[layerOf(i)];
+        used[layerOf(i)] = true;
+        WL.render(L, r.n, t, "deep", { w: frame.w, h: frame.h, cx: cx, cy: cy, zoom: zoom });
+        L.style.opacity = op.toFixed(3);
+      });
+      layers.forEach(function (L, j) { if (!used[j]) { L.innerHTML = ""; L.style.opacity = "0"; } });
+    }
+    // one frame at a time, at most 30 a second (fewer when frames are costly here); only while the hero is on screen
+    var seen = true, clock = 0, last = 0, drawnAt = -1e9, gap = 1000 / 30, cost = 0, raf = 0;
+    function tick(now) {
+      raf = 0;
+      if (!window.WL || !seen || document.hidden) { last = 0; return; }
+      if (!frame) place();
+      if (last) clock = (clock + (now - last) / 1000) % TOTAL;
+      last = now;
+      if (now - drawnAt >= gap) {
+        var t0 = performance.now();
+        draw(clock);
+        var ms = performance.now() - t0;
+        cost = cost ? cost * 0.8 + ms * 0.2 : ms; gap = Math.min(1000 / 12, Math.max(1000 / 30, cost * 2.5));
+        drawnAt = now;
+        media.classList.add("is-live");
+      }
+      raf = requestAnimationFrame(tick);
+    }
+    function kick() { if (!raf) raf = requestAnimationFrame(tick); }
+    function start() { deepTheme(); place(); kick(); }
+    window.addEventListener("resize", function () { place(); });
+    wide.addEventListener("change", function () { place(); drawnAt = -1e9; });
+    if (window.IntersectionObserver) new IntersectionObserver(function (es) { seen = es[0].isIntersecting; if (seen) kick(); }).observe(media);
+    document.addEventListener("visibilitychange", function () { if (!document.hidden) kick(); });
+    var tag = document.getElementById("wl-motion");
+    if (window.WL) start(); else if (tag) tag.addEventListener("load", start);
+  })();
 
   /* the bar is transparent over the hero, then takes its translucent white */
   var head = document.querySelector(".site-head"), heroEl = document.querySelector(".hero");
@@ -2916,8 +3035,10 @@ var DRAW = {
       var k = s ? lightOf(s) : null;
       ["green", "blue", "honey"].forEach(function (n) { bookPanel.classList.toggle("look-" + n, k === n); });
       bookPanel.classList.toggle("has-light", !!k);
-      bookPanel.style.setProperty("--tint", k ? LEAF_LOOKS[k].flat : s ? tintOf(s) : "var(--navy)");
-      if (panelLight) panelLight.look(k);
+      var PAPER_FLAT = { blue: "#1F3852", green: "#233923", honey: "#6B330C" }; // each group's third strip with white text
+      bookPanel.style.setProperty("--tint", k ? PAPER_FLAT[k] : s ? (isWs(s) ? "#433A31" : tintOf(s)) : "var(--navy)");
+      bookPanel.classList.toggle("look-family", !!(s && isWs(s))); // light gold accents on the workshop's stone, as on honey
+      if (panelLight) panelLight.look(null); // the leaf light is no longer used
     }
     // bookings start from tomorrow; a day offers the sessions that fit the chip, those with places left first
     var bookable = function (d) {
