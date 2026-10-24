@@ -3,19 +3,19 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>WonderLab — Creative thinking academy, Mong Kok</title>
-<meta name="description" content="WonderLab is a creative thinking academy in Mong Kok, Hong Kong. Children aged 7 to 14 design, build and test their own ideas in classes of seven or fewer.">
+<title>WonderLab — Creative thinking academy, Mong Kok &amp; Wan Chai</title>
+<meta name="description" content="WonderLab is a creative thinking academy in Mong Kok and Wan Chai, Hong Kong. Children aged 7 to 14 design, build and test their own ideas in classes of seven or fewer.">
 <meta name="theme-color" content="#FFFFFF">
-<!-- the link preview (WhatsApp, iMessage, social apps): edit the title and text here; the image is media/og-2.jpg (1200 x 630) -->
+<!-- the link preview (WhatsApp, iMessage, social apps): edit the title and text here; the image is media/og-3.jpg (1200 x 630) -->
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="WonderLab">
 <meta property="og:url" content="https://wonderlab.page/">
-<meta property="og:title" content="WonderLab — Creative thinking academy, Mong Kok">
-<meta property="og:description" content="Children aged 7 to 14 design, build and test their own ideas in classes of seven or fewer.">
-<meta property="og:image" content="https://wonderlab.page/media/og-2.jpg">
+<meta property="og:title" content="Creative thinking academy">
+<meta property="og:description" content="Mong Kok &amp; Wan Chai&#10;Hong Kong">
+<meta property="og:image" content="https://wonderlab.page/media/og-3.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="WonderLab, creative thinking academy, Mong Kok, Hong Kong">
+<meta property="og:image:alt" content="WonderLab, creative thinking academy, Mong Kok &amp; Wan Chai, Hong Kong">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='-64 -64 128 128'%3E%3Crect x='-62' y='-62' width='124' height='124' rx='14' fill='%231A3F6E'/%3E%3Crect x='-38' y='-38' width='76' height='76' fill='none' stroke='%23FF6000' stroke-width='12'/%3E%3C/svg%3E">
 <script id="wl-motion" src="media/wl-motion.js?v=1" async></script> <!-- live challenge animations: bump ?v= when rebuilt -->
@@ -903,6 +903,22 @@ video.is-waiting { opacity: 0 !important; }
 .map-go:hover .pin-t, .map-go:focus-visible .pin-t { fill: var(--orange); }
 .map-go:focus-visible { outline: none; }
 .map-go:focus-visible circle:first-child { stroke: var(--orange); stroke-width: 2; }
+/* the two places side by side, each a small schematic map and its name, the whole card a link to Google Maps */
+.maps { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 12px; }
+.map-card { display: block; text-decoration: none; color: var(--on-navy); }
+.map-card svg { display: block; width: 100%; height: auto; }
+.map-card text { paint-order: stroke; stroke: #14293A; stroke-width: 3px; stroke-linejoin: round; }
+.map-card .lbl-s { font-size: 11px; }
+.map-card .water { font-size: 11px; }
+.map-cap { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 9px 12px 10px; font-size: 0.95rem; font-weight: 500;
+  letter-spacing: -0.015em; border-top: 1px solid rgba(237, 243, 246, 0.14); transition: color 160ms ease; }
+.map-cap .go { color: var(--on-navy-soft); transition: color 160ms ease; }
+.map-card:hover .map-cap, .map-card:hover .go, .map-card:focus-visible .map-cap, .map-card:focus-visible .go { color: var(--orange); }
+.map-card:focus-visible { outline: 2px solid var(--orange); outline-offset: 2px; }
+@media (max-width: 860px) {
+  .maps { gap: 10px; }
+  .map-cap { padding: 7px 10px 8px; font-size: 0.84rem; }
+}
 @media (max-width: 860px) { .visit-top { grid-template-columns: 1fr; } }
 /* phones: the navy close (details, map, closing line, footer) fits on one screen under the bar: tighter type and
    spacing, the closing line small enough that "Shape the world of tomorrow." stays on one line */
@@ -1108,51 +1124,52 @@ footer { background: var(--deep); color: var(--on-navy-soft); padding: clamp(44p
     <div class="visit-top">
       <dl class="hours fade">
         <div><dt>When</dt><dd>Monday to Friday, 4:00 to 5:30pm and 6:00 to 7:30pm. Saturdays, 10:00am and 2:00pm, with a parent &amp; child workshop at 4:00pm</dd></div>
-        <div><dt>Where</dt><dd>Mong Kok, Kowloon, Hong Kong</dd></div>
+        <div><dt>Where</dt><dd>Mong Kok &amp; Wan Chai, Hong Kong</dd></div>
         <div><dt>Class size</dt><dd>Seven students at most; three parent &amp; child pairs on Saturdays</dd></div>
         <div><dt>WhatsApp</dt><dd><a class="js-wa" data-msg="Hi Julien, I have a question about WonderLab." href="https://wa.me/85267533727" target="_blank" rel="noopener">Contact us</a></dd></div>
       </dl>
-      <figure class="map fade">
-        <svg viewBox="0 0 640 360" role="group" aria-label="Schematic map of Mong Kok in Kowloon, showing Nathan Road and the MTR from Prince Edward through Mong Kok to Yau Ma Tei, Mong Kok East on the East Rail line and Olympic to the west, with WonderLab near Mong Kok station">
-          <rect class="land" width="640" height="360" stroke="none"/>
-          <path class="sea" d="M0 0H58C70 60 52 118 66 176C78 226 60 286 72 360H0Z"/>
-          <path class="road" d="M96 0C92 120 100 240 94 360"/>
-          <path class="road-s" d="M150 0V360M236 0V360M284 0V360M388 0V360M430 0V360M498 18C492 120 500 240 494 360"/>
-          <path class="road-s" d="M94 110H640M94 238H640M94 300H640"/>
-          <path class="road" d="M94 58C260 52 430 54 640 40"/>
-          <path class="road" d="M94 176H640"/>
-          <path class="road" d="M330 0V360"/>
-          <path class="road" d="M430 300C500 280 560 252 640 236"/>
-          <path class="mtr" d="M344 0V360"/>
-          <path class="mtr" d="M560 0C556 90 568 170 562 250C558 300 566 330 564 360"/>
-          <path class="mtr" d="M60 132C110 166 150 190 176 206C200 222 218 250 226 280L234 360"/>
-          <circle class="stn" cx="344" cy="58" r="8"/>
-          <circle class="stn" cx="344" cy="176" r="8"/>
-          <circle class="stn" cx="344" cy="306" r="8"/>
-          <circle class="stn" cx="562" cy="176" r="8"/>
-          <circle class="stn" cx="176" cy="206" r="8"/>
-          <text class="lbl-s" x="358" y="48">Prince Edward</text>
-          <text class="lbl-s" x="358" y="334">Yau Ma Tei</text>
-          <text class="lbl-s" x="548" y="204" text-anchor="end">Mong Kok East</text>
-          <text class="lbl-s" x="120" y="236">Olympic</text>
-          <text class="lbl-s" x="321" y="292" transform="rotate(-90 321 292)">Nathan Road</text>
-          <text class="lbl-s" x="196" y="170">Argyle Street</text>
-          <text class="lbl" x="130" y="94">Tai Kok Tsui</text>
-          <text class="lbl" x="450" y="276">Yau Ma Tei</text>
-          <text class="water" x="12" y="330" transform="rotate(-90 12 330)" dx="0" dy="18">Victoria Harbour</text>
-          <a class="map-go" href="https://www.google.com/maps/dir/?api=1&amp;destination=Mong%20Kok%20Station%2C%20Hong%20Kong" target="_blank" rel="noopener" aria-label="WonderLab, Mong Kok: get directions in Google Maps (opens in a new tab)">
-          <g transform="translate(370 140)">
-            <circle r="26" fill="rgba(255,96,0,0.22)"/>
-            <path d="M0 18C-9 6-14 0-14-8A14 14 0 0 1 14-8C14 0 9 6 0 18Z" fill="#FF6000" stroke="#0D1B26" stroke-width="2"/>
-            <circle cy="-8" r="5" fill="#0D1B26"/>
-          </g>
-          <text class="pin-t" x="398" y="136">WonderLab</text>
-          <text class="lbl-s" x="398" y="156">Mong Kok</text>
-          </a>
-          <g transform="translate(606 34)" fill="none" stroke="#7F95A5" stroke-width="2"><path d="M0 14V-12M-6-4L0-12L6-4"/></g>
-          <text class="lbl-s" x="599" y="64">N</text>
-        </svg>
-      </figure>
+      <div class="maps fade">
+        <a class="map map-card" href="https://maps.app.goo.gl/BUkNJVJVUxLdG4Ts8" target="_blank" rel="noopener" aria-label="WonderLab Mong Kok, on Nathan Road between Mong Kok and Prince Edward stations: open in Google Maps (opens in a new tab)">
+          <svg viewBox="0 0 240 150" aria-hidden="true">
+            <rect class="land" width="240" height="150" stroke="none"/>
+            <path class="road-s" d="M60 0V150M170 0V150M0 60H240M0 136H240"/>
+            <path class="road" d="M0 24H240M0 104H240"/>
+            <path class="road" d="M110 0V150"/>
+            <path class="mtr" d="M120 0V150"/>
+            <path class="mtr" d="M214 0C211 50 217 100 214 150"/>
+            <circle class="stn" cx="120" cy="24" r="6"/>
+            <circle class="stn" cx="120" cy="104" r="6"/>
+            <circle class="stn" cx="214" cy="110" r="6"/>
+            <text class="lbl-s" x="130" y="17">Prince Edward</text>
+            <text class="lbl-s" x="130" y="124">Mong Kok</text>
+            <text class="lbl-s" x="207" y="96" text-anchor="end">Mong Kok East</text>
+            <text class="lbl-s" x="8" y="97">Argyle St</text>
+            <text class="lbl-s" x="103" y="146" transform="rotate(-90 103 146)">Nathan Rd</text>
+            <g transform="translate(110 70) scale(0.8)"><circle r="24" fill="rgba(255,96,0,0.24)"/><path d="M0 18C-9 6-14 0-14-8A14 14 0 0 1 14-8C14 0 9 6 0 18Z" fill="#FF6000" stroke="#0D1B26" stroke-width="2"/><circle cy="-8" r="5" fill="#0D1B26"/></g>
+          </svg>
+          <span class="map-cap">Mong Kok<span class="go" aria-hidden="true">&#8599;</span></span>
+        </a>
+        <a class="map map-card" href="https://maps.app.goo.gl/GFStYoHqheFDycXo8" target="_blank" rel="noopener" aria-label="WonderLab Wan Chai, on Queen&rsquo;s Road East south of Wan Chai station: open in Google Maps (opens in a new tab)">
+          <svg viewBox="0 0 240 150" aria-hidden="true">
+            <rect class="land" width="240" height="150" stroke="none"/>
+            <path class="sea" d="M0 0H240V24C180 30 60 20 0 28Z"/>
+            <path class="road-s" d="M40 42V150M150 42V150M188 42V150"/>
+            <path class="road-s" d="M0 140C80 146 160 144 240 136"/>
+            <path class="road" d="M0 42H240M0 74H240"/>
+            <path class="road" d="M0 104C40 108 80 114 113 116C150 118 190 110 240 100"/>
+            <path class="mtr" d="M0 82H240"/>
+            <circle class="stn" cx="92" cy="82" r="6"/>
+            <circle class="stn" cx="212" cy="82" r="6"/>
+            <text class="water" x="8" y="17">Victoria Harbour</text>
+            <text class="lbl-s" x="100" y="68">Wan Chai</text>
+            <text class="lbl-s" x="232" y="97" text-anchor="end">Causeway Bay</text>
+            <text class="lbl-s" x="8" y="68">Hennessy Rd</text>
+            <text class="lbl-s" x="8" y="128">Queen&rsquo;s Rd East</text>
+            <g transform="translate(113 114) scale(0.8)"><circle r="24" fill="rgba(255,96,0,0.24)"/><path d="M0 18C-9 6-14 0-14-8A14 14 0 0 1 14-8C14 0 9 6 0 18Z" fill="#FF6000" stroke="#0D1B26" stroke-width="2"/><circle cy="-8" r="5" fill="#0D1B26"/></g>
+          </svg>
+          <span class="map-cap">Wan Chai<span class="go" aria-hidden="true">&#8599;</span></span>
+        </a>
+      </div>
     </div>
     <h2 class="visit-line fade"><span class="vl-roll"><span class="roll">Dream</span> it. <span class="roll">Sketch</span> it. <span class="roll">Build</span> it. <span class="roll">Break</span> it.</span> <span class="vl-shape">Shape the world of tomorrow.</span></h2>
     <p class="visit-sub fade">Built by architects. Designed for kids.</p>
