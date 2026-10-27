@@ -617,6 +617,23 @@ video.is-waiting { opacity: 0 !important; }
   .ch-panel .ch-figure svg:not(.wl-live) { color: var(--strip-ink, #FFFFFF); }
 }
 
+/* phones, every challenge open at once (data-all-open on the page; the second preview): one strip each, as the list's
+   strips are, holding its animation, its title with its theme, its text and its skill, as an open challenge shows
+   them. No swaps, no masks: the page scrolls as any page does. Laptops keep the list and its panel */
+.ch-open-list { display: none; }
+@media (max-width: 900px) {
+  .challenges.all-open #ch-list { display: none; }
+  .challenges.all-open .ch-open-list { display: block; }
+  .ch-open-list .ch-figure { aspect-ratio: 4 / 3; background: transparent; }
+  .ch-open-list h3 { padding: 16px 20px 10px; font-size: var(--t2); line-height: 1.08; letter-spacing: -0.03em; color: var(--strip-ink, #FFFFFF); }
+  .ch-open-list h3 small { float: right; margin-left: 14px; padding-top: 4px; font-size: 0.88rem; font-weight: 400; letter-spacing: -0.025em;
+    line-height: calc(var(--t2) * 1.08 - 5px); white-space: nowrap; color: var(--strip-accent, var(--orange)); }
+  .ch-open-list .ch-body { padding: 0 20px 22px; background: none; color: var(--strip-ink, #FFFFFF); }
+  .ch-open-list .ch-body p { margin-top: 2px; color: var(--strip-soft, rgba(255, 255, 255, 0.75)); }
+  .ch-open-list .ch-body .ch-skill { margin-top: 12px; padding-top: 0; border-top: 0; color: var(--strip-ink, #FFFFFF); }
+  .ch-open-list .ch-skill b { color: var(--strip-accent, var(--orange)); }
+}
+
 /* tutor */
 .tutor { display: grid; grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr); gap: clamp(26px, 5vw, 72px); align-items: start; }
 .tutor-photo { margin: 0; border-radius: var(--r); overflow: hidden; background: var(--paper-2); }
@@ -2909,7 +2926,7 @@ var DRAW = {
     if (Math.abs(ys[k] - y) >= FLOW_NEAR) flowGlide(k);
   }
   function flowSet() {
-    var on = isPhone.matches && !reduce.matches && !!tabs.length;
+    var on = isPhone.matches && !reduce.matches && !!tabs.length && !ALL_OPEN;
     if (!on) { flowStop(); gest = null; }
     if (!on && scrub) endScrub(true);
     flowOn = on;
@@ -3029,6 +3046,38 @@ var DRAW = {
 
   var STAGE_TINT = ["var(--st-0)", "var(--st-1)", "var(--st-2)"];
 
+  /* phones, with data-all-open on the page (the second preview): every challenge open at once, in a list of its own
+     beside the usual one (which is hidden there). Each strip has the list's colour for its place, its animation
+     playing from the finished drawing (only those on screen are drawn), its title and theme, text and skill */
+  var ALL_OPEN = document.documentElement.hasAttribute("data-all-open"), openList = null;
+  function buildOpen(g) {
+    if (!openList) {
+      openList = document.createElement("ul"); openList.className = "ch-list ch-open-list";
+      list.parentNode.insertBefore(openList, list.nextSibling);
+      chWrap.classList.add("all-open");
+    }
+    players.forEach(function (p) { if (openList.contains(p.svg)) p.pause(); });
+    openList.textContent = "";
+    var ink = liveInk;
+    GROUPS[g].items.forEach(function (item, i) {
+      var li = document.createElement("li"), st = strips[i];
+      paintStrip(li, st);
+      li.style.setProperty("--zi", String(-(2 * i + 1))); li.style.setProperty("--zs", String(-(2 * i + 2)));
+      var fig = document.createElement("div"); fig.className = "ch-figure"; li.appendChild(fig);
+      var h = document.createElement("h3"); h.innerHTML = "<small></small><span></span>";
+      h.firstChild.textContent = item[4]; h.lastChild.textContent = item[1]; li.appendChild(h);
+      var body = document.createElement("div"); body.className = "ch-body";
+      var what = document.createElement("p"); what.textContent = item[2]; body.appendChild(what);
+      var skill = document.createElement("p"); skill.className = "ch-skill"; skill.innerHTML = "<b>Skill.</b> ";
+      skill.appendChild(document.createTextNode(item[3])); body.appendChild(skill); li.appendChild(body);
+      openList.appendChild(li);
+      liveInk = st && st.light ? st.ink : "";
+      var v = figureInto(fig, item[5] || item[0], STAGE_PAPER[g] || "");
+      if (v) { v.fresh = false; v.play(); }
+    });
+    if (openList.lastChild) openList.lastChild.classList.add("is-last");
+    liveInk = ink;
+  }
   function selectGroup(g, focus) {
     group = GROUPS[g];
     chWrap.style.setProperty("--stage", STAGE_TINT[g] || "var(--navy)");
@@ -3063,6 +3112,7 @@ var DRAW = {
     selectItem(0, false, true);
     joinTabs();
     flowDirty = true;
+    if (ALL_OPEN) buildOpen(g);
     flowSet();
   }
 
