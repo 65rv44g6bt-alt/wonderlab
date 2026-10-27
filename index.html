@@ -2654,10 +2654,11 @@ var DRAW = {
     elSkill.innerHTML = "<b>Skill.</b> ";
     elSkill.appendChild(document.createTextNode(item[3]));
     reach(true);
+    if (v && flowOn) v.fresh = false; // opened by the scroll: it starts from the finished drawing, not a blank page
     playOnly(v, panel);
   }
 
-  function selectItem(i, focus, instant) {
+  function selectItem(i, focus, instant, scrub) {
     finishSwap();
     var phoneSwap = isPhone.matches && !instant && !reduce.matches && tabs[i];
     var snap = phoneSwap && i !== active ? snapshot(i) : null;
@@ -2677,7 +2678,7 @@ var DRAW = {
     var item = group.items[i];
     placePanel(i);
     if (instant || reduce.matches) { fill(item); if (!instant && isPhone.matches) bringPanel(i, before, false); return; }
-    if (isPhone.matches) { fill(item); if (snap) swapTo(i, snap); return; }
+    if (isPhone.matches) { fill(item); if (snap) swapTo(i, snap, scrub); return; }
     panel.classList.add("is-swapping");
     swapTimer = setTimeout(function () { fill(item); panel.classList.remove("is-swapping"); }, 170);
   }
@@ -2723,7 +2724,7 @@ var DRAW = {
     stackStrips();
     return s;
   }
-  function swapTo(i, s) {
+  function swapTo(i, s, scrub) {
     var o = { duration: SWAP, easing: EASE };
     groupExtra = s.rows[1] ? s.rows[1].li : null;
     [panelSlot, bodySlot].forEach(function (sl) { sl.style.overflow = "hidden"; });
@@ -2739,7 +2740,11 @@ var DRAW = {
       swapRows.push(r.li);
       if (Math.abs(h1 - r.h) > 0.5) swapAnims.push(r.li.animate([{ height: r.h + "px" }, { height: h1 + "px" }], o));
       if (Math.abs(f1 - r.fs) > 0.5) swapAnims.push(r.tab.lastChild.animate([{ transform: "scale(" + (r.fs / f1).toFixed(4) + ")" }, { transform: "none" }], o));
+      // a title shrinking back into the list is drawn bigger than its row until the end: its theme waits till then
+      if (r.fs - f1 > 0.5) swapAnims.push(r.tab.firstChild.animate([{ opacity: 0 }, { opacity: 0, offset: 0.8 }, { opacity: 1 }], o));
     });
+    // held at its start for the scroll to move it along (flow); otherwise it plays out on its own
+    if (scrub) { swapAnims.forEach(function (a) { a.pause(); a.currentTime = 0; }); stackStrips(); return; }
     if (swapAnims[0]) swapAnims[0].onfinish = finishSwap;
     stackStrips();
     (function follow() { groupHeight(); if (swapAnims.length) requestAnimationFrame(follow); })();
@@ -2766,6 +2771,73 @@ var DRAW = {
       if (t < 1) glideRaf = requestAnimationFrame(step);
     })(t0);
   }
+
+  /* phones, motion allowed: the challenges open with the scroll. One is open at a time; as the page scrolls, the open
+     one closes while the next opens, by the same masks and sizes as a swap (swapTo) but moved along by the scroll
+     position instead of a clock, so it runs at the scroll's own speed, either way, and stops where the scroll stops.
+     A title is the open one when its row's top is at a line that rises from 60% to 42% down the screen over the list
+     (FLOW_FROM, FLOW_TO), so the open challenge stays in view while the closed titles go by above and below it with
+     the page; the swap between two titles takes the middle FLOW_W of the scroll from one to the next, and the page
+     never scrolls by itself. A tap on a title scrolls to it. With reduced motion, a tap opens it as before */
+  var FLOW_FROM = 0.6, FLOW_TO = 0.42, FLOW_W = 0.6;
+  var flowOn = false, flowDirty = true, flowW = 0, flowVh = 0, flowFig = 0, rowH = [], scrub = null, flowRaf = 0;
+  // every title's height when closed (the open one is closed for the moment it takes to measure it) and the
+  // animation's, measured while nothing moves: again once the fonts are in, as they change how the titles wrap. The
+  // screen's height is taken here too, not followed as the phone's toolbar comes and goes
+  function flowMeasure() {
+    var t = tabs[active];
+    if (t) t.setAttribute("aria-selected", "false");
+    rowH = tabs.map(function (b) { return b.parentNode.offsetHeight; });
+    if (t) t.setAttribute("aria-selected", "true");
+    flowFig = panelSlot.parentNode ? panelSlot.offsetHeight : 0;
+    flowW = window.innerWidth; flowVh = window.innerHeight;
+    flowDirty = false;
+  }
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () { flowDirty = true; flowTick(); });
+  // the scroll position at which each title is the open one: the animation sits above the open title, the closed
+  // titles before it above that
+  function flowStops() {
+    var n = tabs.length, top = list.getBoundingClientRect().top + window.scrollY, vh = flowVh || window.innerHeight;
+    var acc = flowFig, ys = [];
+    for (var k = 0; k < n; k++) {
+      ys.push(top + acc - vh * (FLOW_FROM - (FLOW_FROM - FLOW_TO) * (n > 1 ? k / (n - 1) : 0)));
+      acc += rowH[k] || 0;
+    }
+    return ys;
+  }
+  function flowGo(i) { window.scrollTo({ top: Math.max(0, flowStops()[i]), behavior: "smooth" }); }
+  function beginScrub(to) { var from = active; selectItem(to, false, false, true); scrub = { from: from, to: to }; }
+  function setScrub(p) { swapAnims.forEach(function (a) { a.currentTime = p * SWAP; }); groupHeight(); }
+  // done: the new one stays open; otherwise the old one opens again
+  function endScrub(done) { var s = scrub; scrub = null; finishSwap(); if (!done && s) selectItem(s.from, false, true); }
+  function flowTick() {
+    flowRaf = 0;
+    if (!flowOn || tabs.length < 2) return;
+    if (flowDirty && !scrub) flowMeasure();
+    var ys = flowStops(), n = ys.length, y = window.scrollY, x = 0, j = 0;
+    if (y >= ys[n - 1]) x = n - 1;
+    else if (y > ys[0]) { while (y > ys[j + 1]) j++; x = j + (y - ys[j]) / (ys[j + 1] - ys[j]); }
+    var k = Math.min(n - 2, Math.floor(x)), f = Math.min(1, Math.max(0, (x - k - (1 - FLOW_W) / 2) / FLOW_W));
+    if (scrub) {
+      if (Math.min(scrub.from, scrub.to) === k && f > 0 && f < 1) { setScrub(scrub.to > scrub.from ? f : 1 - f); return; }
+      var want = f < 0.5 ? k : k + 1;
+      endScrub(Math.abs(scrub.to - want) <= Math.abs(scrub.from - want));
+    }
+    var settle = f <= 0 ? k : f >= 1 ? k + 1 : -1;
+    if (settle >= 0) { if (active !== settle) selectItem(settle, false, true); return; }
+    if (active !== k && active !== k + 1) selectItem(f < 0.5 ? k : k + 1, false, true); // a fling past several
+    beginScrub(active === k ? k + 1 : k);
+    setScrub(scrub.to > scrub.from ? f : 1 - f);
+  }
+  function flowSet() {
+    var on = isPhone.matches && !reduce.matches && !!tabs.length;
+    if (!on && scrub) endScrub(true);
+    flowOn = on;
+    // the list changes height as it swaps: the page must not shift itself to make up for it
+    document.documentElement.style.overflowAnchor = on ? "none" : "";
+    if (on) flowTick();
+  }
+  window.addEventListener("scroll", function () { if (flowOn && !flowRaf) flowRaf = requestAnimationFrame(flowTick); }, { passive: true });
 
   // phones: the animation and its text go in the list, just above the chosen title; elsewhere they go back beside it
   var panelHome = panel.parentNode, panelNext = panel.nextSibling, panelSlot = document.createElement("li");
@@ -2889,8 +2961,8 @@ var DRAW = {
       b.innerHTML = "<small></small><span></span>";
       b.lastChild.textContent = item[1];
       b.firstChild.textContent = item[4];
-      b.addEventListener("click", function () { selectItem(i, false); });
-      b.addEventListener("keydown", function (e) { arrowNav(e, i, group.items.length, function (n) { selectItem(n, true); }); });
+      b.addEventListener("click", function () { if (flowOn) flowGo(i); else selectItem(i, false); });
+      b.addEventListener("keydown", function (e) { arrowNav(e, i, group.items.length, function (n) { if (flowOn) { flowGo(n); tabs[n].focus({ preventScroll: true }); } else selectItem(n, true); }); });
       li.appendChild(b); list.appendChild(li);
       return b;
     });
@@ -2903,8 +2975,11 @@ var DRAW = {
     active = -1;
     setPaper(stagesRow, STAGE_PAPER[g] || "");
     document.documentElement.style.setProperty("--prog-accent", "var(--dot-" + g + ")"); // the heading's mark and full stop
+    scrub = null;
     selectItem(0, false, true);
     joinTabs();
+    flowDirty = true;
+    flowSet();
   }
 
   stageTabs.forEach(function (t, g) {
@@ -2913,11 +2988,16 @@ var DRAW = {
   });
   selectGroup(0, false);
   isPhone.addEventListener("change", function () {
+    if (scrub) endScrub(true);
     placePanel(Math.max(0, active));
     joinTabs();
     fill(group.items[Math.max(0, active)]);
     if (!isPhone.matches) moveSlider(Math.max(0, active), true);
+    flowSet();
   });
+  if (reduce.addEventListener) reduce.addEventListener("change", flowSet);
+  // a new width rewraps the titles: measure them again (the group is rebuilt where the scroll has it)
+  window.addEventListener("resize", function () { if (flowOn && window.innerWidth !== flowW) selectGroup(GROUPS.indexOf(group), false); });
 
   /* ---------- leaf light: sunlight through leaves moving across a grainy wall (green01), behind the booking panel ----------
      From grahic design/green01-leaflight.html (and its -blue and -honey copies). The photo is split once on the GPU into
