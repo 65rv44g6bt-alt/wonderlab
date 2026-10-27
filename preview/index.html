@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- Preview of the work in progress (branch claude/beautiful-gates-b4wjh0 at c7a53ad), not the live site: the same page with its media one folder up. Not for search engines. -->
+<!-- Preview of the work in progress (branch claude/beautiful-gates-b4wjh0 at 6d3ce77), not the live site: the same page with its media one folder up. Not for search engines. -->
 <html lang="en">
 <head>
 <meta charset="utf-8">
@@ -362,7 +362,7 @@ video.is-waiting { opacity: 0 !important; }
   -webkit-mask-image: var(--edge); -webkit-mask-composite: source-in; mask-image: var(--edge); mask-composite: intersect; }
 .ch-figure video { transition: opacity 260ms ease; }
 .ch-figure svg { width: 82%; margin: 0 auto; color: var(--on-navy); }
-.ch-figure svg.wl-live { width: 100%; max-width: none; margin: 0; }
+.ch-figure svg.wl-live { width: 100%; max-width: none; margin: 0; pointer-events: none; } /* redrawn every frame: a finger must land on the figure, which stays */
 .ch-body { padding: clamp(18px, 2.4vw, 28px); color: var(--on-navy); }
 .ch-kind { font-size: var(--t-1); font-weight: 500; }
 .ch-body h3 { margin-top: 6px; font-size: var(--t2); }
@@ -2727,7 +2727,7 @@ var DRAW = {
     return s;
   }
   function swapTo(i, s, scrub) {
-    var o = { duration: SWAP, easing: EASE };
+    var o = { duration: SWAP, easing: scrub ? "linear" : EASE };
     groupExtra = s.rows[1] ? s.rows[1].li : null;
     [panelSlot, bodySlot].forEach(function (sl) { sl.style.overflow = "hidden"; });
     var figH = panelSlot.offsetHeight, bodyH = bodySlot.offsetHeight;
@@ -2774,14 +2774,16 @@ var DRAW = {
     })(t0);
   }
 
-  /* phones, motion allowed: the challenges open with the scroll. One is open at a time; as the page scrolls, the open
-     one closes while the next opens, by the same masks and sizes as a swap (swapTo) but moved along by the scroll
-     position instead of a clock, so it runs at the scroll's own speed, either way, and stops where the scroll stops.
-     A title is the open one when its row's top is at a line that rises from 60% to 42% down the screen over the list
-     (FLOW_FROM, FLOW_TO), so the open challenge stays in view while the closed titles go by above and below it with
-     the page; the swap between two titles takes the middle FLOW_W of the scroll from one to the next, and the page
-     never scrolls by itself. A tap on a title scrolls to it. With reduced motion, a tap opens it as before */
-  var FLOW_FROM = 0.6, FLOW_TO = 0.42, FLOW_W = 0.6;
+  /* phones, motion allowed: the challenges open with the scroll, one swipe one challenge. One is open at a time, its
+     title on a line just above the middle of the screen (FLOW_LINE); each title has its scroll position (flowStops),
+     one closed row apart, and the page always comes to rest on one. Between two of them the open one closes while the
+     next opens, by the same masks and sizes as a swap (swapTo), moved along by the scroll position instead of a clock.
+     A swipe that starts in the list moves it by one challenge whatever its length: the page follows the finger as far
+     as the next challenge and no further, and on release glides the rest of the way (FLOW_GLIDE), or back if the
+     finger barely moved (FLOW_MIN). Past the first or the last challenge the page scrolls as usual. Ordinary scrolling
+     that comes to rest inside the list settles on the nearest challenge. A tap on a title glides to it. With reduced
+     motion, a tap opens it as before */
+  var FLOW_LINE = 0.52, FLOW_GLIDE = 460, FLOW_MIN = 10, FLOW_NEAR = 6; // FLOW_NEAR: px from a stop that count as on it (things above can shift the list a little as they load)
   var flowOn = false, flowDirty = true, flowW = 0, flowVh = 0, flowFig = 0, rowH = [], scrub = null, flowRaf = 0;
   // every title's height when closed (the open one is closed for the moment it takes to measure it) and the
   // animation's, measured while nothing moves: again once the fonts are in, as they change how the titles wrap. The
@@ -2802,12 +2804,30 @@ var DRAW = {
     var n = tabs.length, top = list.getBoundingClientRect().top + window.scrollY, vh = flowVh || window.innerHeight;
     var acc = flowFig, ys = [];
     for (var k = 0; k < n; k++) {
-      ys.push(top + acc - vh * (FLOW_FROM - (FLOW_FROM - FLOW_TO) * (n > 1 ? k / (n - 1) : 0)));
+      ys.push(top + acc - vh * FLOW_LINE);
       acc += rowH[k] || 0;
     }
     return ys;
   }
-  function flowGo(i) { window.scrollTo({ top: Math.max(0, flowStops()[i]), behavior: "smooth" }); }
+  function nearest(ys, y) { var k = 0; ys.forEach(function (v, j) { if (Math.abs(v - y) < Math.abs(ys[k] - y)) k = j; }); return k; }
+  function flowGo(i) { flowGlide(i); }
+  function jump(y) {
+    var html = document.documentElement, was = html.style.scrollBehavior;
+    html.style.scrollBehavior = "auto"; window.scrollTo(0, y); html.style.scrollBehavior = was;
+  }
+  // the page glides to a challenge's position (easing out), the swap following it frame by frame
+  var glideTo = -1, flowGlideRaf = 0;
+  function flowGlide(k) {
+    cancelAnimationFrame(flowGlideRaf);
+    var y0 = window.scrollY, y1 = Math.max(0, flowStops()[k]), t0 = performance.now();
+    glideTo = k;
+    (function step(now) {
+      var t = Math.min(1, (now - t0) / FLOW_GLIDE), e = 1 - Math.pow(1 - t, 3);
+      jump(y0 + (y1 - y0) * e); flowTick();
+      if (t < 1) flowGlideRaf = requestAnimationFrame(step); else glideTo = -1;
+    })(t0);
+  }
+  function flowStop() { cancelAnimationFrame(flowGlideRaf); glideTo = -1; }
   function beginScrub(to) { var from = active; selectItem(to, false, false, true); scrub = { from: from, to: to }; }
   function setScrub(p) { swapAnims.forEach(function (a) { a.currentTime = p * SWAP; }); groupHeight(); }
   // done: the new one stays open; otherwise the old one opens again
@@ -2819,7 +2839,9 @@ var DRAW = {
     var ys = flowStops(), n = ys.length, y = window.scrollY, x = 0, j = 0;
     if (y >= ys[n - 1]) x = n - 1;
     else if (y > ys[0]) { while (y > ys[j + 1]) j++; x = j + (y - ys[j]) / (ys[j + 1] - ys[j]); }
-    var k = Math.min(n - 2, Math.floor(x)), f = Math.min(1, Math.max(0, (x - k - (1 - FLOW_W) / 2) / FLOW_W));
+    var near = nearest(ys, y);
+    if (Math.abs(ys[near] - y) < FLOW_NEAR) x = near;
+    var k = Math.min(n - 2, Math.floor(x)), f = x - k;
     if (scrub) {
       if (Math.min(scrub.from, scrub.to) === k && f > 0 && f < 1) { setScrub(scrub.to > scrub.from ? f : 1 - f); return; }
       var want = f < 0.5 ? k : k + 1;
@@ -2831,15 +2853,77 @@ var DRAW = {
     beginScrub(active === k ? k + 1 : k);
     setScrub(scrub.to > scrub.from ? f : 1 - f);
   }
+  // a swipe that starts in the list: which challenge it starts from and which way it goes
+  var gest = null, touching = false, settleTimer = 0;
+  window.addEventListener("touchstart", function (e) {
+    touching = true; gest = null;
+    if (!flowOn || e.touches.length !== 1) return;
+    // a touch's events go to the element it started on, even after a swap takes that element out of the page, and
+    // from there they no longer reach the window: listen on the element itself as well
+    var el = e.target;
+    if (el && el.addEventListener && el !== window) {
+      el.addEventListener("touchmove", onMove, { passive: false });
+      ["touchend", "touchcancel"].forEach(function (t) { el.addEventListener(t, function off(ev) {
+        el.removeEventListener("touchmove", onMove); el.removeEventListener(t, off); touchEnd(ev); }); });
+    }
+    var ys = flowStops(), y = window.scrollY, n = ys.length;
+    if (y < ys[0] - 4 * FLOW_NEAR || y > ys[n - 1] + 4 * FLOW_NEAR) return; // outside the list: the page scrolls as usual
+    var t = e.touches[0];
+    gest = { x0: t.clientX, y0: t.clientY, s0: y, ys: ys, k: glideTo >= 0 ? glideTo : nearest(ys, y), dir: 0 };
+  }, { passive: true });
+  function onMove(e) {
+    if (e.__flow) return; // already seen on its way up
+    e.__flow = true;
+    if (!gest) return;
+    var t = e.touches[0], dy = gest.y0 - t.clientY, dx = gest.x0 - t.clientX, n = gest.ys.length;
+    if (!gest.dir) {
+      // decided on the first move: once the page has started scrolling on its own, it can no longer be held
+      if (!e.cancelable) { gest = null; return; }
+      if (Math.abs(dy) < 1 && Math.abs(dx) < 1) return;
+      var dir = dy > 0 ? 1 : -1;
+      // sideways, or out past the first or the last challenge: not a swipe through the list
+      if (Math.abs(dx) > Math.abs(dy) || gest.k + dir < 0 || gest.k + dir > n - 1) { gest = null; return; }
+      gest.dir = dir; flowStop();
+    }
+    e.preventDefault();
+    gest.dy = dy;
+    var a = gest.ys[gest.k], b = gest.ys[gest.k + gest.dir];
+    jump(Math.min(Math.max(a, b), Math.max(Math.min(a, b), gest.s0 + dy))); flowTick();
+  }
+  window.addEventListener("touchmove", onMove, { passive: false }); // also marks the page as one that may hold a swipe
+  function touchEnd(e) {
+    if (e.__flow) return;
+    e.__flow = true;
+    touching = e.touches && e.touches.length > 0;
+    var g = gest; gest = null;
+    clearTimeout(settleTimer); settleTimer = setTimeout(flowSettle, 160); // a slow drag ends without a fling
+    if (!g || !g.dir) return;
+    flowGlide((g.dy || 0) * g.dir > FLOW_MIN ? g.k + g.dir : g.k);
+  }
+  window.addEventListener("touchend", touchEnd, { passive: true });
+  window.addEventListener("touchcancel", touchEnd, { passive: true });
+  // ordinary scrolling that ends inside the list settles on the nearest challenge
+  function flowSettle() {
+    if (!flowOn || gest || touching || glideTo >= 0) return;
+    var ys = flowStops(), y = window.scrollY, n = ys.length;
+    if (y <= ys[0] + FLOW_NEAR || y >= ys[n - 1] - FLOW_NEAR) return;
+    var k = nearest(ys, y);
+    if (Math.abs(ys[k] - y) >= FLOW_NEAR) flowGlide(k);
+  }
   function flowSet() {
     var on = isPhone.matches && !reduce.matches && !!tabs.length;
+    if (!on) { flowStop(); gest = null; }
     if (!on && scrub) endScrub(true);
     flowOn = on;
     // the list changes height as it swaps: the page must not shift itself to make up for it
     document.documentElement.style.overflowAnchor = on ? "none" : "";
     if (on) flowTick();
   }
-  window.addEventListener("scroll", function () { if (flowOn && !flowRaf) flowRaf = requestAnimationFrame(flowTick); }, { passive: true });
+  window.addEventListener("scroll", function () {
+    if (!flowOn) return;
+    if (!flowRaf) flowRaf = requestAnimationFrame(flowTick);
+    clearTimeout(settleTimer); settleTimer = setTimeout(flowSettle, 160);
+  }, { passive: true });
 
   // phones: the animation and its text go in the list, just above the chosen title; elsewhere they go back beside it
   var panelHome = panel.parentNode, panelNext = panel.nextSibling, panelSlot = document.createElement("li");
