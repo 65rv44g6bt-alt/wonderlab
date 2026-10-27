@@ -61,6 +61,7 @@
   --gutter: clamp(20px, 5vw, 64px);
   --max: 1280px;
   --r: 18px;
+  --r-tab: 16px; /* the age boxes on phones, and the joins at the chosen one's foot */
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) { --paper: #FFFFFF; --ink: #1B1D1F; }  /* the page keeps one light look by design */
@@ -288,19 +289,19 @@ video.is-waiting { opacity: 0 !important; }
    top below the row, --tx/--ty/--th the box's place and height) */
 @media (max-width: 900px) {
   .stages { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 7px; align-items: end; margin: 0; }
-  .stage { gap: 4px; padding: 16px 6px 17px; margin-bottom: 10px; border-radius: 16px; min-width: 0; position: relative; }
+  .stage { gap: 4px; padding: 16px 6px 17px; margin-bottom: 10px; border-radius: var(--r-tab); min-width: 0; position: relative; }
   .stage .s-name { order: 1; font-size: clamp(0.8rem, 3.4vw, 1.3rem); letter-spacing: -0.035em; white-space: nowrap; }
   .stage .s-ages { order: 2; font-size: clamp(0.74rem, 3.2vw, 0.9rem); }
   .stage .s-verb, .stage .s-focus { display: none; }
-  #stage-tabs .stage[aria-selected="true"] { z-index: 1; margin-bottom: -1px; padding-bottom: 28px; border: 0; border-radius: 16px 16px 0 0;
+  #stage-tabs .stage[aria-selected="true"] { z-index: 1; margin-bottom: -1px; padding-bottom: 28px; border: 0; border-radius: var(--r-tab) var(--r-tab) 0 0;
     background: var(--paper-tint), var(--paper-img) calc(-1 * var(--pw, 100vw) - var(--tx, 0px)) calc(-1 * var(--ty, 0px)) / calc(2 * var(--pw, 100vw)) auto no-repeat, var(--paper-base, var(--navy)) !important; }
   #stage-tabs .stage[aria-selected="true"]::before, #stage-tabs .stage[aria-selected="true"]::after {
-    content: ""; position: absolute; bottom: 0; width: 16px; height: 16px; pointer-events: none;
+    content: ""; position: absolute; bottom: 0; width: var(--r-tab); height: var(--r-tab); pointer-events: none;
     background: var(--paper-tint), var(--paper-img) 0 0 / calc(2 * var(--pw, 100vw)) auto no-repeat, var(--paper-base, var(--navy)); }
-  #stage-tabs .stage[aria-selected="true"]::before { left: -16px; background-position: 0 0, calc(-1 * var(--pw, 100vw) - var(--tx, 0px) + 16px) calc(16px - var(--ty, 0px) - var(--th, 0px)), 0 0;
-    -webkit-mask: radial-gradient(circle at 0 0, transparent 15.5px, #000 16px); mask: radial-gradient(circle at 0 0, transparent 15.5px, #000 16px); }
-  #stage-tabs .stage[aria-selected="true"]::after { right: -16px; background-position: 0 0, calc(-1 * var(--pw, 100vw) - var(--tx, 0px) - var(--tw, 0px)) calc(16px - var(--ty, 0px) - var(--th, 0px)), 0 0;
-    -webkit-mask: radial-gradient(circle at 100% 0, transparent 15.5px, #000 16px); mask: radial-gradient(circle at 100% 0, transparent 15.5px, #000 16px); }
+  #stage-tabs .stage[aria-selected="true"]::before { left: calc(-1 * var(--r-tab)); background-position: 0 0, calc(-1 * var(--pw, 100vw) - var(--tx, 0px) + var(--r-tab)) calc(var(--r-tab) - var(--ty, 0px) - var(--th, 0px)), 0 0;
+    -webkit-mask: radial-gradient(circle at 0 0, transparent calc(var(--r-tab) - 0.5px), #000 var(--r-tab)); mask: radial-gradient(circle at 0 0, transparent calc(var(--r-tab) - 0.5px), #000 var(--r-tab)); }
+  #stage-tabs .stage[aria-selected="true"]::after { right: calc(-1 * var(--r-tab)); background-position: 0 0, calc(-1 * var(--pw, 100vw) - var(--tx, 0px) - var(--tw, 0px)) calc(var(--r-tab) - var(--ty, 0px) - var(--th, 0px)), 0 0;
+    -webkit-mask: radial-gradient(circle at 100% 0, transparent calc(var(--r-tab) - 0.5px), #000 var(--r-tab)); mask: radial-gradient(circle at 100% 0, transparent calc(var(--r-tab) - 0.5px), #000 var(--r-tab)); }
   /* a box at either end of the row runs straight down into the block's edge: no fillet on that side */
   #stage-tabs .stage[aria-selected="true"]:first-child::before, #stage-tabs .stage[aria-selected="true"]:last-child::after { display: none; }
 }
@@ -948,6 +949,7 @@ footer { background: var(--deep); color: var(--on-navy-soft); padding: clamp(44p
 /* terms & conditions pop-up */
 .terms { width: min(720px, calc(100% - 32px)); max-height: min(86vh, 900px); padding: 0; border: 0; border-radius: 20px; background: var(--paper); color: var(--ink); box-shadow: 0 24px 80px rgba(13,27,38,0.35); }
 .terms[open] { display: flex; flex-direction: column; }
+.terms-card { display: contents; } /* the card only takes shape where the corners are cut (Safari, see squircles) */
 .terms::backdrop { background: rgba(13,27,38,0.55); }
 .terms-head { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 22px 28px 16px; border-bottom: 1px solid var(--line); }
 .terms-head h2 { font-size: clamp(1.4rem, 1.1rem + 1vw, 1.9rem); }
@@ -959,6 +961,111 @@ footer { background: var(--deep); color: var(--on-navy-soft); padding: clamp(44p
 .terms-body ul { margin: 8px 0 0; padding-left: 1.15em; color: var(--ink-soft); }
 .terms-body li + li { margin-top: 6px; }
 @media (max-width: 600px) { .terms-head { padding: 18px 20px 14px; } .terms-body { padding: 4px 20px 24px; } }
+/* ---------- squircles ----------
+   Corners are squircles (their curve eases out of the straight edge, as on iPhone) wherever the browser can draw them,
+   and circular fillets elsewhere. A squircle looks tighter than a fillet of the same radius, so the radii grow by 1.6x
+   (18px to 29px, the age boxes 16px to 26px) to keep the corners as soft. Circles and pill buttons stay round. Chrome
+   and Edge draw them natively (corner-shape). Safari can't yet: there each rounded box is cut to the shape (clip-path:
+   shape(), a cubic per corner with its handles 9% of the radius from the corner, close to the same curve), over a
+   fillet of half the radius so the cut is all that shows; a box with an outline draws it as a ring cut the same way
+   (::after), since the cut would take a plain border off at the corners. Safari takes all this only if it reads every
+   part of the paths used (the test in @supports), so a ring can never show as a filled box. The concave joins (the
+   chosen age box into the block, the chosen title into the panel) are squircle slivers (masks) in both */
+@supports (corner-shape: squircle) or (clip-path: shape(evenodd from 0px 1px, curve to 1px 0px with 0px calc(1px * 0.09) / calc(1px * 0.09) 0px, hline to calc(100% - max(0px, 2px - 1px)), vline to 100%, close, move to 1px 1px, line to 2px 2px, close)) {
+  :root { --r: 29px; --r-tab: 26px; }
+  @media (max-width: 900px) {
+    #stage-tabs .stage[aria-selected="true"]::before { -webkit-mask: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20100%20100'%20preserveAspectRatio='none'%3E%3Cpath%20d='M100%200C100%2091%2091%20100%200%20100H100Z'/%3E%3C/svg%3E") 0 0 / 100% 100% no-repeat; mask: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20100%20100'%20preserveAspectRatio='none'%3E%3Cpath%20d='M100%200C100%2091%2091%20100%200%20100H100Z'/%3E%3C/svg%3E") 0 0 / 100% 100% no-repeat; }
+    #stage-tabs .stage[aria-selected="true"]::after { -webkit-mask: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20100%20100'%20preserveAspectRatio='none'%3E%3Cpath%20d='M0%200C0%2091%209%20100%20100%20100H0Z'/%3E%3C/svg%3E") 0 0 / 100% 100% no-repeat; mask: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20100%20100'%20preserveAspectRatio='none'%3E%3Cpath%20d='M0%200C0%2091%209%20100%20100%20100H0Z'/%3E%3C/svg%3E") 0 0 / 100% 100% no-repeat; }
+  }
+  @media (min-width: 901px) {
+    /* the join's sliver in its corner, and the strips it overlaps the box (3px) and the panel (2px) by */
+    .ch-slider::before { -webkit-mask: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20100%20100'%20preserveAspectRatio='none'%3E%3Cpath%20d='M100%200C100%2091%2091%20100%200%20100H100Z'/%3E%3C/svg%3E") 0 0 / var(--jt, var(--r)) var(--jt, var(--r)) no-repeat, linear-gradient(#000 0 0) 100% 0 / 2px 100% no-repeat, linear-gradient(#000 0 0) 0 100% / 100% 3px no-repeat;
+      mask: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20100%20100'%20preserveAspectRatio='none'%3E%3Cpath%20d='M100%200C100%2091%2091%20100%200%20100H100Z'/%3E%3C/svg%3E") 0 0 / var(--jt, var(--r)) var(--jt, var(--r)) no-repeat, linear-gradient(#000 0 0) 100% 0 / 2px 100% no-repeat, linear-gradient(#000 0 0) 0 100% / 100% 3px no-repeat; }
+    .ch-slider::after { -webkit-mask: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20100%20100'%20preserveAspectRatio='none'%3E%3Cpath%20d='M100%20100C100%209%2091%200%200%200H100Z'/%3E%3C/svg%3E") 0 100% / var(--jb, var(--r)) var(--jb, var(--r)) no-repeat, linear-gradient(#000 0 0) 100% 0 / 2px 100% no-repeat, linear-gradient(#000 0 0) 0 0 / 100% 3px no-repeat;
+      mask: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20100%20100'%20preserveAspectRatio='none'%3E%3Cpath%20d='M100%20100C100%209%2091%200%200%200H100Z'/%3E%3C/svg%3E") 0 100% / var(--jb, var(--r)) var(--jb, var(--r)) no-repeat, linear-gradient(#000 0 0) 100% 0 / 2px 100% no-repeat, linear-gradient(#000 0 0) 0 0 / 100% 3px no-repeat; }
+  }
+}
+@supports (corner-shape: squircle) {
+  *, *::before, *::after { corner-shape: squircle; }
+  .btn, .chip, .chip::before, .ch-dot, .cal-nav button, .cal-slot .dot, .bp-dates li, .stepper, .stepper button, .terms-close { corner-shape: round; }
+  .cal-day { border-radius: 19px; }
+  .cal-slot { border-radius: 13px; }
+  .bp-plans button { border-radius: 22px; }
+  .terms { border-radius: 32px; }
+  @media (max-width: 600px) { .cal-day { border-radius: 14px; } .cal-slot { border-radius: 10px; } }
+  /* the approach box clips with its own corners (overflow), not a circular inset */
+  @media (max-width: 900px) { #approach.has-dock .ap-dock, #approach.has-shell.has-dock .ap-dock, #approach.has-shell .ap-shell { clip-path: none; } }
+}
+@supports (clip-path: shape(evenodd from 0px 1px, curve to 1px 0px with 0px calc(1px * 0.09) / calc(1px * 0.09) 0px, hline to calc(100% - max(0px, 2px - 1px)), vline to 100%, close, move to 1px 1px, line to 2px 2px, close)) and (not (corner-shape: squircle)) {
+  /* each box's corners: --sq (all four, default --r) or --q1 to --q4 (top left, top right, bottom right, bottom left) */
+  .stage, .tutor-photo, .cal, .cal-day, .book-panel, .bp-plans button, .map, .terms-card {
+    --sq1: var(--q1, var(--sq, var(--r))); --sq2: var(--q2, var(--sq, var(--r))); --sq3: var(--q3, var(--sq, var(--r))); --sq4: var(--q4, var(--sq, var(--r)));
+    border-radius: calc(var(--sq1) * 0.5) calc(var(--sq2) * 0.5) calc(var(--sq3) * 0.5) calc(var(--sq4) * 0.5);
+    clip-path: shape(from 0px var(--sq1), curve to var(--sq1) 0px with 0 calc(var(--sq1) * 0.09) / calc(var(--sq1) * 0.09) 0, hline to calc(100% - var(--sq2)), curve to 100% var(--sq2) with calc(100% - calc(var(--sq2) * 0.09)) 0px / 100% calc(var(--sq2) * 0.09), vline to calc(100% - var(--sq3)), curve to calc(100% - var(--sq3)) 100% with 100% calc(100% - calc(var(--sq3) * 0.09)) / calc(100% - calc(var(--sq3) * 0.09)) 100%, hline to var(--sq4), curve to 0 calc(100% - var(--sq4)) with calc(var(--sq4) * 0.09) 100% / 0px calc(100% - calc(var(--sq4) * 0.09)), close);
+  }
+  @media (max-width: 900px) {
+    #approach .pillars, #approach.has-shell .pillars, #approach.has-dock .ap-dock, #approach.has-shell.has-dock .ap-dock, #approach.has-shell .ap-shell, .challenges {
+      --sq1: var(--q1, var(--sq, var(--r))); --sq2: var(--q2, var(--sq, var(--r))); --sq3: var(--q3, var(--sq, var(--r))); --sq4: var(--q4, var(--sq, var(--r)));
+      border-radius: calc(var(--sq1) * 0.5) calc(var(--sq2) * 0.5) calc(var(--sq3) * 0.5) calc(var(--sq4) * 0.5);
+      clip-path: shape(from 0px var(--sq1), curve to var(--sq1) 0px with 0 calc(var(--sq1) * 0.09) / calc(var(--sq1) * 0.09) 0, hline to calc(100% - var(--sq2)), curve to 100% var(--sq2) with calc(100% - calc(var(--sq2) * 0.09)) 0px / 100% calc(var(--sq2) * 0.09), vline to calc(100% - var(--sq3)), curve to calc(100% - var(--sq3)) 100% with 100% calc(100% - calc(var(--sq3) * 0.09)) / calc(100% - calc(var(--sq3) * 0.09)) 100%, hline to var(--sq4), curve to 0 calc(100% - var(--sq4)) with calc(var(--sq4) * 0.09) 100% / 0px calc(100% - calc(var(--sq4) * 0.09)), close);
+    }
+    .stage { --sq: var(--r-tab); }
+    #approach.has-shell .pillars, #approach.has-shell.has-dock .ap-dock { --q3: 0px; --q4: 0px; --w3: 0px; }
+    #approach.has-shell .ap-shell { --q1: 0px; --q2: 0px; --w1: 0px; }
+    #programme:has(#stage-tabs .stage:first-child[aria-selected="true"]) .challenges { --q1: 0px; }
+    #programme:has(#stage-tabs .stage:last-child[aria-selected="true"]) .challenges { --q2: 0px; }
+    /* the chosen age box: its top corners, and room at its foot for the joins on either side */
+    #stage-tabs .stage[aria-selected="true"] { border-radius: calc(var(--r-tab) * 0.5) calc(var(--r-tab) * 0.5) 0 0;
+      clip-path: shape(from calc(-1 * var(--r-tab)) 100%, vline to calc(100% - var(--r-tab)), hline to 0px, vline to var(--r-tab), curve to var(--r-tab) 0px with 0px calc(var(--r-tab) * 0.09) / calc(var(--r-tab) * 0.09) 0px, hline to calc(100% - var(--r-tab)), curve to 100% var(--r-tab) with calc(100% - var(--r-tab) * 0.09) 0px / 100% calc(var(--r-tab) * 0.09), vline to calc(100% - var(--r-tab)), hline to calc(100% + var(--r-tab)), vline to 100%, close); }
+  }
+  @media (max-width: 860px) {
+    .tutor-body {
+      --sq1: var(--q1, var(--sq, var(--r))); --sq2: var(--q2, var(--sq, var(--r))); --sq3: var(--q3, var(--sq, var(--r))); --sq4: var(--q4, var(--sq, var(--r)));
+      border-radius: calc(var(--sq1) * 0.5) calc(var(--sq2) * 0.5) calc(var(--sq3) * 0.5) calc(var(--sq4) * 0.5);
+      clip-path: shape(from 0px var(--sq1), curve to var(--sq1) 0px with 0 calc(var(--sq1) * 0.09) / calc(var(--sq1) * 0.09) 0, hline to calc(100% - var(--sq2)), curve to 100% var(--sq2) with calc(100% - calc(var(--sq2) * 0.09)) 0px / 100% calc(var(--sq2) * 0.09), vline to calc(100% - var(--sq3)), curve to calc(100% - var(--sq3)) 100% with 100% calc(100% - calc(var(--sq3) * 0.09)) / calc(100% - calc(var(--sq3) * 0.09)) 100%, hline to var(--sq4), curve to 0 calc(100% - var(--sq4)) with calc(var(--sq4) * 0.09) 100% / 0px calc(100% - calc(var(--sq4) * 0.09)), close);
+    }
+    .tutor-photo { --q3: 0px; --q4: 0px; }
+    .tutor-body { --q1: 0px; --q2: 0px; }
+  }
+  @media (min-width: 901px) {
+    .hero-shell, .challenges .ch-panel {
+      --sq1: var(--q1, var(--sq, var(--r))); --sq2: var(--q2, var(--sq, var(--r))); --sq3: var(--q3, var(--sq, var(--r))); --sq4: var(--q4, var(--sq, var(--r)));
+      border-radius: calc(var(--sq1) * 0.5) calc(var(--sq2) * 0.5) calc(var(--sq3) * 0.5) calc(var(--sq4) * 0.5);
+      clip-path: shape(from 0px var(--sq1), curve to var(--sq1) 0px with 0 calc(var(--sq1) * 0.09) / calc(var(--sq1) * 0.09) 0, hline to calc(100% - var(--sq2)), curve to 100% var(--sq2) with calc(100% - calc(var(--sq2) * 0.09)) 0px / 100% calc(var(--sq2) * 0.09), vline to calc(100% - var(--sq3)), curve to calc(100% - var(--sq3)) 100% with 100% calc(100% - calc(var(--sq3) * 0.09)) / calc(100% - calc(var(--sq3) * 0.09)) 100%, hline to var(--sq4), curve to 0 calc(100% - var(--sq4)) with calc(var(--sq4) * 0.09) 100% / 0px calc(100% - calc(var(--sq4) * 0.09)), close);
+    }
+    .challenges .ch-panel { --q1: var(--jt, var(--r)); --q4: var(--jb, var(--r)); }
+    /* the selected title's box: its left corners (no taller than half its 48px row), and room on its right for the joins */
+    .ch-slider { border-radius: 12px 0 0 12px; clip-path: shape(from 0px 24px, curve to 24px 0px with 0px calc(24px * 0.09) / calc(24px * 0.09) 0px, hline to calc(100% - var(--jt, var(--r)) - 2px), vline to calc(-1 * var(--jt, var(--r))), hline to 100%, vline to calc(100% + var(--jb, var(--r))), hline to calc(100% - var(--jb, var(--r)) - 2px), vline to 100%, hline to 24px, curve to 0px calc(100% - 24px) with calc(24px * 0.09) 100% / 0px calc(100% - 24px * 0.09), close); }
+  }
+  .cal-day { --sq: 19px; }
+  @media (max-width: 600px) { .cal-day { --sq: 14px; } }
+  .bp-plans button { --sq: 22px; }
+  .terms { background: none; border-radius: 32px; } /* its shadow, under the card's corners */
+  .terms-card { --sq: 32px; display: flex; flex-direction: column; flex: 1 1 auto; min-height: 0; background: var(--paper); }
+  /* outlines: a ring of the outline's colour (--ring) and width (--w1 to --w4, times --rw), over the border's place */
+  .stage:not([aria-selected="true"]), .cal, .bp-plans button, .map { position: relative; isolation: isolate; border-color: transparent !important; }
+  .stage:not([aria-selected="true"])::after, .cal::after, .bp-plans button::after, .map::after {
+    content: ""; position: absolute; z-index: 2; pointer-events: none;
+    top: calc(-1 * var(--w1, 1px)); right: calc(-1 * var(--w2, 1px)); bottom: calc(-1 * var(--w3, 1px)); left: calc(-1 * var(--w4, 1px));
+    background: var(--ring, var(--line));
+    clip-path: shape(evenodd from 0px var(--sq1), curve to var(--sq1) 0px with 0 calc(var(--sq1) * 0.09) / calc(var(--sq1) * 0.09) 0, hline to calc(100% - var(--sq2)), curve to 100% var(--sq2) with calc(100% - calc(var(--sq2) * 0.09)) 0px / 100% calc(var(--sq2) * 0.09), vline to calc(100% - var(--sq3)), curve to calc(100% - var(--sq3)) 100% with 100% calc(100% - calc(var(--sq3) * 0.09)) / calc(100% - calc(var(--sq3) * 0.09)) 100%, hline to var(--sq4), curve to 0 calc(100% - var(--sq4)) with calc(var(--sq4) * 0.09) 100% / 0px calc(100% - calc(var(--sq4) * 0.09)), close, move to calc(var(--w4, 1px) * var(--rw, 1)) calc(calc(var(--w1, 1px) * var(--rw, 1)) + max(0px, var(--sq1) - var(--rw, 1) * 1px)), curve to calc(calc(var(--w4, 1px) * var(--rw, 1)) + max(0px, var(--sq1) - var(--rw, 1) * 1px)) calc(var(--w1, 1px) * var(--rw, 1)) with calc(var(--w4, 1px) * var(--rw, 1)) calc(calc(var(--w1, 1px) * var(--rw, 1)) + calc(max(0px, var(--sq1) - var(--rw, 1) * 1px) * 0.09)) / calc(calc(var(--w4, 1px) * var(--rw, 1)) + calc(max(0px, var(--sq1) - var(--rw, 1) * 1px) * 0.09)) calc(var(--w1, 1px) * var(--rw, 1)), hline to calc(calc(100% - var(--w2, 1px) * var(--rw, 1)) - max(0px, var(--sq2) - var(--rw, 1) * 1px)), curve to calc(100% - var(--w2, 1px) * var(--rw, 1)) calc(calc(var(--w1, 1px) * var(--rw, 1)) + max(0px, var(--sq2) - var(--rw, 1) * 1px)) with calc(calc(100% - var(--w2, 1px) * var(--rw, 1)) - calc(max(0px, var(--sq2) - var(--rw, 1) * 1px) * 0.09)) calc(var(--w1, 1px) * var(--rw, 1)) / calc(100% - var(--w2, 1px) * var(--rw, 1)) calc(calc(var(--w1, 1px) * var(--rw, 1)) + calc(max(0px, var(--sq2) - var(--rw, 1) * 1px) * 0.09)), vline to calc(calc(100% - var(--w3, 1px) * var(--rw, 1)) - max(0px, var(--sq3) - var(--rw, 1) * 1px)), curve to calc(calc(100% - var(--w2, 1px) * var(--rw, 1)) - max(0px, var(--sq3) - var(--rw, 1) * 1px)) calc(100% - var(--w3, 1px) * var(--rw, 1)) with calc(100% - var(--w2, 1px) * var(--rw, 1)) calc(calc(100% - var(--w3, 1px) * var(--rw, 1)) - calc(max(0px, var(--sq3) - var(--rw, 1) * 1px) * 0.09)) / calc(calc(100% - var(--w2, 1px) * var(--rw, 1)) - calc(max(0px, var(--sq3) - var(--rw, 1) * 1px) * 0.09)) calc(100% - var(--w3, 1px) * var(--rw, 1)), hline to calc(calc(var(--w4, 1px) * var(--rw, 1)) + max(0px, var(--sq4) - var(--rw, 1) * 1px)), curve to calc(var(--w4, 1px) * var(--rw, 1)) calc(calc(100% - var(--w3, 1px) * var(--rw, 1)) - max(0px, var(--sq4) - var(--rw, 1) * 1px)) with calc(calc(var(--w4, 1px) * var(--rw, 1)) + calc(max(0px, var(--sq4) - var(--rw, 1) * 1px) * 0.09)) calc(100% - var(--w3, 1px) * var(--rw, 1)) / calc(var(--w4, 1px) * var(--rw, 1)) calc(calc(100% - var(--w3, 1px) * var(--rw, 1)) - calc(max(0px, var(--sq4) - var(--rw, 1) * 1px) * 0.09)), close); }
+  @media (max-width: 900px) {
+    #approach .pillars, #approach.has-dock .ap-dock, #approach.has-shell .ap-shell { position: relative; isolation: isolate; border-color: transparent !important; }
+    #approach .pillars::after, #approach.has-dock .ap-dock::after, #approach.has-shell .ap-shell::after {
+      content: ""; position: absolute; z-index: 2; pointer-events: none;
+      top: calc(-1 * var(--w1, 1px)); right: calc(-1 * var(--w2, 1px)); bottom: calc(-1 * var(--w3, 1px)); left: calc(-1 * var(--w4, 1px));
+      background: var(--ring, var(--line));
+      clip-path: shape(evenodd from 0px var(--sq1), curve to var(--sq1) 0px with 0 calc(var(--sq1) * 0.09) / calc(var(--sq1) * 0.09) 0, hline to calc(100% - var(--sq2)), curve to 100% var(--sq2) with calc(100% - calc(var(--sq2) * 0.09)) 0px / 100% calc(var(--sq2) * 0.09), vline to calc(100% - var(--sq3)), curve to calc(100% - var(--sq3)) 100% with 100% calc(100% - calc(var(--sq3) * 0.09)) / calc(100% - calc(var(--sq3) * 0.09)) 100%, hline to var(--sq4), curve to 0 calc(100% - var(--sq4)) with calc(var(--sq4) * 0.09) 100% / 0px calc(100% - calc(var(--sq4) * 0.09)), close, move to calc(var(--w4, 1px) * var(--rw, 1)) calc(calc(var(--w1, 1px) * var(--rw, 1)) + max(0px, var(--sq1) - var(--rw, 1) * 1px)), curve to calc(calc(var(--w4, 1px) * var(--rw, 1)) + max(0px, var(--sq1) - var(--rw, 1) * 1px)) calc(var(--w1, 1px) * var(--rw, 1)) with calc(var(--w4, 1px) * var(--rw, 1)) calc(calc(var(--w1, 1px) * var(--rw, 1)) + calc(max(0px, var(--sq1) - var(--rw, 1) * 1px) * 0.09)) / calc(calc(var(--w4, 1px) * var(--rw, 1)) + calc(max(0px, var(--sq1) - var(--rw, 1) * 1px) * 0.09)) calc(var(--w1, 1px) * var(--rw, 1)), hline to calc(calc(100% - var(--w2, 1px) * var(--rw, 1)) - max(0px, var(--sq2) - var(--rw, 1) * 1px)), curve to calc(100% - var(--w2, 1px) * var(--rw, 1)) calc(calc(var(--w1, 1px) * var(--rw, 1)) + max(0px, var(--sq2) - var(--rw, 1) * 1px)) with calc(calc(100% - var(--w2, 1px) * var(--rw, 1)) - calc(max(0px, var(--sq2) - var(--rw, 1) * 1px) * 0.09)) calc(var(--w1, 1px) * var(--rw, 1)) / calc(100% - var(--w2, 1px) * var(--rw, 1)) calc(calc(var(--w1, 1px) * var(--rw, 1)) + calc(max(0px, var(--sq2) - var(--rw, 1) * 1px) * 0.09)), vline to calc(calc(100% - var(--w3, 1px) * var(--rw, 1)) - max(0px, var(--sq3) - var(--rw, 1) * 1px)), curve to calc(calc(100% - var(--w2, 1px) * var(--rw, 1)) - max(0px, var(--sq3) - var(--rw, 1) * 1px)) calc(100% - var(--w3, 1px) * var(--rw, 1)) with calc(100% - var(--w2, 1px) * var(--rw, 1)) calc(calc(100% - var(--w3, 1px) * var(--rw, 1)) - calc(max(0px, var(--sq3) - var(--rw, 1) * 1px) * 0.09)) / calc(calc(100% - var(--w2, 1px) * var(--rw, 1)) - calc(max(0px, var(--sq3) - var(--rw, 1) * 1px) * 0.09)) calc(100% - var(--w3, 1px) * var(--rw, 1)), hline to calc(calc(var(--w4, 1px) * var(--rw, 1)) + max(0px, var(--sq4) - var(--rw, 1) * 1px)), curve to calc(var(--w4, 1px) * var(--rw, 1)) calc(calc(100% - var(--w3, 1px) * var(--rw, 1)) - max(0px, var(--sq4) - var(--rw, 1) * 1px)) with calc(calc(var(--w4, 1px) * var(--rw, 1)) + calc(max(0px, var(--sq4) - var(--rw, 1) * 1px) * 0.09)) calc(100% - var(--w3, 1px) * var(--rw, 1)) / calc(var(--w4, 1px) * var(--rw, 1)) calc(calc(100% - var(--w3, 1px) * var(--rw, 1)) - calc(max(0px, var(--sq4) - var(--rw, 1) * 1px) * 0.09)), close); }
+  }
+  #stage-tabs .stage:nth-child(1):hover { --ring: var(--st-0-line); }
+  #stage-tabs .stage:nth-child(2):hover { --ring: var(--st-1-line); }
+  #stage-tabs .stage:nth-child(3):hover { --ring: var(--st-2-line); }
+  .map { --ring: rgba(237,243,246,0.14); }
+  .bp-plans button { --ring: rgba(237,243,246,0.3); }
+  .bp-plans button[aria-checked="true"] { --ring: var(--orange); --rw: 2; box-shadow: none; }
+  /* a focus outline lies outside the box: while it shows, the box keeps its fillet */
+  .bp-plans button:focus-visible, .cal-day:focus-visible, .map-card:focus-visible { clip-path: none; }
+}
 </style>
 </head>
 <body>
@@ -1189,6 +1296,7 @@ footer { background: var(--deep); color: var(--on-navy-soft); padding: clamp(44p
 </footer>
 
 <dialog class="terms" id="terms" aria-labelledby="terms-title">
+  <div class="terms-card">
   <div class="terms-head">
     <h2 id="terms-title">Terms</h2>
     <button type="button" class="terms-close" data-close aria-label="Close">&times;</button>
@@ -1267,6 +1375,7 @@ footer { background: var(--deep); color: var(--on-navy-soft); padding: clamp(44p
       <li>WonderLab can update these terms. Bookings already confirmed keep the terms that applied when they were made.</li>
       <li>These terms are governed by the laws of the Hong Kong SAR.</li>
     </ul>
+  </div>
   </div>
 </dialog>
 
