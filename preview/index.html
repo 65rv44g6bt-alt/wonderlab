@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- Preview of the work in progress (branch claude/beautiful-gates-b4wjh0 at abcaf22), not the live site: the same page with its media one folder up. Not for search engines. -->
+<!-- Preview of the work in progress (branch claude/beautiful-gates-b4wjh0 at f7ba413), not the live site: the same page with its media one folder up. Not for search engines. -->
 <html lang="en">
 <head>
 <meta charset="utf-8">
@@ -1107,6 +1107,14 @@ footer { background: var(--deep); color: var(--on-navy-soft); padding: clamp(44p
 .hg-toggle:focus, .hg-toggle:focus-visible { outline: none; }   /* v166: no frame round the hero after a click or a key */
 .hg-glyph { position: absolute; left: 50%; top: 50%; z-index: 2; width: 64px; height: 64px; margin: -32px 0 0 -32px; border-radius: 50%; background: rgba(13, 27, 38, 0.55); opacity: 0; pointer-events: none; transition: opacity 500ms ease; }
 .hg-glyph.is-on { opacity: 1; transition-duration: 80ms; }
+/* v179: sound on / off, bottom right of the hero (off until clicked: browsers only let sound start from a click) */
+.hg-sound { position: absolute; z-index: 3; right: max(var(--gutter), env(safe-area-inset-right)); bottom: max(18px, env(safe-area-inset-bottom)); width: 44px; height: 44px; padding: 0; border: 0; border-radius: 50%;
+  background: rgba(13, 27, 38, 0.5); color: #EDF3F6; cursor: pointer; -webkit-tap-highlight-color: transparent; transition: background-color 200ms ease; }
+.hg-sound:hover { background: rgba(13, 27, 38, 0.75); }
+.hg-sound svg { width: 22px; height: 22px; display: block; margin: auto; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+.hg-sound .on { display: none; }
+.hg-sound[aria-pressed="true"] .on { display: inline; }
+.hg-sound[aria-pressed="true"] .off { display: none; }
 .hg-glyph svg { width: 100%; height: 100%; display: block; }
 .hg-sr { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
 
@@ -1163,6 +1171,7 @@ footer { background: var(--deep); color: var(--on-navy-soft); padding: clamp(44p
       </div>
       <button class="hg-toggle" id="hg-toggle" type="button" aria-pressed="false" aria-label="Pause the animation"></button>
       <div class="hg-glyph" id="hg-glyph" aria-hidden="true"></div>
+      <button class="hg-sound" id="hg-sound" type="button" aria-pressed="false" aria-label="Turn the sound on"></button>
     </section>
 
 <section class="section" id="approach">
@@ -4506,12 +4515,100 @@ var DRAW = {
       drawBrand(t);
     }
 
+    /* ---------- v179: sound. Off until the button is clicked. The music (../media/hero-music.mp3, when there is one)
+       plays in step with the clock, from the top on every loop; the effects are drawn here, in D major pentatonic so
+       they sit in the music's key, each at its moment on the clock ---------- */
+    var soundBtn = document.getElementById("hg-sound"), soundOn = false, ac = null, master = null, music = null, musicOk = true, noiseBuf = null;
+    var PENTA = [293.66, 329.63, 369.99, 440, 493.88, 587.33, 659.25, 739.99, 880, 987.77, 1174.66];   // D4 E4 F#4 A4 B4 D5 E5 F#5 A5 B5 D6
+    function audio() {
+      if (ac) return ac;
+      var AC = window.AudioContext || window.webkitAudioContext;
+      if (!AC) return null;
+      ac = new AC();
+      var comp = ac.createDynamicsCompressor(); comp.threshold.value = -18; comp.ratio.value = 3; comp.connect(ac.destination);
+      master = ac.createGain(); master.gain.value = 0.55; master.connect(comp);
+      noiseBuf = ac.createBuffer(1, ac.sampleRate * 2, ac.sampleRate);
+      var d = noiseBuf.getChannelData(0); for (var i = 0; i < d.length; i++) d[i] = Math.random() * 2 - 1;
+      return ac;
+    }
+    // a soft struck tone: a sine with a quieter octave and a short attack, ringing out
+    function tone(f, at, dur, vol, att, type) {
+      var o = ac.createOscillator(), o2 = ac.createOscillator(), g = ac.createGain(), g2 = ac.createGain();
+      o.type = type || "sine"; o.frequency.value = f; o2.type = "sine"; o2.frequency.value = f * 2; g2.gain.value = 0.18;
+      g.gain.setValueAtTime(0, at); g.gain.linearRampToValueAtTime(vol, at + (att || 0.006)); g.gain.exponentialRampToValueAtTime(0.0001, at + dur);
+      o.connect(g); o2.connect(g2); g2.connect(g); g.connect(master);
+      o.start(at); o2.start(at); o.stop(at + dur + 0.05); o2.stop(at + dur + 0.05);
+    }
+    // air: filtered noise swept from f0 to f1, swelling and fading
+    function air(at, dur, f0, f1, vol) {
+      var n = ac.createBufferSource(), bp = ac.createBiquadFilter(), g = ac.createGain();
+      n.buffer = noiseBuf; n.loop = true; bp.type = "bandpass"; bp.Q.value = 0.8;
+      bp.frequency.setValueAtTime(f0, at); bp.frequency.exponentialRampToValueAtTime(f1, at + dur);
+      g.gain.setValueAtTime(0, at); g.gain.linearRampToValueAtTime(vol, at + dur * 0.45); g.gain.linearRampToValueAtTime(0, at + dur);
+      n.connect(bp); bp.connect(g); g.connect(master); n.start(at); n.stop(at + dur + 0.05);
+    }
+    function tap(f, at, vol) { tone(f, at, 0.32, vol, 0.003, "triangle"); }   // a woody tap, as a chopstick on a table
+    var SFX = [];
+    function sfx(t, fn) { SFX.push({ t: t, fn: fn }); }
+    sfx(0.05, function (a) { air(a, 1.1, 2400, 6000, 0.05); tone(PENTA[5], a + 0.15, 2.2, 0.05, 0.6); tone(PENTA[8], a + 0.3, 2.0, 0.035, 0.6); });   // the frame turns, the squares unfold
+    sfx(1.2 * BK, function (a) { tone(PENTA[3], a, 0.9, 0.07); });                                    // the name slides out
+    sfx(GS, function (a) { air(a, RISE + 0.3, 260, 1400, 0.07); });                                   // the grid rises
+    sfx(Z0, function (a) { tone(146.83, a, 2.6, 0.09, 0.35); tone(PENTA[0], a + 0.05, 2.4, 0.05, 0.35); });   // into "We're WonderLab"
+    STORY.forEach(function (st, i) {
+      if (i === 0) { if (st.roll) sfx(st.roll, function (a) { tone(PENTA[6], a, 0.6, 0.04); }); return; }
+      var zoom = st.over || STORY[i - 1].over;
+      if (zoom) sfx(ARR[i], function (a) { air(a, SET[i] - ARR[i] + 0.2, st.over ? 1800 : 500, st.over ? 500 : 1800, 0.06); });
+      else sfx(ARR[i], function (a) { tap(PENTA[(i * 2) % 7], a + 0.12, 0.11); tap(PENTA[(i * 2) % 7 + 2], a + 0.24, 0.06); });   // a swap: two taps, a third apart, climbing as the story goes on
+      if (st.roll) sfx(st.roll, function (a) { tone(PENTA[7], a, 0.5, 0.035); });
+      if (st.learn) {
+        sfx(SET[i] - 0.1, function (a) { tone(PENTA[5], a, 1.6, 0.06, 0.02); tone(PENTA[7], a + 0.06, 1.5, 0.045, 0.02); });   // "Nature"
+        sfx(st.lIn, function (a) { tone(PENTA[3], a, 0.9, 0.06); });                                                          // "Explore"
+        var s0 = st.lIn + 0.35;
+        L_TURNS.forEach(function (d, k) { var at = s0; s0 += d; sfx(at, function (a) { tone(PENTA[(k % 5) + 5], a, 0.22, 0.03, 0.002); }); });   // each subject, a tick, quickening with them
+      }
+    });
+    sfx(GX0, function (a) { tone(73.42, a, 0.5, 0.14, 0.004); });                                     // the grid cut away: a low, short D
+    sfx(STORY[LASTI].climax + 0.08, function (a) { [PENTA[0], PENTA[2], PENTA[3], PENTA[5]].forEach(function (f, k) { tone(f, a + k * 0.05, 3.0, 0.06, 0.02); }); });   // "Learn to Wonder"
+    sfx(M0, function (a) { tone(PENTA[10], a, 1.8, 0.04, 0.01); tone(PENTA[8], a + 0.08, 1.6, 0.03, 0.01); });   // "Wonder" becomes the frame
+    // the effects between two readings of the clock (across the loop's end too)
+    function soundStep(t0, t1, wrapped) {
+      if (!soundOn || !ac) return;
+      var at = ac.currentTime + 0.02;
+      SFX.forEach(function (e) { if (wrapped ? (e.t >= t0 || e.t < t1) : (e.t >= t0 && e.t < t1)) e.fn(at); });
+      if (music && wrapped) { music.currentTime = t1; }
+    }
+    function musicSync(play) {
+      if (!music) return;
+      if (play && soundOn && musicOk) { if (Math.abs(music.currentTime - clock) > 0.25 && clock < (music.duration || 1e9)) music.currentTime = clock; var pr = music.play(); if (pr && pr.catch) pr.catch(function () {}); }
+      else music.pause();
+    }
+    var SOUND_ON = '<svg class="on" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z"/><path d="M15.5 9a4 4 0 0 1 0 6M18 6.5a7.5 7.5 0 0 1 0 11"/></svg>';
+    var SOUND_OFF = '<svg class="off" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z"/><path d="M16 9.5l5 5M21 9.5l-5 5"/></svg>';
+    if (soundBtn) {
+      soundBtn.innerHTML = SOUND_ON + SOUND_OFF;
+      soundBtn.addEventListener("click", function (e) {
+        e.stopPropagation(); soundBtn.blur();
+        if (!audio()) return;
+        soundOn = !soundOn;
+        if (ac.state === "suspended") ac.resume();
+        if (soundOn && !music) {
+          music = new Audio("../media/hero-music.mp3"); music.preload = "auto"; music.volume = 0.7;
+          music.addEventListener("error", function () { musicOk = false; });   // no track yet: the effects play alone
+          music.addEventListener("loadedmetadata", function () { musicSync(!paused && seen); });
+        }
+        soundBtn.setAttribute("aria-pressed", soundOn ? "true" : "false");
+        soundBtn.setAttribute("aria-label", soundOn ? "Turn the sound off" : "Turn the sound on");
+        musicSync(soundOn && !paused && seen && FREEZE === null);
+      });
+    }
+
     /* ---------- the clock, and one click to pause or play ---------- */
     var clock = 0, last = 0, raf = 0, seen = true, paused = false, looped = FREEZE !== null && FREEZE < 0.3 && Q.has("loop");
     function tick(now) {
       raf = 0;
-      if (!seen || document.hidden || paused) { last = 0; return; }
-      if (last) { var nc = clock + Math.min(0.1, (now - last) / 1000); if (nc >= TOTAL) looped = true; clock = nc % TOTAL; }
+      if (!seen || document.hidden || paused) { last = 0; musicSync(false); return; }
+      if (music && music.paused && soundOn) musicSync(true);
+      if (last) { var c0 = clock, nc = clock + Math.min(0.1, (now - last) / 1000), wrap = nc >= TOTAL; if (wrap) looped = true; clock = nc % TOTAL; soundStep(c0, clock, wrap); }
       last = now;
       frame(clock, now);
       raf = requestAnimationFrame(tick);
@@ -4525,6 +4622,7 @@ var DRAW = {
     if (headBrand) headBrand.addEventListener("click", function () {
       if (FREEZE !== null) return;
       clock = 0; last = 0; looped = false; headBrand.style.opacity = ""; headBrand.style.transform = "";
+      if (music) music.currentTime = 0;
       if (paused) { paused = false; hero.classList.remove("is-paused"); toggle.setAttribute("aria-pressed", "false"); toggle.setAttribute("aria-label", "Pause the animation"); }
       kick();
     });
