@@ -1091,6 +1091,7 @@ footer { background: var(--deep); color: var(--on-navy-soft); padding: clamp(44p
 .hg-in { position: absolute; inset: 0; border-radius: inherit; overflow: hidden; background: #142F44; }
 .hg-in img, .hg-in svg { position: absolute; inset: 0; width: 100%; height: 100%; display: block; object-fit: cover; }
 .hg-scrim { position: absolute; inset: 0; background: linear-gradient(0deg, rgba(20, 47, 68, 0.82) 0%, rgba(20, 47, 68, 0.42) 34%, rgba(20, 47, 68, 0) 62%); opacity: 0; pointer-events: none; }
+.hg-scrim-full { background: linear-gradient(0deg, rgb(20, 47, 68) 0%, rgba(20, 47, 68, 0.55) 34%, rgba(20, 47, 68, 0) 62%); }   /* v176: "We're WonderLab" (v178: and the studio photos' lines): solid at its foot once zoomed in */
 .hg-in img { transition: none; }
 /* v166: the overviews' veil, under their words */
 .hg-veil { position: absolute; inset: 0; pointer-events: none; opacity: 0; background: radial-gradient(ellipse 50% 34% at 50% 50%, rgba(20, 47, 68, 0.74) 0%, rgba(20, 47, 68, 0.5) 50%, rgba(20, 47, 68, 0) 100%); }   /* v167: only behind the words, so the rectangles keep their strength */
@@ -3738,7 +3739,9 @@ var DRAW = {
      then      down and right, zooming out to four wide: each picture of the nature collage in its own rectangle, laid
                out as in the collage, "Learn through wonder." sliding up as "Nature drew it first." rolls up under it; then down and right, in to the city: "The future is" stays, only
                "not something we enter..." rolls into "something we create." as the picture slides up
-     the end   nothing lies below the last rectangle: it slides up and away with the bar's logo, and the logo starts again at once
+     the end   nothing lies below the last rectangle: the grid slides up and away with the bar's logo as the subjects roll under
+               "Explore", the lower rectangles a little later, all gone as the bigger "Learn to Wonder" comes in; "Wonder"
+               becomes the logo's frame and the logo starts again at once
      one click on the hero pauses it, another plays it; a click on the bar's logo starts it again from the beginning.
      ?t=12.3 freezes it at that moment (for checking) */
   (function heroGrid() {
@@ -3768,7 +3771,7 @@ var DRAW = {
     // challenge diagrams, drawn live by the motion engine: scene, progress range, zoom (a little wider than the old reel,
     // the solar oven wider still so its sun and dish both show) and framing
     var WLS = {
-      davinci: { n: "davinci", a: 0.36, b: 0.9, z: 0.6, ox: 0.012, oy: -0.1 },
+      davinci: { n: "davinci", a: 0.47, b: 0.86, z: 0.6, ox: 0.012, oy: -0.1, u0: 0, own: true },   // v176: from its own zoom in: the second half of the assembly, then the bottle
       hulls: { n: "hullsAll", a: 0.35, b: 0.8, z: 1.12, ox: 0.02, oy: 0.08 },
       facade: { n: "facade", a: 0.5, b: 0.9, z: 0.85, ox: 0, oy: 0 },
       egg: { n: "egg", a: 0.37, b: 0.9, z: 0.88, ox: 0.015, oy: 0.16, u0: 0 },   // v173: from just before the fall
@@ -3777,7 +3780,7 @@ var DRAW = {
       towers: { n: "towersAll", a: 0.4, b: 0.82, z: 0.85, ox: 0.03, oy: 0.18 },
       airport: { n: "airport", a: 0.508, b: 0.645, z: 1.0, ox: 0, oy: -0.08 },
       rube: { n: "rube", a: 0.2, b: 0.7, z: 0.8, ox: -0.04, oy: 0.13 },
-      solar: { n: "solar", a: 0.36, b: 0.86, z: 0.6, ox: 0, oy: 0.1 },
+      solar: { n: "solar", a: 0.36, b: 0.86, z: 0.6, ox: 0, oy: 0.1, u0: 0 },   // v177: from the dish turning to the marshmallow fully melted, over its own rectangle
       tensegrity: { n: "tensegrity", a: 0.5, b: 0.9, z: 0.72, ox: 0, oy: 0.08 }
     };
     var DIAG = Object.keys(WLS).map(function (k) { return "wl:" + k; });
@@ -3800,7 +3803,7 @@ var DRAW = {
       { c: "s-group8", mv: "D", line: "Test like scientists.", acc: 0, fit: "like", hold: 1.6 },
       { c: "wl:rube", mv: "D", line: "Risk like innovators.", acc: 0, fit: "like", hold: 1.6 },
       { c: "s-girl8", mv: "D", line: "Dream like architects.", acc: 0, fit: "like", hold: 1.6 },
-      { over: 3, fill: "challenges", alpha: 0.9, alpha2: 0.7, line: "Through design challenges led by an award-winning architect", acc: -1, hold: 3.0,
+      { over: 3, fill: "challenges", alpha: 0.6, line: "Through design challenges led by an award-winning architect", acc: -1, hold: 3.0,
         next: { line: "building confidence, creativity and the courage to bring ideas to life.", acc: -1 }, hold2: 3.6 },
       { c: "wl:davinci", mv: "B", line: "A bridge with no glue?", acc: -2 },
       { c: "wl:egg", mv: "D", line: "Will the eggs survive the fall?", acc: -2 },
@@ -3813,7 +3816,7 @@ var DRAW = {
     ];
     var LEARN = ["Eco-design", "Risk & problem solving", "Structural forces", "Climate adaptation", "Futures thinking", "Biomimicry",
       "Inclusive design", "Renewable energy", "Tiling & graphic perception", "Buoyancy & water resources"];
-    var L_D0 = 0.62, L_R = 0.83, L_IN = 2.0, L_CLIMAX = 1.6;   // the first subject's turn, each next one 0.83 of it; when "Learn" comes in; how long "Learn to Wonder" holds
+    var L_D0 = 0.72, L_R = 0.92, L_IN = 2.0, L_CLIMAX = 1.6;   // v176: slower, so the last ones can almost be read   // the first subject's turn, each next one 0.83 of it; when "Learn" comes in; how long "Learn to Wonder" holds
     var L_TURNS = LEARN.map(function (w, k) { return L_D0 * Math.pow(L_R, k); }), L_RUN = L_TURNS.reduce(function (a, b) { return a + b; }, 0);
     var NS = STORY.length, LASTI = NS - 1;
     var C0 = 4, R0 = 5;
@@ -3852,7 +3855,11 @@ var DRAW = {
       if (st.learn) { st.lIn = SET[i] + L_IN; st.climax = st.lIn + 0.35 + L_RUN; LEA[i] = st.climax + L_CLIMAX; }
       else LEA[i] = SET[i] + (st.hold || HOLD) + (st.next ? st.hold2 : 0);
     });
-    var FADE0 = LEA[LASTI], E0 = FADE0 + EXIT, M0 = FADE0 + 0.2, M1 = FADE0 + 1.05, TOTAL = M1 + 0.02;   // the grid slides away (FADE0 to E0) as "Wonder" becomes the frame (M0 to M1); then the loop
+    var FADE0 = LEA[LASTI], E0 = FADE0 + EXIT, M0 = FADE0 + 0.2, M1 = FADE0 + 1.05, TOTAL = M1 + 0.02;
+    // v176: the grid slides up and away before "Learn to Wonder", the lower rectangles a little after the higher ones
+    // (up to GX_LAG), the last gone as the climax comes in
+    // v177: no slide: the rectangles are cut away, all at once, no fade, as "Learn to Wonder" starts to come in (GX0)
+    var GX0 = STORY[LASTI].climax + 0.08;   // v178: as "Learn to Wonder" starts to slide up   // the grid slides away (FADE0 to E0) as "Wonder" becomes the frame (M0 to M1); then the loop
     function stopAt(t) { var i = -1; for (var k = 0; k < NS; k++) if (t >= ARR[k]) i = k; return i; }
 
     /* ---------- the grid: columns in running bond (every other column half a rectangle lower) ---------- */
@@ -3949,7 +3956,7 @@ var DRAW = {
         t.natImg = document.createElement("img"); t.natImg.alt = ""; t.natImg.style.display = "none"; inner.appendChild(t.natImg);
         t.a = Array.prototype.slice.call(inner.childNodes, 0, -1); t.isB = false;
       }
-      if (t.j !== undefined) { var sc = document.createElement("div"); sc.className = "hg-scrim"; inner.appendChild(sc); t.scrim = sc; }   // the blue at its foot, under the words
+      if (t.j !== undefined) { var sc = document.createElement("div"); sc.className = "hg-scrim" + (t.j === 0 || key.indexOf("s-") === 0 ? " hg-scrim-full" : "");   /* v178: and under every studio photo's line */ inner.appendChild(sc); t.scrim = sc; }   // the blue at its foot, under the words
       el.style.display = "none";
       world.appendChild(el); tiles.push(t);
     });
@@ -4128,8 +4135,9 @@ var DRAW = {
       if (t < SET[i]) return lerp(DIM, 1, (i === 0 ? eio : eo)(seg(t, ARR[i], SET[i])));
       if (t < LEA[i] || i === LASTI) return 1;
       // v170: a rectangle that zooms out into an overview stays at full strength through it, dimming only on the zoom back in
-      if (STORY[i + 1].over) {
-        var ov = STORY[i + 1], a2 = ov.alpha2 && ov.roll ? lerp(1, ov.alpha2, eio(seg(t, ov.roll, ov.roll + 0.6))) : 1;
+      if (STORY[i + 1].over) {   // v176: unless the overview is dimmer (the challenges, 60%): then it dims with the zoom out
+        var ov = STORY[i + 1], a1 = ov.alpha < 1 ? lerp(1, ov.alpha, eio(seg(t, LEA[i], SET[i + 1]))) : 1;
+        var a2 = ov.alpha2 && ov.roll ? lerp(a1, ov.alpha2, eio(seg(t, ov.roll, ov.roll + 0.6))) : a1;
         return t < LEA[i + 1] || i + 2 > LASTI ? a2 : lerp(a2, DIM, eo(seg(t, LEA[i + 1], SET[i + 2])));
       }
       return lerp(1, DIM, eo(seg(t, LEA[i], SET[i + 1])));
@@ -4309,7 +4317,7 @@ var DRAW = {
       if (item.next && t >= item.roll) { rollWords(A, PA, B, PB, o, lh, t, item.roll, 1, D, ST); return; }
       rollWords([], none, A, PA, o, lh, t, t0, 1, D, ST);
     }
-    // v173: the last stop's words. "Nature drew it first." rolls in and is cut away; then "Learn" and, under it, the
+    // v173 (v176: "Explore" for the first "Learn", a bigger "Learn to Wonder"): the last stop's words. "Nature drew it first." rolls in and is cut away; then "Learn" and, under it, the
     // challenges' subjects take turns letter by letter (as the closing line's Dream / Sketch / Build / Break), each turn
     // shorter, to "Learn to" / "Wonder". As the grid slides away, "Learn to" is cut away and "Wonder" becomes the logo's
     // orange frame, exactly where the opening draws it, so the loop starts again from it
@@ -4321,44 +4329,43 @@ var DRAW = {
       }
     }
     function drawLearn(i, t) {
-      var st = STORY[i], base = clamp(L.W * (L.portrait ? 0.088 : 0.058), 22, 70), ob = fontAt(base), none = { pos: [] };
-      if (t < st.lIn) {   // "Nature drew it first."
-        var A = wordsOf(st), PA = placeCentred(A, ob, L.vw, L.vh / 2, base * 1.14), cutN = st.lIn - 0.4, gN = seg(t, SET[i] - 0.1, SET[i] + 0.4) * (1 - seg(t, cutN, cutN + 0.3));
-        glow(PA.pos, A, ob, base * 1.14, gN);
-        if (t < cutN) { rollWords([], none, A, PA, ob, base * 1.14, t, SET[i] - 0.1, 1, 0.62, 0.045); return; }
+      var st = STORY[i], base = clamp(L.W * (L.portrait ? 0.088 : 0.058), 22, 70), none = { pos: [] };
+      if (t < st.lIn) {   // v176: "Nature" large over a smaller "drew it first.", with no glow behind
+        // v177: "Nature" a little smaller, "drew it first." sized to the same width
+        var oN = fontAt(base * 1.45), oD = fontAt(base * 1.45 * measure("Nature", fontAt(100)) / measure("drew it first.", fontAt(100))), cutN = st.lIn - 0.4;
+        var yN = L.vh / 2 + 0.36 * oN.size - 0.6 * oD.size, yD = yN + oD.size * 1.2;
+        var wN = { s: "Nature", c: ORANGE }, wD = [{ s: "drew", c: WHITE }, { s: "it", c: WHITE }, { s: "first.", c: WHITE }];
+        var PN = { pos: [{ x: (L.vw - measure("Nature", oN)) / 2, y: yN }] }, sp = measure(" ", oD), x = (L.vw - measure("drew it first.", oD)) / 2, PD = { pos: [] };
+        wD.forEach(function (w) { PD.pos.push({ x: x, y: yD }); x += measure(w.s, oD) + sp; });
+        if (t < cutN) {
+          rollWords([], none, [wN], PN, oN, oN.size * 1.1, t, SET[i] - 0.1, 1, 0.62, 0.045);
+          rollWords([], none, wD, PD, oD, oD.size * 1.2, t, SET[i] + 0.12, 1, 0.62, 0.045);
+          return;
+        }
         var kc = eio(seg(t, cutN, cutN + 0.35));
-        A.forEach(function (w, n) { drawWord(w, PA.pos[n].x, PA.pos[n].y - kc * base * 1.45, ob, 1, band(PA.pos[n].y, ob)); });
+        drawWord(wN, PN.pos[0].x, yN - kc * oN.size * 1.45, oN, 1, band(yN, oN));
+        wD.forEach(function (w, n) { drawWord(w, PD.pos[n].x, yD - kc * oD.size * 1.45, oD, 1, band(yD, oD)); });
         return;
       }
-      // one size for every subject: the widest fits the screen with room to spare
-      var widest = 0;
+      // the subjects, under "Explore": one size for all, the widest fitting the screen with room to spare
+      var ob = fontAt(base), widest = 0;
       LEARN.forEach(function (w) { widest = Math.max(widest, measure(w, ob)); });
-      var size = base * Math.min(1, (L.vw - 2 * L.gut) * 0.96 / widest), o = fontAt(size), lh = size * 1.14, lift = size * 1.42, sp = measure(" ", o);
+      var size = base * Math.min(1, (L.vw - 2 * L.gut) * 0.96 / widest), o = fontAt(size), lh = size * 1.14, lift = size * 1.42;
       var y1 = L.vh / 2 - lh / 2 + size * 0.36, y2 = y1 + lh, cx = L.vw / 2;
-      var wLearn = measure("Learn", o), wTo = measure("to", o), wWon = measure("Wonder", o);
-      var slide = eio(seg(t, st.climax, st.climax + 0.45)), xL = lerp(cx - wLearn / 2, cx - (wLearn + sp + wTo) / 2, slide);
-      // the glow, close round both lines
-      var gl = seg(t, st.lIn, st.lIn + 0.4) * (1 - seg(t, FADE0, FADE0 + 0.4));
-      glow([{ x: cx - widest * size / base / 2, y: y1 }, { x: cx - widest * size / base / 2, y: y2 }], [{ s: "x" }, { s: "x" }], o, lh, 0);
-      if (gl > 0) {
-        var gw = Math.max(wLearn + sp + wTo, t < st.climax ? 0 : wWon), x0g = cx - gw / 2;
-        LEARN.forEach(function (w, k) { var s0 = st.lIn + 0.35 + L_TURNS.slice(0, k).reduce(function (a, b) { return a + b; }, 0); if (t >= s0 && t < s0 + L_TURNS[k]) { gw = Math.max(gw, measure(w, o)); x0g = cx - gw / 2; } });
-        ctx.save(); ctx.translate(cx, (y1 + y2) / 2 - size * 0.27); ctx.scale(gw / 2 + size * 1.1, lh + size * 0.8);
-        var gr = ctx.createRadialGradient(0, 0, 0, 0, 0, 1);
-        gr.addColorStop(0, "rgba(20,47,68," + (0.6 * gl).toFixed(3) + ")"); gr.addColorStop(0.6, "rgba(20,47,68," + (0.42 * gl).toFixed(3) + ")"); gr.addColorStop(1, "rgba(20,47,68,0)");
-        ctx.fillStyle = gr; ctx.fillRect(-1, -1, 2, 2); ctx.restore();
-      }
-      // line 1: "Learn", then "to" beside it at the climax; both cut away as the grid leaves
-      var cut1 = t >= FADE0 ? eio(seg(t, FADE0, FADE0 + 0.35)) * size * 1.45 : 0;
-      if (cut1 < size * 1.45) {
-        var yL = y1 - cut1;
-        rollLetters("Learn", WHITE, xL, yL, o, t, st.lIn, null, 0.3, 0.02, lift, 1);
-        if (t >= st.climax) rollLetters("to", WHITE, cx - (wLearn + sp + wTo) / 2 + wLearn + sp, yL, o, t, st.climax + 0.08, null, 0.3, 0.02, lift, 1);
-      }
-      // line 2: the subjects, each in at its turn and up and out at the next, faster and faster
+      // v176: the climax, bigger: "Learn to" / "Wonder"
+      var o1 = fontAt(100), fitC = (L.vw - 2 * L.gut) * 0.96 / Math.max(measure("Learn to", o1), measure("Wonder", o1)) * 100;
+      var sizeC = Math.min(base * 1.25, fitC), oC = fontAt(sizeC), lhC = sizeC * 0.98, liftC = sizeC * 1.42;   // v177: smaller, lines closer
+      var y1c = L.vh / 2 - lhC / 2 + sizeC * 0.36, y2c = y1c + lhC;
+      var wLT = measure("Learn to", oC), wWon = measure("Wonder", oC);
+      // line 1: "Explore", rolling out at the climax as "Learn to" rolls in; cut away as "Wonder" becomes the frame
+      rollLetters("Explore", WHITE, cx - measure("Explore", o) / 2, y1, o, t, st.lIn, st.climax, 0.3, 0.02, lift, 1);
+      var gLT = 1 - seg(eio(seg(t, M0, M1)), 0, 0.35);   // v177: it fades out, in place, as the orange frame fades in
+      if (t >= st.climax && gLT > 0) rollLetters("Learn to", WHITE, cx - wLT / 2, y1c, oC, t, st.climax + 0.08, null, 0.34, 0.025, liftC, gLT);
+      // line 2: the subjects, each in at its turn and up and out at the next, a little faster each time; the letters
+      // follow each other closely (v176: a smaller lag), so each can still be read
       var s0 = st.lIn + 0.35;
       LEARN.forEach(function (w, k) {
-        var d = L_TURNS[k], tin = s0, tout = s0 + d, D = Math.min(0.28, 0.55 * d), STG = Math.min(0.02, 0.3 * d / w.length);
+        var d = L_TURNS[k], tin = s0, tout = s0 + d, D = Math.min(0.28, 0.5 * d), STG = Math.min(0.01, 0.12 * d / w.length);
         s0 += d;
         if (t < tin || t > tout + D + STG * w.length) return;
         rollLetters(w, WHITE, cx - measure(w, o) / 2, y2, o, t, tin, tout, D, STG, lift, 1);
@@ -4368,15 +4375,15 @@ var DRAW = {
       var xW = cx - wWon / 2, k = eio(seg(t, M0, M1));
       if (k < 1) {
         var ga = 1 - seg(k, 0.12, 0.55);
-        if (t < M0) rollLetters("Wonder", ORANGE, xW, y2, o, t, st.climax, null, 0.3, 0.025, lift, 1);
-        else if (ga > 0) { ctx.save(); var cy0 = lerp(y2 - size * 0.35, L.vh / 2, k), sc = lerp(1, 0.6, k); ctx.translate(cx, cy0); ctx.scale(sc, sc); ctx.translate(-cx, -(y2 - size * 0.35));
-          drawWord({ s: "Wonder", c: ORANGE }, xW, y2, o, ga, [-1e4, 1e4]); ctx.restore(); }
+        if (t < M0) rollLetters("Wonder", ORANGE, xW, y2c, oC, t, st.climax + 0.12, null, 0.34, 0.03, liftC, 1);
+        else if (ga > 0) { ctx.save(); var cy0 = lerp(y2c - sizeC * 0.35, L.vh / 2, k), sc = lerp(1, 0.6, k); ctx.translate(cx, cy0); ctx.scale(sc, sc); ctx.translate(-cx, -(y2c - sizeC * 0.35));
+          drawWord({ s: "Wonder", c: ORANGE }, xW, y2c, oC, ga, [-1e4, 1e4]); ctx.restore(); }
       }
       if (t < M0) return;
       var q = BR.ms * 100 / 144, sw = BR.ms * 9 / 144, rr = BR.ms * 3 / 144;
-      var w0 = wWon + size * 0.5, h0 = size * 0.95, rw = lerp(w0, q, k), rh = lerp(h0, q, k), rcy = lerp(y2 - size * 0.35, L.vh / 2, k);
+      var w0 = wWon + sizeC * 0.5, h0 = sizeC * 0.95, rw = lerp(w0, q, k), rh = lerp(h0, q, k), rcy = lerp(y2c - sizeC * 0.35, L.vh / 2, k);
       ctx.save(); ctx.globalAlpha = seg(k, 0, 0.35); ctx.strokeStyle = ORANGE; ctx.lineWidth = lerp(sw * 0.4, sw, k);
-      var rx0 = cx - rw / 2, ry0 = rcy - rh / 2, rad = lerp(size * 0.12, rr, k);
+      var rx0 = cx - rw / 2, ry0 = rcy - rh / 2, rad = lerp(sizeC * 0.12, rr, k);
       ctx.beginPath();
       if (ctx.roundRect) ctx.roundRect(rx0, ry0, rw, rh, rad); else ctx.rect(rx0, ry0, rw, rh);
       ctx.stroke(); ctx.restore();
@@ -4399,7 +4406,8 @@ var DRAW = {
       var te = t - B0, on = te >= 0 && te < B_END;
       if (headBrand) {
         headBrand.style.opacity = t < B0 + B_END ? "0" : "";
-        headBrand.style.transform = t >= FADE0 ? "translateY(" + (-exY(t)).toFixed(1) + "px)" : "";   // up and away with the grid
+        headBrand.style.transform = "";
+        if (t >= GX0) headBrand.style.opacity = "0";   // cut away with the grid; the opening brings it back
       }
       brandEl.style.display = on ? "block" : "none";
       if (!on || !BR) return;
@@ -4430,7 +4438,6 @@ var DRAW = {
     var liveAt = -1e9, ovAt = -1e9, rr = 0;
     // the grid rises as one sheet from below the screen over the logo's glide, with its easing, so both land together.
     // Its top is the highest rectangle wholly on screen once landed (lead); the rows above it come in at the end
-    function exY(t) { return (L.vh + 40) * eio(seg(t, FADE0, E0)); }   // the grid sliding up and away at the end
     function landDY(t, lead, f) {   // f: how far down the screen the rectangle lands (0 top, 1 bottom): lower ones drag behind and catch up
       if (t < G0) return -1;
       if (t >= LE) return 0;
@@ -4440,15 +4447,15 @@ var DRAW = {
 
     function wlU(tl, t) {   // how far a diagram has played
       var i = tl.j;
-      if (i !== undefined) return seg(t, i > 0 && STORY[i - 1].over ? ARR[i - 1] : ARR[i], LEA[i] + PAN);
+      var own = WLS[tl.key.slice(3)] && WLS[tl.key.slice(3)].own;   // own: it starts with its own zoom in, not the overview's
+      if (i !== undefined) return seg(t, i > 0 && STORY[i - 1].over && !own ? ARR[i - 1] : ARR[i], LEA[i] + PAN);
       return tl.reg1 >= 0 ? seg(t, ARR[tl.reg1], SET[tl.reg1 + 1]) : 0;
     }
     function frame(t, wall) {
       if (!L) layout();
       if (!L) return;
       var cam = camera(t), s = cam.s;
-      var ex = t >= FADE0 ? exY(t) : 0;
-      var tx = snap(L.vw / 2 - cam.x * s), ty = snap(L.vh / 2 - cam.y * s - ex);
+      var tx = snap(L.vw / 2 - cam.x * s), ty = snap(L.vh / 2 - cam.y * s);
       world.style.transform = "translate(" + tx.toFixed(2) + "px," + ty.toFixed(2) + "px) scale(" + s.toFixed(5) + ")";
       world.style.setProperty("--hs", s.toFixed(5));
       var i = stopAt(t);
@@ -4457,7 +4464,7 @@ var DRAW = {
       tiles.forEach(function (tl) {
         var x = tl.c * L.px * s + tx, y0 = tileY(tl.c, tl.r) * s + ty, dy = landing ? landDY(t, lead, clamp(y0 / L.vh, 0, 1)) : 0, y = y0 + Math.max(0, dy);
         var a = Math.max(alphaOf(t, tl), oa) * (dy < 0 ? 0 : 1);
-        if (t >= FADE0 && y + ex > L.vh) a = 0;   // at the end only what is on screen slides away: nothing follows it up
+        if (t >= GX0) a = 0;   // the clean cut at the end
         if (landing && y0 + L.H * s <= 0) a = 0;   // and at the start only what will be on screen rises: nothing above it
         tl.ldy = Math.max(0, dy);
         if (tl.a) {   // seen in both overviews: its challenge until it is off screen between them, then its nature picture
@@ -4468,7 +4475,8 @@ var DRAW = {
         if (on !== tl.shown) { tl.el.style.display = on ? "" : "none"; tl.shown = on; }
         if (!on) return;
         tl.el.style.opacity = a.toFixed(3);
-        tl.el.style.transform = tl.ldy > 0.5 ? "translateY(" + (tl.ldy / s).toFixed(1) + "px)" : "";
+        var ddy = y - y0;
+        tl.el.style.transform = Math.abs(ddy) > 0.5 ? "translateY(" + (ddy / s).toFixed(1) + "px)" : "";
         if (tl.scrim) tl.scrim.style.opacity = textA(tl.j, t).toFixed(3);   // the blue foot belongs to the line: it rides with the rectangle
         if (tl.svg && !tl.isB) live.push(tl);
       });
