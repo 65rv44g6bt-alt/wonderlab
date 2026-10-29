@@ -3727,7 +3727,7 @@ var DRAW = {
 </script>
 <script>
 
-  /* ---------- hero grid (v172) ----------
+  /* ---------- hero grid (v175) ----------
      0-3.3 s   empty blue: the orange frame turns 90 degrees as the thin squares unfold inside it (as in v145), the mark
                slides left as the name slides out from behind it, a short pause, then it glides into the bar
      then      the grid rises from below with the logo's glide into the bar, in step, landing as it lands; 0.2 s later the camera zooms into the middle rectangle ("We're WonderLab", then
@@ -3771,7 +3771,7 @@ var DRAW = {
       davinci: { n: "davinci", a: 0.36, b: 0.9, z: 0.6, ox: 0.012, oy: -0.1 },
       hulls: { n: "hullsAll", a: 0.35, b: 0.8, z: 1.12, ox: 0.02, oy: 0.08 },
       facade: { n: "facade", a: 0.5, b: 0.9, z: 0.85, ox: 0, oy: 0 },
-      egg: { n: "egg", a: 0.3, b: 0.86, z: 0.88, ox: 0.015, oy: 0.16 },
+      egg: { n: "egg", a: 0.37, b: 0.9, z: 0.88, ox: 0.015, oy: 0.16, u0: 0 },   // v173: from just before the fall
       treehouse: { n: "treehouse", a: 0.2, b: 0.78, z: 0.66, ox: 0, oy: 0.18 },
       chair: { n: "chair2", a: 0.3, b: 0.89, z: 1.0, ox: -0.06, oy: 0.06 },
       towers: { n: "towersAll", a: 0.4, b: 0.82, z: 0.85, ox: 0.03, oy: 0.18 },
@@ -3781,66 +3781,78 @@ var DRAW = {
       tensegrity: { n: "tensegrity", a: 0.5, b: 0.9, z: 0.72, ox: 0, oy: 0.08 }
     };
     var DIAG = Object.keys(WLS).map(function (k) { return "wl:" + k; });
-    var PHOTO = ["s-girl2", "s-girl3", "s-group2", "s-girl9", "s-boy2", "s-boy3", "s-girl8", "s-girlfoil", "s-group8"];
-    var NATURE = ["b-honeycomb", "b-mud", "b-succulent", "b-wing", "b-urchin", "b-roots", "b-aloe", "b-tensile", "b-tent", "b-stairs", "b-nautilus", "b-leaf"];
+    var PHOTO = ["s-girl2", "s-airport2", "s-girl3", "s-group2", "s-facade1", "s-girl9", "s-boy2", "s-boy3", "s-girl8", "s-girlfoil", "s-group8"];
+    // the studio photos come in sets of the same scene (the girl and her tree house, the boy and his table): never two of a set side by side
+    var SETS = { "s-girl2": "tree", "s-girl3": "tree", "s-girl9": "tree", "s-girl8": "tree", "s-boy2": "boy", "s-boy3": "boy" };
+    function setOf(k) { return SETS[k] || k; }
+    var NATURE = ["b-honeycomb", "b-mud", "b-succulent", "b-wing", "b-urchin", "b-roots", "b-aloe", "b-tensile", "b-tent", "b-stairs", "b-nautilus", "b-magnolia"];   // v174: the southern magnolia leaf, white lines on the blue, for the leaf veins
     // where the child is across each studio photo (%), for the tall rectangles on phones; the rest stay centred
-    var FOCAL = { "s-girl2": 72, "s-girl3": 78, "s-girl9": 66, "s-boy2": 75, "s-boy3": 74, "s-girl8": 80, "s-girlfoil": 64, "s-group8": 50, "s-group2": 60 };   // girl3: her scale model; group2: the boats; girl8: the tree house
+    var FOCAL = { "s-girl2": 72, "s-girl3": 78, "s-girl9": 66, "s-boy2": 75, "s-boy3": 74, "s-girl8": 80, "s-girlfoil": 64, "s-group8": 50, "s-group2": 60, "s-airport2": 63, "s-facade1": 83 };   // airport2: the two on the right; facade1: the tower   // girl3: her scale model; group2: the boats; girl8: the tree house
 
     // the story, one stop at a time. A rectangle: its picture (c), its move from the one before (mv: D down, B down and
     // right, in running bond), its line (acc: the word in orange, -1 none, -2 the last) and how long it holds once there.
     // An overview (over: how many rectangles wide): its words on the screen, centred on the cells the next rectangle's
     // move passes through
     var STORY = [
-      { c: "x:start", line: "We\u2019re WonderLab", acc: -1, hold: 2.1, endAs: 6.4, vz: 10, lift: 24,
-        next: { line: "A creative thinking academy, where young minds", acc: -1 }, hold2: 3.4, swapPic: "fade" },
-      { c: "wl:towers", mv: "D", line: "Think like engineers.", acc: 0 },
-      { c: "s-group8", mv: "D", line: "Test like scientists.", acc: 0 },
-      { c: "wl:rube", mv: "D", line: "Plan like inventors.", acc: 0 },
-      { c: "s-girl8", mv: "D", line: "Dream like architects.", acc: 0 },
-      { over: 3, fill: "challenges", alpha: 0.9, line: "Through design challenges led by an award-winning architect", acc: -1, hold: 3.1 },
+      { c: "x:start", line: "We\u2019re WonderLab", acc: -1, hold: 1.5, lift: 24,
+        next: { line: "A creative thinking academy, where young minds", acc: -1 }, hold2: 2.5, swapPic: "fade" },
+      { c: "wl:towers", mv: "D", line: "Think like engineers.", acc: 0, fit: "like", hold: 1.6 },
+      { c: "s-group8", mv: "D", line: "Test like scientists.", acc: 0, fit: "like", hold: 1.6 },
+      { c: "wl:rube", mv: "D", line: "Risk like innovators.", acc: 0, fit: "like", hold: 1.6 },
+      { c: "s-girl8", mv: "D", line: "Dream like architects.", acc: 0, fit: "like", hold: 1.6 },
+      { over: 3, fill: "challenges", alpha: 0.9, alpha2: 0.7, line: "Through design challenges led by an award-winning architect", acc: -1, hold: 3.0,
+        next: { line: "building confidence, creativity and the courage to bring ideas to life.", acc: -1 }, hold2: 3.6 },
       { c: "wl:davinci", mv: "B", line: "A bridge with no glue?", acc: -2 },
       { c: "wl:egg", mv: "D", line: "Will the eggs survive the fall?", acc: -2 },
       { c: "s-boy3", mv: "D", line: "Can a table float?", acc: -2 },
       { c: "wl:solar", mv: "D", line: "Can sunlight cook lunch?", acc: 1 },
-      { over: 4, fill: "nature", alpha: 1, line: "Learn through wonder.", acc: -2, hold: 2.0, stack: true,
-        next: { line: "Nature drew it first.", acc: 0 }, hold2: 2.3 },
-      // the last one: its picture slides up to tomorrow's city as the second line rolls; "The future is" stays
-      { c: "x:bridges", mv: "BB", line: "The future is\nnot something we enter...", acc: 3, hold: 2.8, vz: 10, lowK: 0.5, lift: 24,
-        next: { line: "The future is\nsomething we create.", acc: -2 }, hold2: 3.2, swapPic: "up" }
+      // the last stop: the nature overview, down and right twice from the oven. "Nature drew it first.", then "Learn"
+      // and the challenges' subjects rolling letter by letter, faster and faster, to "Learn to Wonder"; then the grid
+      // slides up and away and "Wonder" turns into the logo's orange frame, where the loop starts again
+      { over: 4, fill: "nature", alpha: 1, mv: "BB", line: "Nature drew it first.", acc: 0, learn: true }
     ];
+    var LEARN = ["Eco-design", "Risk & problem solving", "Structural forces", "Climate adaptation", "Futures thinking", "Biomimicry",
+      "Inclusive design", "Renewable energy", "Tiling & graphic perception", "Buoyancy & water resources"];
+    var L_D0 = 0.62, L_R = 0.83, L_IN = 2.0, L_CLIMAX = 1.6;   // the first subject's turn, each next one 0.83 of it; when "Learn" comes in; how long "Learn to Wonder" holds
+    var L_TURNS = LEARN.map(function (w, k) { return L_D0 * Math.pow(L_R, k); }), L_RUN = L_TURNS.reduce(function (a, b) { return a + b; }, 0);
     var NS = STORY.length, LASTI = NS - 1;
     var C0 = 4, R0 = 5;
     function step(p, m) { return m === "B" ? [p[0] + 1, odd(p[0]) ? p[1] + 1 : p[1]] : [p[0], p[1] + 1]; }
     function gv(p) { return p[1] + (odd(p[0]) ? 0.5 : 0); }   // a cell's row in grid units, with the half step of running bond
     var cur = [C0, R0], ON_PATH = {};
     STORY.forEach(function (st, i) {
-      if (st.over) return;
+      if (st.over) {   // an overview with its own move: centred on the cells that move passes through
+        if (st.mv) { var c2 = cur; st.via = []; st.mv.split("").forEach(function (m) { c2 = step(c2, m); st.via.push(c2); }); }
+        return;
+      }
       var via = [];
       if (i > 0) (st.mv || "D").split("").forEach(function (m) { cur = step(cur, m); via.push(cur); });
       st.cell = cur; st.via = via; ON_PATH[cur[0] + "," + cur[1]] = i;
     });
     STORY.forEach(function (st, i) {   // an overview is centred on the cells the next rectangle's move passes through
       if (!st.over) return;
-      var v = STORY[i + 1].via;
+      var v = st.via || STORY[i + 1].via;
       st.gu = v.reduce(function (a, p) { return a + p[0]; }, 0) / v.length;
       st.gv = v.reduce(function (a, p) { return a + gv(p); }, 0) / v.length;
     });
-    var LAST_CELL = STORY[LASTI].cell;
 
     /* ---------- timing (seconds) ---------- */
     var B0 = 0, B_END = 4.0 / 1.3, BK = 1 / 1.3;   // the logo on the empty blue, 1.3x faster than v163
     var GE = B0 + B_END;                           // the logo's glide into the bar ends
-    var GS = B0 + 3.1 * BK, LE = GE, G0 = GS, Z0 = LE + 0.2, ZD = 1.25;   // the grid rises over the logo's glide (GS to GE); the zoom 0.2 s after it lands
-    var PAN = 0.5, OUT = 1.35, IN = 1.15, DIM = 0.6, VZ = 16;   // PAN: a swap; OUT / IN: to and from an overview; DIM: every rectangle but the one in focus; VZ: the drift, screen px a second
+    var DRAG0 = 0.22, DRAG1 = 0.15;   // v175: the bottom row starts its rise 0.22 s after the top and lands 0.15 s after it
+    var GS = B0 + 3.1 * BK, RISE = (B_END - 3.1 * BK) * 1.4, LE = GS + RISE + DRAG1, G0 = GS, Z0 = LE + 0.2, ZD = 1.25;   // RISE: 1.4x the logo's glide   // the grid rises over the logo's glide (GS to GE); the zoom 0.2 s after it lands
+    var PAN = 0.75 / 1.8, OUT = 1.35, IN = 1.15, DIM = 0.6, VZ = 16;   // PAN: a swap; OUT / IN: to and from an overview; DIM: every rectangle but the one in focus
+    var VE = 45, VMIN = 14;   // v175: nothing ever stands still: VMIN is the slowest drift, mid-hold and through the overviews   // v172: the speed (screen px a second) a rectangle carries in and out of a swap, and its slowest, mid-hold
     var EXIT = 0.9, HOLD = 2.2;
     var ARR = [], SET = [], LEA = [];
     STORY.forEach(function (st, i) {
       ARR[i] = i === 0 ? Z0 : LEA[i - 1];
       SET[i] = ARR[i] + (i === 0 ? ZD : st.over ? OUT : STORY[i - 1].over ? IN : PAN);
       if (st.next) st.roll = SET[i] + st.hold;   // when the line rolls into the next, in the same rectangle
-      LEA[i] = SET[i] + (st.hold || HOLD) + (st.next ? st.hold2 : 0);
+      if (st.learn) { st.lIn = SET[i] + L_IN; st.climax = st.lIn + 0.35 + L_RUN; LEA[i] = st.climax + L_CLIMAX; }
+      else LEA[i] = SET[i] + (st.hold || HOLD) + (st.next ? st.hold2 : 0);
     });
-    var FADE0 = LEA[LASTI], E0 = FADE0 + EXIT, TOTAL = E0 - 0.1;   // the logo starts again as soon as the last rectangle is gone
+    var FADE0 = LEA[LASTI], E0 = FADE0 + EXIT, M0 = FADE0 + 0.2, M1 = FADE0 + 1.05, TOTAL = M1 + 0.02;   // the grid slides away (FADE0 to E0) as "Wonder" becomes the frame (M0 to M1); then the loop
     function stopAt(t) { var i = -1; for (var k = 0; k < NS; k++) if (t >= ARR[k]) i = k; return i; }
 
     /* ---------- the grid: columns in running bond (every other column half a rectangle lower) ---------- */
@@ -3871,6 +3883,8 @@ var DRAW = {
     // studio photos in about 4 : 3.5 : 2; never the same kind (or, in the challenges overview, the same picture) side by side
     var CONTENT = {}, NAT = {}, KINDS = [DIAG, NATURE, PHOTO], use = [0, 0, 0];
     Object.keys(ON_PATH).forEach(function (k) { CONTENT[k] = STORY[ON_PATH[k]].c; });
+    CONTENT[(C0 - 1) + "," + (R0 - 2)] = "s-airport2"; CONTENT[(C0 + 1) + "," + (R0 - 2)] = "s-facade1";      // v173: beside the first rectangle, top row
+    CONTENT[(C0 - 1) + "," + (R0 - 1)] = "wl:tensegrity"; CONTENT[(C0 + 1) + "," + (R0 - 1)] = "wl:airport";  // and the row under it
     function kindOf(key) { return key.indexOf("wl:") === 0 ? 0 : key.indexOf("b-") === 0 ? 1 : key.indexOf("s-") === 0 ? 2 : -1; }
     var cells = Object.keys(need).map(function (k) { return need[k]; }).sort(function (a, b) { return a[0] - b[0] || a[1] - b[1]; });
     cells.forEach(function (p) { var k = p[0] + "," + p[1]; if (ON_PATH[k] === undefined && inOver(p[0], p[1], OI.nature)) NAT[k] = true; });
@@ -3881,8 +3895,6 @@ var DRAW = {
       var st = STORY[OI.challenges], inReg = cells.filter(function (p) { return inOver(p[0], p[1], OI.challenges); });
       var taken = inReg.map(function (p) { return CONTENT[p[0] + "," + p[1]]; }).filter(Boolean);
       // the studio photos come in sets of the same scene (the girl and her tree house, the boy and his table): one per set at most
-      var SETS = { "s-girl2": "tree", "s-girl3": "tree", "s-girl9": "tree", "s-girl8": "tree", "s-boy2": "boy", "s-boy3": "boy" };
-      function setOf(k) { return SETS[k] || k; }
       var takenSets = taken.map(setOf);
       var dl = CH_DIAG.filter(function (k) { return taken.indexOf(k) < 0; }), pl = [];
       PHOTO.forEach(function (k) { if (takenSets.indexOf(setOf(k)) < 0) { pl.push(k); takenSets.push(setOf(k)); } });
@@ -3903,7 +3915,8 @@ var DRAW = {
       var nk = nb.map(kindOf), h = hash(p[0], p[1]) % 100, first = h < 42 ? 0 : h < 77 ? 1 : 2, kind = first;
       for (var i = 0; i < 3; i++) { kind = (first + i) % 3; if (nk.indexOf(kind) < 0) break; }
       var list = KINDS[kind], pick = list[use[kind] % list.length];
-      for (var j = 0; j < list.length && nb.indexOf(pick) >= 0; j++) { use[kind]++; pick = list[use[kind] % list.length]; }
+      var nbs = nb.map(setOf);
+      for (var j = 0; j < list.length && nbs.indexOf(setOf(pick)) >= 0; j++) { use[kind]++; pick = list[use[kind] % list.length]; }
       use[kind] += 1 + (h % 3);
       CONTENT[k] = pick;
     });
@@ -3925,7 +3938,7 @@ var DRAW = {
       var t = { c: p[0], r: p[1], key: key, el: el, j: ON_PATH[k], shown: false, svg: null, reg1: inOver(p[0], p[1], OI.challenges) ? OI.challenges : -1 };
       if (key.indexOf("wl:") === 0) { t.svg = document.createElementNS("http://www.w3.org/2000/svg", "svg"); t.svg.setAttribute("preserveAspectRatio", "xMidYMid slice"); inner.appendChild(t.svg); }
       else if (key === "x:start" || key === "x:bridges") {
-        var pa = key === "x:start" ? ["s-girl3", "s-group2"] : ["f-enter", "f-create"];
+        var pa = key === "x:start" ? ["s-girl3", "s-airport2"] : ["f-enter", "f-create"];
         pa.forEach(function (k2) { var i2 = document.createElement("img"); i2.alt = ""; i2.src = M + k2 + ".jpg"; if (FOCAL[k2]) i2.style.objectPosition = FOCAL[k2] + "% 50%"; inner.appendChild(i2); });
         t.first = inner.firstChild; t.second = inner.lastChild;
         if (key === "x:start") t.second.style.opacity = "0"; else t.second.style.transform = "translateY(100%)";
@@ -3962,7 +3975,7 @@ var DRAW = {
     var WL_U0 = 1 / 3, PHONE_Z = { davinci: 0.62, egg: 0.7, towers: 0.66 };   // WL_U0: where each challenge starts, so the rest plays 1.5x slower over its rectangle's time
     function drawWL(svg, name, u) {
       var s = WLS[name], z = s.z * (L && L.portrait && PHONE_Z[name] ? PHONE_Z[name] : 1);
-      WL.render(svg, s.n, s.a + (s.b - s.a) * (WL_U0 + (1 - WL_U0) * u), "deep", { w: 1920, h: 1080, cx: 0.5 + s.ox, cy: 0.5 + s.oy, zoom: z });
+      WL.render(svg, s.n, s.a + (s.b - s.a) * ((s.u0 === undefined ? WL_U0 : s.u0) + (1 - (s.u0 === undefined ? WL_U0 : s.u0)) * u), "deep", { w: 1920, h: 1080, cx: 0.5 + s.ox, cy: 0.5 + s.oy, zoom: z });
     }
     function initWL() {
       if (wlReady || !window.WL) return;
@@ -4007,28 +4020,25 @@ var DRAW = {
         if (st.over) { st.x = st.gu * L.px + L.W / 2; st.y = st.gv * L.py + L.H / 2; st.s = vw / (st.over * L.px); }
         else { var c = center(st.cell); st.x = c.x; st.y = c.y; st.s = 1; }
       });
-      // a rectangle in focus arrives a little below the middle and drifts up, never under the bar's logo
+      // v173: each stop's glide while it holds: it carries in the speed of the swap that brought it, slows almost to a
+      // stop mid-hold, and picks up again into the next swap (a zoom brings it in, or takes it out, at rest)
       STORY.forEach(function (st, i) {
-        st.off = 0;
-        if (st.over) return;
-        var vz = st.vz || VZ, top0 = vh / 2 - H / 2;
-        function low(d) { var drift = vz * (d + 0.3); return Math.max(0, Math.min(Math.max(drift * (st.lowK || 0.6), 88 - top0 + drift), top0 - 8)); }
-        // the first one arrives higher and holds its first line less, so it ends where it did (v167) at the same drift
-        function low16(d) { var drift = VZ * (d + 0.3); return Math.max(0, Math.min(Math.max(drift * 0.6, 88 - top0 + drift), top0 - 8)); }
-        // the first one ends where it did (v167), drifting slower over a shorter hold, so it arrives higher
-        st.off = st.endAs ? low16(st.endAs) - VZ * st.endAs + vz * (LEA[i] - SET[i]) : low(LEA[i] - SET[i]);
-        st.off -= st.lift || 0;   // v170: the first and last sit higher, start and end, over the same drift
+        st.vA = !st.over && i > 0 && !STORY[i - 1].over ? VE : VMIN;
+        st.vB = !st.over && i < LASTI && !STORY[i + 1].over ? VE : VMIN;
+        st.th = LEA[i] - SET[i];
+        st.dTot = glide(st, st.th);
+        st.off0 = st.dTot / 2 - (st.lift || 0);   // centred mid-glide (the first a little higher), screen px below the middle at its start
       });
-      L.lastBottom = tileY(LAST_CELL[0], LAST_CELL[1]) + L.H - 1;
+      L.lastBottom = 1e12;
       layoutNature();
       dpr = Math.min(2, window.devicePixelRatio || 1); DPX = window.devicePixelRatio || 1;
       world.style.setProperty("--hl", (portrait || DPX >= 3 ? 1 : 0.5) + "px");   // the outline: 1px on phones
       cv.width = Math.round(vw * dpr); cv.height = Math.round(vh * dpr);
-      var cs = gridHold(LE), s0 = cs.s, best = 1e9;
-      L.leadT = null;
+      var cs = gridHold(LE), s0 = cs.s;
+      L.topT = null; var best = 1e9;   // the highest rectangle on screen once landed, even in part: the whole sheet starts below the screen
       tiles.forEach(function (t) {
         var x = (t.c * L.px - cs.x) * s0 + vw / 2, y = (tileY(t.c, t.r) - cs.y) * s0 + vh / 2;
-        if (y >= 0 && x >= -1 && x + L.W * s0 <= vw + 1 && y < best) { best = y; L.leadT = t; }
+        if (y + L.H * s0 > 0 && x < vw && x + L.W * s0 > 0 && y < best) { best = y; L.topT = t; }
       });
       tiles.forEach(function (t) {
         var x = (t.c * L.px - cs.x) * s0 + vw / 2, y = (tileY(t.c, t.r) - cs.y) * s0 + vh / 2;
@@ -4083,19 +4093,30 @@ var DRAW = {
 
     /* ---------- the camera: the world point at the screen's centre, and the scale ---------- */
     function gridHold(t) { var f0 = center(STORY[0].cell); return { x: f0.x, y: f0.y + (24 / L.sG) * (t - Z0), s: L.sG }; }   // 24 screen px a second
-    function hold(i, t) { var st = STORY[i]; return { x: st.x, y: st.y - (st.off || 0) + (st.vz || VZ) / st.s * (t - SET[i]), s: st.s }; }   // a little low as it arrives, then drifting up
-    function exitD() { return Math.max(L.py, (L.vh + L.H) / 2 + 40); }
+    // how far (screen px) a stop has glided up after tau seconds of its hold: its speed runs from vA down towards VMIN and
+    // back up to vB, as a curve with no corners
+    function glide(st, tau) {
+      var T = st.th, u = clamp(tau / T, 0, 1);
+      return VMIN * u * T + (st.vA - VMIN) * (T / 4) * (1 - Math.pow(1 - u, 4)) + (st.vB - VMIN) * (T / 4) * Math.pow(u, 4);
+    }
+    function hold(i, t) { var st = STORY[i]; return { x: st.x, y: st.y + (glide(st, t - SET[i]) - st.off0) / st.s, s: st.s }; }
+    function hermite(p0, p1, v0, v1, T, u) {   // a cubic from p0 to p1 leaving at v0 and arriving at v1: its speed is a smooth hump, no corners
+      var u2 = u * u, u3 = u2 * u;
+      return (2 * u3 - 3 * u2 + 1) * p0 + (u3 - 2 * u2 + u) * T * v0 + (-2 * u3 + 3 * u2) * p1 + (u3 - u2) * T * v1;
+    }
     function camera(t) {
-      if (t >= FADE0) {   // the last rectangle slides up and away, far enough to leave the screen
-        var hN = hold(LASTI, t), d = exitD() * eq4(seg(t, FADE0, E0));
-        return { x: hN.x, y: hN.y + d, s: 1 };
-      }
       var i = stopAt(t);
       if (i < 0) return gridHold(t);
       if (t >= SET[i]) return hold(i, t);
-      var a = i === 0 ? gridHold(t) : hold(i - 1, t), b = hold(i, t), zoom = Math.abs(a.s - b.s) > 1e-3;
-      var p = (zoom ? eio : eq5)(seg(t, ARR[i], SET[i]));
-      if (!zoom) return { x: lerp(a.x, b.x, p), y: lerp(a.y, b.y, p), s: b.s };
+      var a = i === 0 ? gridHold(t) : hold(i - 1, Math.min(t, LEA[i - 1])), b = hold(i, SET[i]), zoom = Math.abs(a.s - b.s) > 1e-3;
+      if (i === 0) b = hold(0, t);
+      if (!zoom) {   // a swap: one smooth stroke from the last rectangle's glide into this one's, at the speeds they carry
+        // v174: 2.5x shorter, with a sharp peak of speed (quintic in-out, soft at both ends) plus the small speeds the
+        // rectangles carry in and out of their holds, so it still joins them without a corner
+        var T = SET[i] - ARR[i], u = seg(t, ARR[i], SET[i]), pe = eq4(u);
+        return { x: lerp(a.x, b.x, pe), y: a.y + (b.y - a.y) * pe + T * (STORY[i - 1].vB * (u * u * u - 2 * u * u + u) + STORY[i].vA * (u * u * u - u * u)), s: b.s };
+      }
+      var p = eio(seg(t, ARR[i], SET[i]));
       // a zoom: the scale changes evenly in log, and the centre moves in step with how far the view has changed size
       var s = a.s * Math.pow(b.s / a.s, p), w = (1 / s - 1 / a.s) / (1 / b.s - 1 / a.s);
       return { x: lerp(a.x, b.x, w), y: lerp(a.y, b.y, w), s: s };
@@ -4107,7 +4128,10 @@ var DRAW = {
       if (t < SET[i]) return lerp(DIM, 1, (i === 0 ? eio : eo)(seg(t, ARR[i], SET[i])));
       if (t < LEA[i] || i === LASTI) return 1;
       // v170: a rectangle that zooms out into an overview stays at full strength through it, dimming only on the zoom back in
-      if (STORY[i + 1].over) return t < LEA[i + 1] ? 1 : lerp(1, DIM, eo(seg(t, LEA[i + 1], SET[i + 2])));
+      if (STORY[i + 1].over) {
+        var ov = STORY[i + 1], a2 = ov.alpha2 && ov.roll ? lerp(1, ov.alpha2, eio(seg(t, ov.roll, ov.roll + 0.6))) : 1;
+        return t < LEA[i + 1] || i + 2 > LASTI ? a2 : lerp(a2, DIM, eo(seg(t, LEA[i + 1], SET[i + 2])));
+      }
       return lerp(1, DIM, eo(seg(t, LEA[i], SET[i + 1])));
     }
     // a rectangle's line and its blue foot: there from its arrival (fading in through a zoom), riding out with it
@@ -4127,10 +4151,14 @@ var DRAW = {
       return a;
     }
     // in an overview every rectangle comes up to its strength (90% for the challenges, full for nature)
-    function overK(i, t) { return seg(t, lerp(ARR[i], SET[i], 0.3), SET[i]) * (1 - seg(t, LEA[i], lerp(LEA[i], SET[i + 1], 0.5))); }
+    function overK(i, t) { return seg(t, lerp(ARR[i], SET[i], 0.3), SET[i]) * (i === LASTI ? 1 : 1 - seg(t, LEA[i], lerp(LEA[i], SET[i + 1], 0.5))); }
     function overA(t) {
       var a = 0;
-      STORY.forEach(function (st, i) { if (st.over) a = Math.max(a, lerp(DIM, st.alpha, overK(i, t))); });
+      STORY.forEach(function (st, i) {   // the challenges overview drops to 70% for its second line
+        if (!st.over) return;
+        var top = st.alpha2 && st.roll ? lerp(st.alpha, st.alpha2, eio(seg(t, st.roll, st.roll + 0.6))) : st.alpha;
+        a = Math.max(a, lerp(DIM, top, overK(i, t)));
+      });
       return a;
     }
     function veilA(t) {
@@ -4226,6 +4254,13 @@ var DRAW = {
         if (fit < 1) { size *= fit; o = fontAt(size); }
         maxW = 1e6;   // and it never wraps on its own
       }
+      if (item.fit) {   // v173: a set of lines in one size, each on one line ("Dream like architects." on phones)
+        var wg = 0;
+        STORY.forEach(function (it) { if (it.fit === item.fit) wg = Math.max(wg, phraseW(it, o)); });
+        var fg = Math.min(1, maxW * 0.96 / wg);
+        if (fg < 1) { size *= fg; o = fontAt(size); }
+        maxW = 1e6;
+      }
       var lh = size * 1.12;
       function lay(ws) { return placeWords(ws, o, R.x + pad, maxW, R.y + R.h - pad, lh); }
       var A = wordsOf(item), PA = lay(A);
@@ -4274,12 +4309,85 @@ var DRAW = {
       if (item.next && t >= item.roll) { rollWords(A, PA, B, PB, o, lh, t, item.roll, 1, D, ST); return; }
       rollWords([], none, A, PA, o, lh, t, t0, 1, D, ST);
     }
+    // v173: the last stop's words. "Nature drew it first." rolls in and is cut away; then "Learn" and, under it, the
+    // challenges' subjects take turns letter by letter (as the closing line's Dream / Sketch / Build / Break), each turn
+    // shorter, to "Learn to" / "Wonder". As the grid slides away, "Learn to" is cut away and "Wonder" becomes the logo's
+    // orange frame, exactly where the opening draws it, so the loop starts again from it
+    function rollLetters(text, color, x, y, o, t, tIn, tOut, D, STG, lift, g) {
+      for (var j = 0; j < text.length; j++) {
+        var kin = tIn === null ? 1 : eio(seg(t, tIn + j * STG, tIn + j * STG + D)), kout = tOut === null ? 0 : eio(seg(t, tOut + j * STG, tOut + j * STG + D));
+        if (kin <= 0 || kout >= 1 || text[j] === " ") continue;
+        drawWord({ s: text[j], c: color }, x + measure(text.slice(0, j), o), y + (1 - kin) * lift - kout * lift, o, g, band(y, o));
+      }
+    }
+    function drawLearn(i, t) {
+      var st = STORY[i], base = clamp(L.W * (L.portrait ? 0.088 : 0.058), 22, 70), ob = fontAt(base), none = { pos: [] };
+      if (t < st.lIn) {   // "Nature drew it first."
+        var A = wordsOf(st), PA = placeCentred(A, ob, L.vw, L.vh / 2, base * 1.14), cutN = st.lIn - 0.4, gN = seg(t, SET[i] - 0.1, SET[i] + 0.4) * (1 - seg(t, cutN, cutN + 0.3));
+        glow(PA.pos, A, ob, base * 1.14, gN);
+        if (t < cutN) { rollWords([], none, A, PA, ob, base * 1.14, t, SET[i] - 0.1, 1, 0.62, 0.045); return; }
+        var kc = eio(seg(t, cutN, cutN + 0.35));
+        A.forEach(function (w, n) { drawWord(w, PA.pos[n].x, PA.pos[n].y - kc * base * 1.45, ob, 1, band(PA.pos[n].y, ob)); });
+        return;
+      }
+      // one size for every subject: the widest fits the screen with room to spare
+      var widest = 0;
+      LEARN.forEach(function (w) { widest = Math.max(widest, measure(w, ob)); });
+      var size = base * Math.min(1, (L.vw - 2 * L.gut) * 0.96 / widest), o = fontAt(size), lh = size * 1.14, lift = size * 1.42, sp = measure(" ", o);
+      var y1 = L.vh / 2 - lh / 2 + size * 0.36, y2 = y1 + lh, cx = L.vw / 2;
+      var wLearn = measure("Learn", o), wTo = measure("to", o), wWon = measure("Wonder", o);
+      var slide = eio(seg(t, st.climax, st.climax + 0.45)), xL = lerp(cx - wLearn / 2, cx - (wLearn + sp + wTo) / 2, slide);
+      // the glow, close round both lines
+      var gl = seg(t, st.lIn, st.lIn + 0.4) * (1 - seg(t, FADE0, FADE0 + 0.4));
+      glow([{ x: cx - widest * size / base / 2, y: y1 }, { x: cx - widest * size / base / 2, y: y2 }], [{ s: "x" }, { s: "x" }], o, lh, 0);
+      if (gl > 0) {
+        var gw = Math.max(wLearn + sp + wTo, t < st.climax ? 0 : wWon), x0g = cx - gw / 2;
+        LEARN.forEach(function (w, k) { var s0 = st.lIn + 0.35 + L_TURNS.slice(0, k).reduce(function (a, b) { return a + b; }, 0); if (t >= s0 && t < s0 + L_TURNS[k]) { gw = Math.max(gw, measure(w, o)); x0g = cx - gw / 2; } });
+        ctx.save(); ctx.translate(cx, (y1 + y2) / 2 - size * 0.27); ctx.scale(gw / 2 + size * 1.1, lh + size * 0.8);
+        var gr = ctx.createRadialGradient(0, 0, 0, 0, 0, 1);
+        gr.addColorStop(0, "rgba(20,47,68," + (0.6 * gl).toFixed(3) + ")"); gr.addColorStop(0.6, "rgba(20,47,68," + (0.42 * gl).toFixed(3) + ")"); gr.addColorStop(1, "rgba(20,47,68,0)");
+        ctx.fillStyle = gr; ctx.fillRect(-1, -1, 2, 2); ctx.restore();
+      }
+      // line 1: "Learn", then "to" beside it at the climax; both cut away as the grid leaves
+      var cut1 = t >= FADE0 ? eio(seg(t, FADE0, FADE0 + 0.35)) * size * 1.45 : 0;
+      if (cut1 < size * 1.45) {
+        var yL = y1 - cut1;
+        rollLetters("Learn", WHITE, xL, yL, o, t, st.lIn, null, 0.3, 0.02, lift, 1);
+        if (t >= st.climax) rollLetters("to", WHITE, cx - (wLearn + sp + wTo) / 2 + wLearn + sp, yL, o, t, st.climax + 0.08, null, 0.3, 0.02, lift, 1);
+      }
+      // line 2: the subjects, each in at its turn and up and out at the next, faster and faster
+      var s0 = st.lIn + 0.35;
+      LEARN.forEach(function (w, k) {
+        var d = L_TURNS[k], tin = s0, tout = s0 + d, D = Math.min(0.28, 0.55 * d), STG = Math.min(0.02, 0.3 * d / w.length);
+        s0 += d;
+        if (t < tin || t > tout + D + STG * w.length) return;
+        rollLetters(w, WHITE, cx - measure(w, o) / 2, y2, o, t, tin, tout, D, STG, lift, 1);
+      });
+      if (t < st.climax) return;
+      // "Wonder", in orange; then the frame
+      var xW = cx - wWon / 2, k = eio(seg(t, M0, M1));
+      if (k < 1) {
+        var ga = 1 - seg(k, 0.12, 0.55);
+        if (t < M0) rollLetters("Wonder", ORANGE, xW, y2, o, t, st.climax, null, 0.3, 0.025, lift, 1);
+        else if (ga > 0) { ctx.save(); var cy0 = lerp(y2 - size * 0.35, L.vh / 2, k), sc = lerp(1, 0.6, k); ctx.translate(cx, cy0); ctx.scale(sc, sc); ctx.translate(-cx, -(y2 - size * 0.35));
+          drawWord({ s: "Wonder", c: ORANGE }, xW, y2, o, ga, [-1e4, 1e4]); ctx.restore(); }
+      }
+      if (t < M0) return;
+      var q = BR.ms * 100 / 144, sw = BR.ms * 9 / 144, rr = BR.ms * 3 / 144;
+      var w0 = wWon + size * 0.5, h0 = size * 0.95, rw = lerp(w0, q, k), rh = lerp(h0, q, k), rcy = lerp(y2 - size * 0.35, L.vh / 2, k);
+      ctx.save(); ctx.globalAlpha = seg(k, 0, 0.35); ctx.strokeStyle = ORANGE; ctx.lineWidth = lerp(sw * 0.4, sw, k);
+      var rx0 = cx - rw / 2, ry0 = rcy - rh / 2, rad = lerp(size * 0.12, rr, k);
+      ctx.beginPath();
+      if (ctx.roundRect) ctx.roundRect(rx0, ry0, rw, rh, rad); else ctx.rect(rx0, ry0, rw, rh);
+      ctx.stroke(); ctx.restore();
+    }
     function drawText(t, cam) {
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0); ctx.clearRect(0, 0, L.vw, L.vh);
       var i = stopAt(t);
       if (i < 0) return;
       [i - 1, i].forEach(function (k) {
         if (k < 0) return;
+        if (STORY[k].learn) { if (k === i && t >= SET[k] - 0.1) drawLearn(k, t); return; }
         if (STORY[k].over) { if (k === i ? t >= SET[k] - 0.1 : t < LEA[k] + 0.45) drawOver(k, t); return; }
         drawLine(k, t, cam, wordA(k, t));
       });
@@ -4291,12 +4399,12 @@ var DRAW = {
       var te = t - B0, on = te >= 0 && te < B_END;
       if (headBrand) {
         headBrand.style.opacity = t < B0 + B_END ? "0" : "";
-        headBrand.style.transform = t >= FADE0 ? "translateY(" + (-exitD() * eq4(seg(t, FADE0, E0))).toFixed(1) + "px)" : "";   // up and away with the last rectangle
+        headBrand.style.transform = t >= FADE0 ? "translateY(" + (-exY(t)).toFixed(1) + "px)" : "";   // up and away with the grid
       }
       brandEl.style.display = on ? "block" : "none";
       if (!on || !BR) return;
       var r = eio(seg(te, 0, 1.0 * BK));
-      bFr.setAttribute("opacity", eo(seg(te, 0, 0.2 * BK)).toFixed(3));
+      bFr.setAttribute("opacity", looped ? "1" : eo(seg(te, 0, 0.2 * BK)).toFixed(3));   // on a loop the frame is already there: "Wonder" became it
       bFr.setAttribute("transform", "rotate(" + (90 * r).toFixed(2) + ")");
       for (var i = 0; i < bSq.length; i++) {
         bSq[i].setAttribute("transform", "rotate(" + (12 * (i + 1) * r).toFixed(2) + ")");
@@ -4322,10 +4430,12 @@ var DRAW = {
     var liveAt = -1e9, ovAt = -1e9, rr = 0;
     // the grid rises as one sheet from below the screen over the logo's glide, with its easing, so both land together.
     // Its top is the highest rectangle wholly on screen once landed (lead); the rows above it come in at the end
-    function landDY(t, lead) {
+    function exY(t) { return (L.vh + 40) * eio(seg(t, FADE0, E0)); }   // the grid sliding up and away at the end
+    function landDY(t, lead, f) {   // f: how far down the screen the rectangle lands (0 top, 1 bottom): lower ones drag behind and catch up
       if (t < G0) return -1;
       if (t >= LE) return 0;
-      return (L.vh + 24 - lead) * (1 - eio(seg(t, GS, GE)));
+      var u = seg(t, GS + DRAG0 * f, GS + RISE + DRAG1 * f);
+      return (L.vh + 24 - lead) * Math.pow(1 - u * u, 4);   // a soft start, staying under the logo while it is low, then a long ease out
     }
 
     function wlU(tl, t) {   // how far a diagram has played
@@ -4337,17 +4447,19 @@ var DRAW = {
       if (!L) layout();
       if (!L) return;
       var cam = camera(t), s = cam.s;
-      var tx = snap(L.vw / 2 - cam.x * s), ty = snap(L.vh / 2 - cam.y * s);
+      var ex = t >= FADE0 ? exY(t) : 0;
+      var tx = snap(L.vw / 2 - cam.x * s), ty = snap(L.vh / 2 - cam.y * s - ex);
       world.style.transform = "translate(" + tx.toFixed(2) + "px," + ty.toFixed(2) + "px) scale(" + s.toFixed(5) + ")";
       world.style.setProperty("--hs", s.toFixed(5));
-      var i = stopAt(t), cut = t >= SET[LASTI] ? 1 : seg(t, lerp(ARR[LASTI], SET[LASTI], 0.5), SET[LASTI]);   // nothing below the last rectangle once it is in
-      var landing = t < LE, lead = L.leadT ? tileY(L.leadT.c, L.leadT.r) * s + ty : 0;
-      var live = [], dy = landDY(t, lead), oa = overA(t), swapT = SET[OI.challenges + 2];
-      if (landing) { ty = snap(L.vh / 2 - cam.y * s + Math.max(0, dy)); world.style.transform = "translate(" + tx.toFixed(2) + "px," + ty.toFixed(2) + "px) scale(" + s.toFixed(5) + ")"; }   // the whole sheet moves as one
+      var i = stopAt(t);
+      var landing = t < LE, lead = L.topT ? tileY(L.topT.c, L.topT.r) * s + ty : 0;
+      var live = [], oa = overA(t), swapT = SET[OI.challenges + 2];
       tiles.forEach(function (tl) {
-        var x = tl.c * L.px * s + tx, y = tileY(tl.c, tl.r) * s + ty;
-        var below = tileY(tl.c, tl.r) >= L.lastBottom ? 1 - cut : 1, a = Math.max(alphaOf(t, tl), oa) * below * (dy < 0 ? 0 : 1);
-        if (landing && y < lead + Math.max(0, dy) - 1) a *= seg(t, GE - 0.22, GE);   // above the grid's top row: in as it settles
+        var x = tl.c * L.px * s + tx, y0 = tileY(tl.c, tl.r) * s + ty, dy = landing ? landDY(t, lead, clamp(y0 / L.vh, 0, 1)) : 0, y = y0 + Math.max(0, dy);
+        var a = Math.max(alphaOf(t, tl), oa) * (dy < 0 ? 0 : 1);
+        if (t >= FADE0 && y + ex > L.vh) a = 0;   // at the end only what is on screen slides away: nothing follows it up
+        if (landing && y0 + L.H * s <= 0) a = 0;   // and at the start only what will be on screen rises: nothing above it
+        tl.ldy = Math.max(0, dy);
         if (tl.a) {   // seen in both overviews: its challenge until it is off screen between them, then its nature picture
           var b2 = t >= swapT;
           if (b2 !== tl.isB) { tl.isB = b2; tl.a.forEach(function (n) { n.style.display = b2 ? "none" : ""; }); tl.natImg.style.display = b2 ? "" : "none"; }
@@ -4356,6 +4468,7 @@ var DRAW = {
         if (on !== tl.shown) { tl.el.style.display = on ? "" : "none"; tl.shown = on; }
         if (!on) return;
         tl.el.style.opacity = a.toFixed(3);
+        tl.el.style.transform = tl.ldy > 0.5 ? "translateY(" + (tl.ldy / s).toFixed(1) + "px)" : "";
         if (tl.scrim) tl.scrim.style.opacity = textA(tl.j, t).toFixed(3);   // the blue foot belongs to the line: it rides with the rectangle
         if (tl.svg && !tl.isB) live.push(tl);
       });
@@ -4384,11 +4497,11 @@ var DRAW = {
     }
 
     /* ---------- the clock, and one click to pause or play ---------- */
-    var clock = 0, last = 0, raf = 0, seen = true, paused = false;
+    var clock = 0, last = 0, raf = 0, seen = true, paused = false, looped = FREEZE !== null && FREEZE < 0.3 && Q.has("loop");
     function tick(now) {
       raf = 0;
       if (!seen || document.hidden || paused) { last = 0; return; }
-      if (last) clock = (clock + Math.min(0.1, (now - last) / 1000)) % TOTAL;
+      if (last) { var nc = clock + Math.min(0.1, (now - last) / 1000); if (nc >= TOTAL) looped = true; clock = nc % TOTAL; }
       last = now;
       frame(clock, now);
       raf = requestAnimationFrame(tick);
@@ -4401,7 +4514,7 @@ var DRAW = {
     // the bar's logo starts the hero again from the beginning (its link still takes the page to the top)
     if (headBrand) headBrand.addEventListener("click", function () {
       if (FREEZE !== null) return;
-      clock = 0; last = 0; headBrand.style.opacity = ""; headBrand.style.transform = "";
+      clock = 0; last = 0; looped = false; headBrand.style.opacity = ""; headBrand.style.transform = "";
       if (paused) { paused = false; hero.classList.remove("is-paused"); toggle.setAttribute("aria-pressed", "false"); toggle.setAttribute("aria-label", "Pause the animation"); }
       kick();
     });
