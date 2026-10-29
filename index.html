@@ -18,11 +18,11 @@
 <meta property="og:image:alt" content="WonderLab, creative thinking academy, Mong Kok &amp; Wan Chai, Hong Kong">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="canonical" href="https://wonderlab.page/">
-<link rel="icon" href="/favicon.ico" sizes="48x48">
-<link rel="icon" href="/favicon.svg" type="image/svg+xml">
-<link rel="icon" href="/favicon-96.png" type="image/png" sizes="96x96">
-<link rel="apple-touch-icon" href="/apple-touch-icon.png">
-<link rel="manifest" href="/site.webmanifest">
+<link rel="icon" href="favicon.ico" sizes="48x48">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="icon" href="favicon-96.png" type="image/png" sizes="96x96">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="manifest" href="site.webmanifest">
 <script id="wl-motion" src="media/wl-motion.js?v=1" async></script> <!-- live challenge animations: bump ?v= when rebuilt -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -425,16 +425,6 @@ video.is-waiting { opacity: 0 !important; }
 /* wide screens: each age group's paper is the third strip of its run with white text (as on phones), flat, for the
    chosen age card, the selected title's box, the challenge panel and the booking panel (no leaf light, no grain) */
 @media (min-width: 901px) {
-  .paper-blue { --paper-base: #1F3852; }
-  .paper-green { --paper-base: #233923; }
-  .paper-honey { --paper-base: #6B330C; }
-  .ch-panel::before { background: var(--paper-base); }
-  .ch-panel::after { display: none; }
-  .ch-panel.is-paper .ch-body { text-shadow: none; }
-  .ch-slider-paper, .challenges.is-paper .ch-slider::before, .challenges.is-paper .ch-slider::after { background-image: none; }
-  #stage-tabs .stage:nth-child(1)[aria-selected="true"] { background: #1F3852; border-color: #1F3852; }
-  #stage-tabs .stage:nth-child(2)[aria-selected="true"] { background: #233923; border-color: #233923; }
-  #stage-tabs .stage:nth-child(3)[aria-selected="true"] { background: #6B330C; border-color: #6B330C; }
   .book-panel { background: var(--tint, var(--navy)); }
   .book-panel .bp-light { display: none; }
 }
@@ -1088,6 +1078,57 @@ footer { background: var(--deep); color: var(--on-navy-soft); padding: clamp(44p
   /* a focus outline lies outside the box: while it shows, the box keeps its fillet */
   .bp-plans button:focus-visible, .cal-day:focus-visible, .map-card:focus-visible { clip-path: none; }
 }
+
+/* ---------- hero grid (v167): columns in running bond, landing in a second, then a zoom into one rectangle the width of
+   the approach box, swaps one rectangle down or right, the words rolling over it; it ends on the logo, which glides into the bar ---------- */
+.hero.hg { position: relative; margin-top: -76px; height: 100svh; min-height: 560px; padding: 0; overflow: hidden; background: #142F44; color: var(--on-navy); }
+@media (min-width: 901px) {
+  .hero.hg { margin-top: -76px; height: 100svh; min-height: 600px; padding: 0; background: #142F44; overflow: hidden; }
+}
+.hg-stage { position: absolute; inset: 0; }
+.hg-world { position: absolute; left: 0; top: 0; width: 0; height: 0; transform-origin: 0 0; --hs: 1; }
+.hg-tile { position: absolute; border-radius: var(--r); box-shadow: 0 0 0 calc(0.5px / var(--hs)) #FFFFFF;   /* a hairline */ }
+.hg-in { position: absolute; inset: 0; border-radius: inherit; overflow: hidden; background: #142F44; }
+.hg-in img, .hg-in svg { position: absolute; inset: 0; width: 100%; height: 100%; display: block; object-fit: cover; }
+.hg-scrim { position: absolute; inset: 0; background: linear-gradient(0deg, rgba(20, 47, 68, 0.82) 0%, rgba(20, 47, 68, 0.42) 34%, rgba(20, 47, 68, 0) 62%); opacity: 0; pointer-events: none; }
+.hg-in img { transition: none; }
+/* v166: the overviews' veil, under their words */
+.hg-veil { position: absolute; inset: 0; pointer-events: none; opacity: 0; background: radial-gradient(ellipse 50% 34% at 50% 50%, rgba(20, 47, 68, 0.74) 0%, rgba(20, 47, 68, 0.5) 50%, rgba(20, 47, 68, 0) 100%); }   /* v167: only behind the words, so the rectangles keep their strength */
+.hg-text { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+/* the ending: the logo and the name, in the bar's proportions, so the glide into the bar is a pure scale */
+.hg-brand { position: absolute; left: 0; top: 0; display: none; align-items: center; white-space: nowrap; transform-origin: 0 0; pointer-events: none; color: var(--on-navy); }
+.hg-brand svg { flex: none; overflow: visible; display: block; max-width: none; }
+.hg-brand .hg-word { display: block; font-weight: 500; letter-spacing: -0.035em; line-height: 1.02; }
+/* one click pauses, another plays */
+.hg-toggle { position: absolute; inset: 0; z-index: 1; margin: 0; padding: 0; border: 0; background: transparent; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+.hg-toggle:focus, .hg-toggle:focus-visible { outline: none; }   /* v166: no frame round the hero after a click or a key */
+.hg-glyph { position: absolute; left: 50%; top: 50%; z-index: 2; width: 64px; height: 64px; margin: -32px 0 0 -32px; border-radius: 50%; background: rgba(13, 27, 38, 0.55); opacity: 0; pointer-events: none; transition: opacity 500ms ease; }
+.hg-glyph.is-on { opacity: 1; transition-duration: 80ms; }
+.hg-glyph svg { width: 100%; height: 100%; display: block; }
+.hg-sr { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+
+/* v164 phones: no paper grain, no torn edges, no outlines. Each age group sits on one picture, its leaf light as in
+   v145, shared by the chosen age box and the list and placed from the box's top (plSync in the script), so it runs on
+   without a seam. The challenges are separated by a faint rule; text is white. A tap swaps them as in v145 */
+@media (max-width: 900px) {
+  #programme:has(#stage-explorers[aria-selected="true"]) { --pl-img: url("media/challenges/leaf-blue-wide.jpg"); --pl-base: #0E2A4F; }
+  #programme:has(#stage-creators[aria-selected="true"]) { --pl-img: url("media/challenges/leaf-green-wide.jpg"); --pl-base: #1F3A1D; }
+  #programme:has(#stage-changemakers[aria-selected="true"]) { --pl-img: url("media/challenges/leaf-honey-wide.jpg"); --pl-base: #3E1003; }
+  #programme .ch-list::before { z-index: -1000; transform: none; border-radius: 0 0 12px 12px;
+    background: var(--pl-img) var(--pl-lx, 100%) var(--pl-ly, 0px) / var(--pl-sz, auto 100%) no-repeat, var(--pl-base, #0E2A4F); }
+  #stage-tabs .stage[aria-selected="true"] {
+    background: var(--pl-img) var(--pl-tx, 100%) 0 / var(--pl-sz, 200% auto) no-repeat, var(--pl-base, #0E2A4F) !important;
+    background-origin: border-box !important; clip-path: none !important; -webkit-clip-path: none !important;
+    border: 0 !important; border-radius: 12px 12px 0 0 !important;
+    position: relative; z-index: 3; color: #FFFFFF; }
+  #stage-tabs .stage[aria-selected="true"]::before, #stage-tabs .stage[aria-selected="true"]::after { display: none !important; }
+  #stage-tabs .stage[aria-selected="true"] .s-ages { color: rgba(255, 255, 255, 0.76); }
+  #programme .ch-list > li { --strip-ink: #FFFFFF !important; --strip-soft: rgba(255, 255, 255, 0.78) !important; --strip-accent: #FF8A3D !important; }
+  #programme .ch-list > li::before { background: none !important; -webkit-mask: none !important; mask: none !important; border: 0 !important;
+    left: 20px; right: 20px; top: auto; bottom: calc(-1 * var(--gb, 0px)); height: 1px; border-top: 0; background-color: rgba(255, 255, 255, 0.16) !important; }
+  #programme .ch-list > li.is-last::before, #programme .ch-list > li.ch-panel-slot::before, #programme .ch-list > li.ch-body-slot::before { display: none !important; }
+  #programme .ch-list > li::after { display: none !important; }
+}
 </style>
 </head>
 <body>
@@ -1110,20 +1151,16 @@ footer { background: var(--deep); color: var(--on-navy-soft); padding: clamp(44p
 
 <main id="main">
 
-<section class="hero" id="top">
-  <div class="hero-shell">
-    <div class="hero-media" aria-hidden="true">
-      <picture>
-        <source media="(min-width: 901px)" srcset="media/hero.jpg?v=22">
-        <img id="hero-poster" src="media/hero-portrait.jpg?v=22" alt="" width="1080" height="1920">
-      </picture>
-      <div class="hero-reel" id="hero-reel"><svg></svg><svg></svg><svg></svg></div>
-    </div>
-    <div class="wrap">
-      <h1 class="hero-statement rv-wrap" data-lines="<span class='big'>We&rsquo;re WonderLab</span>|A creative thinking academy where young minds|take on meaningful design challenges|that build confidence, creativity and|the courage to bring ideas to life."></h1>
-    </div>
-  </div>
-</section>
+<section class="hero hg" id="top" aria-label="WonderLab">
+      <h1 class="hg-sr">We&rsquo;re WonderLab, a creative thinking academy in Hong Kong where young minds take on meaningful design challenges that build confidence, creativity and the courage to bring ideas to life.</h1>
+      <div class="hg-stage" aria-hidden="true">
+        <div class="hg-world" id="hg-world"></div>
+        <canvas class="hg-text" id="hg-text"></canvas>
+        <div class="hg-brand" id="hg-brand"></div>
+      </div>
+      <button class="hg-toggle" id="hg-toggle" type="button" aria-pressed="false" aria-label="Pause the animation"></button>
+      <div class="hg-glyph" id="hg-glyph" aria-hidden="true"></div>
+    </section>
 
 <section class="section" id="approach">
   <div class="wrap">
@@ -2343,7 +2380,7 @@ var DRAW = {
   /* the bar is transparent over the hero, then takes its translucent white */
   var head = document.querySelector(".site-head"), heroEl = document.querySelector(".hero");
   if (head && heroEl) {
-    var setHead = function () { head.classList.toggle("at-top", !window.matchMedia("(min-width: 901px)").matches && window.scrollY < heroEl.offsetHeight - 120); };
+    var setHead = function () { head.classList.toggle("at-top", window.scrollY < heroEl.offsetHeight - 120); };
     setHead();
     window.addEventListener("scroll", setHead, { passive: true });
     window.addEventListener("resize", setHead);
@@ -2667,7 +2704,7 @@ var DRAW = {
 
   function fill(item) {
     var st = isPhone.matches ? strips[active] : null;
-    liveInk = st && st.light ? st.ink : "";
+    liveInk = ""; // v163: white lines on every strip
     var v = figureInto(fig, item[5] || item[0], paperOf(item));
     setPaper(panel, paperOf(item));
     elKind.textContent = item[4];
@@ -2931,7 +2968,7 @@ var DRAW = {
     if (Math.abs(ys[k] - y) >= FLOW_NEAR) flowGlide(k);
   }
   function flowSet() {
-    var on = isPhone.matches && !reduce.matches && !!tabs.length && !ALL_OPEN;
+    var on = false; // v162: a tap swaps, as in v145
     if (!on) { flowStop(); gest = null; }
     if (!on && scrub) endScrub(true);
     flowOn = on;
@@ -3076,7 +3113,7 @@ var DRAW = {
       var skill = document.createElement("p"); skill.className = "ch-skill"; skill.innerHTML = "<b>Skill.</b> ";
       skill.appendChild(document.createTextNode(item[3])); body.appendChild(skill); li.appendChild(body);
       openList.appendChild(li);
-      liveInk = st && st.light ? st.ink : "";
+      liveInk = ""; // v163: white lines on every strip
       var v = figureInto(fig, item[5] || item[0], STAGE_PAPER[g] || "");
       if (v) { v.fresh = false; v.play(); }
     });
@@ -3687,6 +3724,716 @@ var DRAW = {
     termsBox.addEventListener("click", function (e) { if (e.target === termsBox) termsBox.close(); }); // a click on the backdrop closes it
   }
 })();
+</script>
+<script>
+
+  /* ---------- hero grid (v169) ----------
+     0-3.3 s   empty blue: the orange frame turns 90 degrees as the thin squares unfold inside it (as in v145), the mark
+               slides left as the name slides out from behind it, a short pause, then it glides into the bar
+     then      the grid rises from below with the logo's glide into the bar, in step, landing as it lands; 0.2 s later the camera zooms into the middle rectangle ("We're WonderLab", then
+               the boats and "A creative thinking academy"), then down through engineers, scientists, inventors, architects
+     then      down and right, zooming out to three rectangles wide: challenges playing, a few studio photos, and
+               "Through design challenges led by an award-winning architect"; then in to "A bridge with no glue?",
+               and down through the egg, the table and the oven
+     then      down and right, zooming out to four wide: each picture of the nature collage in its own rectangle, laid
+               out as in the collage, "Learn through wonder." sliding up as "Nature drew it first." rolls up under it; then down and right, in to the city: "The future is" stays, only
+               "not something we enter." rolls into "something we create." as the picture slides up
+     the end   nothing lies below the last rectangle: it slides up and away with the bar's logo, and the logo starts again at once
+     one click on the hero pauses it, another plays it; a click on the bar's logo starts it again from the beginning.
+     ?t=12.3 freezes it at that moment (for checking) */
+  (function heroGrid() {
+    var hero = document.getElementById("top"), world = document.getElementById("hg-world"), cv = document.getElementById("hg-text");
+    if (!hero || !world || !cv || !hero.classList.contains("hg")) return;
+    var ctx = cv.getContext("2d");
+    var toggle = document.getElementById("hg-toggle"), glyph = document.getElementById("hg-glyph"), brandEl = document.getElementById("hg-brand");
+    var head = document.querySelector(".site-head"), headBrand = head && head.querySelector(".brand");
+    var Q = new URLSearchParams(location.search), FREEZE = Q.has("t") ? parseFloat(Q.get("t")) : null;
+    var reduceMq = window.matchMedia("(prefers-reduced-motion: reduce)");
+    var M = "media/hero-grid/", WHITE = "#EDF3F6", ORANGE = "#FF6000";
+
+    /* ---------- maths ---------- */
+    function clamp(x, a, b) { return Math.max(a, Math.min(b, x)); }
+    function seg(t, a, b) { return clamp((t - a) / (b - a), 0, 1); }
+    function lerp(a, b, k) { return a + (b - a) * k; }
+    function eo(x) { return 1 - Math.pow(1 - x, 3); }
+    function eo5(x) { return 1 - Math.pow(1 - x, 5); }
+    function eio(x) { return x < 0.5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2; }
+    function eq4(x) { return x < 0.5 ? 8 * x * x * x * x : 1 - Math.pow(-2 * x + 2, 4) / 2; }
+    function eroll(x) { var c1 = 1.2, c3 = c1 + 1; return 1 + c3 * Math.pow(x - 1, 3) + c1 * Math.pow(x - 1, 2); }   // the LBL clunk
+    function mod(a, n) { return ((a % n) + n) % n; }
+    function hash(c, r) { var h = (c * 73856093) ^ (r * 19349663); h = (h ^ (h >>> 13)) * 1274126177; return Math.abs(h ^ (h >>> 16)); }
+
+    /* ---------- what the rectangles hold ---------- */
+    // challenge diagrams, drawn live by the motion engine: scene, progress range, zoom (a little wider than the old reel,
+    // the solar oven wider still so its sun and dish both show) and framing
+    var WLS = {
+      davinci: { n: "davinci", a: 0.36, b: 0.9, z: 0.6, ox: 0.012, oy: -0.1 },
+      hulls: { n: "hullsAll", a: 0.35, b: 0.8, z: 1.12, ox: 0.02, oy: 0.08 },
+      facade: { n: "facade", a: 0.5, b: 0.9, z: 0.85, ox: 0, oy: 0 },
+      egg: { n: "egg", a: 0.3, b: 0.86, z: 0.88, ox: 0.015, oy: 0.16 },
+      treehouse: { n: "treehouse", a: 0.2, b: 0.78, z: 0.66, ox: 0, oy: 0.18 },
+      chair: { n: "chair2", a: 0.3, b: 0.89, z: 1.0, ox: -0.06, oy: 0.06 },
+      towers: { n: "towersAll", a: 0.4, b: 0.82, z: 0.85, ox: 0.03, oy: 0.18 },
+      airport: { n: "airport", a: 0.508, b: 0.645, z: 1.0, ox: 0, oy: -0.08 },
+      rube: { n: "rube", a: 0.2, b: 0.7, z: 0.8, ox: -0.04, oy: 0.13 },
+      solar: { n: "solar", a: 0.36, b: 0.86, z: 0.6, ox: 0, oy: 0.1 },
+      tensegrity: { n: "tensegrity", a: 0.5, b: 0.9, z: 0.72, ox: 0, oy: 0.08 }
+    };
+    var DIAG = Object.keys(WLS).map(function (k) { return "wl:" + k; });
+    var PHOTO = ["s-girl2", "s-girl3", "s-group2", "s-girl9", "s-boy2", "s-boy3", "s-girl8", "s-girlfoil", "s-group8"];
+    var NATURE = ["b-honeycomb", "b-mud", "b-succulent", "b-wing", "b-urchin", "b-roots", "b-aloe", "b-tensile", "b-tent", "b-stairs", "b-nautilus", "b-leaf"];
+    // where the child is across each studio photo (%), for the tall rectangles on phones; the rest stay centred
+    var FOCAL = { "s-girl2": 72, "s-girl3": 78, "s-girl9": 66, "s-boy2": 75, "s-boy3": 74, "s-girl8": 80, "s-girlfoil": 64, "s-group8": 50, "s-group2": 60 };   // girl3: her scale model; group2: the boats; girl8: the tree house
+
+    // the story, one stop at a time. A rectangle: its picture (c), its move from the one before (mv: D down, B down and
+    // right, in running bond), its line (acc: the word in orange, -1 none, -2 the last) and how long it holds once there.
+    // An overview (over: how many rectangles wide): its words on the screen, centred on the cells the next rectangle's
+    // move passes through
+    var STORY = [
+      { c: "x:start", line: "We\u2019re WonderLab", acc: -1, hold: 2.1, endAs: 6.4, vz: 10,
+        next: { line: "A creative thinking academy, where young minds", acc: -1 }, hold2: 3.4, swapPic: "fade" },
+      { c: "wl:towers", mv: "D", line: "Think like engineers.", acc: 0 },
+      { c: "s-group8", mv: "D", line: "Test like scientists.", acc: 0 },
+      { c: "wl:rube", mv: "D", line: "Plan like inventors.", acc: 0 },
+      { c: "s-girl8", mv: "D", line: "Dream like architects.", acc: 0 },
+      { over: 3, fill: "challenges", alpha: 0.9, line: "Through design challenges led by an award-winning architect", acc: -1, hold: 3.1 },
+      { c: "wl:davinci", mv: "B", line: "A bridge with no glue?", acc: -2 },
+      { c: "wl:egg", mv: "D", line: "Will the eggs survive the fall?", acc: -2 },
+      { c: "s-boy3", mv: "D", line: "Can a table float?", acc: -2 },
+      { c: "wl:solar", mv: "D", line: "Can sunlight cook lunch?", acc: 1 },
+      { over: 4, fill: "nature", alpha: 1, line: "Learn through wonder.", acc: -2, hold: 2.0, stack: true,
+        next: { line: "Nature drew it first.", acc: 0 }, hold2: 2.3 },
+      // the last one: its picture slides up to tomorrow's city as the second line rolls; "The future is" stays
+      { c: "x:bridges", mv: "BB", line: "The future is\nnot something we enter.", acc: 3, hold: 2.8, vz: 10, lowK: 0.5,
+        next: { line: "The future is\nsomething we create.", acc: -2 }, hold2: 3.2, swapPic: "up" }
+    ];
+    var NS = STORY.length, LASTI = NS - 1;
+    var C0 = 4, R0 = 5;
+    function step(p, m) { return m === "B" ? [p[0] + 1, odd(p[0]) ? p[1] + 1 : p[1]] : [p[0], p[1] + 1]; }
+    function gv(p) { return p[1] + (odd(p[0]) ? 0.5 : 0); }   // a cell's row in grid units, with the half step of running bond
+    var cur = [C0, R0], ON_PATH = {};
+    STORY.forEach(function (st, i) {
+      if (st.over) return;
+      var via = [];
+      if (i > 0) (st.mv || "D").split("").forEach(function (m) { cur = step(cur, m); via.push(cur); });
+      st.cell = cur; st.via = via; ON_PATH[cur[0] + "," + cur[1]] = i;
+    });
+    STORY.forEach(function (st, i) {   // an overview is centred on the cells the next rectangle's move passes through
+      if (!st.over) return;
+      var v = STORY[i + 1].via;
+      st.gu = v.reduce(function (a, p) { return a + p[0]; }, 0) / v.length;
+      st.gv = v.reduce(function (a, p) { return a + gv(p); }, 0) / v.length;
+    });
+    var LAST_CELL = STORY[LASTI].cell;
+
+    /* ---------- timing (seconds) ---------- */
+    var B0 = 0, B_END = 4.0 / 1.3, BK = 1 / 1.3;   // the logo on the empty blue, 1.3x faster than v163
+    var GE = B0 + B_END;                           // the logo's glide into the bar ends
+    var GS = B0 + 3.1 * BK, LE = GE, G0 = GS, Z0 = LE + 0.2, ZD = 1.25;   // the grid rises over the logo's glide (GS to GE); the zoom 0.2 s after it lands
+    var PAN = 0.8 / 1.3 / 1.5, OUT = 1.35, IN = 1.15, DIM = 0.6, VZ = 16;   // PAN: a swap; OUT / IN: to and from an overview; DIM: every rectangle but the one in focus; VZ: the drift, screen px a second
+    var EXIT = 0.9, HOLD = 2.2;
+    var ARR = [], SET = [], LEA = [];
+    STORY.forEach(function (st, i) {
+      ARR[i] = i === 0 ? Z0 : LEA[i - 1];
+      SET[i] = ARR[i] + (i === 0 ? ZD : st.over ? OUT : STORY[i - 1].over ? IN : PAN);
+      if (st.next) st.roll = SET[i] + st.hold;   // when the line rolls into the next, in the same rectangle
+      LEA[i] = SET[i] + (st.hold || HOLD) + (st.next ? st.hold2 : 0);
+    });
+    var FADE0 = LEA[LASTI], E0 = FADE0 + EXIT, TOTAL = E0 - 0.1;   // the logo starts again as soon as the last rectangle is gone
+    function stopAt(t) { var i = -1; for (var k = 0; k < NS; k++) if (t >= ARR[k]) i = k; return i; }
+
+    /* ---------- the grid: columns in running bond (every other column half a rectangle lower) ---------- */
+    function odd(c) { return mod(c, 2) === 1; }
+    function touching(c, r) {   // the rectangles that share an edge with (c, r)
+      var out = [[c, r - 1], [c, r + 1]], rs = odd(c) ? [r, r + 1] : [r - 1, r];
+      [-1, 1].forEach(function (dc) { rs.forEach(function (rr) { out.push([c + dc, rr]); }); });
+      return out;
+    }
+    var need = {};
+    function want(c, r) { need[c + "," + r] = [c, r]; }
+    for (var c = C0 - 3; c <= C0 + 3; c++) for (var r = R0 - 5; r <= R0 + 4; r++) want(c, r);
+    STORY.forEach(function (st) {
+      if (st.cell) for (var dc = -1; dc <= 1; dc++) for (var dr = -2; dr <= 2; dr++) want(st.cell[0] + dc, st.cell[1] + dr);
+      if (st.over) for (var cc = Math.floor(st.gu - st.over / 2 - 1); cc <= Math.ceil(st.gu + st.over / 2 + 1); cc++)
+        for (var rr = Math.floor(st.gv - st.over * 0.75 - 2); rr <= Math.ceil(st.gv + st.over * 0.75 + 2); rr++) want(cc, rr);
+    });
+    // the overviews a cell shows in (their rows reach further on tall screens)
+    var OI = { challenges: -1, nature: -1 };
+    STORY.forEach(function (st, i) { if (st.over) OI[st.fill] = i; });
+    function inOver(c, r, i) {
+      var st = STORY[i], du = (c - st.gu) / (st.over / 2 + 0.01), dv = (gv([c, r]) - st.gv) / (st.over * 0.7 + 0.6);
+      return Math.abs(du) <= 1 && Math.abs(dv) <= 1;
+    }
+    // the fill. The challenges overview plays diagrams with a studio photo here and there; the nature one holds the
+    // collage's pictures, placed as in the collage once the screen's size is known (a cell seen in both shows its
+    // challenge first and its nature picture after, swapped while it is off screen). Elsewhere diagrams, nature and
+    // studio photos in about 4 : 3.5 : 2; never the same kind (or, in the challenges overview, the same picture) side by side
+    var CONTENT = {}, NAT = {}, KINDS = [DIAG, NATURE, PHOTO], use = [0, 0, 0];
+    Object.keys(ON_PATH).forEach(function (k) { CONTENT[k] = STORY[ON_PATH[k]].c; });
+    function kindOf(key) { return key.indexOf("wl:") === 0 ? 0 : key.indexOf("b-") === 0 ? 1 : key.indexOf("s-") === 0 ? 2 : -1; }
+    var cells = Object.keys(need).map(function (k) { return need[k]; }).sort(function (a, b) { return a[0] - b[0] || a[1] - b[1]; });
+    cells.forEach(function (p) { var k = p[0] + "," + p[1]; if (ON_PATH[k] === undefined && inOver(p[0], p[1], OI.nature)) NAT[k] = true; });
+    var CH_DIAG = ["wl:tensegrity", "wl:chair", "wl:facade", "wl:airport", "wl:towers", "wl:rube", "wl:egg", "wl:solar"];   // the lighter ones to draw, so they all play
+    var cu = 0, pu = 3;
+    cells.forEach(function (p) {
+      var k = p[0] + "," + p[1];
+      if (CONTENT[k] || !inOver(p[0], p[1], OI.challenges)) return;
+      var nb = touching(p[0], p[1]).map(function (q) { return CONTENT[q[0] + "," + q[1]]; }).filter(Boolean);
+      var photo = hash(p[0], p[1]) % 100 < 22 && nb.map(kindOf).indexOf(2) < 0, list = photo ? PHOTO : CH_DIAG, n = photo ? pu : cu, pick = list[n % list.length];
+      for (var j = 0; j < list.length && nb.indexOf(pick) >= 0; j++) { n++; pick = list[n % list.length]; }
+      if (photo) pu = n + 1; else cu = n + 1;
+      CONTENT[k] = pick;
+    });
+    Object.keys(NAT).forEach(function (k) { if (!CONTENT[k]) CONTENT[k] = "x:nat"; });
+    cells.forEach(function (p) {
+      var k = p[0] + "," + p[1];
+      if (CONTENT[k]) return;
+      var nb = touching(p[0], p[1]).map(function (q) { return CONTENT[q[0] + "," + q[1]]; }).filter(Boolean);
+      var nk = nb.map(kindOf), h = hash(p[0], p[1]) % 100, first = h < 42 ? 0 : h < 77 ? 1 : 2, kind = first;
+      for (var i = 0; i < 3; i++) { kind = (first + i) % 3; if (nk.indexOf(kind) < 0) break; }
+      var list = KINDS[kind], pick = list[use[kind] % list.length];
+      for (var j = 0; j < list.length && nb.indexOf(pick) >= 0; j++) { use[kind]++; pick = list[use[kind] % list.length]; }
+      use[kind] += 1 + (h % 3);
+      CONTENT[k] = pick;
+    });
+    // the collage (09_nature): each picture's centre across and down it, so the overview keeps its order of colours
+    var NAT_BOX = [[0,0,105,125],[105,0,258,152],[258,0,403,215],[403,0,540,82],[403,82,540,245],[0,125,108,295],[108,152,258,295],
+      [0,295,140,515],[140,295,266,462],[266,215,403,462],[403,245,540,462],[0,515,135,652],[135,462,277,652],[277,462,410,595],
+      [410,462,540,625],[0,652,277,808],[277,595,425,808],[425,625,540,850],[0,808,110,960],[110,808,277,960],[277,808,425,960],[425,850,540,960]];
+    var CUTS = NAT_BOX.map(function (b, i) { return { key: "n" + (i < 9 ? "0" : "") + (i + 1), u: (b[0] + b[2]) / 1080, v: (b[1] + b[3]) / 1920 }; });
+
+    function logoSVG(cls) {
+      var SQ = [47, 44.65, 42.4175, 40.296625, 38.28179375], s = '<svg class="' + cls + '" viewBox="-72 -72 144 144" aria-hidden="true">';
+      SQ.forEach(function (q) { s += '<path class="sq" d="M' + (-q) + " " + (-q) + "H" + q + "V" + q + "H" + (-q) + 'Z" fill="none" stroke="currentColor" stroke-width="3.4" opacity="0"/>'; });
+      return s + '<rect class="fr" x="-50" y="-50" width="100" height="100" rx="3" fill="none" stroke="#FF6000" stroke-width="9" opacity="0"/></svg>';
+    }
+    var tiles = [];
+    Object.keys(need).forEach(function (k) {
+      var p = need[k], key = CONTENT[k], el = document.createElement("div"), inner = document.createElement("div");
+      el.className = "hg-tile"; inner.className = "hg-in"; el.appendChild(inner);
+      var t = { c: p[0], r: p[1], key: key, el: el, j: ON_PATH[k], shown: false, svg: null, reg1: inOver(p[0], p[1], OI.challenges) ? OI.challenges : -1 };
+      if (key.indexOf("wl:") === 0) { t.svg = document.createElementNS("http://www.w3.org/2000/svg", "svg"); t.svg.setAttribute("preserveAspectRatio", "xMidYMid slice"); inner.appendChild(t.svg); }
+      else if (key === "x:start" || key === "x:bridges") {
+        var pa = key === "x:start" ? ["s-girl3", "s-group2"] : ["f-enter", "f-create"];
+        pa.forEach(function (k2) { var i2 = document.createElement("img"); i2.alt = ""; i2.src = M + k2 + ".jpg"; if (FOCAL[k2]) i2.style.objectPosition = FOCAL[k2] + "% 50%"; inner.appendChild(i2); });
+        t.first = inner.firstChild; t.second = inner.lastChild;
+        if (key === "x:start") t.second.style.opacity = "0"; else t.second.style.transform = "translateY(100%)";
+      }
+      else if (key === "x:nat") { t.natImg = document.createElement("img"); t.natImg.alt = ""; inner.appendChild(t.natImg); }
+      else { var im = document.createElement("img"); im.alt = ""; im.decoding = "async"; im.src = M + key + ".jpg"; if (FOCAL[key]) im.style.objectPosition = FOCAL[key] + "% 50%"; inner.appendChild(im); }
+      if (NAT[k] && !t.natImg) {   // seen in both overviews: its nature picture waits behind its challenge
+        t.natImg = document.createElement("img"); t.natImg.alt = ""; t.natImg.style.display = "none"; inner.appendChild(t.natImg);
+        t.a = Array.prototype.slice.call(inner.childNodes, 0, -1); t.isB = false;
+      }
+      if (t.j !== undefined) { var sc = document.createElement("div"); sc.className = "hg-scrim"; inner.appendChild(sc); t.scrim = sc; }   // the blue at its foot, under the words
+      el.style.display = "none";
+      world.appendChild(el); tiles.push(t);
+    });
+    var byPath = []; tiles.forEach(function (t) { if (t.j !== undefined) byPath[t.j] = t; });
+    var stage = cv.parentNode, veil = document.createElement("div"); veil.className = "hg-veil"; stage.insertBefore(veil, cv);
+
+    /* ---------- the challenge diagrams ---------- */
+    var wlReady = false, VB = "-192 -108 2304 1296";    // the 1920 x 1080 frame, 20% looser
+    function deepTheme() {
+      if (WL.THEMES.deep) return;
+      var D = WL.THEMES.dark, out = {}, k;
+      function shift(h) {
+        if (typeof h !== "string" || h[0] !== "#" || h.length !== 7) return h;
+        var cc = [1, 3, 5].map(function (i) { return parseInt(h.substr(i, 2), 16); }), d = [7, 20, 30];
+        if (cc[0] + cc[1] + cc[2] > 400) return h;
+        return "#" + cc.map(function (v, i) { return ("0" + Math.min(255, v + d[i]).toString(16)).slice(-2); }).join("");
+      }
+      for (k in D) out[k] = D[k];
+      out.bg = "#142F44"; out.tone = shift(D.tone); out.mats = {};
+      for (k in D.mats) out.mats[k] = shift(D.mats[k]);
+      WL.THEMES.deep = out;
+    }
+    var WL_U0 = 1 / 3, PHONE_Z = { davinci: 0.62, egg: 0.7, towers: 0.66 };   // WL_U0: where each challenge starts, so the rest plays 1.5x slower over its rectangle's time
+    function drawWL(svg, name, u) {
+      var s = WLS[name], z = s.z * (L && L.portrait && PHONE_Z[name] ? PHONE_Z[name] : 1);
+      WL.render(svg, s.n, s.a + (s.b - s.a) * (WL_U0 + (1 - WL_U0) * u), "deep", { w: 1920, h: 1080, cx: 0.5 + s.ox, cy: 0.5 + s.oy, zoom: z });
+    }
+    function initWL() {
+      if (wlReady || !window.WL) return;
+      deepTheme();
+      var cache = {}, tmp = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+      tiles.forEach(function (t) {
+        if (!t.svg) return;
+        var name = t.key.slice(3);
+        if (!(name in cache)) { drawWL(tmp, name, 0); cache[name] = tmp.innerHTML; }
+        t.svg.setAttribute("viewBox", VB); t.svg.innerHTML = cache[name];
+      });
+      wlReady = true;
+    }
+
+    /* ---------- the ending's logo and name ---------- */
+    brandEl.innerHTML = logoSVG("hg-bmark") + '<span class="hg-word">WonderLab</span>';
+    var bMark = brandEl.querySelector(".hg-bmark"), bSq = bMark.querySelectorAll(".sq"), bFr = bMark.querySelector(".fr"), bWord = brandEl.querySelector(".hg-word");
+    bMark.style.position = bWord.style.position = "absolute";
+
+    /* ---------- sizes ---------- */
+    var L = null, dpr = 1, BR = null;
+    function layout() {
+      var vw = hero.clientWidth, vh = hero.clientHeight;
+      if (!vw || !vh) return;
+      var gut = clamp(vw * 0.05, 20, 64), portrait = vw / vh < 0.8;
+      var W = Math.min(vw - 2 * gut, 1280 - 2 * gut), H = portrait ? W * 1.25 * 1.3 : W * 9 / 16;
+      var maxH = vh - 2 * 76 - 16;                              // clear of the bar on short screens
+      if (H > maxH) { H = maxH; if (!portrait) W = Math.min(W, H * 16 / 9); }
+      // the gap between columns puts the rectangles beside a zoomed one off screen; rows take the same gap
+      var gap = (vw - W) / 2 + 24, px = W + gap, cols = portrait ? 3 : 5;
+      L = { vw: vw, vh: vh, W: W, H: H, px: px, py: H + gap, gut: gut, sG: 1.06 * vw / (cols * px), portrait: portrait };
+      tiles.forEach(function (t) {
+        var s = t.el.style;
+        s.left = (t.c * L.px).toFixed(1) + "px"; s.top = tileY(t.c, t.r).toFixed(1) + "px";
+        s.width = W.toFixed(1) + "px"; s.height = H.toFixed(1) + "px";
+      });
+      // each stop's camera: a rectangle centred at full size, or an overview n rectangles wide
+      STORY.forEach(function (st) {
+        if (st.over) { st.x = st.gu * L.px + L.W / 2; st.y = st.gv * L.py + L.H / 2; st.s = vw / (st.over * L.px); }
+        else { var c = center(st.cell); st.x = c.x; st.y = c.y; st.s = 1; }
+      });
+      // a rectangle in focus arrives a little below the middle and drifts up, never under the bar's logo
+      STORY.forEach(function (st, i) {
+        st.off = 0;
+        if (st.over) return;
+        var vz = st.vz || VZ, top0 = vh / 2 - H / 2;
+        function low(d) { var drift = vz * (d + 0.3); return Math.max(0, Math.min(Math.max(drift * (st.lowK || 0.6), 88 - top0 + drift), top0 - 8)); }
+        // the first one arrives higher and holds its first line less, so it ends where it did (v167) at the same drift
+        function low16(d) { var drift = VZ * (d + 0.3); return Math.max(0, Math.min(Math.max(drift * 0.6, 88 - top0 + drift), top0 - 8)); }
+        // the first one ends where it did (v167), drifting slower over a shorter hold, so it arrives higher
+        st.off = st.endAs ? low16(st.endAs) - VZ * st.endAs + vz * (LEA[i] - SET[i]) : low(LEA[i] - SET[i]);
+      });
+      L.lastBottom = tileY(LAST_CELL[0], LAST_CELL[1]) + L.H - 1;
+      layoutNature();
+      dpr = Math.min(2, window.devicePixelRatio || 1);
+      cv.width = Math.round(vw * dpr); cv.height = Math.round(vh * dpr);
+      var cs = gridHold(LE), s0 = cs.s, best = 1e9;
+      L.leadT = null;
+      tiles.forEach(function (t) {
+        var x = (t.c * L.px - cs.x) * s0 + vw / 2, y = (tileY(t.c, t.r) - cs.y) * s0 + vh / 2;
+        if (y >= 0 && x >= -1 && x + L.W * s0 <= vw + 1 && y < best) { best = y; L.leadT = t; }
+      });
+      tiles.forEach(function (t) {
+        var x = (t.c * L.px - cs.x) * s0 + vw / 2, y = (tileY(t.c, t.r) - cs.y) * s0 + vh / 2;
+        t.wave = clamp((x / vw) * 0.55 + (y / vh) * 0.45, 0, 1);
+      });
+      layoutBrand();
+    }
+    // the nature overview: the cells it shows, matched to the collage's pictures by place (each used once on screen),
+    // so its colours run as in the collage; cells beyond take the nearest picture not beside them
+    function layoutNature() {
+      var i = OI.nature, st = STORY[i], s = st.s, cy = st.y + VZ / s * (LEA[i] - SET[i]) / 2;
+      var vx0 = st.x - L.vw / 2 / s, vy0 = cy - L.vh / 2 / s, vw = L.vw / s, vh = L.vh / s;
+      var nt = tiles.filter(function (t) { return t.natImg; }), pairs = [], inView = [], rest = [], given = {};
+      nt.forEach(function (t) {
+        var x0 = t.c * L.px, y0 = tileY(t.c, t.r), ox = Math.max(0, Math.min(x0 + L.W, vx0 + vw) - Math.max(x0, vx0)), oy = Math.max(0, Math.min(y0 + L.H, vy0 + vh) - Math.max(y0, vy0));
+        t.nu = (x0 + L.W / 2 - vx0) / vw; t.nv = (y0 + L.H / 2 - vy0) / vh;
+        (ox * oy > 0.25 * L.W * L.H ? inView : rest).push(t);
+      });
+      inView.forEach(function (t, a) { CUTS.forEach(function (cu, b) { var du = t.nu - cu.u, dv = t.nv - cu.v; pairs.push([du * du + dv * dv, a, b]); }); });
+      pairs.sort(function (p, q) { return p[0] - q[0]; });
+      var usedT = {}, usedC = {};
+      pairs.forEach(function (p) { if (usedT[p[1]] || usedC[p[2]]) return; usedT[p[1]] = usedC[p[2]] = 1; given[inView[p[1]].c + "," + inView[p[1]].r] = CUTS[p[2]].key; });
+      inView.forEach(function (t, a) { if (!usedT[a]) rest.push(t); });
+      rest.sort(function (p, q) { return Math.abs(p.nv - 0.5) + Math.abs(p.nu - 0.5) - Math.abs(q.nv - 0.5) - Math.abs(q.nu - 0.5); });
+      rest.forEach(function (t) {
+        var nb = touching(t.c, t.r).map(function (q) { return given[q[0] + "," + q[1]]; });
+        var best = null, bd = 1e9;
+        CUTS.forEach(function (cu) { var du = clamp(t.nu, 0, 1) - cu.u, dv = clamp(t.nv, 0, 1) - cu.v, d = du * du + dv * dv + (nb.indexOf(cu.key) >= 0 ? 10 : 0); if (d < bd) { bd = d; best = cu.key; } });
+        given[t.c + "," + t.r] = best;
+      });
+      nt.forEach(function (t) { var src = M + given[t.c + "," + t.r] + ".jpg"; if (t.natSrc !== src) { t.natImg.src = src; t.natSrc = src; } });
+    }
+    function tileY(c, r) { return r * L.py + (odd(c) ? L.py / 2 : 0); }
+    function center(p) { return { x: p[0] * L.px + L.W / 2, y: tileY(p[0], p[1]) + L.H / 2 }; }
+    // the lockup in the bar's own proportions (mark width and gap per unit of the name's size)
+    function layoutBrand() {
+      var fsH = 32, swH = 48, gapH = 12;
+      if (headBrand) {
+        var hs = headBrand.querySelector("svg"), hn = headBrand.querySelector(".brand-roll") || headBrand.querySelector("span");
+        if (hn) fsH = parseFloat(getComputedStyle(hn).fontSize) || fsH;
+        if (hs) swH = hs.getBoundingClientRect().width || swH;
+        gapH = parseFloat(getComputedStyle(headBrand).columnGap) || gapH;
+      }
+      var F = L.portrait ? L.vw * 0.085 : Math.min(L.vw * 0.048, 80), ms = F * swH / fsH, gap = F * gapH / fsH;
+      bWord.style.fontSize = F.toFixed(1) + "px";
+      brandEl.style.display = "flex";
+      var ww = bWord.offsetWidth, wh = bWord.offsetHeight;
+      brandEl.style.display = "none";
+      bMark.style.width = bMark.style.height = ms.toFixed(1) + "px";
+      BR = { F: F, ms: ms, gap: gap, ww: ww, wh: wh, fsH: fsH, total: ms + gap + ww };
+    }
+
+    /* ---------- the camera: the world point at the screen's centre, and the scale ---------- */
+    function gridHold(t) { var f0 = center(STORY[0].cell); return { x: f0.x, y: f0.y + (24 / L.sG) * (t - Z0), s: L.sG }; }   // 24 screen px a second
+    function hold(i, t) { var st = STORY[i]; return { x: st.x, y: st.y - (st.off || 0) + (st.vz || VZ) / st.s * (t - SET[i]), s: st.s }; }   // a little low as it arrives, then drifting up
+    function exitD() { return Math.max(L.py, (L.vh + L.H) / 2 + 40); }
+    function camera(t) {
+      if (t >= FADE0) {   // the last rectangle slides up and away, far enough to leave the screen
+        var hN = hold(LASTI, t), d = exitD() * eq4(seg(t, FADE0, E0));
+        return { x: hN.x, y: hN.y + d, s: 1 };
+      }
+      var i = stopAt(t);
+      if (i < 0) return gridHold(t);
+      if (t >= SET[i]) return hold(i, t);
+      var a = i === 0 ? gridHold(t) : hold(i - 1, t), b = hold(i, t), zoom = Math.abs(a.s - b.s) > 1e-3;
+      var p = (zoom ? eio : eq4)(seg(t, ARR[i], SET[i]));
+      if (!zoom) return { x: lerp(a.x, b.x, p), y: lerp(a.y, b.y, p), s: b.s };
+      // a zoom: the scale changes evenly in log, and the centre moves in step with how far the view has changed size
+      var s = a.s * Math.pow(b.s / a.s, p), w = (1 / s - 1 / a.s) / (1 / b.s - 1 / a.s);
+      return { x: lerp(a.x, b.x, w), y: lerp(a.y, b.y, w), s: s };
+    }
+    // every rectangle at DIM (60%); the one in focus at full strength
+    function alphaOf(t, tile) {
+      var i = tile.j;
+      if (i === undefined || t < ARR[i]) return DIM;
+      if (t < SET[i]) return lerp(DIM, 1, (i === 0 ? eio : eo)(seg(t, ARR[i], SET[i])));
+      if (t < LEA[i] || i === LASTI) return 1;
+      return lerp(1, DIM, eo(seg(t, LEA[i], SET[i + 1])));
+    }
+    // a rectangle's line and its blue foot: there from its arrival (fading in through a zoom), riding out with it
+    function textA(i, t) {
+      if (t < ARR[i]) return 0;
+      var a = i === 0 || STORY[i - 1].over ? seg(t, lerp(ARR[i], SET[i], 0.45), SET[i]) : 1;
+      if (i < LASTI && t >= LEA[i]) {
+        if (STORY[i + 1].over) a *= 1 - seg(t, LEA[i], lerp(LEA[i], SET[i + 1], 0.6));
+        else if (t >= SET[i + 1]) a = 0;
+      }
+      return a;
+    }
+    // in an overview every rectangle comes up to its strength (90% for the challenges, full for nature)
+    function overK(i, t) { return seg(t, lerp(ARR[i], SET[i], 0.3), SET[i]) * (1 - seg(t, LEA[i], lerp(LEA[i], SET[i + 1], 0.5))); }
+    function overA(t) {
+      var a = 0;
+      STORY.forEach(function (st, i) { if (st.over) a = Math.max(a, lerp(DIM, st.alpha, overK(i, t))); });
+      return a;
+    }
+    function veilA(t) {
+      var v = 0;
+      STORY.forEach(function (st, i) {
+        if (!st.over) return;
+        v = Math.max(v, seg(t, lerp(ARR[i], SET[i], 0.35), SET[i]) * (1 - seg(t, LEA[i], lerp(LEA[i], SET[i + 1], 0.55))));
+      });
+      return v;
+    }
+
+    /* ---------- the words: the logo's face (Inter 500, as the bar's WonderLab). Each line rides with its rectangle as
+       it slides in and out; in a rectangle that holds two lines, only the words that change roll (ported from the LBL
+       hero's sceneLearn / rollWords). A "\n" in a line starts a new line there, and each of its parts stays on one
+       line ---------- */
+    var FONT = '"Inter", "Helvetica Neue", Arial, sans-serif';
+    function setFont(size, wt) { ctx.font = wt + " " + size.toFixed(1) + "px " + FONT; }
+    function lsp(v) { if ("letterSpacing" in ctx) ctx.letterSpacing = v.toFixed(2) + "px"; }
+    function measure(s, o) { setFont(o.size, o.wt); lsp(o.ls); var w = ctx.measureText(s).width; lsp(0); return w; }
+    function fontAt(size) { return { size: size, wt: 500, ls: -size * 0.035 }; }
+    function wordsOf(item) {
+      if (!item || !item.line) return [];
+      var ws = [];
+      item.line.split("\n").forEach(function (ln, li) { ln.split(" ").forEach(function (w, wi) { ws.push({ s: w, br: li > 0 && wi === 0 }); }); });
+      var acc = item.acc === -2 ? ws.length - 1 : item.acc;
+      return ws.map(function (w, i) { return { s: w.s, br: w.br, c: i === acc ? ORANGE : WHITE }; });
+    }
+    // wrapped to the rectangle, bottom-aligned, left-aligned
+    function placeWords(ws, o, x0, maxW, yBottom, lh) {
+      var sp = measure(" ", o), x = 0, line = 0, pos = [];
+      ws.forEach(function (w) { var wd = measure(w.s, o); if (x > 0 && (w.br || x + wd > maxW)) { line++; x = 0; } pos.push({ x: x0 + x, line: line }); x += wd + sp; });
+      pos.forEach(function (p) { p.y = yBottom - (line - p.line) * lh; });
+      return { pos: pos };
+    }
+    // the width of each phrase of a line broken by hand, measured word by word as placeWords sets it
+    function phraseW(item, o) {
+      var sp = measure(" ", o), widest = 0;
+      item.line.split("\n").forEach(function (ph) { var w = 0; ph.split(" ").forEach(function (wd, i) { w += (i ? sp : 0) + measure(wd, o); }); widest = Math.max(widest, w); });
+      return widest;
+    }
+    // centred on the screen, in lines of even length
+    function placeCentred(ws, o, maxW, cy, lh) {
+      var sp = measure(" ", o), wd = ws.map(function (w) { return measure(w.s, o); });
+      function lines(mw) { var out = [[]], x = 0; ws.forEach(function (w, i) { if (x > 0 && x + wd[i] > mw) { out.push([]); x = 0; } out[out.length - 1].push(i); x += wd[i] + sp; }); return out; }
+      var n = lines(maxW).length, lo = 0, hi = maxW;
+      for (var it = 0; it < 16; it++) { var mid = (lo + hi) / 2; if (lines(mid).length > n) lo = mid; else hi = mid; }
+      var ls = lines(hi), pos = [], y0 = cy - (ls.length - 1) * lh / 2 + o.size * 0.36;
+      ls.forEach(function (ln, li) {
+        var w = ln.reduce(function (a, i) { return a + wd[i]; }, 0) + sp * (ln.length - 1), x = (L.vw - w) / 2;
+        ln.forEach(function (i) { pos[i] = { x: x, y: y0 + li * lh }; x += wd[i] + sp; });
+      });
+      return { pos: pos };
+    }
+    function drawWord(w, x, y, o, alpha, band) {
+      if (alpha <= 0.001) return;
+      ctx.save(); ctx.beginPath(); ctx.rect(0, band[0], L.vw, band[1] - band[0]); ctx.clip();
+      setFont(o.size, o.wt); lsp(o.ls); ctx.textBaseline = "alphabetic"; ctx.textAlign = "left";
+      ctx.globalAlpha = alpha; ctx.fillStyle = w.c; ctx.fillText(w.s, x, y);
+      lsp(0); ctx.restore();
+    }
+    function band(y, o) { return [y - o.size * 0.98, y + o.size * 0.36]; }
+    // a word that stays slides into its new place; a word that changes rolls up and out as the new one rolls up in
+    function rollWords(A, PA, B, PB, o, step, t, t0, g, D, ST) {
+      var n = Math.max(A.length, B.length);
+      if (D === undefined) { D = 1.5 * (0.22 + 0.04 * Math.min(n, 7)); ST = 1.5 * (0.03 + 0.006 * Math.min(n, 7)); }
+      for (var i = 0, m = 0; i < n; i++) {
+        var a = A[i], b = B[i];
+        if (a && b && a.s === b.s && a.c === b.c) {
+          var pa = PA.pos[i], pb = PB.pos[i];
+          if (Math.abs(pa.x - pb.x) < 0.5 && Math.abs(pa.y - pb.y) < 0.5) { drawWord(b, pb.x, pb.y, o, g, [-1e4, 1e4]); continue; }   // it stays put
+          var e = eo(seg(t, t0 + m * ST, t0 + m * ST + D)); m++;
+          drawWord(b, lerp(pa.x, pb.x, e), lerp(pa.y, pb.y, e), o, g, [Math.min(pa.y, pb.y) - o.size * 0.98, Math.max(pa.y, pb.y) + o.size * 0.36]);
+          continue;
+        }
+        var k = seg(t, t0 + m * ST, t0 + m * ST + D), kr = eroll(k); m++;
+        if (a && k < 1) drawWord(a, PA.pos[i].x, PA.pos[i].y - kr * step, o, g * (1 - 0.35 * Math.min(1, kr)), band(PA.pos[i].y, o));
+        if (b && k > 0) drawWord(b, PB.pos[i].x, PB.pos[i].y + (1 - kr) * step, o, g * (1 - 0.35 * Math.min(1, Math.abs(1 - kr))), band(PB.pos[i].y, o));
+      }
+    }
+    function rectOf(i, cam) {   // rectangle i on screen
+      var p = STORY[i].cell;
+      return { x: (p[0] * L.px - cam.x) * cam.s + L.vw / 2, y: (tileY(p[0], p[1]) - cam.y) * cam.s + L.vh / 2, w: L.W * cam.s, h: L.H * cam.s };
+    }
+    // the line of rectangle i, drawn where the rectangle is and at its scale; it only rolls where it changes in place
+    function drawLine(i, t, cam, alpha) {
+      var item = STORY[i], R = rectOf(i, cam);
+      if (alpha <= 0.001 || R.y > L.vh || R.y + R.h < 0 || R.x > L.vw || R.x + R.w < 0) return;
+      var size = clamp(L.W * (L.portrait ? 0.1 : 0.068), 24, 84) * cam.s, o = fontAt(size);
+      var pad = L.W * (L.portrait ? 0.07 : 0.055) * cam.s, maxW = R.w - 2 * pad;
+      // a line broken by hand keeps each of its phrases on one line: the size shrinks until the widest fits, with room to spare
+      if (item.line.indexOf("\n") >= 0) {
+        var widest = Math.max(phraseW(item, o), item.next ? phraseW(item.next, o) : 0), fit = Math.min(1, maxW * 0.96 / widest);
+        if (fit < 1) { size *= fit; o = fontAt(size); }
+        maxW = 1e6;   // and it never wraps on its own
+      }
+      var lh = size * 1.12;
+      function lay(ws) { return placeWords(ws, o, R.x + pad, maxW, R.y + R.h - pad, lh); }
+      var A = wordsOf(item), PA = lay(A);
+      if (item.next && t >= item.roll) { var B = wordsOf(item.next); rollWords(A, PA, B, lay(B), o, lh, t, item.roll, alpha); return; }
+      A.forEach(function (w, k) { drawWord(w, PA.pos[k].x, PA.pos[k].y, o, alpha, [-1e4, 1e4]); });
+    }
+    // an overview's words, on the screen, over a soft glow kept close to them: rolling up in once it has settled (a
+    // second line either rolls in over the first or, stacked, rolls up under it as the first slides up a line), then
+    // sliding up and cut away all at once as the zoom back in starts
+    function glow(P, ws, o, lh, a) {
+      if (a <= 0.001 || !ws.length) return;
+      var x0 = 1e9, x1 = -1e9, y0 = 1e9, y1 = -1e9;
+      ws.forEach(function (w, k) { var p = P[k]; x0 = Math.min(x0, p.x); x1 = Math.max(x1, p.x + measure(w.s, o)); y0 = Math.min(y0, p.y - o.size * 0.74); y1 = Math.max(y1, p.y + o.size * 0.2); });
+      var cx = (x0 + x1) / 2, cy = (y0 + y1) / 2, rx = (x1 - x0) / 2 + o.size * 1.1, ry = (y1 - y0) / 2 + o.size * 0.8;
+      ctx.save(); ctx.translate(cx, cy); ctx.scale(rx, ry);
+      var g = ctx.createRadialGradient(0, 0, 0, 0, 0, 1);
+      g.addColorStop(0, "rgba(20,47,68," + (0.6 * a).toFixed(3) + ")"); g.addColorStop(0.6, "rgba(20,47,68," + (0.42 * a).toFixed(3) + ")"); g.addColorStop(1, "rgba(20,47,68,0)");
+      ctx.globalAlpha = 1; ctx.fillStyle = g; ctx.fillRect(-1, -1, 2, 2); ctx.restore();
+    }
+    function drawOver(i, t) {
+      var item = STORY[i], size = clamp(L.W * (L.portrait ? 0.088 : 0.058), 22, 70), o = fontAt(size), lh = size * 1.14;
+      var mw = Math.min(L.vw - 2 * L.gut, L.portrait ? 1e4 : size * 14), none = { pos: [] };
+      var cy = L.vh / 2 + (item.stack ? lh / 2 : 0);   // a stacked pair ends centred
+      function lay(ws) { return placeCentred(ws, o, mw, cy, lh); }
+      var A = wordsOf(item), PA = lay(A), B = item.next ? wordsOf(item.next) : [], PB = item.next ? lay(B) : none;
+      var D = 0.62, ST = 0.045, t0 = SET[i] - 0.1, out = LEA[i];
+      // what shows once all is in: the last line, or the stacked pair
+      var W = [], P = [];
+      if (item.stack) { A.forEach(function (w, k) { W.push(w); P.push({ x: PA.pos[k].x, y: PA.pos[k].y - lh }); }); B.forEach(function (w, k) { W.push(w); P.push(PB.pos[k]); }); }
+      else if (item.next) { W = B; P = PB.pos; } else { W = A; P = PA.pos; }
+      var gA = seg(t, t0, t0 + 0.5) * (1 - seg(t, out, out + 0.3));
+      if (t >= out) {   // the cut: everything slides up out of its own line at once
+        var k = eio(seg(t, out, out + 0.4)), dy = k * size * 1.45;
+        glow(P, W, o, lh, gA);
+        W.forEach(function (w, n) { drawWord(w, P[n].x, P[n].y - dy, o, 1, band(P[n].y, o)); });
+        return;
+      }
+      if (item.stack && t >= item.roll) {
+        var up = eo(seg(t, item.roll, item.roll + 0.55));   // out of the way first, then the second line rolls up under it
+        glow(P, W, o, lh, gA);
+        A.forEach(function (w, n) { drawWord(w, PA.pos[n].x, PA.pos[n].y - lh * up, o, 1, [-1e4, 1e4]); });
+        rollWords([], none, B, PB, o, lh, t, item.roll + 0.12, 1, D, ST);
+        return;
+      }
+      glow(PA.pos, A, o, lh, gA);
+      if (item.next && t >= item.roll) { rollWords(A, PA, B, PB, o, lh, t, item.roll, 1, D, ST); return; }
+      rollWords([], none, A, PA, o, lh, t, t0, 1, D, ST);
+    }
+    function drawText(t, cam) {
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0); ctx.clearRect(0, 0, L.vw, L.vh);
+      var i = stopAt(t);
+      if (i < 0) return;
+      [i - 1, i].forEach(function (k) {
+        if (k < 0) return;
+        if (STORY[k].over) { if (k === i ? t >= SET[k] - 0.1 : t < LEA[k] + 0.45) drawOver(k, t); return; }
+        drawLine(k, t, cam, textA(k, t));
+      });
+    }
+
+    /* ---------- the opening: one turn (the orange frame 90 degrees, the thin squares unfolding inside it, as in v145),
+       the slide, the pause, the glide into the bar ---------- */
+    function drawBrand(t) {
+      var te = t - B0, on = te >= 0 && te < B_END;
+      if (headBrand) {
+        headBrand.style.opacity = t < B0 + B_END ? "0" : "";
+        headBrand.style.transform = t >= FADE0 ? "translateY(" + (-exitD() * eq4(seg(t, FADE0, E0))).toFixed(1) + "px)" : "";   // up and away with the last rectangle
+      }
+      brandEl.style.display = on ? "block" : "none";
+      if (!on || !BR) return;
+      var r = eio(seg(te, 0, 1.0 * BK));
+      bFr.setAttribute("opacity", eo(seg(te, 0, 0.2 * BK)).toFixed(3));
+      bFr.setAttribute("transform", "rotate(" + (90 * r).toFixed(2) + ")");
+      for (var i = 0; i < bSq.length; i++) {
+        bSq[i].setAttribute("transform", "rotate(" + (12 * (i + 1) * r).toFixed(2) + ")");
+        bSq[i].setAttribute("opacity", Math.min(1, r * 1.6).toFixed(3));
+      }
+      // the slide: the mark goes left as the name comes out from behind it to the right
+      var k = eio(seg(te, 1.2 * BK, 2.1 * BK)), left = (L.vw - BR.total) / 2, top = L.vh / 2 - BR.ms / 2;
+      var mx = lerp((L.vw - BR.ms) / 2 - left, 0, k), wx = lerp((L.vw - BR.ms) / 2 - left + BR.ms - BR.ww, BR.ms + BR.gap, k);
+      bMark.style.transform = "translate(" + mx.toFixed(1) + "px,0)";
+      bWord.style.transform = "translate(" + wx.toFixed(1) + "px," + ((BR.ms - BR.wh) / 2).toFixed(1) + "px)";
+      var cut = Math.max(0, mx + BR.ms + BR.gap * 0.35 - wx);
+      bWord.style.clipPath = "inset(-20% -5% -20% " + cut.toFixed(1) + "px)";
+      // the glide: a pure scale into the bar's logo
+      var q = eio(seg(te, 3.1 * BK, B_END)), tx = left, ty = top, sc = 1;
+      if (q > 0 && headBrand) {
+        var hs = headBrand.querySelector("svg"), hr = (hs || headBrand).getBoundingClientRect(), r0 = hero.getBoundingClientRect();
+        tx = lerp(left, hr.left - r0.left, q); ty = lerp(top, hr.top - r0.top, q); sc = lerp(1, hr.width / BR.ms, q);
+      }
+      brandEl.style.transform = "translate(" + tx.toFixed(1) + "px," + ty.toFixed(1) + "px) scale(" + sc.toFixed(4) + ")";
+    }
+
+    /* ---------- one frame ---------- */
+    var liveAt = -1e9, ovAt = -1e9, rr = 0;
+    // the grid rises as one sheet from below the screen over the logo's glide, with its easing, so both land together.
+    // Its top is the highest rectangle wholly on screen once landed (lead); the rows above it come in at the end
+    function landDY(t, lead) {
+      if (t < G0) return -1;
+      if (t >= LE) return 0;
+      return (L.vh + 24 - lead) * (1 - eio(seg(t, GS, GE)));
+    }
+
+    function wlU(tl, t) {   // how far a diagram has played
+      var i = tl.j;
+      if (i !== undefined) return seg(t, i > 0 && STORY[i - 1].over ? ARR[i - 1] : ARR[i], LEA[i] + PAN);
+      return tl.reg1 >= 0 ? seg(t, ARR[tl.reg1], SET[tl.reg1 + 1]) : 0;
+    }
+    function frame(t, wall) {
+      if (!L) layout();
+      if (!L) return;
+      var cam = camera(t), s = cam.s;
+      var tx = L.vw / 2 - cam.x * s, ty = L.vh / 2 - cam.y * s;
+      world.style.transform = "translate(" + tx.toFixed(2) + "px," + ty.toFixed(2) + "px) scale(" + s.toFixed(5) + ")";
+      world.style.setProperty("--hs", s.toFixed(5));
+      var i = stopAt(t), cut = t >= SET[LASTI] ? 1 : seg(t, lerp(ARR[LASTI], SET[LASTI], 0.5), SET[LASTI]);   // nothing below the last rectangle once it is in
+      var landing = t < LE, lead = L.leadT ? tileY(L.leadT.c, L.leadT.r) * s + ty : 0;
+      var live = [], dy = landDY(t, lead), oa = overA(t), swapT = SET[OI.challenges + 2];
+      if (landing) { tx = L.vw / 2 - cam.x * s; ty = L.vh / 2 - cam.y * s + Math.max(0, dy); world.style.transform = "translate(" + tx.toFixed(2) + "px," + ty.toFixed(2) + "px) scale(" + s.toFixed(5) + ")"; }   // the whole sheet moves as one
+      tiles.forEach(function (tl) {
+        var x = tl.c * L.px * s + tx, y = tileY(tl.c, tl.r) * s + ty;
+        var below = tileY(tl.c, tl.r) >= L.lastBottom ? 1 - cut : 1, a = Math.max(alphaOf(t, tl), oa) * below * (dy < 0 ? 0 : 1);
+        if (landing && y < lead + Math.max(0, dy) - 1) a *= seg(t, GE - 0.22, GE);   // above the grid's top row: in as it settles
+        if (tl.a) {   // seen in both overviews: its challenge until it is off screen between them, then its nature picture
+          var b2 = t >= swapT;
+          if (b2 !== tl.isB) { tl.isB = b2; tl.a.forEach(function (n) { n.style.display = b2 ? "none" : ""; }); tl.natImg.style.display = b2 ? "" : "none"; }
+        }
+        var on = a > 0.002 && x < L.vw + 40 && x + L.W * s > -40 && y < L.vh + 40 && y + L.H * s > -40;
+        if (on !== tl.shown) { tl.el.style.display = on ? "" : "none"; tl.shown = on; }
+        if (!on) return;
+        tl.el.style.opacity = a.toFixed(3);
+        if (tl.scrim) tl.scrim.style.opacity = textA(tl.j, t).toFixed(3);   // the blue foot belongs to the line: it rides with the rectangle
+        if (tl.svg && !tl.isB) live.push(tl);
+      });
+      // the rectangle in focus plays its challenge; in and around an overview every challenge on screen plays, one
+      // redrawn at a time; the others hold a still
+      if (wlReady) {
+        var ft = i >= 0 ? byPath[i] : null, ov = -1;
+        STORY.forEach(function (st, k) { if (st.over && t >= ARR[k] && t < SET[k + 1]) ov = k; });
+        if (ft && ft.svg && (wall === null || wall - liveAt > 33)) { drawWL(ft.svg, ft.key.slice(3), wlU(ft, t)); liveAt = wall === null ? 0 : wall; }
+        if (ov >= 0) {
+          var more = live.filter(function (tl) { return tl !== ft && (tl.reg1 === ov || tl.j !== undefined); });
+          // as many as fit in about 7 ms each frame, in turn, so each plays at a steady rate without holding the frame up
+          var tb = performance.now(), nOv = 0;
+          while (nOv < more.length && (wall === null || nOv === 0 || performance.now() - tb < 7)) { var tl = more[rr % more.length]; rr++; nOv++; drawWL(tl.svg, tl.key.slice(3), wlU(tl, t)); }
+        }
+      }
+      STORY.forEach(function (it, jj) {
+        var tl = byPath[jj];
+        if (!tl || !tl.second || !it.roll) return;
+        var k = eio(seg(t, it.roll, it.roll + 0.9));
+        if (it.swapPic === "fade") tl.second.style.opacity = k.toFixed(3);             // the girl's model to the boats, as the line rolls
+        else { tl.first.style.transform = "translateY(" + (-100 * k).toFixed(2) + "%)"; tl.second.style.transform = "translateY(" + (100 - 100 * k).toFixed(2) + "%)"; }   // today's city slides up to tomorrow's
+      });
+      drawText(t, cam);
+      drawBrand(t);
+    }
+
+    /* ---------- the clock, and one click to pause or play ---------- */
+    var clock = 0, last = 0, raf = 0, seen = true, paused = false;
+    function tick(now) {
+      raf = 0;
+      if (!seen || document.hidden || paused) { last = 0; return; }
+      if (last) clock = (clock + Math.min(0.1, (now - last) / 1000)) % TOTAL;
+      last = now;
+      frame(clock, now);
+      raf = requestAnimationFrame(tick);
+    }
+    function kick() { if (!raf && FREEZE === null && !paused) raf = requestAnimationFrame(tick); }
+    function still() { frame(FREEZE, null); }
+    var PAUSE_ICON = '<svg viewBox="0 0 64 64" aria-hidden="true"><rect x="23" y="20" width="6" height="24" rx="1.5" fill="#EDF3F6"/><rect x="35" y="20" width="6" height="24" rx="1.5" fill="#EDF3F6"/></svg>';
+    var PLAY_ICON = '<svg viewBox="0 0 64 64" aria-hidden="true"><path d="M26 20.5v23l18-11.5z" fill="#EDF3F6"/></svg>';
+    var glyphTimer = 0;
+    // the bar's logo starts the hero again from the beginning (its link still takes the page to the top)
+    if (headBrand) headBrand.addEventListener("click", function () {
+      if (FREEZE !== null) return;
+      clock = 0; last = 0; headBrand.style.opacity = ""; headBrand.style.transform = "";
+      if (paused) { paused = false; hero.classList.remove("is-paused"); toggle.setAttribute("aria-pressed", "false"); toggle.setAttribute("aria-label", "Pause the animation"); }
+      kick();
+    });
+    if (toggle) toggle.addEventListener("click", function () {
+      toggle.blur();
+      if (FREEZE !== null) return;
+      paused = !paused;
+      hero.classList.toggle("is-paused", paused);
+      toggle.setAttribute("aria-pressed", paused ? "true" : "false");
+      toggle.setAttribute("aria-label", paused ? "Play the animation" : "Pause the animation");
+      glyph.innerHTML = paused ? PAUSE_ICON : PLAY_ICON;
+      glyph.classList.add("is-on"); clearTimeout(glyphTimer); glyphTimer = setTimeout(function () { glyph.classList.remove("is-on"); }, 450);
+      if (!paused) { last = 0; kick(); }
+    });
+    if (FREEZE === null && reduceMq.matches) FREEZE = SET[0] + 1.2;   // reduced motion: the first rectangle and its line, held   // reduced motion: the first rectangle and its line, held
+    window.addEventListener("resize", function () { layout(); if (FREEZE !== null || paused) frame(FREEZE !== null ? FREEZE : clock, null); });
+    if (window.IntersectionObserver) new IntersectionObserver(function (es) {
+      seen = es[0].isIntersecting;
+      if (!seen && headBrand) { headBrand.style.opacity = ""; headBrand.style.transform = ""; }   // the bar's logo never stays hidden off the hero
+      if (seen) kick();
+    }).observe(hero);
+    document.addEventListener("visibilitychange", function () { if (!document.hidden) kick(); });
+    function wlLoaded() { initWL(); if (FREEZE !== null) still(); }
+    if (window.WL) initWL(); else { var tag = document.getElementById("wl-motion"); if (tag) tag.addEventListener("load", wlLoaded); }
+    if (document.fonts && document.fonts.load) document.fonts.load('500 64px "Inter"').then(function () { if (L) layoutBrand(); if (FREEZE !== null) still(); });
+    layout();
+    if (FREEZE !== null) still(); else kick();
+  })();
+
+  /* ---------- v163 phones: the chosen age box and the list share one picture, placed from the box's top ----------
+     The list's picture (its ::before, 20px wider than the list on each side) and the box's are the same size and
+     position on the page: right-aligned to the list, starting at the box's top, tall enough for the whole list */
+  (function plSync() {
+    var prog = document.getElementById("programme"), list = document.getElementById("ch-list"), row = document.getElementById("stage-tabs");
+    if (!prog || !list || !row) return;
+    var phone = window.matchMedia("(max-width: 900px)"), RATIO = 1800 / 1930;
+    function sync() {
+      if (!phone.matches) return;
+      var tab = row.querySelector('.stage[aria-selected="true"]');
+      if (!tab) return;
+      var lr = list.getBoundingClientRect(), tr = tab.getBoundingClientRect();
+      var boxL = lr.left - 20, boxW = lr.width + 40, off = lr.top - tr.top;
+      var w = Math.max((lr.height + off) * RATIO, 2 * boxW), h = w / RATIO, imgL = boxL + boxW - w;
+      prog.style.setProperty("--pl-sz", w.toFixed(1) + "px " + h.toFixed(1) + "px");
+      prog.style.setProperty("--pl-lx", (imgL - boxL).toFixed(1) + "px");
+      prog.style.setProperty("--pl-ly", (-off).toFixed(1) + "px");
+      prog.style.setProperty("--pl-tx", (imgL - tr.left).toFixed(1) + "px");
+    }
+    var raf = 0;
+    function soon() { if (!raf) raf = requestAnimationFrame(function () { raf = 0; sync(); }); }
+    if (window.ResizeObserver) new ResizeObserver(soon).observe(list);
+    row.addEventListener("click", function () { soon(); setTimeout(sync, 450); });
+    window.addEventListener("resize", soon);
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(sync);
+    sync();
+  })();
 </script>
 </body>
 </html>
