@@ -1091,7 +1091,7 @@ footer { background: var(--deep); color: var(--on-navy-soft); padding: clamp(44p
 .hg-in { position: absolute; inset: 0; border-radius: inherit; overflow: hidden; background: #142F44; }
 .hg-in img, .hg-in svg { position: absolute; inset: 0; width: 100%; height: 100%; display: block; object-fit: cover; }
 .hg-scrim { position: absolute; inset: 0; background: linear-gradient(0deg, rgba(20, 47, 68, 0.82) 0%, rgba(20, 47, 68, 0.42) 34%, rgba(20, 47, 68, 0) 62%); opacity: 0; pointer-events: none; }
-.hg-scrim-full { background: linear-gradient(0deg, rgb(20, 47, 68) 0%, rgba(20, 47, 68, 0.55) 34%, rgba(20, 47, 68, 0) 62%); }   /* v176: "We're WonderLab": solid at its foot once zoomed in */
+.hg-scrim-full { background: linear-gradient(0deg, rgb(20, 47, 68) 0%, rgba(20, 47, 68, 0.55) 34%, rgba(20, 47, 68, 0) 62%); }   /* v176: "We're WonderLab" (v178: and the studio photos' lines): solid at its foot once zoomed in */
 .hg-in img { transition: none; }
 /* v166: the overviews' veil, under their words */
 .hg-veil { position: absolute; inset: 0; pointer-events: none; opacity: 0; background: radial-gradient(ellipse 50% 34% at 50% 50%, rgba(20, 47, 68, 0.74) 0%, rgba(20, 47, 68, 0.5) 50%, rgba(20, 47, 68, 0) 100%); }   /* v167: only behind the words, so the rectangles keep their strength */
@@ -3858,8 +3858,8 @@ var DRAW = {
     var FADE0 = LEA[LASTI], E0 = FADE0 + EXIT, M0 = FADE0 + 0.2, M1 = FADE0 + 1.05, TOTAL = M1 + 0.02;
     // v176: the grid slides up and away before "Learn to Wonder", the lower rectangles a little after the higher ones
     // (up to GX_LAG), the last gone as the climax comes in
-    // v177: no slide: the rectangles are cut away, all at once, no fade, just after the last subject has rolled in (GX0)
-    var GX0 = STORY[LASTI].climax - L_TURNS[L_TURNS.length - 1] + 0.22;   // its letters are up by then; "Learn to Wonder" follows   // the grid slides away (FADE0 to E0) as "Wonder" becomes the frame (M0 to M1); then the loop
+    // v177: no slide: the rectangles are cut away, all at once, no fade, as "Learn to Wonder" starts to come in (GX0)
+    var GX0 = STORY[LASTI].climax + 0.08;   // v178: as "Learn to Wonder" starts to slide up   // the grid slides away (FADE0 to E0) as "Wonder" becomes the frame (M0 to M1); then the loop
     function stopAt(t) { var i = -1; for (var k = 0; k < NS; k++) if (t >= ARR[k]) i = k; return i; }
 
     /* ---------- the grid: columns in running bond (every other column half a rectangle lower) ---------- */
@@ -3956,7 +3956,7 @@ var DRAW = {
         t.natImg = document.createElement("img"); t.natImg.alt = ""; t.natImg.style.display = "none"; inner.appendChild(t.natImg);
         t.a = Array.prototype.slice.call(inner.childNodes, 0, -1); t.isB = false;
       }
-      if (t.j !== undefined) { var sc = document.createElement("div"); sc.className = "hg-scrim" + (t.j === 0 ? " hg-scrim-full" : ""); inner.appendChild(sc); t.scrim = sc; }   // the blue at its foot, under the words
+      if (t.j !== undefined) { var sc = document.createElement("div"); sc.className = "hg-scrim" + (t.j === 0 || key.indexOf("s-") === 0 ? " hg-scrim-full" : "");   /* v178: and under every studio photo's line */ inner.appendChild(sc); t.scrim = sc; }   // the blue at its foot, under the words
       el.style.display = "none";
       world.appendChild(el); tiles.push(t);
     });
