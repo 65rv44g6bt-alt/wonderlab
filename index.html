@@ -3727,7 +3727,7 @@ var DRAW = {
 </script>
 <script>
 
-  /* ---------- hero grid (v170) ----------
+  /* ---------- hero grid (v172) ----------
      0-3.3 s   empty blue: the orange frame turns 90 degrees as the thin squares unfold inside it (as in v145), the mark
                slides left as the name slides out from behind it, a short pause, then it glides into the bar
      then      the grid rises from below with the logo's glide into the bar, in step, landing as it lands; 0.2 s later the camera zooms into the middle rectangle ("We're WonderLab", then
@@ -4111,6 +4111,12 @@ var DRAW = {
       return lerp(1, DIM, eo(seg(t, LEA[i], SET[i + 1])));
     }
     // a rectangle's line and its blue foot: there from its arrival (fading in through a zoom), riding out with it
+    // words: as the line, but on a swap to the next rectangle they fade out fully by the time it has arrived (v172)
+    function wordA(i, t) {
+      var a = textA(i, t);
+      if (i < LASTI && !STORY[i + 1].over && t >= LEA[i]) a *= 1 - eio(seg(t, LEA[i], SET[i + 1]));
+      return a;
+    }
     function textA(i, t) {
       if (t < ARR[i]) return 0;
       var a = i === 0 || STORY[i - 1].over ? seg(t, lerp(ARR[i], SET[i], 0.45), SET[i]) : 1;
@@ -4275,7 +4281,7 @@ var DRAW = {
       [i - 1, i].forEach(function (k) {
         if (k < 0) return;
         if (STORY[k].over) { if (k === i ? t >= SET[k] - 0.1 : t < LEA[k] + 0.45) drawOver(k, t); return; }
-        drawLine(k, t, cam, textA(k, t));
+        drawLine(k, t, cam, wordA(k, t));
       });
     }
 
