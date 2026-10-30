@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- Preview of the work in progress (branch claude/beautiful-gates-b4wjh0 at 93d4985), not the live site: the same page with its media one folder up. Not for search engines. -->
+<!-- Preview of the work in progress (branch claude/beautiful-gates-b4wjh0 at 16ee8c4), not the live site: the same page with its media one folder up. Not for search engines. -->
 <html lang="en">
 <head>
 <meta charset="utf-8">
@@ -1093,7 +1093,7 @@ footer { background: var(--deep); color: var(--on-navy-soft); padding: clamp(44p
 .hg-in { position: absolute; inset: 0; border-radius: inherit; overflow: hidden; background: #142F44; }
 .hg-in img, .hg-in svg { position: absolute; inset: 0; width: 100%; height: 100%; display: block; object-fit: cover; }
 .hg-scrim { position: absolute; inset: 0; background: linear-gradient(0deg, rgba(20, 47, 68, 0.82) 0%, rgba(20, 47, 68, 0.42) 34%, rgba(20, 47, 68, 0) 62%); opacity: 0; pointer-events: none; }
-.hg-scrim-full { background: linear-gradient(0deg, rgb(20, 47, 68) 0%, rgba(20, 47, 68, 0.55) 34%, rgba(20, 47, 68, 0) 62%); }   /* v176: "We're WonderLab" (v178: and the studio photos' lines): solid at its foot once zoomed in */
+.hg-scrim-full { background: linear-gradient(0deg, rgb(20, 47, 68) 0%, rgba(20, 47, 68, 0.6) 20%, rgba(20, 47, 68, 0) 42%); }   /* v183: shorter */   /* v176: "We're WonderLab" (v178: and the studio photos' lines): solid at its foot once zoomed in */
 .hg-in img { transition: none; }
 /* v166: the overviews' veil, under their words */
 .hg-veil { position: absolute; inset: 0; pointer-events: none; opacity: 0; background: radial-gradient(ellipse 50% 34% at 50% 50%, rgba(20, 47, 68, 0.74) 0%, rgba(20, 47, 68, 0.5) 50%, rgba(20, 47, 68, 0) 100%); }   /* v167: only behind the words, so the rectangles keep their strength */
@@ -3798,11 +3798,11 @@ var DRAW = {
     var DIAG = Object.keys(WLS).map(function (k) { return "wl:" + k; });
     var PHOTO = ["s-girl2", "s-airport2", "s-girl3", "s-group2", "s-facade1", "s-girl9", "s-boy2", "s-boy3", "s-girl8", "s-girlfoil", "s-group8"];
     // the studio photos come in sets of the same scene (the girl and her tree house, the boy and his table): never two of a set side by side
-    var SETS = { "s-girl2": "tree", "s-girl3": "tree", "s-girl9": "tree", "s-girl8": "tree", "s-girl10": "tree", "s-boy2": "boy", "s-boy3": "boy", "s-boy27b": "tree" };
+    var SETS = { "s-girl2": "tree", "s-girl3": "tree", "s-girl9": "tree", "s-girl8": "tree", "s-girl10": "tree", "s-girl2h": "tree", "s-boy27c": "tree", "s-boy2": "boy", "s-boy3": "boy", "s-boy27b": "tree" };
     function setOf(k) { return SETS[k] || k; }
     var NATURE = ["b-honeycomb", "b-mud", "b-succulent", "b-wing", "b-urchin", "b-roots", "b-aloe", "b-tensile", "b-tent", "b-stairs", "b-nautilus", "b-magnolia"];   // v174: the southern magnolia leaf, white lines on the blue, for the leaf veins
     // where the child is across each studio photo (%), for the tall rectangles on phones; the rest stay centred
-    var FOCAL = { "s-girl10": 70, "s-egg13": 60, "s-fractal10": 52, "s-boy27b": 50, "s-girl2": 72, "s-girl3": 78, "s-girl9": 66, "s-boy2": 75, "s-boy3": 74, "s-girl8": 80, "s-girlfoil": 64, "s-group8": 50, "s-group2": 60, "s-airport2": 63, "s-facade1": 83 };   // airport2: the two on the right; facade1: the tower   // girl3: her scale model; group2: the boats; girl8: the tree house
+    var FOCAL = { "s-girl2h": 76, "s-boy27c": 46, "s-girl10": 70, "s-egg13": 60, "s-fractal10": 52, "s-boy27b": 50, "s-girl2": 72, "s-girl3": 78, "s-girl9": 66, "s-boy2": 75, "s-boy3": 74, "s-girl8": 80, "s-girlfoil": 64, "s-group8": 50, "s-group2": 60, "s-airport2": 63, "s-facade1": 83 };   // airport2: the two on the right; facade1: the tower   // girl3: her scale model; group2: the boats; girl8: the tree house
 
     // the story, one stop at a time. A rectangle: its picture (c), its move from the one before (mv: D down, B down and
     // right, in running bond), its line (acc: the word in orange, -1 none, -2 the last) and how long it holds once there.
@@ -3814,7 +3814,7 @@ var DRAW = {
       { c: "wl:towers", mv: "D", line: "Think like engineers.", acc: 0, fit: "like", hold: 1.6 },
       { c: "s-group8", mv: "D", line: "Test like scientists.", acc: 0, fit: "like", hold: 1.6 },
       { c: "wl:rube", mv: "D", line: "Risk like innovators.", acc: 0, fit: "like", hold: 1.6 },
-      { c: "s-boy27b", mv: "D", line: "Dream like architects.", acc: 0, fit: "like", hold: 1.6 },
+      { c: "s-boy27c", mv: "D", line: "Dream like architects.", acc: 0, fit: "like", hold: 1.6 },
       { over: 3, fill: "challenges", alpha: 0.6, line: "Through design challenges led by an award-winning architect", acc: -1, hold: 3.0,
         next: { line: "building confidence, creativity and the courage to bring ideas to life.", acc: -1 }, hold2: 3.6 },
       { c: "wl:davinci", mv: "B", line: "A bridge with no glue?", acc: -2, hold: 2.2 },
@@ -3958,7 +3958,7 @@ var DRAW = {
       var t = { c: p[0], r: p[1], key: key, el: el, j: ON_PATH[k], shown: false, svg: null, reg1: inOver(p[0], p[1], OI.challenges) ? OI.challenges : -1 };
       if (key.indexOf("wl:") === 0) { t.svg = document.createElementNS("http://www.w3.org/2000/svg", "svg"); t.svg.setAttribute("preserveAspectRatio", "xMidYMid slice"); inner.appendChild(t.svg); }
       else if (key === "x:start" || key === "x:bridges") {
-        var pa = key === "x:start" ? ["s-girl10", "s-egg13"] : ["f-enter", "f-create"];   // v182: the girl and her tree house, then the egg drop in the park
+        var pa = key === "x:start" ? ["s-girl2h", "s-egg13"] : ["f-enter", "f-create"];   // v182: the girl and her tree house, then the egg drop in the park
         pa.forEach(function (k2) { var i2 = document.createElement("img"); i2.alt = ""; i2.src = M + k2 + ".jpg"; if (FOCAL[k2]) i2.style.objectPosition = FOCAL[k2] + "% 50%"; inner.appendChild(i2); });
         t.first = inner.firstChild; t.second = inner.lastChild;
         if (key === "x:start") t.second.style.opacity = "0"; else t.second.style.transform = "translateY(100%)";
