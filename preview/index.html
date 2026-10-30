@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- Preview of the work in progress (branch claude/beautiful-gates-b4wjh0 at cb79e83), not the live site: the same page with its media one folder up. Not for search engines. -->
+<!-- Preview of the work in progress (branch claude/beautiful-gates-b4wjh0 at 04607fc), not the live site: the same page with its media one folder up. Not for search engines. -->
 <html lang="en">
 <head>
 <meta charset="utf-8">
@@ -3816,17 +3816,17 @@ var DRAW = {
       { c: "s-girl8", mv: "D", line: "Dream like architects.", acc: 0, fit: "like", hold: 1.6 },
       { over: 3, fill: "challenges", alpha: 0.6, line: "Through design challenges led by an award-winning architect", acc: -1, hold: 3.0,
         next: { line: "building confidence, creativity and the courage to bring ideas to life.", acc: -1 }, hold2: 3.6 },
-      { c: "wl:davinci", mv: "B", line: "A bridge with no glue?", acc: -2 },
-      { c: "wl:egg", mv: "D", line: "Will the eggs survive the fall?", acc: -2 },
-      { c: "s-boy3", mv: "D", line: "Can a table float?", acc: -2 },
-      { c: "wl:solar", mv: "D", line: "Can sunlight cook lunch?", acc: 1 },
+      { c: "wl:davinci", mv: "B", line: "A bridge with no glue?", acc: -2, hold: 2.2 },
+      { c: "wl:egg", mv: "D", line: "Will the eggs survive the fall?", acc: -2, hold: 2.0 },
+      { c: "s-boy3", mv: "D", line: "Can a table float?", acc: -2, hold: 1.8 },
+      { c: "wl:solar", mv: "D", line: "Can sunlight cook lunch?", acc: 1, hold: 1.6 },
       // the last stop: the nature overview, down and right twice from the oven. "Nature drew it first.", then "Learn"
       // and the challenges' subjects rolling letter by letter, faster and faster, to "Learn to Wonder"; then the grid
       // slides up and away and "Wonder" turns into the logo's orange frame, where the loop starts again
       { over: 4, fill: "nature", alpha: 1, mv: "BB", line: "Nature drew it first.", acc: 0, learn: true }
     ];
     var LEARN = ["Eco-design", "Risk & problem solving", "Structural forces", "Climate adaptation", "Futures thinking", "Biomimicry",
-      "Inclusive design", "Renewable energy", "Tiling & graphic perception", "Buoyancy & water resources"];
+      "Inclusive design", "Renewable energy", "Tiling & graphic perception", "Buoyancy & water resources", "Tensegrity systems", "3D fractal geometry"];   // v181: the last two
     var L_D0 = 0.72, L_R = 0.92, L_IN = 2.0, L_CLIMAX = 1.6;   // v176: slower, so the last ones can almost be read   // the first subject's turn, each next one 0.83 of it; when "Learn" comes in; how long "Learn to Wonder" holds
     var L_TURNS = LEARN.map(function (w, k) { return L_D0 * Math.pow(L_R, k); }), L_RUN = L_TURNS.reduce(function (a, b) { return a + b; }, 0);
     var NS = STORY.length, LASTI = NS - 1;
@@ -3967,7 +3967,8 @@ var DRAW = {
         t.natImg = document.createElement("img"); t.natImg.alt = ""; t.natImg.style.display = "none"; inner.appendChild(t.natImg);
         t.a = Array.prototype.slice.call(inner.childNodes, 0, -1); t.isB = false;
       }
-      if (t.j !== undefined) { var sc = document.createElement("div"); sc.className = "hg-scrim" + (t.j === 0 || key.indexOf("s-") === 0 ? " hg-scrim-full" : "");   /* v178: and under every studio photo's line */ inner.appendChild(sc); t.scrim = sc; }   // the blue at its foot, under the words
+      t.photo = key.indexOf("s-") === 0;
+      if (t.j !== undefined || t.photo) { var sc = document.createElement("div"); sc.className = "hg-scrim" + (t.j === 0 || t.photo ? " hg-scrim-full" : "");   /* v178: and under every studio photo's line */ inner.appendChild(sc); t.scrim = sc; }   // the blue at its foot, under the words
       el.style.display = "none";
       world.appendChild(el); tiles.push(t);
     });
@@ -4336,7 +4337,7 @@ var DRAW = {
       for (var j = 0; j < text.length; j++) {
         var kin = tIn === null ? 1 : eio(seg(t, tIn + j * STG, tIn + j * STG + D)), kout = tOut === null ? 0 : eio(seg(t, tOut + j * STG, tOut + j * STG + D));
         if (kin <= 0 || kout >= 1 || text[j] === " ") continue;
-        drawWord({ s: text[j], c: color }, x + measure(text.slice(0, j), o), y + (1 - kin) * lift - kout * lift, o, g, band(y, o));
+        drawWord({ s: text[j], c: color }, x + measure(text.slice(0, j + 1), o) - measure(text[j], o), y + (1 - kin) * lift - kout * lift, o, g, band(y, o));   // v181: kerned as in the whole word ("Wo")
       }
     }
     function drawLearn(i, t) {
@@ -4488,7 +4489,7 @@ var DRAW = {
         tl.el.style.opacity = a.toFixed(3);
         var ddy = y - y0;
         tl.el.style.transform = Math.abs(ddy) > 0.5 ? "translateY(" + (ddy / s).toFixed(1) + "px)" : "";
-        if (tl.scrim) tl.scrim.style.opacity = textA(tl.j, t).toFixed(3);   // the blue foot belongs to the line: it rides with the rectangle
+        if (tl.scrim) tl.scrim.style.opacity = (tl.isB ? 0 : tl.photo ? 1 : textA(tl.j, t)).toFixed(3);   // the blue foot belongs to the line: it rides with the rectangle (v181: a studio photo keeps it always)
         if (tl.svg && !tl.isB) live.push(tl);
       });
       // the rectangle in focus plays its challenge; in and around an overview every challenge on screen plays, one
