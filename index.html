@@ -3798,11 +3798,11 @@ var DRAW = {
     var DIAG = Object.keys(WLS).map(function (k) { return "wl:" + k; });
     var PHOTO = ["s-girl2", "s-airport2", "s-girl3", "s-group2", "s-facade1", "s-girl9", "s-boy2", "s-boy3", "s-girl8", "s-girlfoil", "s-group8"];
     // the studio photos come in sets of the same scene (the girl and her tree house, the boy and his table): never two of a set side by side
-    var SETS = { "s-girl2": "tree", "s-girl3": "tree", "s-girl9": "tree", "s-girl8": "tree", "s-girl10": "tree", "s-girl2h": "tree", "s-boy27c": "tree", "s-boy27": "tree", "s-boy2": "boy", "s-boy3": "boy", "s-boy27b": "tree" };
+    var SETS = { "s-girl2": "tree", "s-girl3": "tree", "s-girl9": "tree", "s-girl8": "tree", "s-girl10": "tree", "s-girl2h": "tree", "s-boy27c": "tree", "s-boy27g": "tree", "s-boy2": "boy", "s-boy3": "boy", "s-boy27b": "tree" };
     function setOf(k) { return SETS[k] || k; }
     var NATURE = ["b-honeycomb", "b-mud", "b-succulent", "b-wing", "b-urchin", "b-roots", "b-aloe", "b-tensile", "b-tent", "b-stairs", "b-nautilus", "b-magnolia"];   // v174: the southern magnolia leaf, white lines on the blue, for the leaf veins
     // where the child is across each studio photo (%), for the tall rectangles on phones; the rest stay centred
-    var FOCAL = { "s-fractal12": 52, "s-boy27": 46, "s-girl2h": 82, "s-boy27c": 46, "s-girl10": 70, "s-egg13": 60, "s-fractal10": 52, "s-boy27b": 50, "s-girl2": 72, "s-girl3": 78, "s-girl9": 66, "s-boy2": 75, "s-boy3": 74, "s-girl8": 80, "s-girlfoil": 64, "s-group8": 50, "s-group2": 60, "s-airport2": 63, "s-facade1": 83 };   // airport2: the two on the right; facade1: the tower   // girl3: her scale model; group2: the boats; girl8: the tree house
+    var FOCAL = { "s-fractal12": 52, "s-boy27g": 45, "s-girl2h": 82, "s-boy27c": 46, "s-girl10": 70, "s-egg13": 60, "s-fractal10": 52, "s-boy27b": 50, "s-girl2": 72, "s-girl3": 78, "s-girl9": 66, "s-boy2": 75, "s-boy3": 74, "s-girl8": 80, "s-girlfoil": 64, "s-group8": 50, "s-group2": 60, "s-airport2": 63, "s-facade1": 83 };   // airport2: the two on the right; facade1: the tower   // girl3: her scale model; group2: the boats; girl8: the tree house
 
     // the story, one stop at a time. A rectangle: its picture (c), its move from the one before (mv: D down, B down and
     // right, in running bond), its line (acc: the word in orange, -1 none, -2 the last) and how long it holds once there.
@@ -3814,14 +3814,14 @@ var DRAW = {
       { c: "wl:towers", mv: "D", line: "think like engineers", acc: 0, fit: "like", hold: 1.6 },
       { c: "s-group8", mv: "D", line: "test like scientists", acc: 0, fit: "like", hold: 1.6 },
       { c: "wl:rube", mv: "D", line: "risk like innovators", acc: 0, fit: "like", hold: 1.6 },
-      { c: "s-boy27", mv: "D", line: "dream like architects", acc: 0, fit: "like", hold: 1.6 },
+      { c: "s-boy27g", mv: "D", line: "dream like architects", acc: 0, fit: "like", hold: 1.6 },
       { over: 3, fill: "challenges", alpha: 0.6, line: "Through design challenges led by an award-winning architect", acc: -1, hold: 3.0,
         next: { line: "building confidence, creativity and the courage to bring ideas to life.", acc: -1 }, hold2: 3.6 },
       { c: "wl:davinci", mv: "B", line: "A bridge with no glue?", acc: -2, hold: 2.2 },
       { c: "wl:egg", mv: "D", line: "Will the eggs survive the fall?", acc: -2, hold: 2.0 },
       { c: "s-boy3", mv: "D", line: "Can a table float?", acc: -2, hold: 1.8 },
       { c: "wl:solar", mv: "D", line: "Can sunlight cook lunch?", acc: 2, hold: 1.6 },
-      { c: "s-fractal12", mv: "D", line: "Flat sheet to 3D fractal?", acc: -2, hold: 1.4 },   // v182
+      { c: "s-fractal10", mv: "D", line: "Flat sheet to 3D fractal?", acc: -2, hold: 1.4 },   // v182
       // the last stop: the nature overview, down and right twice from the fractal (v182; the oven before). "Nature drew it first.", then "Learn"
       // and the challenges' subjects rolling letter by letter, faster and faster, to "Learn to Wonder"; then the grid
       // slides up and away and "Wonder" turns into the logo's orange frame, where the loop starts again
