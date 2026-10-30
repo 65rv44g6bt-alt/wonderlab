@@ -1086,6 +1086,8 @@ footer { background: var(--deep); color: var(--on-navy-soft); padding: clamp(44p
   .hero.hg { margin-top: -76px; height: 100svh; min-height: 600px; padding: 0; background: #142F44; overflow: hidden; }
 }
 .hg-stage { position: absolute; inset: 0; }
+/* v186: laptops: the animation keeps to the main column (the blue stays full width), its grid as tight as on phones */
+@media (min-width: 901px) { .hg-stage { left: 0; right: 0; width: calc(min(var(--max), 100%) - 2 * var(--gutter)); margin: 0 auto; overflow: hidden; } }
 .hg-world { position: absolute; left: 0; top: 0; width: 0; height: 0; transform-origin: 0 0; --hs: 1; }
 .hg-tile { position: absolute; border-radius: var(--r); box-shadow: 0 0 0 calc(var(--hl, 0.5px) / var(--hs)) #FFFFFF;   /* a hairline, 1px on phones */ }
 .hg-in { position: absolute; inset: 0; border-radius: inherit; overflow: hidden; background: #142F44; }
@@ -3755,7 +3757,7 @@ var DRAW = {
      one click on the hero pauses it, another plays it; a click on the bar's logo starts it again from the beginning.
      ?t=12.3 freezes it at that moment (for checking) */
   (function heroGrid() {
-    var hero = document.getElementById("top"), world = document.getElementById("hg-world"), cv = document.getElementById("hg-text");
+    var hero = document.getElementById("top"), world = document.getElementById("hg-world"), cv = document.getElementById("hg-text"), stageEl = cv && cv.parentNode;
     if (!hero || !world || !cv || !hero.classList.contains("hg")) return;
     var ctx = cv.getContext("2d");
     var toggle = document.getElementById("hg-toggle"), glyph = document.getElementById("hg-glyph"), brandEl = document.getElementById("hg-brand");
@@ -4018,9 +4020,9 @@ var DRAW = {
     var L = null, dpr = 1, DPX = 1, BR = null;
     function snap(v) { return Math.round(v * DPX) / DPX; }
     function layout() {
-      var vw = hero.clientWidth, vh = hero.clientHeight;
+      var vw = stageEl.clientWidth, vh = hero.clientHeight;   // v186: the stage: the main column on laptops
       if (!vw || !vh) return;
-      var gut = clamp(vw * 0.05, 20, 64), portrait = vw / vh < 0.8;
+      var portrait = vw / vh < 0.8, gut = portrait ? clamp(vw * 0.05, 20, 64) : 20;   // v186: on laptops the column is the frame: a phone's margin
       var W = Math.min(vw - 2 * gut, 1280 - 2 * gut), H = portrait ? W * 1.25 * 1.3 : W * 9 / 16;
       var maxH = vh - 2 * 76 - 16;                              // clear of the bar on short screens
       if (H > maxH) { H = maxH; if (!portrait) W = Math.min(W, H * 16 / 9); }
@@ -4442,7 +4444,7 @@ var DRAW = {
       // the glide: a pure scale into the bar's logo
       var q = eio(seg(te, 3.1 * BK, B_END)), tx = left, ty = top, sc = 1;
       if (q > 0 && headBrand) {
-        var hs = headBrand.querySelector("svg"), hr = (hs || headBrand).getBoundingClientRect(), r0 = hero.getBoundingClientRect();
+        var hs = headBrand.querySelector("svg"), hr = (hs || headBrand).getBoundingClientRect(), r0 = stageEl.getBoundingClientRect();
         tx = lerp(left, hr.left - r0.left, q); ty = lerp(top, hr.top - r0.top, q); sc = lerp(1, hr.width / BR.ms, q);
       }
       brandEl.style.transform = "translate(" + tx.toFixed(1) + "px," + ty.toFixed(1) + "px) scale(" + sc.toFixed(4) + ")";
