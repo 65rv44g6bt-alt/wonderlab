@@ -1106,6 +1106,7 @@ footer { background: var(--deep); color: var(--on-navy-soft); padding: clamp(44p
 .hg-glyph { position: absolute; left: 50%; top: 50%; z-index: 2; width: 64px; height: 64px; margin: -32px 0 0 -32px; border-radius: 50%; background: rgba(13, 27, 38, 0.55); opacity: 0; pointer-events: none; transition: opacity 500ms ease; }
 .hg-glyph.is-on { opacity: 1; transition-duration: 80ms; }
 /* v179: sound on / off, bottom right of the hero (off until clicked: browsers only let sound start from a click) */
+.hg-sound[hidden] { display: none; }
 .hg-sound { position: absolute; z-index: 3; right: max(var(--gutter), env(safe-area-inset-right)); bottom: max(18px, env(safe-area-inset-bottom)); width: 44px; height: 44px; padding: 0; border: 0; border-radius: 50%;
   background: rgba(13, 27, 38, 0.5); color: #EDF3F6; cursor: pointer; -webkit-tap-highlight-color: transparent; transition: background-color 200ms ease; }
 .hg-sound:hover { background: rgba(13, 27, 38, 0.75); }
@@ -3795,11 +3796,11 @@ var DRAW = {
     var DIAG = Object.keys(WLS).map(function (k) { return "wl:" + k; });
     var PHOTO = ["s-girl2", "s-airport2", "s-girl3", "s-group2", "s-facade1", "s-girl9", "s-boy2", "s-boy3", "s-girl8", "s-girlfoil", "s-group8"];
     // the studio photos come in sets of the same scene (the girl and her tree house, the boy and his table): never two of a set side by side
-    var SETS = { "s-girl2": "tree", "s-girl3": "tree", "s-girl9": "tree", "s-girl8": "tree", "s-boy2": "boy", "s-boy3": "boy" };
+    var SETS = { "s-girl2": "tree", "s-girl3": "tree", "s-girl9": "tree", "s-girl8": "tree", "s-girl10": "tree", "s-boy2": "boy", "s-boy3": "boy", "s-boy27b": "tree" };
     function setOf(k) { return SETS[k] || k; }
     var NATURE = ["b-honeycomb", "b-mud", "b-succulent", "b-wing", "b-urchin", "b-roots", "b-aloe", "b-tensile", "b-tent", "b-stairs", "b-nautilus", "b-magnolia"];   // v174: the southern magnolia leaf, white lines on the blue, for the leaf veins
     // where the child is across each studio photo (%), for the tall rectangles on phones; the rest stay centred
-    var FOCAL = { "s-girl2": 72, "s-girl3": 78, "s-girl9": 66, "s-boy2": 75, "s-boy3": 74, "s-girl8": 80, "s-girlfoil": 64, "s-group8": 50, "s-group2": 60, "s-airport2": 63, "s-facade1": 83 };   // airport2: the two on the right; facade1: the tower   // girl3: her scale model; group2: the boats; girl8: the tree house
+    var FOCAL = { "s-girl10": 70, "s-egg13": 60, "s-fractal10": 52, "s-boy27b": 50, "s-girl2": 72, "s-girl3": 78, "s-girl9": 66, "s-boy2": 75, "s-boy3": 74, "s-girl8": 80, "s-girlfoil": 64, "s-group8": 50, "s-group2": 60, "s-airport2": 63, "s-facade1": 83 };   // airport2: the two on the right; facade1: the tower   // girl3: her scale model; group2: the boats; girl8: the tree house
 
     // the story, one stop at a time. A rectangle: its picture (c), its move from the one before (mv: D down, B down and
     // right, in running bond), its line (acc: the word in orange, -1 none, -2 the last) and how long it holds once there.
@@ -3811,14 +3812,15 @@ var DRAW = {
       { c: "wl:towers", mv: "D", line: "Think like engineers.", acc: 0, fit: "like", hold: 1.6 },
       { c: "s-group8", mv: "D", line: "Test like scientists.", acc: 0, fit: "like", hold: 1.6 },
       { c: "wl:rube", mv: "D", line: "Risk like innovators.", acc: 0, fit: "like", hold: 1.6 },
-      { c: "s-girl8", mv: "D", line: "Dream like architects.", acc: 0, fit: "like", hold: 1.6 },
+      { c: "s-boy27b", mv: "D", line: "Dream like architects.", acc: 0, fit: "like", hold: 1.6 },
       { over: 3, fill: "challenges", alpha: 0.6, line: "Through design challenges led by an award-winning architect", acc: -1, hold: 3.0,
         next: { line: "building confidence, creativity and the courage to bring ideas to life.", acc: -1 }, hold2: 3.6 },
       { c: "wl:davinci", mv: "B", line: "A bridge with no glue?", acc: -2, hold: 2.2 },
       { c: "wl:egg", mv: "D", line: "Will the eggs survive the fall?", acc: -2, hold: 2.0 },
       { c: "s-boy3", mv: "D", line: "Can a table float?", acc: -2, hold: 1.8 },
       { c: "wl:solar", mv: "D", line: "Can sunlight cook lunch?", acc: 1, hold: 1.6 },
-      // the last stop: the nature overview, down and right twice from the oven. "Nature drew it first.", then "Learn"
+      { c: "s-fractal10", mv: "D", line: "Flat sheet to 3D fractal?", acc: -2, hold: 1.4 },   // v182
+      // the last stop: the nature overview, down and right twice from the fractal (v182; the oven before). "Nature drew it first.", then "Learn"
       // and the challenges' subjects rolling letter by letter, faster and faster, to "Learn to Wonder"; then the grid
       // slides up and away and "Wonder" turns into the logo's orange frame, where the loop starts again
       { over: 4, fill: "nature", alpha: 1, mv: "BB", line: "Nature drew it first.", acc: 0, learn: true }
@@ -3954,7 +3956,7 @@ var DRAW = {
       var t = { c: p[0], r: p[1], key: key, el: el, j: ON_PATH[k], shown: false, svg: null, reg1: inOver(p[0], p[1], OI.challenges) ? OI.challenges : -1 };
       if (key.indexOf("wl:") === 0) { t.svg = document.createElementNS("http://www.w3.org/2000/svg", "svg"); t.svg.setAttribute("preserveAspectRatio", "xMidYMid slice"); inner.appendChild(t.svg); }
       else if (key === "x:start" || key === "x:bridges") {
-        var pa = key === "x:start" ? ["s-girl3", "s-airport2"] : ["f-enter", "f-create"];
+        var pa = key === "x:start" ? ["s-girl10", "s-egg13"] : ["f-enter", "f-create"];   // v182: the girl and her tree house, then the egg drop in the park
         pa.forEach(function (k2) { var i2 = document.createElement("img"); i2.alt = ""; i2.src = M + k2 + ".jpg"; if (FOCAL[k2]) i2.style.objectPosition = FOCAL[k2] + "% 50%"; inner.appendChild(i2); });
         t.first = inner.firstChild; t.second = inner.lastChild;
         if (key === "x:start") t.second.style.opacity = "0"; else t.second.style.transform = "translateY(100%)";
@@ -4517,6 +4519,7 @@ var DRAW = {
     /* ---------- v179: sound. Off until the button is clicked. The music (media/hero-music.mp3, when there is one)
        plays in step with the clock, from the top on every loop; the effects are drawn here, in D major pentatonic so
        they sit in the music's key, each at its moment on the clock ---------- */
+    var SOUND = false;   // v182: no sound for now: the button is hidden and nothing plays; true brings it all back
     var soundBtn = document.getElementById("hg-sound"), soundOn = false, ac = null, master = null, music = null, musicOk = true, noiseBuf = null;
     var PENTA = [293.66, 329.63, 369.99, 440, 493.88, 587.33, 659.25, 739.99, 880, 987.77, 1174.66];   // D4 E4 F#4 A4 B4 D5 E5 F#5 A5 B5 D6
     function audio() {
@@ -4583,7 +4586,8 @@ var DRAW = {
     }
     var SOUND_ON = '<svg class="on" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z"/><path d="M15.5 9a4 4 0 0 1 0 6M18 6.5a7.5 7.5 0 0 1 0 11"/></svg>';
     var SOUND_OFF = '<svg class="off" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z"/><path d="M16 9.5l5 5M21 9.5l-5 5"/></svg>';
-    if (soundBtn) {
+    if (soundBtn && !SOUND) soundBtn.hidden = true;
+    if (soundBtn && SOUND) {
       soundBtn.innerHTML = SOUND_ON + SOUND_OFF;
       soundBtn.addEventListener("click", function (e) {
         e.stopPropagation(); soundBtn.blur();
