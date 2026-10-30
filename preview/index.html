@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- Preview of the work in progress (branch claude/beautiful-gates-b4wjh0 at 9caa858), not the live site: the same page with its media one folder up. Not for search engines. -->
+<!-- Preview of the work in progress (branch claude/beautiful-gates-b4wjh0 at 1811e01), not the live site: the same page with its media one folder up. Not for search engines. -->
 <html lang="en">
 <head>
 <meta charset="utf-8">
@@ -3935,13 +3935,45 @@ var DRAW = {
       if (CONTENT[k]) return;
       var nb = touching(p[0], p[1]).map(function (q) { return CONTENT[q[0] + "," + q[1]]; }).filter(Boolean);
       var nk = nb.map(kindOf), h = hash(p[0], p[1]) % 100, first = h < 42 ? 0 : h < 77 ? 1 : 2, kind = first;
-      for (var i = 0; i < 3; i++) { kind = (first + i) % 3; if (nk.indexOf(kind) < 0) break; }
-      var list = KINDS[kind], pick = list[use[kind] % list.length];
-      var nbs = nb.map(setOf);
-      for (var j = 0; j < list.length && nbs.indexOf(setOf(pick)) >= 0; j++) { use[kind]++; pick = list[use[kind] % list.length]; }
+      // v187: nothing seen twice on one screen: no picture (or set of studio photos) already within two columns and
+      // four rows of it
+      var near = [];
+      cells.forEach(function (q) { var key = CONTENT[q[0] + "," + q[1]]; if (key && Math.abs(q[0] - p[0]) <= 2 && Math.abs(gv(q) - gv(p)) <= 4) near.push(setOf(key)); });
+      var nbs = nb.map(setOf), pick = null;
+      for (var i = 0; i < 3 && !pick; i++) {
+        kind = (first + i) % 3;
+        if (nk.indexOf(kind) >= 0) continue;
+        var list = KINDS[kind];
+        for (var j = 0; j < list.length; j++) { var c2 = list[(use[kind] + j) % list.length]; if (near.indexOf(setOf(c2)) < 0) { pick = c2; use[kind] += j; break; } }
+      }
+      if (!pick) {   // nothing new left near it: as before, only never beside its own kind or set
+        for (var i2 = 0; i2 < 3; i2++) { kind = (first + i2) % 3; if (nk.indexOf(kind) < 0) break; }
+        var list2 = KINDS[kind]; pick = list2[use[kind] % list2.length];
+        for (var j2 = 0; j2 < list2.length && nbs.indexOf(setOf(pick)) >= 0; j2++) { use[kind]++; pick = list2[use[kind] % list2.length]; }
+      }
       use[kind] += 1 + (h % 3);
       CONTENT[k] = pick;
     });
+    // v187: a last pass over the whole grid: a picture met again within two columns and four rows (the overview's
+    // fill, the ones set beside the first rectangle) gives way to one of its kind not seen near it. Cells on the story's
+    // path and the nature collage keep theirs
+    (function () {
+      var FIXED = {}; Object.keys(ON_PATH).forEach(function (k) { FIXED[k] = 1; });
+      function nearOf(p, skip) {
+        var out = [];
+        cells.forEach(function (q) { var k = q[0] + "," + q[1]; if (k !== skip && CONTENT[k] && Math.abs(q[0] - p[0]) <= 2 && Math.abs(gv(q) - gv(p)) <= 4) out.push(setOf(CONTENT[k])); });
+        return out;
+      }
+      cells.forEach(function (p) {
+        var k = p[0] + "," + p[1], key = CONTENT[k], kind = kindOf(key);
+        if (FIXED[k] || kind < 0) return;
+        var near = nearOf(p, k);
+        if (near.indexOf(setOf(key)) < 0) return;
+        var nbs = touching(p[0], p[1]).map(function (q) { return CONTENT[q[0] + "," + q[1]]; }).filter(Boolean).map(setOf);
+        var alt = KINDS[kind].filter(function (c) { return near.indexOf(setOf(c)) < 0 && nbs.indexOf(setOf(c)) < 0; });
+        if (alt.length) CONTENT[k] = alt[hash(p[0], p[1]) % alt.length];
+      });
+    })();
     // the collage (09_nature): each picture's centre across and down it, so the overview keeps its order of colours
     var NAT_BOX = [[0,0,105,125],[105,0,258,152],[258,0,403,215],[403,0,540,82],[403,82,540,245],[0,125,108,295],[108,152,258,295],
       [0,295,140,515],[140,295,266,462],[266,215,403,462],[403,245,540,462],[0,515,135,652],[135,462,277,652],[277,462,410,595],
@@ -4029,7 +4061,7 @@ var DRAW = {
       var maxH = vh - 2 * 76 - 16;                              // clear of the bar on short screens
       if (H > maxH) { H = maxH; if (!portrait) W = Math.min(W, H * 16 / 9); }
       // the gap between columns puts the rectangles beside a zoomed one off screen; rows take the same gap
-      var gap = (vw - W) / 2 + 24, cols = portrait ? 3 : 5;
+      var gap = (vw - W) / 2 + 24, cols = 3;   // v187: three rectangles wide as the grid rises, on laptops too
       W = Math.round(W); H = Math.round(H); gap = Math.round(gap); if ((H + gap) % 2) H -= 1;   // whole pixels, rows an even height (for the half step)
       var px = W + gap;
       L = { vw: vw, vh: vh, W: W, H: H, px: px, py: H + gap, gut: gut, sG: 1.06 * vw / (cols * px), portrait: portrait };
