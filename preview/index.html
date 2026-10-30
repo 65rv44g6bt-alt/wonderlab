@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- Preview of the work in progress (branch claude/beautiful-gates-b4wjh0 at 93d4985), not the live site: the same page with its media one folder up. Not for search engines. -->
+<!-- Preview of the work in progress (branch claude/beautiful-gates-b4wjh0 at 1811e01), not the live site: the same page with its media one folder up. Not for search engines. -->
 <html lang="en">
 <head>
 <meta charset="utf-8">
@@ -1088,12 +1088,14 @@ footer { background: var(--deep); color: var(--on-navy-soft); padding: clamp(44p
   .hero.hg { margin-top: -76px; height: 100svh; min-height: 600px; padding: 0; background: #142F44; overflow: hidden; }
 }
 .hg-stage { position: absolute; inset: 0; }
+/* v186: laptops: the animation keeps to the main column (the blue stays full width), its grid as tight as on phones */
+@media (min-width: 901px) { .hg-stage { left: 0; right: 0; width: calc(min(var(--max), 100%) - 2 * var(--gutter)); margin: 0 auto; overflow: hidden; } }
 .hg-world { position: absolute; left: 0; top: 0; width: 0; height: 0; transform-origin: 0 0; --hs: 1; }
 .hg-tile { position: absolute; border-radius: var(--r); box-shadow: 0 0 0 calc(var(--hl, 0.5px) / var(--hs)) #FFFFFF;   /* a hairline, 1px on phones */ }
 .hg-in { position: absolute; inset: 0; border-radius: inherit; overflow: hidden; background: #142F44; }
 .hg-in img, .hg-in svg { position: absolute; inset: 0; width: 100%; height: 100%; display: block; object-fit: cover; }
 .hg-scrim { position: absolute; inset: 0; background: linear-gradient(0deg, rgba(20, 47, 68, 0.82) 0%, rgba(20, 47, 68, 0.42) 34%, rgba(20, 47, 68, 0) 62%); opacity: 0; pointer-events: none; }
-.hg-scrim-full { background: linear-gradient(0deg, rgb(20, 47, 68) 0%, rgba(20, 47, 68, 0.55) 34%, rgba(20, 47, 68, 0) 62%); }   /* v176: "We're WonderLab" (v178: and the studio photos' lines): solid at its foot once zoomed in */
+.hg-scrim-full { background: linear-gradient(0deg, rgb(20, 47, 68) 0%, rgba(20, 47, 68, 0.6) 20%, rgba(20, 47, 68, 0) 42%); }   /* v183: shorter */   /* v176: "We're WonderLab" (v178: and the studio photos' lines): solid at its foot once zoomed in */
 .hg-in img { transition: none; }
 /* v166: the overviews' veil, under their words */
 .hg-veil { position: absolute; inset: 0; pointer-events: none; opacity: 0; background: radial-gradient(ellipse 50% 34% at 50% 50%, rgba(20, 47, 68, 0.74) 0%, rgba(20, 47, 68, 0.5) 50%, rgba(20, 47, 68, 0) 100%); }   /* v167: only behind the words, so the rectangles keep their strength */
@@ -3757,7 +3759,7 @@ var DRAW = {
      one click on the hero pauses it, another plays it; a click on the bar's logo starts it again from the beginning.
      ?t=12.3 freezes it at that moment (for checking) */
   (function heroGrid() {
-    var hero = document.getElementById("top"), world = document.getElementById("hg-world"), cv = document.getElementById("hg-text");
+    var hero = document.getElementById("top"), world = document.getElementById("hg-world"), cv = document.getElementById("hg-text"), stageEl = cv && cv.parentNode;
     if (!hero || !world || !cv || !hero.classList.contains("hg")) return;
     var ctx = cv.getContext("2d");
     var toggle = document.getElementById("hg-toggle"), glyph = document.getElementById("hg-glyph"), brandEl = document.getElementById("hg-brand");
@@ -3798,29 +3800,29 @@ var DRAW = {
     var DIAG = Object.keys(WLS).map(function (k) { return "wl:" + k; });
     var PHOTO = ["s-girl2", "s-airport2", "s-girl3", "s-group2", "s-facade1", "s-girl9", "s-boy2", "s-boy3", "s-girl8", "s-girlfoil", "s-group8"];
     // the studio photos come in sets of the same scene (the girl and her tree house, the boy and his table): never two of a set side by side
-    var SETS = { "s-girl2": "tree", "s-girl3": "tree", "s-girl9": "tree", "s-girl8": "tree", "s-girl10": "tree", "s-boy2": "boy", "s-boy3": "boy", "s-boy27b": "tree" };
+    var SETS = { "s-girl2": "tree", "s-girl3": "tree", "s-girl9": "tree", "s-girl8": "tree", "s-girl10": "tree", "s-girl2h": "tree", "s-boy27c": "tree", "s-boy2": "boy", "s-boy3": "boy", "s-boy27b": "tree" };
     function setOf(k) { return SETS[k] || k; }
     var NATURE = ["b-honeycomb", "b-mud", "b-succulent", "b-wing", "b-urchin", "b-roots", "b-aloe", "b-tensile", "b-tent", "b-stairs", "b-nautilus", "b-magnolia"];   // v174: the southern magnolia leaf, white lines on the blue, for the leaf veins
     // where the child is across each studio photo (%), for the tall rectangles on phones; the rest stay centred
-    var FOCAL = { "s-girl10": 70, "s-egg13": 60, "s-fractal10": 52, "s-boy27b": 50, "s-girl2": 72, "s-girl3": 78, "s-girl9": 66, "s-boy2": 75, "s-boy3": 74, "s-girl8": 80, "s-girlfoil": 64, "s-group8": 50, "s-group2": 60, "s-airport2": 63, "s-facade1": 83 };   // airport2: the two on the right; facade1: the tower   // girl3: her scale model; group2: the boats; girl8: the tree house
+    var FOCAL = { "s-girl2h": 82, "s-boy27c": 46, "s-girl10": 70, "s-egg13": 60, "s-fractal10": 52, "s-boy27b": 50, "s-girl2": 72, "s-girl3": 78, "s-girl9": 66, "s-boy2": 75, "s-boy3": 74, "s-girl8": 80, "s-girlfoil": 64, "s-group8": 50, "s-group2": 60, "s-airport2": 63, "s-facade1": 83 };   // airport2: the two on the right; facade1: the tower   // girl3: her scale model; group2: the boats; girl8: the tree house
 
     // the story, one stop at a time. A rectangle: its picture (c), its move from the one before (mv: D down, B down and
     // right, in running bond), its line (acc: the word in orange, -1 none, -2 the last) and how long it holds once there.
     // An overview (over: how many rectangles wide): its words on the screen, centred on the cells the next rectangle's
     // move passes through
     var STORY = [
-      { c: "x:start", line: "We\u2019re WonderLab", acc: -1, hold: 1.5, lift: 24,
-        next: { line: "A creative thinking academy, where young minds", acc: -1 }, hold2: 2.5, swapPic: "fade" },
-      { c: "wl:towers", mv: "D", line: "Think like engineers.", acc: 0, fit: "like", hold: 1.6 },
-      { c: "s-group8", mv: "D", line: "Test like scientists.", acc: 0, fit: "like", hold: 1.6 },
-      { c: "wl:rube", mv: "D", line: "Risk like innovators.", acc: 0, fit: "like", hold: 1.6 },
-      { c: "s-boy27b", mv: "D", line: "Dream like architects.", acc: 0, fit: "like", hold: 1.6 },
+      { c: "x:start", line: "We\u2019re WonderLab", acc: -1, dot: true, hold: 1.5, lift: 24,
+        next: { line: "A creative thinking academy where young minds", acc: -1 }, hold2: 2.5, swapPic: "fade" },
+      { c: "wl:towers", mv: "D", line: "think like engineers", acc: 0, fit: "like", hold: 1.6 },
+      { c: "s-group8", mv: "D", line: "test like scientists", acc: 0, fit: "like", hold: 1.6 },
+      { c: "wl:rube", mv: "D", line: "risk like innovators", acc: 0, fit: "like", hold: 1.6 },
+      { c: "s-boy27c", mv: "D", line: "dream like architects", acc: 0, fit: "like", hold: 1.6 },
       { over: 3, fill: "challenges", alpha: 0.6, line: "Through design challenges led by an award-winning architect", acc: -1, hold: 3.0,
         next: { line: "building confidence, creativity and the courage to bring ideas to life.", acc: -1 }, hold2: 3.6 },
       { c: "wl:davinci", mv: "B", line: "A bridge with no glue?", acc: -2, hold: 2.2 },
       { c: "wl:egg", mv: "D", line: "Will the eggs survive the fall?", acc: -2, hold: 2.0 },
       { c: "s-boy3", mv: "D", line: "Can a table float?", acc: -2, hold: 1.8 },
-      { c: "wl:solar", mv: "D", line: "Can sunlight cook lunch?", acc: 1, hold: 1.6 },
+      { c: "wl:solar", mv: "D", line: "Can sunlight cook lunch?", acc: 2, hold: 1.6 },
       { c: "s-fractal10", mv: "D", line: "Flat sheet to 3D fractal?", acc: -2, hold: 1.4 },   // v182
       // the last stop: the nature overview, down and right twice from the fractal (v182; the oven before). "Nature drew it first.", then "Learn"
       // and the challenges' subjects rolling letter by letter, faster and faster, to "Learn to Wonder"; then the grid
@@ -3933,13 +3935,45 @@ var DRAW = {
       if (CONTENT[k]) return;
       var nb = touching(p[0], p[1]).map(function (q) { return CONTENT[q[0] + "," + q[1]]; }).filter(Boolean);
       var nk = nb.map(kindOf), h = hash(p[0], p[1]) % 100, first = h < 42 ? 0 : h < 77 ? 1 : 2, kind = first;
-      for (var i = 0; i < 3; i++) { kind = (first + i) % 3; if (nk.indexOf(kind) < 0) break; }
-      var list = KINDS[kind], pick = list[use[kind] % list.length];
-      var nbs = nb.map(setOf);
-      for (var j = 0; j < list.length && nbs.indexOf(setOf(pick)) >= 0; j++) { use[kind]++; pick = list[use[kind] % list.length]; }
+      // v187: nothing seen twice on one screen: no picture (or set of studio photos) already within two columns and
+      // four rows of it
+      var near = [];
+      cells.forEach(function (q) { var key = CONTENT[q[0] + "," + q[1]]; if (key && Math.abs(q[0] - p[0]) <= 2 && Math.abs(gv(q) - gv(p)) <= 4) near.push(setOf(key)); });
+      var nbs = nb.map(setOf), pick = null;
+      for (var i = 0; i < 3 && !pick; i++) {
+        kind = (first + i) % 3;
+        if (nk.indexOf(kind) >= 0) continue;
+        var list = KINDS[kind];
+        for (var j = 0; j < list.length; j++) { var c2 = list[(use[kind] + j) % list.length]; if (near.indexOf(setOf(c2)) < 0) { pick = c2; use[kind] += j; break; } }
+      }
+      if (!pick) {   // nothing new left near it: as before, only never beside its own kind or set
+        for (var i2 = 0; i2 < 3; i2++) { kind = (first + i2) % 3; if (nk.indexOf(kind) < 0) break; }
+        var list2 = KINDS[kind]; pick = list2[use[kind] % list2.length];
+        for (var j2 = 0; j2 < list2.length && nbs.indexOf(setOf(pick)) >= 0; j2++) { use[kind]++; pick = list2[use[kind] % list2.length]; }
+      }
       use[kind] += 1 + (h % 3);
       CONTENT[k] = pick;
     });
+    // v187: a last pass over the whole grid: a picture met again within two columns and four rows (the overview's
+    // fill, the ones set beside the first rectangle) gives way to one of its kind not seen near it. Cells on the story's
+    // path and the nature collage keep theirs
+    (function () {
+      var FIXED = {}; Object.keys(ON_PATH).forEach(function (k) { FIXED[k] = 1; });
+      function nearOf(p, skip) {
+        var out = [];
+        cells.forEach(function (q) { var k = q[0] + "," + q[1]; if (k !== skip && CONTENT[k] && Math.abs(q[0] - p[0]) <= 2 && Math.abs(gv(q) - gv(p)) <= 4) out.push(setOf(CONTENT[k])); });
+        return out;
+      }
+      cells.forEach(function (p) {
+        var k = p[0] + "," + p[1], key = CONTENT[k], kind = kindOf(key);
+        if (FIXED[k] || kind < 0) return;
+        var near = nearOf(p, k);
+        if (near.indexOf(setOf(key)) < 0) return;
+        var nbs = touching(p[0], p[1]).map(function (q) { return CONTENT[q[0] + "," + q[1]]; }).filter(Boolean).map(setOf);
+        var alt = KINDS[kind].filter(function (c) { return near.indexOf(setOf(c)) < 0 && nbs.indexOf(setOf(c)) < 0; });
+        if (alt.length) CONTENT[k] = alt[hash(p[0], p[1]) % alt.length];
+      });
+    })();
     // the collage (09_nature): each picture's centre across and down it, so the overview keeps its order of colours
     var NAT_BOX = [[0,0,105,125],[105,0,258,152],[258,0,403,215],[403,0,540,82],[403,82,540,245],[0,125,108,295],[108,152,258,295],
       [0,295,140,515],[140,295,266,462],[266,215,403,462],[403,245,540,462],[0,515,135,652],[135,462,277,652],[277,462,410,595],
@@ -3958,7 +3992,7 @@ var DRAW = {
       var t = { c: p[0], r: p[1], key: key, el: el, j: ON_PATH[k], shown: false, svg: null, reg1: inOver(p[0], p[1], OI.challenges) ? OI.challenges : -1 };
       if (key.indexOf("wl:") === 0) { t.svg = document.createElementNS("http://www.w3.org/2000/svg", "svg"); t.svg.setAttribute("preserveAspectRatio", "xMidYMid slice"); inner.appendChild(t.svg); }
       else if (key === "x:start" || key === "x:bridges") {
-        var pa = key === "x:start" ? ["s-girl10", "s-egg13"] : ["f-enter", "f-create"];   // v182: the girl and her tree house, then the egg drop in the park
+        var pa = key === "x:start" ? ["s-girl2h", "s-egg13"] : ["f-enter", "f-create"];   // v182: the girl and her tree house, then the egg drop in the park
         pa.forEach(function (k2) { var i2 = document.createElement("img"); i2.alt = ""; i2.src = M + k2 + ".jpg"; if (FOCAL[k2]) i2.style.objectPosition = FOCAL[k2] + "% 50%"; inner.appendChild(i2); });
         t.first = inner.firstChild; t.second = inner.lastChild;
         if (key === "x:start") t.second.style.opacity = "0"; else t.second.style.transform = "translateY(100%)";
@@ -4020,14 +4054,14 @@ var DRAW = {
     var L = null, dpr = 1, DPX = 1, BR = null;
     function snap(v) { return Math.round(v * DPX) / DPX; }
     function layout() {
-      var vw = hero.clientWidth, vh = hero.clientHeight;
+      var vw = stageEl.clientWidth, vh = hero.clientHeight;   // v186: the stage: the main column on laptops
       if (!vw || !vh) return;
-      var gut = clamp(vw * 0.05, 20, 64), portrait = vw / vh < 0.8;
+      var portrait = vw / vh < 0.8, gut = portrait ? clamp(vw * 0.05, 20, 64) : 20;   // v186: on laptops the column is the frame: a phone's margin
       var W = Math.min(vw - 2 * gut, 1280 - 2 * gut), H = portrait ? W * 1.25 * 1.3 : W * 9 / 16;
       var maxH = vh - 2 * 76 - 16;                              // clear of the bar on short screens
       if (H > maxH) { H = maxH; if (!portrait) W = Math.min(W, H * 16 / 9); }
       // the gap between columns puts the rectangles beside a zoomed one off screen; rows take the same gap
-      var gap = (vw - W) / 2 + 24, cols = portrait ? 3 : 5;
+      var gap = (vw - W) / 2 + 24, cols = 3;   // v187: three rectangles wide as the grid rises, on laptops too
       W = Math.round(W); H = Math.round(H); gap = Math.round(gap); if ((H + gap) % 2) H -= 1;   // whole pixels, rows an even height (for the half step)
       var px = W + gap;
       L = { vw: vw, vh: vh, W: W, H: H, px: px, py: H + gap, gut: gut, sG: 1.06 * vw / (cols * px), portrait: portrait };
@@ -4206,12 +4240,14 @@ var DRAW = {
       var ws = [];
       item.line.split("\n").forEach(function (ln, li) { ln.split(" ").forEach(function (w, wi) { ws.push({ s: w, br: li > 0 && wi === 0 }); }); });
       var acc = item.acc === -2 ? ws.length - 1 : item.acc;
-      return ws.map(function (w, i) { return { s: w.s, br: w.br, c: i === acc ? ORANGE : WHITE }; });
+      var out = ws.map(function (w, i) { return { s: w.s, br: w.br, c: i === acc ? ORANGE : WHITE }; });
+      if (item.dot) out.push({ s: ".", c: ORANGE, glue: true });   // v185: an orange full stop, with no space before it
+      return out;
     }
     // wrapped to the rectangle, bottom-aligned, left-aligned
     function placeWords(ws, o, x0, maxW, yBottom, lh) {
       var sp = measure(" ", o), x = 0, line = 0, pos = [];
-      ws.forEach(function (w) { var wd = measure(w.s, o); if (x > 0 && (w.br || x + wd > maxW)) { line++; x = 0; } pos.push({ x: x0 + x, line: line }); x += wd + sp; });
+      ws.forEach(function (w) { var wd = measure(w.s, o); if (w.glue && x > 0) x -= sp; else if (x > 0 && (w.br || x + wd > maxW)) { line++; x = 0; } pos.push({ x: x0 + x, line: line }); x += wd + sp; });
       pos.forEach(function (p) { p.y = yBottom - (line - p.line) * lh; });
       return { pos: pos };
     }
@@ -4367,14 +4403,14 @@ var DRAW = {
       var size = base * Math.min(1, (L.vw - 2 * L.gut) * 0.96 / widest), o = fontAt(size), lh = size * 1.14, lift = size * 1.42;
       var y1 = L.vh / 2 - lh / 2 + size * 0.36, y2 = y1 + lh, cx = L.vw / 2;
       // v176: the climax, bigger: "Learn to" / "Wonder"
-      var o1 = fontAt(100), fitC = (L.vw - 2 * L.gut) * 0.96 / Math.max(measure("Learn to", o1), measure("Wonder", o1)) * 100;
+      var o1 = fontAt(100), fitC = (L.vw - 2 * L.gut) * 0.96 / Math.max(measure("Learn to", o1), measure("Wonder.", o1)) * 100;
       var sizeC = Math.min(base * 1.25, fitC), oC = fontAt(sizeC), lhC = sizeC * 0.98, liftC = sizeC * 1.42;   // v177: smaller, lines closer
       var y1c = L.vh / 2 - lhC / 2 + sizeC * 0.36, y2c = y1c + lhC;
-      var wLT = measure("Learn to", oC), wWon = measure("Wonder", oC);
+      var wLT = measure("Learn to", oC), wWon = measure("Wonder.", oC);   // v185: with its orange full stop
       // line 1: "Explore", rolling out at the climax as "Learn to" rolls in; cut away as "Wonder" becomes the frame
       rollLetters("Explore", WHITE, cx - measure("Explore", o) / 2, y1, o, t, st.lIn, st.climax, 0.3, 0.02, lift, 1);
       var gLT = 1 - seg(eio(seg(t, M0, M1)), 0, 0.35);   // v177: it fades out, in place, as the orange frame fades in
-      if (t >= st.climax && gLT > 0) rollLetters("Learn to", WHITE, cx - wLT / 2, y1c, oC, t, st.climax + 0.08, null, 0.34, 0.025, liftC, gLT);
+      if (t >= st.climax && gLT > 0) rollLetters("Learn to", WHITE, cx - wLT / 2, y1c, oC, t, st.climax + 0.08, null, 0.17, 0.0125, liftC, gLT);   // v185: 2x faster
       // line 2: the subjects, each in at its turn and up and out at the next, a little faster each time; the letters
       // follow each other closely (v176: a smaller lag), so each can still be read
       var s0 = st.lIn + 0.35;
@@ -4389,9 +4425,9 @@ var DRAW = {
       var xW = cx - wWon / 2, k = eio(seg(t, M0, M1));
       if (k < 1) {
         var ga = 1 - seg(k, 0.12, 0.55);
-        if (t < M0) rollLetters("Wonder", ORANGE, xW, y2c, oC, t, st.climax + 0.12, null, 0.34, 0.03, liftC, 1);
+        if (t < M0) rollLetters("Wonder.", ORANGE, xW, y2c, oC, t, st.climax + 0.1, null, 0.17, 0.015, liftC, 1);
         else if (ga > 0) { ctx.save(); var cy0 = lerp(y2c - sizeC * 0.35, L.vh / 2, k), sc = lerp(1, 0.6, k); ctx.translate(cx, cy0); ctx.scale(sc, sc); ctx.translate(-cx, -(y2c - sizeC * 0.35));
-          drawWord({ s: "Wonder", c: ORANGE }, xW, y2c, oC, ga, [-1e4, 1e4]); ctx.restore(); }
+          drawWord({ s: "Wonder.", c: ORANGE }, xW, y2c, oC, ga, [-1e4, 1e4]); ctx.restore(); }
       }
       if (t < M0) return;
       var q = BR.ms * 100 / 144, sw = BR.ms * 9 / 144, rr = BR.ms * 3 / 144;
@@ -4442,7 +4478,7 @@ var DRAW = {
       // the glide: a pure scale into the bar's logo
       var q = eio(seg(te, 3.1 * BK, B_END)), tx = left, ty = top, sc = 1;
       if (q > 0 && headBrand) {
-        var hs = headBrand.querySelector("svg"), hr = (hs || headBrand).getBoundingClientRect(), r0 = hero.getBoundingClientRect();
+        var hs = headBrand.querySelector("svg"), hr = (hs || headBrand).getBoundingClientRect(), r0 = stageEl.getBoundingClientRect();
         tx = lerp(left, hr.left - r0.left, q); ty = lerp(top, hr.top - r0.top, q); sc = lerp(1, hr.width / BR.ms, q);
       }
       brandEl.style.transform = "translate(" + tx.toFixed(1) + "px," + ty.toFixed(1) + "px) scale(" + sc.toFixed(4) + ")";
@@ -4491,7 +4527,7 @@ var DRAW = {
         tl.el.style.opacity = a.toFixed(3);
         var ddy = y - y0;
         tl.el.style.transform = Math.abs(ddy) > 0.5 ? "translateY(" + (ddy / s).toFixed(1) + "px)" : "";
-        if (tl.scrim) tl.scrim.style.opacity = (tl.isB ? 0 : tl.photo ? 1 : textA(tl.j, t)).toFixed(3);   // the blue foot belongs to the line: it rides with the rectangle (v181: a studio photo keeps it always)
+        if (tl.scrim) tl.scrim.style.opacity = (tl.isB ? 0 : tl.photo || (tl.j === 0 && t >= LEA[0]) ? 1 : textA(tl.j, t)).toFixed(3);   // the blue foot belongs to the line: it rides with the rectangle (v181: a studio photo keeps it always)
         if (tl.svg && !tl.isB) live.push(tl);
       });
       // the rectangle in focus plays its challenge; in and around an overview every challenge on screen plays, one
