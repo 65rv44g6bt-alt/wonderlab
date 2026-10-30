@@ -3798,11 +3798,11 @@ var DRAW = {
     var DIAG = Object.keys(WLS).map(function (k) { return "wl:" + k; });
     var PHOTO = ["s-girl2", "s-airport2", "s-girl3", "s-group2", "s-facade1", "s-girl9", "s-boy2", "s-boy3", "s-girl8", "s-girlfoil", "s-group8"];
     // the studio photos come in sets of the same scene (the girl and her tree house, the boy and his table): never two of a set side by side
-    var SETS = { "s-girl2": "tree", "s-girl3": "tree", "s-girl9": "tree", "s-girl8": "tree", "s-girl10": "tree", "s-girl2h": "tree", "s-boy27c": "tree", "s-boy2": "boy", "s-boy3": "boy", "s-boy27b": "tree" };
+    var SETS = { "s-girl2": "tree", "s-girl3": "tree", "s-girl9": "tree", "s-girl8": "tree", "s-girl10": "tree", "s-girl2h": "tree", "s-boy27c": "tree", "s-boy27": "tree", "s-boy2": "boy", "s-boy3": "boy", "s-boy27b": "tree" };
     function setOf(k) { return SETS[k] || k; }
     var NATURE = ["b-honeycomb", "b-mud", "b-succulent", "b-wing", "b-urchin", "b-roots", "b-aloe", "b-tensile", "b-tent", "b-stairs", "b-nautilus", "b-magnolia"];   // v174: the southern magnolia leaf, white lines on the blue, for the leaf veins
     // where the child is across each studio photo (%), for the tall rectangles on phones; the rest stay centred
-    var FOCAL = { "s-girl2h": 82, "s-boy27c": 46, "s-girl10": 70, "s-egg13": 60, "s-fractal10": 52, "s-boy27b": 50, "s-girl2": 72, "s-girl3": 78, "s-girl9": 66, "s-boy2": 75, "s-boy3": 74, "s-girl8": 80, "s-girlfoil": 64, "s-group8": 50, "s-group2": 60, "s-airport2": 63, "s-facade1": 83 };   // airport2: the two on the right; facade1: the tower   // girl3: her scale model; group2: the boats; girl8: the tree house
+    var FOCAL = { "s-fractal12": 52, "s-boy27": 46, "s-girl2h": 82, "s-boy27c": 46, "s-girl10": 70, "s-egg13": 60, "s-fractal10": 52, "s-boy27b": 50, "s-girl2": 72, "s-girl3": 78, "s-girl9": 66, "s-boy2": 75, "s-boy3": 74, "s-girl8": 80, "s-girlfoil": 64, "s-group8": 50, "s-group2": 60, "s-airport2": 63, "s-facade1": 83 };   // airport2: the two on the right; facade1: the tower   // girl3: her scale model; group2: the boats; girl8: the tree house
 
     // the story, one stop at a time. A rectangle: its picture (c), its move from the one before (mv: D down, B down and
     // right, in running bond), its line (acc: the word in orange, -1 none, -2 the last) and how long it holds once there.
@@ -3814,14 +3814,14 @@ var DRAW = {
       { c: "wl:towers", mv: "D", line: "think like engineers", acc: 0, fit: "like", hold: 1.6 },
       { c: "s-group8", mv: "D", line: "test like scientists", acc: 0, fit: "like", hold: 1.6 },
       { c: "wl:rube", mv: "D", line: "risk like innovators", acc: 0, fit: "like", hold: 1.6 },
-      { c: "s-boy27c", mv: "D", line: "dream like architects", acc: 0, fit: "like", hold: 1.6 },
+      { c: "s-boy27", mv: "D", line: "dream like architects", acc: 0, fit: "like", hold: 1.6 },
       { over: 3, fill: "challenges", alpha: 0.6, line: "Through design challenges led by an award-winning architect", acc: -1, hold: 3.0,
         next: { line: "building confidence, creativity and the courage to bring ideas to life.", acc: -1 }, hold2: 3.6 },
       { c: "wl:davinci", mv: "B", line: "A bridge with no glue?", acc: -2, hold: 2.2 },
       { c: "wl:egg", mv: "D", line: "Will the eggs survive the fall?", acc: -2, hold: 2.0 },
       { c: "s-boy3", mv: "D", line: "Can a table float?", acc: -2, hold: 1.8 },
       { c: "wl:solar", mv: "D", line: "Can sunlight cook lunch?", acc: 2, hold: 1.6 },
-      { c: "s-fractal10", mv: "D", line: "Flat sheet to 3D fractal?", acc: -2, hold: 1.4 },   // v182
+      { c: "s-fractal12", mv: "D", line: "Flat sheet to 3D fractal?", acc: -2, hold: 1.4 },   // v182
       // the last stop: the nature overview, down and right twice from the fractal (v182; the oven before). "Nature drew it first.", then "Learn"
       // and the challenges' subjects rolling letter by letter, faster and faster, to "Learn to Wonder"; then the grid
       // slides up and away and "Wonder" turns into the logo's orange frame, where the loop starts again
@@ -4062,7 +4062,7 @@ var DRAW = {
       var gap = (vw - W) / 2 + 24, cols = 3;   // v187: three rectangles wide as the grid rises, on laptops too
       W = Math.round(W); H = Math.round(H); gap = Math.round(gap); if ((H + gap) % 2) H -= 1;   // whole pixels, rows an even height (for the half step)
       var px = W + gap;
-      L = { vw: vw, vh: vh, W: W, H: H, px: px, py: H + gap, gut: gut, sG: 1.06 * vw / (cols * px), portrait: portrait };
+      L = { vw: vw, vh: vh, W: W, H: H, px: px, py: H + gap, gut: gut, sG: (vw - 16) / (cols * px - gap), portrait: portrait };
       tiles.forEach(function (t) {
         var s = t.el.style;
         s.left = (t.c * L.px) + "px"; s.top = tileY(t.c, t.r) + "px";
@@ -4408,7 +4408,7 @@ var DRAW = {
       // line 1: "Explore", rolling out at the climax as "Learn to" rolls in; cut away as "Wonder" becomes the frame
       rollLetters("Explore", WHITE, cx - measure("Explore", o) / 2, y1, o, t, st.lIn, st.climax, 0.3, 0.02, lift, 1);
       var gLT = 1 - seg(eio(seg(t, M0, M1)), 0, 0.35);   // v177: it fades out, in place, as the orange frame fades in
-      if (t >= st.climax && gLT > 0) rollLetters("Learn to", WHITE, cx - wLT / 2, y1c, oC, t, st.climax + 0.08, null, 0.17, 0.0125, liftC, gLT);   // v185: 2x faster
+      if (t >= st.climax && gLT > 0) rollLetters("Learn to", WHITE, cx - wLT / 2, y1c, oC, t, st.climax + 0.08, null, 0.255, 0.019, liftC, gLT);   // v188: 1.5x slower than v185
       // line 2: the subjects, each in at its turn and up and out at the next, a little faster each time; the letters
       // follow each other closely (v176: a smaller lag), so each can still be read
       var s0 = st.lIn + 0.35;
@@ -4423,7 +4423,7 @@ var DRAW = {
       var xW = cx - wWon / 2, k = eio(seg(t, M0, M1));
       if (k < 1) {
         var ga = 1 - seg(k, 0.12, 0.55);
-        if (t < M0) rollLetters("Wonder.", ORANGE, xW, y2c, oC, t, st.climax + 0.1, null, 0.17, 0.015, liftC, 1);
+        if (t < M0) rollLetters("Wonder.", ORANGE, xW, y2c, oC, t, st.climax + 0.1, null, 0.255, 0.0225, liftC, 1);
         else if (ga > 0) { ctx.save(); var cy0 = lerp(y2c - sizeC * 0.35, L.vh / 2, k), sc = lerp(1, 0.6, k); ctx.translate(cx, cy0); ctx.scale(sc, sc); ctx.translate(-cx, -(y2c - sizeC * 0.35));
           drawWord({ s: "Wonder.", c: ORANGE }, xW, y2c, oC, ga, [-1e4, 1e4]); ctx.restore(); }
       }
@@ -4510,7 +4510,7 @@ var DRAW = {
       var landing = t < LE, lead = L.topT ? tileY(L.topT.c, L.topT.r) * s + ty : 0;
       var live = [], oa = overA(t), swapT = SET[OI.challenges + 2];
       tiles.forEach(function (tl) {
-        var x = tl.c * L.px * s + tx, y0 = tileY(tl.c, tl.r) * s + ty, dy = landing ? landDY(t, lead, clamp(y0 / L.vh, 0, 1)) : 0, y = y0 + Math.max(0, dy);
+        var x = tl.c * L.px * s + tx, y0 = tileY(tl.c, tl.r) * s + ty, dy = landing ? landDY(t, Math.min(lead, y0), clamp(y0 / L.vh, 0, 1)) : 0, y = y0 + Math.max(0, dy);
         var a = Math.max(alphaOf(t, tl), oa) * (dy < 0 ? 0 : 1);
         if (t >= GX0) a = 0;   // the clean cut at the end
         if (landing && y0 + L.H * s <= 0) a = 0;   // and at the start only what will be on screen rises: nothing above it
