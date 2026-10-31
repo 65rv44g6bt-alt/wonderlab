@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- Preview of the work in progress (branch claude/beautiful-gates-b4wjh0 at 7ade3ef), not the live site: the same page with its media one folder up. Not for search engines. -->
+<!-- Preview of the work in progress (branch claude/beautiful-gates-b4wjh0 at 49404a0), not the live site: the same page with its media one folder up. Not for search engines. -->
 <html lang="en">
 <head>
 <meta charset="utf-8">
@@ -282,9 +282,21 @@ video.is-waiting { opacity: 0 !important; }
 .stage:focus-visible { outline: none; } /* the filled card already marks the chosen stage */
 .stage[aria-selected="true"] { background: var(--navy); border-color: var(--navy); color: var(--on-navy); }
 /* the chosen card is a window onto its stage's still (the same image as the challenge panels, see .paper-green) */
-#stage-tabs .stage:nth-child(1)[aria-selected="true"] { background: url("../media/challenges/leaf-blue-wide.jpg") right top / 200% auto no-repeat, var(--st-0); border-color: var(--st-0); }
-#stage-tabs .stage:nth-child(2)[aria-selected="true"] { background: url("../media/challenges/leaf-green-wide.jpg") right top / 200% auto no-repeat, var(--st-1); border-color: var(--st-1); }
-#stage-tabs .stage:nth-child(3)[aria-selected="true"] { background: url("../media/challenges/leaf-honey-wide.jpg") right top / 200% auto no-repeat, var(--st-2); border-color: var(--st-2); }
+#stage-tabs .stage:nth-child(1)[aria-selected="true"] { background: url("../media/challenges/blur-blue.jpg") right top / 200% auto no-repeat, var(--st-0); border-color: var(--st-0); }
+#stage-tabs .stage:nth-child(2)[aria-selected="true"] { background: url("../media/challenges/blur-green.jpg") right top / 200% auto no-repeat, var(--st-1); border-color: var(--st-1); }
+#stage-tabs .stage:nth-child(3)[aria-selected="true"] { background: url("../media/challenges/blur-honey.jpg") right top / 200% auto no-repeat, var(--st-2); border-color: var(--st-2); }
+/* v190: laptops: the blur pictures with their highlights softened (-d) and a light tint, so white text and lines stay clear */
+@media (min-width: 901px) {
+  body .paper-green { --paper-img: url("../media/challenges/blur-green-d.jpg"); }   /* the laptop versions: their highlights softened */
+  body .paper-blue { --paper-img: url("../media/challenges/blur-blue-d.jpg"); }
+  body .paper-honey { --paper-img: url("../media/challenges/blur-honey-d.jpg"); }
+  body :is(.paper-green, .paper-blue, .paper-honey) { --paper-tint-a: 0.18; }
+  #stage-tabs .stage[aria-selected="true"] { background-image: linear-gradient(rgba(0, 0, 0, 0.14), rgba(0, 0, 0, 0.14)), var(--stage-img) !important; }
+  #stage-tabs .stage:nth-child(1) { --stage-img: url("../media/challenges/blur-blue-d.jpg"); }
+  #stage-tabs .stage:nth-child(2) { --stage-img: url("../media/challenges/blur-green-d.jpg"); }
+  #stage-tabs .stage:nth-child(3) { --stage-img: url("../media/challenges/blur-honey-d.jpg"); }
+  #stage-tabs .stage[aria-selected="true"] { background-size: 100% 100%, 200% auto !important; background-position: 0 0, right top !important; background-repeat: no-repeat !important; }
+}
 .stage[aria-selected="true"] .s-ages, .stage[aria-selected="true"] .s-focus { color: var(--on-navy-soft); }
 .s-ages { font-size: var(--t-1); color: var(--ink-soft); font-weight: 500; }
 .s-name { font-size: var(--t2); font-weight: 500; letter-spacing: -0.03em; line-height: 1.05; }
@@ -382,9 +394,9 @@ video.is-waiting { opacity: 0 !important; }
    the panel shows the real half, fitted to its width from the top, and the selected title's box the mirrored half. The
    clips are drawn in the glass theme straight over it. The stills are already capped for white text like the booking
    light, so the tint is light; a scrim under the text keeps it readable lower down. */
-.paper-green { --paper-img: url("../media/challenges/leaf-green-wide.jpg"); --paper-base: #1F3A1D; --paper-ink: 8, 20, 7; --paper-tint-a: 0.08; }
-.paper-blue { --paper-img: url("../media/challenges/leaf-blue-wide.jpg"); --paper-base: #0E2A4F; --paper-ink: 4, 14, 30; --paper-tint-a: 0.08; }
-.paper-honey { --paper-img: url("../media/challenges/leaf-honey-wide.jpg"); --paper-base: #3E1003; --paper-ink: 30, 8, 0; --paper-tint-a: 0.08; }
+.paper-green { --paper-img: url("../media/challenges/blur-green.jpg"); --paper-base: #1F3A1D; --paper-ink: 8, 20, 7; --paper-tint-a: 0.08; }
+.paper-blue { --paper-img: url("../media/challenges/blur-blue.jpg"); --paper-base: #0E2A4F; --paper-ink: 4, 14, 30; --paper-tint-a: 0.08; }
+.paper-honey { --paper-img: url("../media/challenges/blur-honey.jpg"); --paper-base: #3E1003; --paper-ink: 30, 8, 0; --paper-tint-a: 0.08; }
 .ch-panel.paper-honey, .ch-slide.paper-honey { --orange: #FFD48A; } /* on honey the orange accents turn light gold, as on the booking panel */
 .paper-green, .paper-blue, .paper-honey { --paper-tint: linear-gradient(rgba(var(--paper-ink), var(--paper-tint-a)), rgba(var(--paper-ink), var(--paper-tint-a)));
   --paper-scrim: linear-gradient(180deg, rgba(var(--paper-ink), 0) 0, rgba(var(--paper-ink), 0.34) 26px, rgba(var(--paper-ink), 0.5) 80px, rgba(var(--paper-ink), 0.58) 100%); }
@@ -1125,17 +1137,19 @@ footer { background: var(--deep); color: var(--on-navy-soft); padding: clamp(44p
    v145, shared by the chosen age box and the list and placed from the box's top (plSync in the script), so it runs on
    without a seam. The challenges are separated by a faint rule; text is white. A tap swaps them as in v145 */
 @media (max-width: 900px) {
-  #programme:has(#stage-explorers[aria-selected="true"]) { --pl-img: url("../media/challenges/leaf-blue-wide.jpg"); --pl-base: #0E2A4F; }
-  #programme:has(#stage-creators[aria-selected="true"]) { --pl-img: url("../media/challenges/leaf-green-wide.jpg"); --pl-base: #1F3A1D; }
-  #programme:has(#stage-changemakers[aria-selected="true"]) { --pl-img: url("../media/challenges/leaf-honey-wide.jpg"); --pl-base: #3E1003; }
+  #programme:has(#stage-explorers[aria-selected="true"]) { --pl-img: url("../media/challenges/blur-blue.jpg"); --pl-base: #0E2A4F; }
+  #programme:has(#stage-creators[aria-selected="true"]) { --pl-img: url("../media/challenges/blur-green.jpg"); --pl-base: #1F3A1D; }
+  #programme:has(#stage-changemakers[aria-selected="true"]) { --pl-img: url("../media/challenges/blur-honey.jpg"); --pl-base: #3E1003; }
   #programme .ch-list::before { z-index: -1000; transform: none; border-radius: 0 0 12px 12px;
     background: var(--pl-img) var(--pl-lx, 100%) var(--pl-ly, 0px) / var(--pl-sz, auto 100%) no-repeat, var(--pl-base, #0E2A4F); }
   #stage-tabs .stage[aria-selected="true"] {
     background: var(--pl-img) var(--pl-tx, 100%) 0 / var(--pl-sz, 200% auto) no-repeat, var(--pl-base, #0E2A4F) !important;
-    background-origin: border-box !important; clip-path: none !important; -webkit-clip-path: none !important;
-    border: 0 !important; border-radius: 12px 12px 0 0 !important;
+    background-origin: border-box !important; border: 0 !important;
     position: relative; z-index: 3; color: #FFFFFF; }
-  #stage-tabs .stage[aria-selected="true"]::before, #stage-tabs .stage[aria-selected="true"]::after { display: none !important; }
+  /* v190: its squircle top and the two concave joins at its foot are back (the squircles block), the joins painted from
+     the same picture, offset by where each sits against the box */
+  #stage-tabs .stage[aria-selected="true"]::before { background: var(--pl-img) calc(var(--pl-tx, 100%) + var(--r-tab)) calc(var(--r-tab) - var(--th, 0px)) / var(--pl-sz, 200% auto) no-repeat, var(--pl-base, #0E2A4F) !important; }
+  #stage-tabs .stage[aria-selected="true"]::after { background: var(--pl-img) calc(var(--pl-tx, 100%) - var(--tw, 0px)) calc(var(--r-tab) - var(--th, 0px)) / var(--pl-sz, 200% auto) no-repeat, var(--pl-base, #0E2A4F) !important; }
   #stage-tabs .stage[aria-selected="true"] .s-ages { color: rgba(255, 255, 255, 0.76); }
   #programme .ch-list > li { --strip-ink: #FFFFFF !important; --strip-soft: rgba(255, 255, 255, 0.78) !important; --strip-accent: #FF8A3D !important; }
   #programme .ch-list > li::before { background: none !important; -webkit-mask: none !important; mask: none !important; border: 0 !important;
