@@ -4,18 +4,18 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>WonderLab | Creative &amp; Design Thinking Classes for Kids, HK</title>
-<meta name="description" content="Creative and design thinking classes for kids aged 7–14 in Wan Chai and Mong Kok, Hong Kong. Led by award-winning architect Julien KLISZ.">
+<meta name="description" content="Creative and design thinking classes for kids aged 7–14 in Mong Kok and Wan Chai, Hong Kong. Led by award-winning architect Julien KLISZ.">
 <meta name="theme-color" content="#FFFFFF">
 <!-- the link preview (WhatsApp, iMessage, social apps): edit the title and text here; the image is media/og-3.jpg (1200 x 630) -->
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="WonderLab">
 <meta property="og:url" content="https://wonderlab.page/">
 <meta property="og:title" content="Creative thinking academy">
-<meta property="og:description" content="Wan Chai &amp; Mong Kok&#10;Hong Kong">
+<meta property="og:description" content="Mong Kok &amp; Wan Chai&#10;Hong Kong">
 <meta property="og:image" content="https://wonderlab.page/media/og-3.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="WonderLab, creative thinking academy, Wan Chai &amp; Mong Kok, Hong Kong">
+<meta property="og:image:alt" content="WonderLab, creative thinking academy, Mong Kok &amp; Wan Chai, Hong Kong">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="canonical" href="https://wonderlab.page/">
 <link rel="icon" href="favicon.ico" sizes="48x48">
@@ -47,7 +47,7 @@
   --family: #433A31;     /* parent & child workshops: the tutor's stone (the booking box's colour on wide screens) */
   --st-0: #0E2A4F;       /* stage colours, the flat tones of the booking lights (LEAF_LOOKS): Explorers blue */
   --st-1: #1F3A1D;       /* Creators green */
-  --st-2: #4A1A10;       /* Changemakers sunset (blur-green's light mapped #4A1A10 > #A8452A > #E07A45 > #F3B06A, drawn in code) */
+  --st-2: #4C1E0A;       /* Changemakers orange (blur-orange: blur-green's light mapped #4C1E0A > #BC531C > #EE8635 > #FBBA62) */
   --st-0-line: #2B9BBD;  /* the same hues bright enough to outline a card on white */
   --st-1-line: #5C8F33;
   --st-2-line: #D08A16;
@@ -280,19 +280,19 @@ video.is-waiting { opacity: 0 !important; }
 .stage:focus-visible { outline: none; } /* the filled card already marks the chosen stage */
 .stage[aria-selected="true"] { background: var(--navy); border-color: var(--navy); color: var(--on-navy); }
 /* the chosen card is a window onto its stage's still (the same image as the challenge panels, see .paper-green) */
-#stage-tabs .stage:nth-child(1)[aria-selected="true"] { background: var(--img-blue, none) right top / 200% auto no-repeat, var(--st-0); border-color: var(--st-0); }
-#stage-tabs .stage:nth-child(2)[aria-selected="true"] { background: var(--img-green, none) right top / 200% auto no-repeat, var(--st-1); border-color: var(--st-1); }
-#stage-tabs .stage:nth-child(3)[aria-selected="true"] { background: var(--img-orange, none) right top / 200% auto no-repeat, var(--st-2); border-color: var(--st-2); }
+#stage-tabs .stage:nth-child(1)[aria-selected="true"] { background: url("media/challenges/blur-blue.jpg") right top / 200% auto no-repeat, var(--st-0); border-color: var(--st-0); }
+#stage-tabs .stage:nth-child(2)[aria-selected="true"] { background: url("media/challenges/blur-green.jpg") right top / 200% auto no-repeat, var(--st-1); border-color: var(--st-1); }
+#stage-tabs .stage:nth-child(3)[aria-selected="true"] { background: url("media/challenges/blur-orange.jpg") right top / 200% auto no-repeat, var(--st-2); border-color: var(--st-2); }
 /* v190: laptops: the blur pictures with their highlights softened (-d) and a light tint, so white text and lines stay clear */
 @media (min-width: 901px) {
-  body .paper-green { --paper-img: var(--img-green, none); }   /* the laptop versions: their highlights softened */
-  body .paper-blue { --paper-img: var(--img-blue, none); }
-  body .paper-honey { --paper-img: var(--img-orange, none); }
+  body .paper-green { --paper-img: url("media/challenges/blur-green.jpg"); }   /* the laptop versions: their highlights softened */
+  body .paper-blue { --paper-img: url("media/challenges/blur-blue.jpg"); }
+  body .paper-honey { --paper-img: url("media/challenges/blur-orange.jpg"); }
   body :is(.paper-green, .paper-blue, .paper-honey) { --paper-tint-a: 0.18; }
   #stage-tabs .stage[aria-selected="true"] { background-image: linear-gradient(rgba(0, 0, 0, 0.14), rgba(0, 0, 0, 0.14)), var(--stage-img) !important; }
-  #stage-tabs .stage:nth-child(1) { --stage-img: var(--img-blue, none); }
-  #stage-tabs .stage:nth-child(2) { --stage-img: var(--img-green, none); }
-  #stage-tabs .stage:nth-child(3) { --stage-img: var(--img-orange, none); }
+  #stage-tabs .stage:nth-child(1) { --stage-img: url("media/challenges/blur-blue.jpg"); }
+  #stage-tabs .stage:nth-child(2) { --stage-img: url("media/challenges/blur-green.jpg"); }
+  #stage-tabs .stage:nth-child(3) { --stage-img: url("media/challenges/blur-orange.jpg"); }
   #stage-tabs .stage[aria-selected="true"] { background-size: 100% 100%, 200% auto !important; background-position: 0 0, right top !important; background-repeat: no-repeat !important; }
 }
 .stage[aria-selected="true"] .s-ages, .stage[aria-selected="true"] .s-focus { color: var(--on-navy-soft); }
@@ -392,9 +392,9 @@ video.is-waiting { opacity: 0 !important; }
    the panel shows the real half, fitted to its width from the top, and the selected title's box the mirrored half. The
    clips are drawn in the glass theme straight over it. The stills are already capped for white text like the booking
    light, so the tint is light; a scrim under the text keeps it readable lower down. */
-.paper-green { --paper-img: var(--img-green, none); --paper-base: #1F3A1D; --paper-ink: 8, 20, 7; --paper-tint-a: 0.08; }
-.paper-blue { --paper-img: var(--img-blue, none); --paper-base: #0E2A4F; --paper-ink: 4, 14, 30; --paper-tint-a: 0.08; }
-.paper-honey { --paper-img: var(--img-orange, none); --paper-base: #4A1A10; --paper-ink: 40, 10, 4; --paper-tint-a: 0.08; }
+.paper-green { --paper-img: url("media/challenges/blur-green.jpg"); --paper-base: #1F3A1D; --paper-ink: 8, 20, 7; --paper-tint-a: 0.08; }
+.paper-blue { --paper-img: url("media/challenges/blur-blue.jpg"); --paper-base: #0E2A4F; --paper-ink: 4, 14, 30; --paper-tint-a: 0.08; }
+.paper-honey { --paper-img: url("media/challenges/blur-orange.jpg"); --paper-base: #4C1E0A; --paper-ink: 42, 14, 2; --paper-tint-a: 0.08; }
 .ch-panel.paper-honey, .ch-slide.paper-honey { --orange: #FFD48A; } /* on honey the orange accents turn light gold, as on the booking panel */
 .paper-green, .paper-blue, .paper-honey { --paper-tint: linear-gradient(rgba(var(--paper-ink), var(--paper-tint-a)), rgba(var(--paper-ink), var(--paper-tint-a)));
   --paper-scrim: linear-gradient(180deg, rgba(var(--paper-ink), 0) 0%, rgba(var(--paper-ink), 0.4) 100%); }   /* clear at the top of the text, 40% dark at its foot (the skill) */
@@ -469,11 +469,8 @@ video.is-waiting { opacity: 0 !important; }
   #programme:has(#stage-tabs .stage:last-child[aria-selected="true"]) .challenges { border-top-right-radius: 0; }
   /* the paper starts at the top of the age boxes (--pd above the block); the photo (214vw tall at this width) fades
      into its base colour where the list runs on below it */
-  .challenges.is-paper { background: var(--paper-tint), linear-gradient(180deg, transparent calc(var(--pp-s, 2) * 107vw - var(--pd, 0px) - 300px), var(--paper-base) calc(var(--pp-s, 2) * 107vw - var(--pd, 0px))),
-    var(--paper-img) calc(var(--pp-x, -1) * var(--pw, 100vw)) calc(-1 * var(--pd, 0px)) / calc(var(--pp-s, 2) * var(--pw, 100vw)) auto no-repeat, var(--paper-base); }
-  /* Changemakers: the paper laid smaller and further right, so its glow (top left) to its deep red (bottom right) shows
-     across the block, as on laptops */
-  .challenges.is-paper.paper-honey { --pp-s: 1.1; --pp-x: -0.1; }
+  .challenges.is-paper { background: var(--paper-tint), linear-gradient(180deg, transparent calc(214vw - var(--pd, 0px) - 300px), var(--paper-base) calc(214vw - var(--pd, 0px))),
+    var(--paper-img) calc(-1 * var(--pw, 100vw)) calc(-1 * var(--pd, 0px)) / calc(2 * var(--pw, 100vw)) auto no-repeat, var(--paper-base); }
   .ch-panel-slot { list-style: none; margin: 0 -20px; } /* the animation above the chosen title, its text below */
   .ch-body-slot { list-style: none; }
   .ch-body-slot .ch-kind, .ch-body-slot #ch-title { display: none; } /* the chosen title in the list is the title */
@@ -699,14 +696,6 @@ video.is-waiting { opacity: 0 !important; }
   .tutor-body .t-intro p, .tutor-body .t-strip li > span, .tutor-body .highlights li.t-strip > span { color: var(--t-soft); }
   .tutor-body .t-strip .dot { color: var(--orange); }
   .tutor-body .highlights a { text-decoration-color: var(--orange); }
-  /* v204: one paper for the whole text (the tutor's stone, drawn in code as the programme's papers, --img-stone), coming
-     in under the photo's fade over its first 64px; the strips' own papers and torn feet are off, thin lines between */
-  .tutor-body::before { content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none;
-    background: var(--img-stone, none) right top / 200% auto no-repeat, #29221A;
-    -webkit-mask: linear-gradient(transparent, #000 64px); mask: linear-gradient(transparent, #000 64px); }
-  .tutor-body .t-strip::before, .tutor-body .t-strip::after, .tutor-body .highlights li.t-strip::before, .tutor-body .highlights li.t-strip::after { display: none !important; }
-  .tutor-body .t-strip { --t-ink: #F4EFE8 !important; --t-soft: rgba(244, 239, 232, 0.78) !important; }
-  .tutor-body .highlights li.t-strip { border-top: 1px solid rgba(244, 239, 232, 0.14); }
 }
 @media (max-width: 520px) { .highlights { grid-template-columns: 1fr; } }
 
@@ -849,13 +838,6 @@ video.is-waiting { opacity: 0 !important; }
 .book-panel.has-light { --on-navy-soft: rgba(255, 255, 255, 0.78); }
 .book-panel.has-light .bp-kind, .book-panel.has-light .bp-seats b, .book-panel.has-light .bp-row small b { text-shadow: 0 1px 10px rgba(0, 0, 0, 0.45); }
 .book-panel.look-honey, .book-panel.look-family { --orange: #FFD48A; }
-@media (min-width: 901px) { #stage-tabs .stage[aria-selected="true"], #stage-tabs .stage[aria-selected="true"]:hover { border-color: transparent !important; } }
-#stage-tabs .stage[aria-selected="true"], .book-panel { background-origin: border-box !important; }   /* v205: the paper reaches under the 1px border: no dark hairline along the top */   /* the chosen box: no outline */
-/* an age group's booking panel wears its programme box: the same paper, placed and shaded as the chosen box on laptops */
-.book-panel.look-blue:not(.has-strips) { background: linear-gradient(rgba(0, 0, 0, 0.14), rgba(0, 0, 0, 0.14)), var(--img-blue, none) right top / 200% auto no-repeat, var(--st-0); }
-.book-panel.look-green:not(.has-strips) { background: linear-gradient(rgba(0, 0, 0, 0.14), rgba(0, 0, 0, 0.14)), var(--img-green, none) right top / 200% auto no-repeat, var(--st-1); }
-.book-panel.look-honey:not(.has-strips) { background: linear-gradient(rgba(0, 0, 0, 0.14), rgba(0, 0, 0, 0.14)), var(--img-orange, none) right top / 200% auto no-repeat, var(--st-2); }
-.book-panel:is(.look-blue, .look-green, .look-honey) .bp-light { display: none !important; }
 .bp-kind { font-size: var(--t0); font-weight: 500; color: var(--orange); }
 .bp-title { margin-top: 6px; font-size: var(--t2); }
 .bp-title span { white-space: nowrap; } /* a line may break after the date, never inside the hours */
@@ -1124,9 +1106,6 @@ footer { background: var(--deep); color: var(--on-navy-soft); padding: clamp(44p
   background-color: #186371;
   background-size: 256px 256px, cover; background-position: 0 0, center; background-repeat: repeat, no-repeat;
 }
-/* tall screens (phones): "cover" would show only the field's middle column; instead its full width and the same band
-   of its height a laptop shows (58%), so the teal on the left, the blue on the right and the deep corner all come along */
-/* v213: as in v199, "cover" on every screen (phones show the field's middle column) */
 .hg-stage { position: absolute; inset: 0; }
 /* v186: laptops: the animation keeps to the main column (the blue stays full width), its grid as tight as on phones */
 @media (min-width: 901px) { .hg-stage { left: 0; right: 0; width: calc(min(var(--max), 100%) - 2 * var(--gutter)); margin: 0 auto; overflow: hidden; } }
@@ -1159,11 +1138,6 @@ footer { background: var(--deep); color: var(--on-navy-soft); padding: clamp(44p
 
 /* v166: the overviews' veil, under their words */
 .hg-veil { position: absolute; inset: 0; pointer-events: none; opacity: 0; background: radial-gradient(ellipse 50% 34% at 50% 50%, rgba(20, 47, 68, 0.74) 0%, rgba(20, 47, 68, 0.5) 50%, rgba(20, 47, 68, 0) 100%); }   /* v167: only behind the words, so the rectangles keep their strength */
-   /* v217: 30% */
-/* v219: each block's dark layer while the subjects run over the nature pictures (--nd, 0..1, set by the animation) */
-.hg-in::after { content: ""; position: absolute; inset: 0; z-index: 2; border-radius: inherit; pointer-events: none; background: rgba(4, 16, 24, 0.35); opacity: var(--nd, 0); }
-/* and their white outlines dimmed by the same 35% (the same dark mixed in) */
-.hg-tile { box-shadow: 0 0 0 calc(var(--hl, 0.5px) / var(--hs)) color-mix(in srgb, #FFFFFF calc(100% - 35% * var(--nd, 0)), rgb(4, 16, 24)); }
 .hg-text { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
 /* the ending: the logo and the name, in the bar's proportions, so the glide into the bar is a pure scale */
 .hg-brand { position: absolute; left: 0; top: 0; display: none; align-items: center; white-space: nowrap; transform-origin: 0 0; pointer-events: none; color: var(--on-navy); }
@@ -1190,9 +1164,9 @@ footer { background: var(--deep); color: var(--on-navy-soft); padding: clamp(44p
    v145, shared by the chosen age box and the list and placed from the box's top (plSync in the script), so it runs on
    without a seam. The challenges are separated by a faint rule; text is white. A tap swaps them as in v145 */
 @media (max-width: 900px) {
-  #programme:has(#stage-explorers[aria-selected="true"]) { --pl-img: var(--img-blue, none); --pl-base: #0E2A4F; }
-  #programme:has(#stage-creators[aria-selected="true"]) { --pl-img: var(--img-green, none); --pl-base: #1F3A1D; }
-  #programme:has(#stage-changemakers[aria-selected="true"]) { --pl-img: var(--img-orange, none); --pl-base: #4A1A10; }
+  #programme:has(#stage-explorers[aria-selected="true"]) { --pl-img: url("media/challenges/blur-blue.jpg"); --pl-base: #0E2A4F; }
+  #programme:has(#stage-creators[aria-selected="true"]) { --pl-img: url("media/challenges/blur-green.jpg"); --pl-base: #1F3A1D; }
+  #programme:has(#stage-changemakers[aria-selected="true"]) { --pl-img: url("media/challenges/blur-orange.jpg"); --pl-base: #4C1E0A; }
   #programme .ch-list::before { z-index: -1000; transform: none; border-radius: 0 0 12px 12px;
     background: var(--pl-img) var(--pl-lx, 100%) var(--pl-ly, 0px) / var(--pl-sz, auto 100%) no-repeat, var(--pl-base, #0E2A4F); }
   #stage-tabs .stage[aria-selected="true"] {
@@ -1247,7 +1221,7 @@ footer { background: var(--deep); color: var(--on-navy-soft); padding: clamp(44p
 <main id="main">
 
 <section class="hero hg" id="top" aria-label="WonderLab">
-      <h1 class="hg-sr">Welcome to WonderLab, a creative thinking and design academy in Hong Kong where young minds think like engineers, experiment like scientists, dare like innovators, and dream like architects. Led by an award-winning architect. Our design challenges build creativity, confidence, and the courage to bring ideas to life.</h1>
+      <h1 class="hg-sr">We&rsquo;re WonderLab, a creative thinking academy in Hong Kong where young minds take on meaningful design challenges that build confidence, creativity and the courage to bring ideas to life.</h1>
       <div class="hg-stage" aria-hidden="true">
         <div class="hg-world" id="hg-world"></div>
         <canvas class="hg-text" id="hg-text"></canvas>
@@ -1259,8 +1233,9 @@ footer { background: var(--deep); color: var(--on-navy-soft); padding: clamp(44p
     </section>
 <script>
 /* the hero's ground (see .hero.hg): blur-blue02's colour field, 24 x 26 cells (cell averages), drawn to a 240 x 260 canvas
-   by Catmull-Rom interpolation, then set under a grain tile. Its top-left corner is taken down to the same blue as its bottom left (v194) and its
-   bottom-right corner settles into the deep blue of the challenge panel (#1B3446, v196): v199's field, back in v212 */
+   by Catmull-Rom interpolation, then set under a grain tile. Its top-left corner is taken down to the same blue as its
+   bottom left (each column's lower colour, mirrored and blended in), so the logo sits on blue; the bottom-right corner
+   settles into the deep blue of the challenge panel's right side (#1B3446), softly */
 (function () {
   var el = document.getElementById("top"); if (!el) return;
   var GW = 24, GH = 26, G = "03556a04546a07536a0a556a10576c155c701c63742369782a707b2d757e2f7b802f7e812c7f81287e811f7a7f19727b0e6b770a6573065e70045a6c03556a035169024c65014763035b6e05596c07576d0a576d0e596e135c701961741f6777236d7927727c28757e28787f277a8022797f1c757d136e780c6876096270065c6e05586b03556a025068024b64014762066172075e70085c6e0b5b6e0d5c6f115e711661741a65761f6a78226e7b24727c23737e20747e1d737c176f7a106b780c6674086170065b6d05576b035469034f68024a640146630d68760a65730a61720b60710d5f711160711362731764751c67771e6b791f6d7a1d6f7b1b707a176f7a136c790f69770c6573085f70075a6d05576b03536a034e67024a6501466213707a126c780e68750d65740d63731063731363741565751866771968781a6a79196c7a176c79156b781169780f67750a6371085e70075a6c05566b045169034d660249650345621c787e17737c146f7a106b770e69750f66751165751365751565761766771867771768781768771468771166750e6472096071085b6e08586d05546a045069034c670348660345622581831f7a801a757d14717a106d790f69761066761165761365761665761665771665761566761365751064740e61730b5d6f0a596d07556b06526a044e68044b67054767054563328e8b298686217e821a787e14727c116e7a0f6a771167771166771465771565761465751363741263731060720f5d710c5b6e09576c08536a055069044c68054967064765074461419a9233918c2786861e7f8217777e12717b0f6e7a106a78126877126677136575136375136273136173115d710e5c6f0d596e0b556b07526a064e68054b670749660846640743604aa29738968f288b881e8284167a8010737c0f6f7a0f6b79116977116777116475126374136074125e72115d71105a6f0d576d0a546b095169084d67084b6508486309456107425d4ba599389890288c881c8384147a800d737d0f6f7b106b7a116978106776116475136273135f73135e72115c7010596f0f566c0d536a0c50670d4e660c4a640c48610b455e0a415b48a39734968e258c8819818411797f0c737c0e6e7a0f6b79106977106675126374136173145e72135d71135a6f12576d11556c10546a115167104f650f4c630e49600c455d0c4259409f9330938c238987177f8310787e0c717b0d6d79106a78106776106575126273136072145d71135a6f14586e13576d14556a155468155266145065124d61114a5e10465b0d42583a9a912d918a228886187e8211767d0d707b0e6d780f6977106675116374136172155e70145b7015596f15576c17566a185469185267185165164f63144c6115495e13465b11435836978e2b8f89228685187d8111757d0e707a0e6c770f68760f6574116172135f71145c6f165a6e17576b18566b195469195366195264194f62194d60174a5e17485a15455714425433958d2a8d88218484197c8013757c0f6f790e6a770e65750f6273126071145c6e155a6d17586c19566a1954671a53661b51631b50621b4d5f1a4a5c19475a18455717425516405232928b298a872082831a7a7f14747b0e6d780d68760d63730f5f70125d6f13596d16586b1855691954671b53651c52631c50601c4d5e1b4a5b1a47581a4456194153183e50183c4e308e892787861f7e8219777e1270790e6a760c65740d6071105c6f115a6e12566b16556a1854671b53641b52621c50601c4e5e1c4b5c1b47581a43551a40521a3e4f193b4d18394b2b89872381831c797f16727b0f6c780c66750a61710d5c6f0e596d10566b1454691653681952651b51621c50611c4f5f1c4c5d1c495a1b45561b42531a3e50193b4d19394b19384a2481831d797f17737c106d780b67750961710a5c6f0b586d0d566b11536a1351671750661950631b4f611c50601d4e5e1c4b5b1c48591b44551a40521a3d4f1a3a4c19384a1937481c787e16727b116c780b6774086271085c6f08586c0a556b0d5269115068144e65164e63194d601a4e5f1b4e5e1c4c5d1b4a5a1b47571a44541a40511a3c4e193a4c19384a19364813707a106b770a6573076071065b6e07576c08546a0952680d4f67104e66134d63154d62184c60194d5e1b4c5d1b4b5c1c4a581b46561a43541a4051193d4e193a4c1837491736480d6876086472065e70055a6d05566b065369065168084e670d4d65104d64124b62144a60164a5e194a5c1a4a5c1b4a5a1b48581b45551a4253193f50183c4e17394b163649163447066172055d6f04596c04556a045269044f68064d67094c660c4b640f4b63114a6012495e15485c17475a1947591a47581a4456194354194052173d4f163a4d15384b143548133346035b6e03576b03536a035068034e67044c65064b65094a650b4a620e496110475e11465d13455a154357174256184254174053173e50163c4f153a4e14384c14354a12334711304503556a025269024f67024d65034a640349640549630748630a48600b465e0d455c0f4359114157143f54143f53143d50153b4e153a4d15394c13374b1235491132481030450f2d43", C = [];
@@ -1295,56 +1270,6 @@ footer { background: var(--deep); color: var(--on-navy-soft); padding: clamp(44p
   nx.putImageData(ni, 0, 0);
   el.style.backgroundImage = "url(" + nv.toDataURL() + "), url(" + cv.toDataURL() + ")";
   window.WL_HG = { ground: cv, grain: nv };   // for the glow under the hero's words
-})();
-</script>
-<script>
-/* the programme's three papers (Explorers blue, Creators green, Changemakers orange), drawn in code like the hero's
-   ground: each colour field is 24 x 26 cells (sampled from the old blur pictures), drawn smoothly by Catmull-Rom to
-   240 x 260, laid out at 1200 x 1287 with a grain (about 3.2 colour levels, in grains of about 1.5px),
-   and handed to the page as --img-blue, --img-green and --img-orange, where the pictures were. Until then (or without
-   canvas) each paper shows its flat base colour */
-(function () {
-  var F = { blue: "66a39d5d9b98569493529090508e8f4f8f8f5091915192915093924d92914a928f46908d418c8a3b88873381832d787d266f792168741d61701b5d6d1a586b185469164f66144a6463a29c5b99965291914b8b8d49898c488a8c478a8d478b8d468c8c448b8c418a8b3e89893a8687368184307b8029737b236b772065721d5f6f1b5b6c19576a185368164e65144a6463a29c5a9896508f8f48898b4386894186884086893f86883e85883d85883b8488388286347f84307b812b757d266f792269751f63711d5e6e1b5a6b19566a185268164d6514496465a39d5a9a974e909044898b3f85873c83863b82863a8186398086377f85357e84327c822f7a802b757e28717b256d782268741e62701d5d6e1b596b19556a185168164d6614496368a79f5b9d994d9290438a8a3c8586388285377f84357e84337c83317a822f78802e777f2b747e29717c266e79246a762065721e60701c5c6d1b586b195469185067164c661548636baba25b9f994c9490408b89398486368084337c83317a812f78802e767f2d747e2b727d29707b276d79256a762267732062721e5e6f1c5a6c1a566a195269184f68174b661648636bada25aa09949948f3d8a88368385327e832f7a802d777f2b747e2c727d2a707c296e7b286c792669772467752163731f5f701e5b6d1b586b1a546a195168184e68184a6717486469ada1569f9745928d3a88863382842e7b812b767e2a737d29707c296e7b286c79276b782668762466742363732260711f5d6f1d596c1b556a1a5269194f69184c68184a6618476364aba0519d9440908b378785307f822b787e29747c28707b286e7a276c78266a77266775256574246374236072215d701f5b6e1d576b1b546a1a5068194e68194c671949651746625da89c4b99913c8d893384842d7c8028767c27717a266e7a266c78256976256775256574256274246173235f71225c6f1f596d1d576b1c53691b50681a4e66194b6519486317455f57a39846968f398b873082822b7a7e26747c267079266d79266a77256875256674256473246172245f71235e70215b6f20596d1f566b1d54691d51671b4e651b4c6319496118455e509e9441928c3788852e7f8129787d25737a256f78256c78256976246774256473256372256072245f71235c6f235a6e22596d21576b2054691f53671e51661c4e631a4a6019465d499a903e908a3587842d7e8028777c25717a246e77256b77256875246674256372256171245f71245d70245b6f235a6e23596c23586a2257692155682053661d50631c4c6119485d45968e3c8e883485842d7d8028767b257179256e77256a76246774246473256272256070245e70245c6f245b6d255a6c25596c25586b25586a2356682255682052651e4e621b4b5f42938c3a8b863484832d7c7f28757b257078246d76246975236674246372246170245e6f255d6e255b6d265a6c26596c26596a26596a2558692457682356672253641f50621d4c5e40918a3a8a853382822d7b7e29757b256f77246b75236774236372246171245f6f245d6e255b6d265a6c26596a27596a27596a2759692758682657672556662354642151621e4d5f3f8e893987843280812d797d29737a256e77236875226472226170235f6f235c6d245b6c26596b26596a2759692859682859682758672657662656652455652352632150601e4c5d3e8b87378483317d7f2c767c277078246b75226673216170225e6f225c6e22596c24586b25586a275868275867275867275867275766265565255464245363235161204e5e1e4a5b3a8684347f802e797d297279256d76226774206270205d6f205b6d21586c22576a245669255667265666275666275766285766275765265564255363235161214f5f1f4b5c1d47583480812f797d2a737a266d772268742063711f5e6f1f5a6d1f586b21556a225468245467255466265565275665285665285665275564255362245261224f5f214c5c1f48591d44552e787c2a7279266d772268741f63711e5e6f1d5a6c1d576b1e5469205268215266235265245263255363265463275564265463255362255161244f5f224c5c20495a1e45561b4052287078256b762167731f62701d5d6e1c596c1c566a1c54681d51671f516720506522506423506324526225526226536225525f25515e244e5e224c5c21495a1f45561c4052193c4f2369752065721e606f1c5c6d1b586b1a55691a53681b51681d50661e4f651f4e63214e63214e61244e60244f60254f5f254f5e244d5c234b5b2148591f45561d41531a3c4f18384c1e63711d5f6f1b5b6c1a576b1954691952681a50681b4f671c4e651d4e641e4d621f4c61204c5f224b5d234b5d234c5c234a5a2249592146581f44561d40531a3d5118384d1635491b5c6d1a596b19556a195369175167184e66194e661a4d651b4d631c4c621d4a601d495f1e485c1f475a2046592146582044571f43551e41541c3f531b3c5119394e16354a14314719576a185469175167174f66164d65164c65184c64194b641a4b621a49601b485e1b465c1c44591d42571d42551d40531d3f521d3e511c3d501a3b4f19384d17364b153248132e45", green: "a2bf659ebc639cba619bb95f9ab75a97b55597b35096b14c95b04993ae458fab418ca73e86a33b809e397998377091346688315d802d55792e4e732d476d2d40682b3b622a375e289ebb639bb96198b65e94b25990af538eac4e8dab488ca9448aa74188a53d84a23b809e397c9b377696357091346889325f822e587b2d52752c4c702d456c2d41672b3c622a375e289ab76195b45d90af598aaa5286a64b84a34582a240819f3d7f9e3a7d9c387a99377696357292356d8f3367893160832e5a7d2e54762d4d712c486d2d43692c40662c3b622a375e2996b35e8fad5987a75281a24a7c9d437a9a3d78983a7796387695367393357091346d8e33698b336587316083305b7e2f55782e4f732d4a6f2d466b2d41672c3d642c39602a355c2992ae5a8aa754809f4b79994373943c6f90386d8e366c8d346b8c33698b336789326587306284305e81305b7e3056792f51752f4d712e486c2e43692d3f662d3b622c375e2b335a298faa5784a04e79974570903c6b8b3667873364853162833061833060822f5f812f5e80305c7f315a7c305679305276304e72304a6e30456b2e41672d3d642d395f2c345b2b3057298ca5547f9a4973903e6988366382325e7e305b7b2e597a2e597a2e597b2e587a2f57792f56792f5477305175304f73314c7031486d3043692d3f662d3a612c365d2b32592a2d542889a24f7a95436e8a396382335c7c3057772d53742b52732b51732b51742c50742d50732e50732f5073304f72314e71324c6e31486c2f43682e3e642d395f2c345b2c30572a2d5329859e4b76913e6986355e7d3056762d50722a4d6e2a4b6d294a6d294a6d2b4a6d2c4a6d2d4b6e2f4c6e304d6f314d6f324b6d31486a2f43672f3d622d385e2b335a2b2f562a2b5128839c47738e3a6683325b7a2f52722a4d6d2a486a28476a2946682945682a45682b46692c476a2e496b2f4a6c304a6c30496b3046682f41652e3c612d375d2b33592a2e55292a5027819a42728d3863813158782e50702b496b2946692844672943652941652941652942642a43652b45662d46682e47682f46672f43652e3f632c3a5f2c365b2a32582a2e53282a4f277f993f708c3761813256772f4d6f2c486b294568294365294164283f62283e61283e61293f612a40622b42632c42632d42632d40622c3e602c395d2b365a2a3256292e52272a4d257e993d6e8d365f7f3252752f4a6e2d476b2b45672a4365294063273d60273c5f273b5e273b5e283b5e293d5e2a3d5d2a3d5d2b3c5d2a3a5c2a385a293457283154282d50252a4b247e9a3c6f8d375f8033517630496f2e476b2d45682b4266293f62283c5f273a5d26385a263759263758263758273858283959283959283859283657283454283152262d4e242a49227f9a3b718f376283345578314c712f496d2e47692b4266293e61283b5e26385a25355725335524335425345426345425355525355525355426345425325125304f242d4c232947217f9b3c7391376586345a7c3151742f4c6f2d476a2b4266293d6027395c25355725325424315224305024315024315024315024325124335125335024314f232e4d232b49212945207f9a3c7290376585335c7c3254752f4d6f2c47692b4165283b5e273759263355243051242f4f232f4e222f4d22304d21314e22324f23324f23314e22304d212e4a212b472028431f7b973b6f8c3663823259792f52722d4c6d2c45672a3f6228395c263557253152242f4f232e4d212d4c212e4c202f4c20304d21304d21314d21304c212e4b202c481f29441e26411d7693396b88345e7d3155742d4e6e2c48692c4264293d5f28385a263354253050242e4d222d4c212d4b212e4b1f2e4b1f304b20304b20304b202f4a202d491f2b451d28421d253f1b728f376684325a792f51702d4a6a2b45662a4061293c5c28375726335324304f232f4d212e4b202e4a1f2e4b1f2e4b1f2f4a1f2f4a1f2f4a1f2d481e2c471e2a441c27401b243d1b6d8a3462803257762e4e6e2c48682b44642a3e5f283a5a27365624325223314f23304d212e4b1f2e4a1f2d4a1f2e4a1e2e491e2e491e2d481d2c471d2b451d29421c263f1b233b1b6685325d7c3154742e4c6c2c47662b4261293d5d283a5926355524345123335022314e222f4c202e4a1f2d491f2d481f2d481d2d481e2c471d2b451d2a431c28401b253d1a223a1a5f7f3158782f50702d4a692c456429415f293d5b27395726375424355223335022324d21304c202e4a1f2c481f2c471e2c471e2b461d2b441c2a431b28401b263e1b233b1a21391958782f51722d4c6b2c47662b4361293f5d293c5a27395725365323355122344f22324d21304b202d481f2b461d2b451d2a441c29431b28411b27401b263e1b243c1a2239191f36194f712d4b6c2d46672b446329415f293e5c283c5827395625365323345022334e22314c212e4a1f2c461e29441c28421c27401b273f1b263e1a253d1a233b19223a192037191d3418486a2c45672b42632a415f293f5d283d5a263b5726385524365223344f22324d222f4b202c471f2a441d27411c253f1b253d1b243c1a233b19223a192139191f37181d34171c3216", orange: "e99356e78e53e68c51e5894fe4854de2814ae17f48e07c46df7a45dc7744da7442d67140d26d3ecd683cc76339c05b35b75331af4c2da9462aa242289b3f26943c248e3922883621e68d52e5894fe3844ce17e48de7945db7643d97442d87241d67140d36e3fd16b3dcd683cc9653ac56038bf5b35b85532b14e2eab482ba543299f4127993e25933b248e3922883621e4874ee28149de7a45d97442d5703fd26d3ed06b3dce693ccc673bca653ac86339c46037c15d36bd5934b85431b24f2fac492ca64529a041279c3f26963d25923b248d3822883621e28149dd7844d77140d16c3ecc673bc9643ac76239c56138c46037c25e36c05c35bd5934ba5632b65331b24f2fae4b2ca8462aa242289d4027993e25943c24903a238b3822863520df7a45d87241cf6a3dc96439c35f37bf5b35bd5934bc5833bb5733ba5632b85432b65231b3502fb14d2eae4a2da9472ba54429a041279b3f26963c25923b248e3922893621843420db7643d16c3ec86339c05c35bb5733b75331b45130b3502fb24f2fb24e2eb14e2eb04d2eaf4b2dac492ca9472ba64429a242289d4027983d25943c24903a238b372186352080331fd77240cc663bc15d36b95532b34f2faf4c2dac492cab482baa482bab482baa482baa472ba9462aa7452aa54429a342289f41279b3f26973d25923b248c382288362183341f7d311ed46f3fc76239bb5733b34f2fac4a2ca8462aa54329a34328a34328a34328a34329a34328a34328a34228a24228a142289e40279a3f26953c24903a238b372286352080321f7c311dd06b3dc35f37b75331ae4b2da7452aa142289e40279c3f269b3f269c3f269c3f269c3f269d40279e40279f41279f41279d4027993e26943c248e39238936218434207f321e7a301dce693cc05c35b45130ab482ba342289d4026983e25973d25963c25963c25963c25973d25993e259a3e269c3f269c3f269a3e26963d25923b248d382288362183341f7e311e782f1ccc673bbe5a35b24f2fa9462aa041279a3e26973d25943c24933b24923b23923a23923b23933b24953c24963d25973d25963c25933b248f39238b382286352082331f7c311e772e1cca663abd5934b14e2ea8452a9f4027993e25963c25933b24913a238e39228d39228d39228e39238f3923913a23913a23913a23903a238d382289372185352081331f7b301d762e1cc9653abd5934b04d2ea544299d4027993e25953c24933b248f39238c38228a37218a37218937218a37218a37218a37218b37218a372189362186352082331f7f321e7a2f1d742d1bca653abd5934b14d2ea544299d4027993e26963d25933b248f39238b372288362186352084342084341f84342084342085352085352084342083341f80321e7c311e782f1c722c1bca663abf5b35b3502fa9462aa041279c3f26973d25933b248e392289372185352082341f80321e7e321e7f321e7f321e80321e80321e80321f7f321e7c311d792f1d752e1c702b1acb663bc15d36b55230ac492ca443299e4027983d25933b248c382287362082331f7e311e7c311d7b301d7a301d7b301d7b301d7c311e7c311e7c311d7a301d772e1c732c1b6f2a1aca653ac05c35b55230ad4a2ca644299e4027983d25913a238a37218434207f321e7b301d792f1d782f1c772f1c782f1c792f1d7a301d7a301d792f1d772e1c752d1b712b1a6c2919c76339bd5934b34f2faa482ba343289c3f26953c248e392388362182331f7c311d792f1d762e1c762e1c762e1c762e1c772e1c782f1c782f1c772e1c752e1c722c1b6e2a1a6a2818c35f37b95532ae4b2da544299e4027983d25913a238b38228535207f321e7a301d772e1c752e1c752d1b752d1c752e1c762e1c762e1c762e1c752d1b732d1b6f2b1a6c2919682718bf5b35b55130aa472ba14228993e26943b248e392389362183341f7d311e792f1d772f1c752e1c742d1b752d1b752e1c752d1b752d1b742d1b732c1b712b1a6d2a19692818662717bb5733b14e2ea7452a9e4027973d25923b238c382287352081331f7c311e7a301d782f1c752e1c742d1b742d1b742d1b742d1b732c1b722c1b712c1a6f2a1a6b2919682718642617b65230ae4b2da544299c3f26953c248f3a238a372185352080321f7d311e7b301d782f1d762e1c742d1b732c1b732c1b722c1b722c1b712b1a6f2b1a6d2a196a2818662617622516af4c2da9462aa04128993e25933b248d382288362184342080321f7e311e7b301d792f1d762e1c742d1b722c1b712c1a712b1a6f2b1a6e2a1a6c29196a2819682718642617612416a9472aa242289b3f26953c248f39238b382287362083341f7f321e7d311e7b301d782f1c762e1c732c1b702b1a6f2b1a6d2a1a6c29196b29196928186827186526176225165e2315a041289b3f26963c25913a238d382289372186352082331f7f321e7c301d792f1d772f1c742d1b702b1a6d2a196b29196a28186928186727186627176426176225165f23165c2215993e25953c24913a238d38228a372187362185352081331f7e311e7a301d782f1c752e1c712c1b6e2a1a6a29196827186627186526176425176325166124165f23155c22155a2114", stone: "6758476355456153436052425e50415c4e3f5a4d3e594c3d584b3c57493b55483a5246385043364c4034493d3144392d3e34293a3026372d24352c22332a2131281f2f261e2d251d6254446051425d4f405a4c3e584a3c56483a55473a5447395245385144374f42364c40344a3e32473c3044392d3f352a3b3126382e24362c23342b2232292131281f2f261e2d251d5e50415b4d3f584b3c54473a5245375043364f42354d41344c40334b3f32493d31473c30453a2e42372c3f342a3b3127392f25362d23342b22332a2132292030281f2f261e2d251d5b4d3f574a3c5346384f43364c40334a3e32493d31483c30473b2f463a2e44392d42372c40362b3e33293c3127392f25372d24352c22342a2132292031281f30271f2e261e2d241d584b3c5346394e42354a3e32463b2f44392d42372c41372c41362b40352b3f342a3e33293c32283b3126392f25372e24362c23342b22332a2131292030281f2f261e2e251d2c241c55483a4f4336493e3144392e41362b3e34293d32283c32273b31273b31273b31263a3026393026382f25372e24362d23352b22342a2132292031281f30271f2e261e2d241d2b231c5346394b3f3345392e3f352a3c32273a3026382e25382e24382e24382e24382e24372e24372d24372d23362c23352c23342b22332a2132292030281f2f261e2d251d2c241c2a221b514437483d3141362b3c3227392f25372d24362c23352c23352c22352c22352c23352c23352c23352c22352c22352b22342a21332a2131282030271f2e261e2d241d2b231c2a221b4f4235463b2f3f3429392f25372d23352b22342a21332a21332a21332a21332a21332a21342a21342b21342b22342b22332a213229213128202f271e2e251d2c241c2b231b29211a4d413444392d3d3228382e24352c22332a21322920322920312920312820312820322920322921332a21332a21332a21332a2132292030281f2f261e2d251d2c241c2b231b29211a4c403343382d3c3127372d24342b2232292132292031281f31281f30271f30271f30271f31281f31282032292032292031292031281f30271f2e261e2d251d2c241c2a221b29211a4b3f3242372c3b3127372d24342b2232292031282031281f30271f2f271e2f261e2f261e2f271e30271f30271f30271f30271f30271f2f261e2e251d2d241c2b231c2a221b2821194a3e3242372c3a3026362d23332a2132292031282030281f30271f2f261e2e261d2e251d2e251d2e251d2e261e2e261e2e261e2e251d2e251d2d241d2c241c2b231b29211a2820194a3e3243382c3b3126362d23342a2132292132292031281f2f271e2e261e2d251d2d241d2c241c2c241c2c241c2c241c2d241c2d241c2c241c2c241c2b231b2a221b29211a2720194b3f3244382d3c3227372d24342b22332a2132292031281f2f261e2e251d2d241d2c241c2b231b2b231b2b231b2b231b2b231b2b231b2b231b2b231b2a221b29211a282019271f184b3f3345392e3e3328382f25362c23342b2232292031281f2f261e2d251d2c241c2b231b2a221b29221a29221a2a221a2a221a2a221b2a221b2a221b29221a28211a272019261f184b3f3244392e3d3329392f25362d23342b2232292030271f2e261d2c241c2b231b2a221a29211a29211a29211a29211a29211a29221a29221a29211a29211a282019271f18261e18493d3142372c3c3127382e24352c23332a213128202f271e2d251d2c231c2a221b29211a29211a28211928211928211a28211a29211a29211a28211a282019272019261f18251e17463b2f40352a392f25362c23342b2232292030271f2e261e2d241c2b231b29221a29211a282019282019282019282019282119282119282119282019272019261f18251e17241d1743382d3d3328382e24352b2232292131281f2f271e2e251d2c241c2a221b29211a29211a282019282019282019282019282019282019282019272019271f18261e18251e17241d1641362b3b3127372d24342b2232292030271f2f261e2d251d2b231c2a221b29221a29211a282019282019282019282019282019272019272019271f18261f18251e17241d17231c163e3329392f25362c23332a2131282030271f2e251e2d241c2b231b2a221b2a221a29211a28211a282019272019272019272019272019271f18261f18261e18251e17241d16231c163a3026372d24342b2232292031281f2f261e2e251d2c241c2b231b2a221b2a221a29211a28211a282019272019271f18271f18261f18261f18261e18251e17241d17231c16221b15372e24352c22332a2131282030271f2e261e2d251d2c241c2b231b2a221b2a221a29211a282119272019261f18261f18261f18251e18251e17251d17241d17231c16221c15221b15352b22332a2131282030271f2f261e2e251d2d241d2c241c2b231b2a221b29211a29211a282019271f18261e18251e17251d17241d17241d16241d16231c16231c15221b15211a1432292031282030271f2f261e2e261e2d251d2c241c2c231c2b231b2a221a29211a282019271f19261f18251e17241d17241d16231c16231c16231c16221b15221b15211a14201914" }, GW = 24, GH = 26;
-  function field(G) {
-    var C = [], i; for (i = 0; i < GW * GH; i++) C.push([0, 2, 4].map(function (o) { return parseInt(G.substr(i * 6 + o, 2), 16); }));
-    var W = 240, H = 260, cv = document.createElement("canvas"); cv.width = W; cv.height = H;
-    var x = cv.getContext("2d"), img = x.createImageData(W, H), d = img.data;
-    function cr(a, b, c, e, t) { return b + 0.5 * t * (c - a + t * (2 * a - 5 * b + 4 * c - e + t * (3 * (b - c) + e - a))); }
-    function at(px, py, k) { px = px < 0 ? 0 : px > GW - 1 ? GW - 1 : px; py = py < 0 ? 0 : py > GH - 1 ? GH - 1 : py; return C[py * GW + px][k]; }
-    for (var y = 0; y < H; y++) {
-      var gy = (y + 0.5) * GH / H - 0.5, iy = Math.floor(gy), ty = gy - iy;
-      for (var xx = 0; xx < W; xx++) {
-        var gx = (xx + 0.5) * GW / W - 0.5, ix = Math.floor(gx), tx = gx - ix, o = (y * W + xx) * 4;
-        for (var k = 0; k < 3; k++) {
-          var r = []; for (var m = -1; m < 3; m++) r.push(cr(at(ix - 1, iy + m, k), at(ix, iy + m, k), at(ix + 1, iy + m, k), at(ix + 2, iy + m, k), tx));
-          var v = cr(r[0], r[1], r[2], r[3], ty); d[o + k] = v < 0 ? 0 : v > 255 ? 255 : v;
-        }
-        d[o + 3] = 255;
-      }
-    }
-    x.putImageData(img, 0, 0); return cv;
-  }
-  function grain() {
-    var N = 128, SIGMA = 3.8, nv = document.createElement("canvas"); nv.width = N; nv.height = N;   // drawn at 1.5x: grains of about 1.5px, about 3.2 levels (halfway between v201 and v202)
-    var nx = nv.getContext("2d"), ni = nx.createImageData(N, N), nd = ni.data;
-    for (var q = 0; q < N * N; q++) {
-      var u = Math.random() || 1e-9, g = Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * Math.random()) * SIGMA, w = g > 0 ? 255 : 0;
-      nd[q * 4] = nd[q * 4 + 1] = nd[q * 4 + 2] = w; nd[q * 4 + 3] = Math.min(255, Math.round(Math.abs(g) / (g > 0 ? 155 : 100) * 255));
-    }
-    nx.putImageData(ni, 0, 0); return nv;
-  }
-  function build() {
-    var t = document.createElement("canvas"); if (!t.getContext || !t.getContext("2d")) return;
-    var gr = grain(), root = document.documentElement.style;
-    Object.keys(F).forEach(function (k) {
-      var out = document.createElement("canvas"); out.width = 1200; out.height = 1287;
-      var o = out.getContext("2d"); o.imageSmoothingEnabled = true; o.imageSmoothingQuality = "high";
-      o.drawImage(field(F[k]), 0, 0, 1200, 1287);
-      var pat = o.createPattern(gr, "repeat"); o.save(); o.scale(1.5, 1.5); o.fillStyle = pat; o.fillRect(0, 0, 800, 858); o.restore();
-      root.setProperty("--img-" + k, "url(" + out.toDataURL("image/jpeg", 0.9) + ")");
-    });
-  }
-  if (window.requestIdleCallback) requestIdleCallback(build, { timeout: 700 }); else setTimeout(build, 60);
 })();
 </script>
 
@@ -1476,31 +1401,11 @@ footer { background: var(--deep); color: var(--on-navy-soft); padding: clamp(44p
     <div class="visit-top">
       <dl class="hours fade">
         <div><dt>When</dt><dd>Monday to Friday, 4:00 to 5:30pm and 6:00 to 7:30pm. Saturdays, 10:00am and 2:00pm, with a parent &amp; child workshop at 4:00pm</dd></div>
-        <div><dt>Where</dt><dd>Wan Chai &amp; Mong Kok, Hong Kong.</dd></div>
+        <div><dt>Where</dt><dd>Mong Kok &amp; Wan Chai, Hong Kong</dd></div>
         <div><dt>Class size</dt><dd>Seven students at most; three parent &amp; child pairs on Saturdays</dd></div>
         <div><dt>WhatsApp</dt><dd><a class="js-wa" data-msg="Hi Julien, I have a question about WonderLab." href="https://wa.me/85267533727" target="_blank" rel="noopener">Contact us</a></dd></div>
       </dl>
       <div class="maps fade">
-        <a class="map map-card" href="https://maps.app.goo.gl/GFStYoHqheFDycXo8" target="_blank" rel="noopener" aria-label="WonderLab Wan Chai, on Queen&rsquo;s Road East south of Wan Chai station: open in Google Maps (opens in a new tab)">
-          <svg viewBox="0 0 240 150" aria-hidden="true">
-            <rect class="land" width="240" height="150" stroke="none"/>
-            <path class="sea" d="M0 0H240V24C180 30 60 20 0 28Z"/>
-            <path class="road-s" d="M40 42V150M150 42V150M188 42V150"/>
-            <path class="road-s" d="M0 140C80 146 160 144 240 136"/>
-            <path class="road" d="M0 42H240M0 74H240"/>
-            <path class="road" d="M0 104C40 108 80 114 113 116C150 118 190 110 240 100"/>
-            <path class="mtr" d="M0 82H240"/>
-            <circle class="stn" cx="92" cy="82" r="6"/>
-            <circle class="stn" cx="212" cy="82" r="6"/>
-            <text class="water" x="8" y="17">Victoria Harbour</text>
-            <text class="lbl-s" x="100" y="68">Wan Chai</text>
-            <text class="lbl-s" x="232" y="97" text-anchor="end">Causeway Bay</text>
-            <text class="lbl-s" x="8" y="68">Hennessy Rd</text>
-            <text class="lbl-s" x="8" y="128">Queen&rsquo;s Rd East</text>
-            <g transform="translate(113 114) scale(0.8)"><circle r="24" fill="rgba(255,96,0,0.24)"/><path d="M0 18C-9 6-14 0-14-8A14 14 0 0 1 14-8C14 0 9 6 0 18Z" fill="#FF6000" stroke="#0D1B26" stroke-width="2"/><circle cy="-8" r="5" fill="#0D1B26"/></g>
-          </svg>
-          <span class="map-cap">Wan Chai<span class="go" aria-hidden="true">&#8599;</span></span>
-        </a>
         <a class="map map-card" href="https://maps.app.goo.gl/BUkNJVJVUxLdG4Ts8" target="_blank" rel="noopener" aria-label="WonderLab Mong Kok, on Nathan Road between Mong Kok and Prince Edward stations: open in Google Maps (opens in a new tab)">
           <svg viewBox="0 0 240 150" aria-hidden="true">
             <rect class="land" width="240" height="150" stroke="none"/>
@@ -1521,10 +1426,30 @@ footer { background: var(--deep); color: var(--on-navy-soft); padding: clamp(44p
           </svg>
           <span class="map-cap">Mong Kok<span class="go" aria-hidden="true">&#8599;</span></span>
         </a>
+        <a class="map map-card" href="https://maps.app.goo.gl/GFStYoHqheFDycXo8" target="_blank" rel="noopener" aria-label="WonderLab Wan Chai, on Queen&rsquo;s Road East south of Wan Chai station: open in Google Maps (opens in a new tab)">
+          <svg viewBox="0 0 240 150" aria-hidden="true">
+            <rect class="land" width="240" height="150" stroke="none"/>
+            <path class="sea" d="M0 0H240V24C180 30 60 20 0 28Z"/>
+            <path class="road-s" d="M40 42V150M150 42V150M188 42V150"/>
+            <path class="road-s" d="M0 140C80 146 160 144 240 136"/>
+            <path class="road" d="M0 42H240M0 74H240"/>
+            <path class="road" d="M0 104C40 108 80 114 113 116C150 118 190 110 240 100"/>
+            <path class="mtr" d="M0 82H240"/>
+            <circle class="stn" cx="92" cy="82" r="6"/>
+            <circle class="stn" cx="212" cy="82" r="6"/>
+            <text class="water" x="8" y="17">Victoria Harbour</text>
+            <text class="lbl-s" x="100" y="68">Wan Chai</text>
+            <text class="lbl-s" x="232" y="97" text-anchor="end">Causeway Bay</text>
+            <text class="lbl-s" x="8" y="68">Hennessy Rd</text>
+            <text class="lbl-s" x="8" y="128">Queen&rsquo;s Rd East</text>
+            <g transform="translate(113 114) scale(0.8)"><circle r="24" fill="rgba(255,96,0,0.24)"/><path d="M0 18C-9 6-14 0-14-8A14 14 0 0 1 14-8C14 0 9 6 0 18Z" fill="#FF6000" stroke="#0D1B26" stroke-width="2"/><circle cy="-8" r="5" fill="#0D1B26"/></g>
+          </svg>
+          <span class="map-cap">Wan Chai<span class="go" aria-hidden="true">&#8599;</span></span>
+        </a>
       </div>
     </div>
     <h2 class="visit-line fade"><span class="vl-roll"><span class="roll">Dream</span> it. <span class="roll">Sketch</span> it. <span class="roll">Build</span> it. <span class="roll">Break</span> it.</span> <span class="vl-shape">Shape the world of tomorrow.</span></h2>
-    <p class="visit-sub fade">Built by architects &middot; Designed for kids.</p>
+    <p class="visit-sub fade">Built by architects. Designed for kids.</p>
   </div>
 </section>
 
@@ -2603,7 +2528,7 @@ var DRAW = {
      A key without a clip keeps its line drawing (DRAW). */
   // the strips' colours down the list on phones, light to dark, for each age group (after grahic design/Backgrounds/
   // 10_titles): each title gets its share of the run; text is ink (the run's own deep shade) on the light ones
-  var STRIPS = {"green": ["#D0D2BC", "#BDC29A", "#B2B57E", "#7D824A", "#4B5B30", "#2D442A", "#1D321F", "#132B1E", "#0E231A", "#131D15"], "blue": ["#C9D6E0", "#A9C0D3", "#8FAECA", "#4E7598", "#2F5170", "#223E59", "#182E44", "#112437", "#0C1B2B", "#10161E"], "honey": ["#F3C7AA", "#EAA582", "#DB7E58", "#B24E34", "#913D28", "#73301F", "#592518", "#441C12"]};
+  var STRIPS = {"green": ["#D0D2BC", "#BDC29A", "#B2B57E", "#7D824A", "#4B5B30", "#2D442A", "#1D321F", "#132B1E", "#0E231A", "#131D15"], "blue": ["#C9D6E0", "#A9C0D3", "#8FAECA", "#4E7598", "#2F5170", "#223E59", "#182E44", "#112437", "#0C1B2B", "#10161E"], "honey": ["#EDC3A0", "#E2A477", "#C97B44", "#8A4514", "#74380E", "#5E2C0A", "#4B2206", "#3A1A05"]};
   function hexRgb(h) { return [1, 3, 5].map(function (i) { return parseInt(h.substr(i, 2), 16); }); }
   function rgbHex(c) { return "#" + c.map(function (v) { return ("0" + Math.round(v).toString(16)).slice(-2); }).join("").toUpperCase(); }
   function stripsFor(g, n) {
@@ -2813,8 +2738,8 @@ var DRAW = {
   function paperSync() {
     if (!slider || !tabs[active] || isPhone.matches) return;
     var s = slider.getBoundingClientRect(), p = panel.getBoundingClientRect(), W = p.width, st = slider.style;
-    st.setProperty("--gw", (2 * W + 2).toFixed(2) + "px");   // v205: 2px to spare on the left, so no hairline of the strip's own colour shows
-    st.setProperty("--gx", (p.left - W - s.left - 2).toFixed(2) + "px");
+    st.setProperty("--gw", (2 * W).toFixed(2) + "px");
+    st.setProperty("--gx", (p.left - W - s.left).toFixed(2) + "px");
     st.setProperty("--gy", (p.top - s.top).toFixed(2) + "px");
     st.setProperty("--ph", p.height.toFixed(2) + "px");
     st.setProperty("--sw", s.width.toFixed(2) + "px");
@@ -3371,7 +3296,7 @@ var DRAW = {
   var LEAF_LOOKS = {
     green: { flat: "#1F3A1D", maxLum: 0.12 },
     blue: { flat: "#0E2A4F", maxLum: 0.12, cols: ["#081C38", "#0E2A4F", "#33AACB", "#A2E8F3"], stops: [0.08, 0.22, 0.64, 0.98] },
-    honey: { flat: "#4C1E0A", maxLum: 0.12, cols: ["#200A02", "#4C1E0A", "#A8481A", "#E07A2E", "#F8B55C"], stops: [0.08, 0.2, 0.36, 0.56, 0.86] }   // v201: the Changemakers orange
+    honey: { flat: "#3E1003", maxLum: 0.12, cols: ["#1E0600", "#4A1203", "#8A2B08", "#CC600F", "#E8A626"], stops: [0.08, 0.2, 0.36, 0.56, 0.86] }
   };
   var LEAF_SET = { speed: 4, sway: 3, breathe: 1.8, focus: [0.5, 0.35], maxDpr: 1.5, fps: 30 };
   function leafLight(box, canvas, src) {
@@ -3616,7 +3541,7 @@ var DRAW = {
       var k = s ? lightOf(s) : null;
       ["green", "blue", "honey"].forEach(function (n) { bookPanel.classList.toggle("look-" + n, k === n); });
       bookPanel.classList.toggle("has-light", !!k);
-      var PAPER_FLAT = { blue: "#1F3852", green: "#233923", honey: "#8E3A26" }; // each group's third strip with white text
+      var PAPER_FLAT = { blue: "#1F3852", green: "#233923", honey: "#6B330C" }; // each group's third strip with white text
       bookPanel.style.setProperty("--tint", k ? PAPER_FLAT[k] : s ? (isWs(s) ? "#433A31" : tintOf(s)) : "var(--navy)");
       bookPanel.classList.toggle("look-family", !!(s && isWs(s))); // light gold accents on the workshop's stone, as on honey
       if (panelLight) panelLight.look(null); // the leaf light is no longer used
@@ -3747,7 +3672,7 @@ var DRAW = {
     // phones: the panel's pieces gathered into paper strips in the class's colours (see .bp-strip)
     var bpPhone = window.matchMedia("(max-width: 900px)"), FAMILY_RUN = ["#7A6F63", "#5F564B", "#433A31", "#29221A"]; // the tutor's stone
     function bpStrips(s) {
-      var on = false;   // v204: phones show the panel as laptops do (its group's paper), no strips
+      var on = bpPhone.matches && !!s;
       bookPanel.classList.toggle("has-strips", on);
       if (!on) return;
       var cols;
@@ -3970,27 +3895,27 @@ var DRAW = {
       tensegrity: { n: "tensegrity", a: 0.5, b: 0.9, z: 0.72, ox: 0, oy: 0.08 }
     };
     var DIAG = Object.keys(WLS).map(function (k) { return "wl:" + k; });
-    var PHOTO = ["s-girl2", "s-airport2", "s-girl3", "s-group2", "s-facade1", "s-girl9", "s-boy2", "s-boy3", "s-girl8", "s-girlfoil", "s-group20b"];
+    var PHOTO = ["s-girl2", "s-airport2", "s-girl3", "s-group2", "s-facade1", "s-girl9", "s-boy2", "s-boy3", "s-girl8", "s-girlfoil", "s-group8"];
     // the studio photos come in sets of the same scene (the girl and her tree house, the boy and his table): never two of a set side by side
     var SETS = { "s-girl2": "tree", "s-girl3": "tree", "s-girl9": "tree", "s-girl8": "tree", "s-girl10": "tree", "s-girl2h": "tree", "s-boy27c": "tree", "s-boy27g": "tree", "s-boy2": "boy", "s-boy3": "boy", "s-boy27b": "tree" };
     function setOf(k) { return SETS[k] || k; }
     var NATURE = ["b-honeycomb", "b-mud", "b-succulent", "b-wing", "b-urchin", "b-roots", "b-aloe", "b-tensile", "b-tent", "b-stairs", "b-nautilus", "b-membrane"];   // v174: the southern magnolia leaf, white lines on the blue, for the leaf veins
     // where the child is across each studio photo (%), for the tall rectangles on phones; the rest stay centred
-    var FOCAL = { "s-fractal12": 52, "s-boy27g": 45, "s-girl2h": 82, "s-boy27c": 46, "s-girl10": 70, "s-egg13": 60, "s-davinci18": 52, "s-fractal10": 52, "s-boy27b": 50, "s-girl2": 72, "s-girl3": 78, "s-girl9": 66, "s-boy2": 75, "s-boy3": 74, "s-girl8": 80, "s-girlfoil": 64, "s-group20b": 50, "s-group2": 60, "s-airport2": 63, "s-facade1": 83 };   // airport2: the two on the right; facade1: the tower   // girl3: her scale model; group2: the boats; girl8: the tree house
+    var FOCAL = { "s-fractal12": 52, "s-boy27g": 45, "s-girl2h": 82, "s-boy27c": 46, "s-girl10": 70, "s-egg13": 60, "s-fractal10": 52, "s-boy27b": 50, "s-girl2": 72, "s-girl3": 78, "s-girl9": 66, "s-boy2": 75, "s-boy3": 74, "s-girl8": 80, "s-girlfoil": 64, "s-group8": 50, "s-group2": 60, "s-airport2": 63, "s-facade1": 83 };   // airport2: the two on the right; facade1: the tower   // girl3: her scale model; group2: the boats; girl8: the tree house
 
     // the story, one stop at a time. A rectangle: its picture (c), its move from the one before (mv: D down, B down and
     // right, in running bond), its line (acc: the word in orange, -1 none, -2 the last) and how long it holds once there.
     // An overview (over: how many rectangles wide): its words on the screen, centred on the cells the next rectangle's
     // move passes through
     var STORY = [
-      { c: "x:start", line: "WonderLab", kicker: "WELCOME TO", big: 1.2, acc: -1, dot: true, hold: 1.5, lift: 24,
-        next: { line: "A creative thinking and design academy where young minds", acc: -1 }, hold2: 2.5, swapPic: "fade" },
-      { c: "wl:towers", mv: "D", line: "think like engineers,", acc: 0, fit: "like", hold: 1.6 },
-      { c: "s-group20b", mv: "D", line: "experiment like scientists,", acc: 0, fit: "like", hold: 1.6 },
-      { c: "s-egg13", mv: "D", line: "dare like innovators,", acc: 0, fit: "like", hold: 1.6 },
-      { c: "s-boy27g", mv: "D", line: "and dream like architects", acc: 1, dot: true, fit: "like", hold: 1.6 },
-      { over: 3, fill: "challenges", alpha: 0.8, line: "Led by an award-winning architect", acc: -1, hold: 3.2,
-        next: { line: "Our design challenges build creativity, confidence, and the courage to bring ideas to life.", acc: -1 }, hold2: 4.4 },   // v226: two lines in turn, each held for its reading time
+      { c: "x:start", line: "We\u2019re WonderLab", acc: -1, dot: true, hold: 1.5, lift: 24,
+        next: { line: "A creative thinking academy where young minds", acc: -1 }, hold2: 2.5, swapPic: "fade" },
+      { c: "wl:towers", mv: "D", line: "think like engineers", acc: 0, fit: "like", hold: 1.6 },
+      { c: "s-group8", mv: "D", line: "test like scientists", acc: 0, fit: "like", hold: 1.6 },
+      { c: "wl:rube", mv: "D", line: "risk like innovators", acc: 0, fit: "like", hold: 1.6 },
+      { c: "s-boy27g", mv: "D", line: "dream like architects", acc: 0, fit: "like", hold: 1.6 },
+      { over: 3, fill: "challenges", alpha: 0.8, line: "Through design challenges led by an award-winning architect", acc: -1, hold: 3.0,
+        next: { line: "building confidence, creativity and the courage to bring ideas to life.", acc: -1 }, hold2: 3.6 },
       { c: "wl:davinci", mv: "B", line: "A bridge with no glue?", acc: -2, hold: 2.2 },
       { c: "wl:egg", mv: "D", line: "Will the eggs survive the fall?", acc: -2, hold: 2.0 },
       { c: "s-boy3", mv: "D", line: "Can a table float?", acc: -2, hold: 1.8 },
@@ -4164,7 +4089,7 @@ var DRAW = {
       var t = { c: p[0], r: p[1], key: key, el: el, j: ON_PATH[k], shown: false, svg: null, reg1: inOver(p[0], p[1], OI.challenges) ? OI.challenges : -1 };
       if (key.indexOf("wl:") === 0) { t.svg = document.createElementNS("http://www.w3.org/2000/svg", "svg"); t.svg.setAttribute("preserveAspectRatio", "xMidYMid slice"); inner.appendChild(t.svg); }
       else if (key === "x:start" || key === "x:bridges") {
-        var pa = key === "x:start" ? ["s-girl2h", "s-davinci18"] : ["f-enter", "f-create"];   // v182: the girl and her tree house, then the egg drop in the park
+        var pa = key === "x:start" ? ["s-girl2h", "s-egg13"] : ["f-enter", "f-create"];   // v182: the girl and her tree house, then the egg drop in the park
         pa.forEach(function (k2) { var i2 = document.createElement("img"); i2.alt = ""; i2.src = M + k2 + EXT(k2); if (FOCAL[k2]) i2.style.objectPosition = FOCAL[k2] + "% 50%"; inner.appendChild(i2); });
         t.first = inner.firstChild; t.second = inner.lastChild;
         if (key === "x:start") t.second.style.opacity = "0"; else t.second.style.transform = "translateY(100%)";
@@ -4482,14 +4407,14 @@ var DRAW = {
         var a = A[i], b = B[i];
         if (a && b && a.s === b.s && a.c === b.c) {
           var pa = PA.pos[i], pb = PB.pos[i];
-          if (Math.abs(pa.x - pb.x) < 0.5 && Math.abs(pa.y - pb.y) < 0.5) { drawWord(b, pb.x, pb.y, b.o || o, g, [-1e4, 1e4]); continue; }   // it stays put
+          if (Math.abs(pa.x - pb.x) < 0.5 && Math.abs(pa.y - pb.y) < 0.5) { drawWord(b, pb.x, pb.y, o, g, [-1e4, 1e4]); continue; }   // it stays put
           var e = eo(seg(t, t0 + m * ST, t0 + m * ST + D)); m++;
-          drawWord(b, lerp(pa.x, pb.x, e), lerp(pa.y, pb.y, e), b.o || o, g, [Math.min(pa.y, pb.y) - o.size * 0.98, Math.max(pa.y, pb.y) + o.size * 0.36]);
+          drawWord(b, lerp(pa.x, pb.x, e), lerp(pa.y, pb.y, e), o, g, [Math.min(pa.y, pb.y) - o.size * 0.98, Math.max(pa.y, pb.y) + o.size * 0.36]);
           continue;
         }
         var k = seg(t, t0 + m * ST, t0 + m * ST + D), kr = eroll(k); m++;
-        if (a && k < 1) drawWord(a, PA.pos[i].x, PA.pos[i].y - kr * step, a.o || o, g * (1 - 0.35 * Math.min(1, kr)), band(PA.pos[i].y, a.o || o));
-        if (b && k > 0) drawWord(b, PB.pos[i].x, PB.pos[i].y + (1 - kr) * step, b.o || o, g * (1 - 0.35 * Math.min(1, Math.abs(1 - kr))), band(PB.pos[i].y, o));
+        if (a && k < 1) drawWord(a, PA.pos[i].x, PA.pos[i].y - kr * step, o, g * (1 - 0.35 * Math.min(1, kr)), band(PA.pos[i].y, o));
+        if (b && k > 0) drawWord(b, PB.pos[i].x, PB.pos[i].y + (1 - kr) * step, o, g * (1 - 0.35 * Math.min(1, Math.abs(1 - kr))), band(PB.pos[i].y, o));
       }
     }
     function rectOf(i, cam) {   // rectangle i on screen
@@ -4518,15 +4443,8 @@ var DRAW = {
       var lh = size * 1.12;
       function lay(ws) { return placeWords(ws, o, R.x + pad, maxW, R.y + R.h - pad, lh); }
       var A = wordsOf(item), PA = lay(A);
-      if (item.big) {   // v226: this line bigger than the rest (the words carry their own size through the roll)
-        var oA = fontAt(size * item.big); A.forEach(function (w) { w.o = oA; }); PA = placeWords(A, oA, R.x + pad, maxW, R.y + R.h - pad, lh * item.big);
-      }
-      if (item.kicker) {   // v226: a small label over the line ("WELCOME TO"), lifting away as the line rolls on
-        var kk = item.next && t >= item.roll ? eio(seg(t, item.roll, item.roll + 0.45)) : 0, oK = fontAt(size * 0.4), oT = A[0].o || o;
-        if (kk < 1) drawWord({ s: item.kicker, c: WHITE }, PA.pos[0].x, PA.pos[0].y - oT.size * 0.98 - oK.size * 0.4 - kk * lh * 0.6, oK, alpha * (1 - kk), [-1e4, 1e4]);
-      }
       if (item.next && t >= item.roll) { var B = wordsOf(item.next); rollWords(A, PA, B, lay(B), o, lh, t, item.roll, alpha); return; }
-      A.forEach(function (w, k) { drawWord(w, PA.pos[k].x, PA.pos[k].y, w.o || o, alpha, [-1e4, 1e4]); });
+      A.forEach(function (w, k) { drawWord(w, PA.pos[k].x, PA.pos[k].y, o, alpha, [-1e4, 1e4]); });
     }
     // an overview's words, on the screen, over a soft glow kept close to them: rolling up in once it has settled (a
     // second line either rolls in over the first or, stacked, rolls up under it as the first slides up a line), then
@@ -4540,8 +4458,7 @@ var DRAW = {
       if (!hero || !G) return;
       var hr = hero.getBoundingClientRect(), cr = cv.getBoundingClientRect(), s = Math.max(hr.width / G.ground.width, hr.height / G.ground.height);
       HG.ox = hr.left - cr.left; HG.oy = hr.top - cr.top;   // the hero's corner, in the canvas
-      HG.dw = G.ground.width * s; HG.dh = G.ground.height * s;
-      HG.dx = HG.ox + (hr.width - HG.dw) / 2; HG.dy = HG.oy + (hr.height - HG.dh) / 2;
+      HG.dw = G.ground.width * s; HG.dh = G.ground.height * s; HG.dx = HG.ox + (hr.width - HG.dw) / 2; HG.dy = HG.oy + (hr.height - HG.dh) / 2;
       if (!HG.c) { HG.c = document.createElement("canvas"); HG.x = HG.c.getContext("2d"); }
       HG.c.width = cv.width; HG.c.height = cv.height;
       HG.gr = HG.x ? HG.x.createPattern(G.grain, "repeat") : null;
@@ -4557,11 +4474,11 @@ var DRAW = {
         var g2 = HG.x; g2.save(); g2.setTransform(dpr, 0, 0, dpr, 0, 0); g2.clearRect(bx, by, bw, bh);
         g2.beginPath(); g2.rect(bx, by, bw, bh); g2.clip(); g2.globalAlpha = 1;
         g2.globalCompositeOperation = "source-over"; g2.drawImage(window.WL_HG.ground, HG.dx, HG.dy, HG.dw, HG.dh);
-        g2.globalCompositeOperation = "multiply"; g2.fillStyle = "rgb(184,184,184)"; g2.fillRect(bx, by, bw, bh);   // v211: 72% as light (was half), same tint
+        g2.globalCompositeOperation = "multiply"; g2.fillStyle = "rgb(128,128,128)"; g2.fillRect(bx, by, bw, bh);   // half as light, same tint
         g2.globalCompositeOperation = "source-over"; g2.translate(HG.ox, HG.oy); g2.fillStyle = HG.gr; g2.fillRect(bx - HG.ox, by - HG.oy, bw, bh); g2.translate(-HG.ox, -HG.oy);
         g2.globalCompositeOperation = "destination-in"; g2.translate(cx, cy); g2.scale(rx, ry);
         var gm = g2.createRadialGradient(0, 0, 0, 0, 0, 1);
-        gm.addColorStop(0, "rgba(0,0,0," + (0.62 * a).toFixed(3) + ")"); gm.addColorStop(0.6, "rgba(0,0,0," + (0.4 * a).toFixed(3) + ")"); gm.addColorStop(1, "rgba(0,0,0,0)");
+        gm.addColorStop(0, "rgba(0,0,0," + (0.75 * a).toFixed(3) + ")"); gm.addColorStop(0.6, "rgba(0,0,0," + (0.52 * a).toFixed(3) + ")"); gm.addColorStop(1, "rgba(0,0,0,0)");
         g2.fillStyle = gm; g2.fillRect(-1, -1, 2, 2); g2.restore();
         var X = Math.floor(bx * dpr), Y = Math.floor(by * dpr), Wd = Math.min(cv.width - X, Math.ceil(bw * dpr) + 1), Hd = Math.min(cv.height - Y, Math.ceil(bh * dpr) + 1);
         ctx.save(); ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.globalAlpha = 1; ctx.globalCompositeOperation = "source-over";
@@ -4661,11 +4578,7 @@ var DRAW = {
       var xW = cx - wWon / 2, k = eio(seg(t, M0, M1));
       if (k < 1) {
         var ga = 1 - seg(k, 0.12, 0.55);
-        if (t < M0) {   // v204: once "Learn to" is in (its last letter landed), "Wonder." wipes in from the left over 0.9s
-          var wS = st.climax + 0.08 + 0.255 + 0.019 * 8, pw = eio(seg(t, wS, wS + 0.9));
-          if (pw > 0) { ctx.save(); ctx.beginPath(); ctx.rect(xW - sizeC * 0.1, y2c - sizeC * 1.1, (wWon + sizeC * 0.2) * pw, sizeC * 1.6); ctx.clip();
-            drawWord({ s: "Wonder.", c: ORANGE }, xW, y2c, oC, 1, [-1e4, 1e4]); ctx.restore(); }
-        }
+        if (t < M0) rollLetters("Wonder.", ORANGE, xW, y2c, oC, t, st.climax + 0.1, null, 0.255, 0.0225, liftC, 1);
         else if (ga > 0) { ctx.save(); var cy0 = lerp(y2c - sizeC * 0.35, L.vh / 2, k), sc = lerp(1, 0.6, k); ctx.translate(cx, cy0); ctx.scale(sc, sc); ctx.translate(-cx, -(y2c - sizeC * 0.35));
           drawWord({ s: "Wonder.", c: ORANGE }, xW, y2c, oC, ga, [-1e4, 1e4]); ctx.restore(); }
       }
@@ -4744,10 +4657,6 @@ var DRAW = {
     function frame(t, wall) {
       if (!L) layout();
       if (!L) return;
-      // v219: as "Explore" and the subjects come in over the nature pictures, each block (not the ground between them)
-      // takes a 35% dark layer (v221), and keeps it until the grid goes: no return before "Learn to"
-      // v227: the same during the challenges overview ("Led by…", then "Our design challenges…"), in with it, out with the zoom back in
-      var stL = STORY[LASTI]; world.style.setProperty("--nd", Math.max(seg(t, stL.lIn - 0.4, stL.lIn), overK(OI.challenges, t)).toFixed(3));
       var cam = camera(t), s = cam.s;
       var tx = snap(L.vw / 2 - cam.x * s), ty = snap(L.vh / 2 - cam.y * s);
       world.style.transform = "translate(" + tx.toFixed(2) + "px," + ty.toFixed(2) + "px) scale(" + s.toFixed(5) + ")";
