@@ -1141,8 +1141,8 @@ footer { background: var(--deep); color: var(--on-navy-soft); padding: clamp(44p
    its strength set per tile by the animation). Line drawings (svg) have no ground of their own: they fade to clear at
    their foot instead, so the hero's ground shows through. --fade (0..1) is set per tile with the scrim's opacity */
 .hg-scrim, .hg-scrim-full { background: none; }
-.hg-in:has(> img) > .hg-scrim { background: linear-gradient(0deg, rgba(var(--foot, 6, 22, 34), 0.65) 0%, rgba(var(--foot, 6, 22, 34), 0.34) 34%, rgba(var(--foot, 6, 22, 34), 0) 62%); }
-.hg-in:has(> img) > .hg-scrim-full { background: linear-gradient(0deg, rgba(var(--foot, 6, 22, 34), 0.72) 0%, rgba(var(--foot, 6, 22, 34), 0.4) 22%, rgba(var(--foot, 6, 22, 34), 0) 46%); }
+.hg-in:has(> img) > .hg-scrim { background: linear-gradient(0deg, rgba(6, 22, 34, 0.65) 0%, rgba(6, 22, 34, 0.34) 34%, rgba(6, 22, 34, 0) 62%); }
+.hg-in:has(> img) > .hg-scrim-full { background: linear-gradient(0deg, rgba(6, 22, 34, 0.72) 0%, rgba(6, 22, 34, 0.4) 22%, rgba(6, 22, 34, 0) 46%); }
 /* a photo sliding (zoomed in, between two holds): its foot fades to clear instead, by --clear (0..1, set per tile) */
 .hg-in > img {
   -webkit-mask-image: linear-gradient(0deg, rgb(0 0 0 / calc(1 - var(--clear, 0))) 0%, rgb(0 0 0 / calc(1 - 0.6 * var(--clear, 0))) 22%, #000 46%);
@@ -1162,9 +1162,6 @@ footer { background: var(--deep); color: var(--on-navy-soft); padding: clamp(44p
    /* v217: 30% */
 /* v219: each block's dark layer while the subjects run over the nature pictures (--nd, 0..1, set by the animation) */
 .hg-in::after { content: ""; position: absolute; inset: 0; z-index: 2; border-radius: inherit; pointer-events: none; background: rgba(4, 16, 24, 0.35); opacity: var(--nd, 0); }
-/* v229: the challenge drawings: no dark layer over their lines, a blue one under them, in the ground's tones */
-.hg-in:has(> svg)::after { display: none; }
-.hg-in:has(> svg)::before { content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none; background: rgba(12, 56, 84, 0.42); opacity: var(--nd, 0); }
 /* and their white outlines dimmed by the same 35% (the same dark mixed in) */
 .hg-tile { box-shadow: 0 0 0 calc(var(--hl, 0.5px) / var(--hs)) color-mix(in srgb, #FFFFFF calc(100% - 35% * var(--nd, 0)), rgb(4, 16, 24)); }
 .hg-text { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
@@ -3940,13 +3937,6 @@ var DRAW = {
     var head = document.querySelector(".site-head"), headBrand = head && head.querySelector(".brand");
     var Q = new URLSearchParams(location.search), FREEZE = Q.has("t") ? parseFloat(Q.get("t")) : null;
     var reduceMq = window.matchMedia("(prefers-reduced-motion: reduce)");
-    // v230: each photo's foot colour: its lowest third's average, same hue, taken dark (for the gradient under its words)
-    var FOOT = {"f-create": "23, 33, 24", "f-enter": "23, 33, 32", "s-airport2": "33, 27, 23", "s-boy2": "33, 29, 23", "s-boy27b": "33, 28, 23", "s-boy27c": "33, 24, 23", "s-boy27g": "33, 29, 23", "s-boy3": "33, 29, 23", "s-davinci18": "33, 27, 23", "s-egg13": "33, 30, 23", "s-facade1": "33, 27, 23", "s-fractal10": "33, 29, 23", "s-fractal12": "33, 28, 23", "s-girl10": "33, 27, 23", "s-girl2": "33, 29, 23", "s-girl2h": "33, 29, 23", "s-girl3": "33, 29, 23", "s-girl8": "33, 29, 23", "s-girl9": "33, 27, 23", "s-girlfoil": "33, 26, 23", "s-group2": "33, 27, 23", "s-group20b": "33, 26, 23"};
-    function footMix(tl, k) {   // the two pictures of a swapping rectangle: the foot colour follows the swap
-      if (!tl.pa || !FOOT[tl.pa[0]] || !FOOT[tl.pa[1]]) return;
-      var a = FOOT[tl.pa[0]].split(","), b = FOOT[tl.pa[1]].split(",");
-      tl.first.parentNode.style.setProperty("--foot", a.map(function (v, n) { return Math.round(+v + (+b[n] - v) * k); }).join(", "));
-    }
     var M = "media/hero-grid/", EXT = function (k) { return ".jpg"; },   // the magnolia leaf: white lines on a clear ground
         WHITE = "#EDF3F6", ORANGE = "#FF6000";
 
@@ -3993,7 +3983,7 @@ var DRAW = {
     // An overview (over: how many rectangles wide): its words on the screen, centred on the cells the next rectangle's
     // move passes through
     var STORY = [
-      { c: "x:start", line: "WonderLab", script: true, big: 1.2, acc: -1, dot: true, hold: 2.5, lift: 24,
+      { c: "x:start", line: "WonderLab", kicker: "WELCOME TO", big: 1.2, acc: -1, dot: true, hold: 1.5, lift: 24,
         next: { line: "A creative thinking and design academy where young minds", acc: -1 }, hold2: 2.5, swapPic: "fade" },
       { c: "wl:towers", mv: "D", line: "think like engineers,", acc: 0, fit: "like", hold: 1.6 },
       { c: "s-group20b", mv: "D", line: "experiment like scientists,", acc: 0, fit: "like", hold: 1.6 },
@@ -4040,9 +4030,8 @@ var DRAW = {
     var B0 = 0, B_END = 4.0 / 1.3, BK = 1 / 1.3;   // the logo on the empty blue, 1.3x faster than v163
     var GE = B0 + B_END;                           // the logo's glide into the bar ends
     var DRAG0 = 0.22, DRAG1 = 0.15;   // v175: the bottom row starts its rise 0.22 s after the top and lands 0.15 s after it
-    var GS = B0 + 3.1 * BK, RISE = (B_END - 3.1 * BK) * 1.4, LE = GS + RISE + DRAG1, G0 = GS, Z0 = LE + 0.2, ZD = 1.25 / 1.3;   // RISE: 1.4x the logo's glide   // the grid rises over the logo's glide (GS to GE); the zoom 0.2 s after it lands
-    var PAN = 0.75 / 1.8, OUT = 1.35 / 1.3, IN = 1.15 / 1.3,   // v229: zooms 1.3x faster
-    DIM = 0.8, VZ = 16;   // PAN: a swap; OUT / IN: to and from an overview; DIM: every rectangle but the one in focus
+    var GS = B0 + 3.1 * BK, RISE = (B_END - 3.1 * BK) * 1.4, LE = GS + RISE + DRAG1, G0 = GS, Z0 = LE + 0.2, ZD = 1.25;   // RISE: 1.4x the logo's glide   // the grid rises over the logo's glide (GS to GE); the zoom 0.2 s after it lands
+    var PAN = 0.75 / 1.8, OUT = 1.35, IN = 1.15, DIM = 0.8, VZ = 16;   // PAN: a swap; OUT / IN: to and from an overview; DIM: every rectangle but the one in focus
     var VE = 45, VMIN = 14;   // v175: nothing ever stands still: VMIN is the slowest drift, mid-hold and through the overviews   // v172: the speed (screen px a second) a rectangle carries in and out of a swap, and its slowest, mid-hold
     var EXIT = 0.9, HOLD = 2.2;
     var ARR = [], SET = [], LEA = [];
@@ -4177,7 +4166,7 @@ var DRAW = {
       else if (key === "x:start" || key === "x:bridges") {
         var pa = key === "x:start" ? ["s-girl2h", "s-davinci18"] : ["f-enter", "f-create"];   // v182: the girl and her tree house, then the egg drop in the park
         pa.forEach(function (k2) { var i2 = document.createElement("img"); i2.alt = ""; i2.src = M + k2 + EXT(k2); if (FOCAL[k2]) i2.style.objectPosition = FOCAL[k2] + "% 50%"; inner.appendChild(i2); });
-        t.first = inner.firstChild; t.second = inner.lastChild; t.pa = pa;
+        t.first = inner.firstChild; t.second = inner.lastChild;
         if (key === "x:start") t.second.style.opacity = "0"; else t.second.style.transform = "translateY(100%)";
       }
       else if (key === "x:nat") { t.natImg = document.createElement("img"); t.natImg.alt = ""; inner.appendChild(t.natImg); }
@@ -4187,7 +4176,6 @@ var DRAW = {
         t.a = Array.prototype.slice.call(inner.childNodes, 0, -1); t.isB = false;
       }
       t.photo = key.indexOf("s-") === 0;
-      if (FOOT[key]) inner.style.setProperty("--foot", FOOT[key]); else if (t.pa && FOOT[t.pa[0]]) inner.style.setProperty("--foot", FOOT[t.pa[0]]);
       if (t.j !== undefined || t.photo) { var sc = document.createElement("div"); sc.className = "hg-scrim" + (t.j === 0 || t.photo ? " hg-scrim-full" : "");   /* v178: and under every studio photo's line */ inner.appendChild(sc); t.scrim = sc; }   // the blue at its foot, under the words
       el.style.display = "none";
       world.appendChild(el); tiles.push(t);
@@ -4399,7 +4387,7 @@ var DRAW = {
       var i = tl.j, d = 0;
       if (tl.isB) return { d: 0, c: 0 };
       if (i !== undefined && t >= ARR[i] && (i === LASTI || t < SET[i + 1])) {
-        var din = seg(t, ARR[i] - 0.3, ARR[i] + 0.1), dout = i < LASTI && t >= LEA[i] ? seg(t, LEA[i], lerp(LEA[i], SET[i + 1], 0.5)) : 0;
+        var din = seg(t, lerp(ARR[i], SET[i], 0.5), SET[i]), dout = i < LASTI && t >= LEA[i] ? seg(t, LEA[i], lerp(LEA[i], SET[i + 1], 0.5)) : 0;
         d = Math.min(din, 1 - dout);
       }
       var z = zinA(t);
@@ -4487,10 +4475,6 @@ var DRAW = {
     }
     function band(y, o) { return [y - o.size * 0.98, y + o.size * 0.36]; }
     // a word that stays slides into its new place; a word that changes rolls up and out as the new one rolls up in
-    // "Welcome to" in Sacramento (Astigmatic, SIL Open Font License), a monoline script, from media/sacramento.woff2;
-    // until it has loaded, the greeting is left out and "WonderLab." comes in alone
-    var WS_OK = false;
-    try { new FontFace("Sacramento", "url(media/sacramento.woff2)").load().then(function (f) { document.fonts.add(f); WS_OK = true; }, function () {}); } catch (e) {}
     function rollWords(A, PA, B, PB, o, step, t, t0, g, D, ST) {
       var n = Math.max(A.length, B.length);
       if (D === undefined) { D = 1.5 * (0.22 + 0.04 * Math.min(n, 7)); ST = 1.5 * (0.03 + 0.006 * Math.min(n, 7)); }
@@ -4537,22 +4521,9 @@ var DRAW = {
       if (item.big) {   // v226: this line bigger than the rest (the words carry their own size through the roll)
         var oA = fontAt(size * item.big); A.forEach(function (w) { w.o = oA; }); PA = placeWords(A, oA, R.x + pad, maxW, R.y + R.h - pad, lh * item.big);
       }
-      if (item.script) {   // v229: "Welcome to" in Sacramento, written in left to right behind a pen edge slanted with the script,
-        // then "WonderLab." rolls up in under it; when the line rolls on, the greeting rolls up and out with it, cut at its band
-        var oT = A[0].o || o, sz = oT.size * 1.0, sx = PA.pos[0].x, sBase = PA.pos[0].y - oT.size * 0.9;
-        var t0s = lerp(ARR[i], SET[i], 0.55), pw = seg(t, t0s, t0s + 1.3), kk = item.next && t >= item.roll ? seg(t, item.roll, item.roll + 0.5) : 0, kr = eroll(kk);
-        if (WS_OK && pw > 0 && kk < 1) {
-          ctx.save(); if ("letterSpacing" in ctx) ctx.letterSpacing = "0px";
-          ctx.font = "400 " + sz.toFixed(1) + "px Sacramento"; var ww = ctx.measureText("Welcome to").width;
-          ctx.beginPath(); ctx.rect(sx - sz, sBase - sz * 0.95, ww + 2 * sz, sz * 1.35); ctx.clip();   // its band
-          var e = pw < 1 ? 0.5 - 0.5 * Math.cos(Math.PI * pw) : 1, xr = sx - sz * 0.2 + (ww + sz * 0.6) * e, sl = sz * 0.32;
-          ctx.beginPath(); ctx.moveTo(sx - sz, sBase - sz); ctx.lineTo(xr + sl, sBase - sz); ctx.lineTo(xr - sl * 0.4, sBase + sz * 0.45); ctx.lineTo(sx - sz, sBase + sz * 0.45); ctx.closePath(); ctx.clip();
-          ctx.globalAlpha = alpha * (1 - 0.35 * Math.min(1, kr)); ctx.fillStyle = WHITE; ctx.textBaseline = "alphabetic"; ctx.textAlign = "left";
-          ctx.fillText("Welcome to", sx, sBase - kr * lh * 1.2);
-          ctx.restore();
-        }
-        var wIn = t0s + 1.1;   // "WonderLab." in as the pen lifts
-        if (!(item.next && t >= item.roll) && t < wIn + 1.2) { rollWords([], { pos: [] }, A, PA, o, lh * 1.2, t, wIn, alpha); return; }
+      if (item.kicker) {   // v226: a small label over the line ("WELCOME TO"), lifting away as the line rolls on
+        var kk = item.next && t >= item.roll ? eio(seg(t, item.roll, item.roll + 0.45)) : 0, oK = fontAt(size * 0.4), oT = A[0].o || o;
+        if (kk < 1) drawWord({ s: item.kicker, c: WHITE }, PA.pos[0].x, PA.pos[0].y - oT.size * 0.98 - oK.size * 0.4 - kk * lh * 0.6, oK, alpha * (1 - kk), [-1e4, 1e4]);
       }
       if (item.next && t >= item.roll) { var B = wordsOf(item.next); rollWords(A, PA, B, lay(B), o, lh, t, item.roll, alpha); return; }
       A.forEach(function (w, k) { drawWord(w, PA.pos[k].x, PA.pos[k].y, w.o || o, alpha, [-1e4, 1e4]); });
@@ -4673,10 +4644,9 @@ var DRAW = {
       var y1c = L.vh / 2 - lhC / 2 + sizeC * 0.36, y2c = y1c + lhC;
       var wLT = measure("Learn to", oC), wWon = measure("Wonder.", oC);   // v185: with its orange full stop
       // line 1: "Explore", rolling out at the climax as "Learn to" rolls in; cut away as "Wonder" becomes the frame
-      var aE = seg(t, st.lIn, st.lIn + 0.25) * (1 - seg(t, st.climax, st.climax + 0.25));   // v229: fades in, as the grid darkens, and out as "Learn to" comes
-      if (aE > 0) drawWord({ s: "Explore", c: WHITE }, cx - measure("Explore", o) / 2, y1, o, aE, [-1e4, 1e4]);
+      rollLetters("Explore", WHITE, cx - measure("Explore", o) / 2, y1, o, t, st.lIn, st.climax, 0.3, 0.02, lift, 1);
       var gLT = 1 - seg(eio(seg(t, M0, M1)), 0, 0.35);   // v177: it fades out, in place, as the orange frame fades in
-      if (t >= st.climax && gLT > 0) drawWord({ s: "Learn to", c: WHITE }, cx - wLT / 2, y1c, oC, gLT * seg(t, st.climax + 0.05, st.climax + 0.4), [-1e4, 1e4]);   // v229: fades in   // v188: 1.5x slower than v185
+      if (t >= st.climax && gLT > 0) rollLetters("Learn to", WHITE, cx - wLT / 2, y1c, oC, t, st.climax + 0.08, null, 0.255, 0.019, liftC, gLT);   // v188: 1.5x slower than v185
       // line 2: the subjects, each in at its turn and up and out at the next, a little faster each time; the letters
       // follow each other closely (v176: a smaller lag), so each can still be read
       var s0 = st.lIn + 0.35;
@@ -4777,7 +4747,7 @@ var DRAW = {
       // v219: as "Explore" and the subjects come in over the nature pictures, each block (not the ground between them)
       // takes a 35% dark layer (v221), and keeps it until the grid goes: no return before "Learn to"
       // v227: the same during the challenges overview ("Led by…", then "Our design challenges…"), in with it, out with the zoom back in
-      var stL = STORY[LASTI]; world.style.setProperty("--nd", Math.max(seg(t, stL.lIn - 0.25, stL.lIn + 0.15), overK(OI.challenges, t)).toFixed(3));
+      var stL = STORY[LASTI]; world.style.setProperty("--nd", Math.max(seg(t, stL.lIn - 0.4, stL.lIn), overK(OI.challenges, t)).toFixed(3));
       var cam = camera(t), s = cam.s;
       var tx = snap(L.vw / 2 - cam.x * s), ty = snap(L.vh / 2 - cam.y * s);
       world.style.transform = "translate(" + tx.toFixed(2) + "px," + ty.toFixed(2) + "px) scale(" + s.toFixed(5) + ")";
@@ -4828,7 +4798,7 @@ var DRAW = {
         var tl = byPath[jj];
         if (!tl || !tl.second || !it.roll) return;
         var k = eio(seg(t, it.roll, it.roll + 0.9));
-        footMix(tl, k); if (it.swapPic === "fade") { tl.second.style.opacity = k.toFixed(3); tl.first.style.visibility = k > 0.999 ? "hidden" : ""; }             // the girl's model to the boats, as the line rolls
+        if (it.swapPic === "fade") { tl.second.style.opacity = k.toFixed(3); tl.first.style.visibility = k > 0.999 ? "hidden" : ""; }             // the girl's model to the boats, as the line rolls
         else { tl.first.style.transform = "translateY(" + (-100 * k).toFixed(2) + "%)"; tl.second.style.transform = "translateY(" + (100 - 100 * k).toFixed(2) + "%)"; }   // today's city slides up to tomorrow's
       });
       drawText(t, cam);
