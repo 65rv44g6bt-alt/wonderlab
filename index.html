@@ -1187,8 +1187,6 @@ footer { background: var(--deep); color: var(--on-navy-soft); padding: clamp(44p
 .hg-in:has(> svg)::before { content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none; background: rgba(12, 56, 84, 0.42); opacity: var(--nd, 0); }
 /* and their white outlines dimmed by the same 35% (the same dark mixed in) */
 .hg-tile { box-shadow: 0 0 0 calc(var(--hl, 0.5px) / var(--hs)) color-mix(in srgb, #FFFFFF calc(100% - 35% * var(--nd, 0)), rgb(4, 16, 24)); }
-/* v248: phones: a diagram on its own layer, so redrawing it repaints only itself, not the whole grid */
-@media (max-width: 900px) { .hg-in > svg { will-change: transform; } }
 .hg-text { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
 /* the ending: the logo and the name, in the bar's proportions, so the glide into the bar is a pure scale */
 .hg-brand { position: absolute; left: 0; top: 0; display: none; align-items: center; white-space: nowrap; transform-origin: 0 0; pointer-events: none; color: var(--on-navy); }
@@ -1250,6 +1248,7 @@ footer { background: var(--deep); color: var(--on-navy-soft); padding: clamp(44p
   #programme .challenges.is-paper .ch-list > li.ch-body-slot::before { display: block !important; bottom: 0 !important; z-index: 1 !important; }
 }
 </style>
+<link rel="preload" as="image" type="image/webp" href="media/hero-grid/wl-towers.webp" media="(max-width: 900px)">   <!-- v250: the first diagram the opening shows, as a picture -->
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
@@ -4255,7 +4254,7 @@ var DRAW = {
     var stage = cv.parentNode, veil = document.createElement("div"); veil.className = "hg-veil"; stage.insertBefore(veil, cv);
 
     /* ---------- the challenge diagrams ---------- */
-    var wlReady = false, VB = "-192 -108 2304 1296";    // the 1920 x 1080 frame, 20% looser
+    var preWL = false, wlReady = false, VB = "-192 -108 2304 1296";    // the 1920 x 1080 frame, 20% looser
     function deepTheme() {
       if (WL.THEMES.deep) return;
       var D = WL.THEMES.dark, out = {}, k;
@@ -4272,14 +4271,15 @@ var DRAW = {
     }
     var WL_U0 = 1 / 3, PHONE_Z = { davinci: 0.62, egg: 0.7, towers: 0.66 };   // WL_U0: where each challenge starts, so the rest plays 1.5x slower over its rectangle's time
     function drawWL(svg, name, u) {
-      svg.__v = (svg.__v || 0) + 1;   // v248: for its still picture (snapOf)
+      svg.__v = u === 0 ? 0 : ++drawWL.n;   // v250: 0 at its first frame (its ready-made picture, wl-<name>.webp), else a new number (its still picture, snapOf)
       var s = WLS[name], z = s.z * (L && L.portrait && PHONE_Z[name] ? PHONE_Z[name] : 1);
       WL.render(svg, s.n, s.a + (s.b - s.a) * ((s.u0 === undefined ? WL_U0 : s.u0) + (1 - (s.u0 === undefined ? WL_U0 : s.u0)) * u), "glass", { w: 1920, h: 1080, cx: 0.5 + s.ox, cy: 0.5 + s.oy, zoom: z });
     }
     // v248: phones: a diagram held still and seen small (the overviews, and the zooms in and out of them) shows as a picture
     // of itself, drawn once: a picture costs nothing to move, its hundreds of lines repainted every frame did (the lag
     // on "Led by…"). Made in the background from the drawing as it stands; the drawing shows until it is ready
-    var SNAP_W = 1024, SNAP_H = 576, SNAP_S = 0.42;
+    drawWL.n = 0;
+    var SNAP_W = 1024, SNAP_H = 576;
     snapOf.n = 0;
     function snapOf(tl) {
       var v = tl.svg.__v || 0;
@@ -4907,11 +4907,11 @@ var DRAW = {
         tl.ldy = Math.max(0, dy);
         if (tl.a) {   // seen in both overviews: its challenge until it is off screen between them, then its nature picture
           var b2 = t >= swapT;
-          if (b2 !== tl.isB) { tl.isB = b2; tl.a.forEach(function (n) { n.style.display = b2 ? "none" : ""; }); if (tl.snap) { tl.snap.style.display = "none"; tl.snapOn = false; } tl.natImg.style.display = b2 ? "" : "none"; }
+          if (b2 !== tl.isB) { tl.isB = b2; tl.a.forEach(function (n) { n.style.display = b2 ? "none" : ""; }); if (tl.showing) { tl.showing.style.display = "none"; tl.showing = null; } tl.natImg.style.display = b2 ? "" : "none"; }
         }
         var on = a > 0.002 && x < L.vw + 40 && x + L.W * s > -40 && y < L.vh + 40 && y + L.H * s > -40;
         if (on !== tl.shown) { tl.el.style.display = on ? "" : "none"; tl.shown = on;
-          if (!on && tl.snap && tl.reg1 < 0 && tl.j === undefined) { URL.revokeObjectURL(tl.snapURL); tl.snap.remove(); tl.snap = null; tl.snapURL = null; tl.snapV = -1; tl.snapOn = false; tl.svg.style.display = ""; }   // v248: the others' pictures let go once off screen
+          if (!on && tl.snap && tl.reg1 < 0 && tl.j === undefined) { URL.revokeObjectURL(tl.snapURL); if (tl.showing === tl.snap) { tl.showing = null; tl.svg.style.display = ""; } tl.snap.remove(); tl.snap = null; tl.snapURL = null; tl.snapV = -1; }   // v248: the others' pictures let go once off screen
         }
         if (!on) return;
         tl.el.style.opacity = a.toFixed(3);
@@ -4934,7 +4934,7 @@ var DRAW = {
       if (wlReady) {
         var held = i >= 0 && t >= SET[i], ft = i >= 0 ? byPath[i] : null, ov = held && STORY[i].over ? i : -1;
         if (ft && ft.svg) {
-          if (held) { if (wall === null || wall - liveAt > (L.portrait ? 49 : 33)) {   // v248: 20 a second on phones (each redraw repaints the whole grid)
+          if (held) { if (wall === null || wall - liveAt > 33) {   // v249: 30 a second everywhere again
             drawWL(ft.svg, ft.key.slice(3), wlU(ft, t)); liveAt = wall === null ? 0 : wall; } ft.frozenAt = -1; }
           else if (ft.frozenAt !== i) { drawWL(ft.svg, ft.key.slice(3), wlU(ft, SET[i])); ft.frozenAt = i; }
         }
@@ -4948,10 +4948,21 @@ var DRAW = {
           while (nOv < more.length && (wall === null || nOv === 0 || performance.now() - tb < 7)) { var tl = more[rr % more.length]; rr++; nOv++; drawWL(tl.svg, tl.key.slice(3), wlU(tl, t)); }
         }
       }
-      if (wlReady && L.portrait && !snapOf.n) for (var q = 0; q < tiles.length; q++) { var tq = tiles[(q + (snapOf.k || 0)) % tiles.length]; if (tq.svg && (tq.reg1 >= 0 || tq.j !== undefined) && !tq.noSnap && tq.snapV !== (tq.svg.__v || 0) && tq !== ft) { snapOf(tq); snapOf.k = (q + (snapOf.k || 0) + 1) % tiles.length; break; } }   // made ahead, one at a time, for the challenges overview's
-      if (wlReady && L.portrait) live.forEach(function (tl) {   // v248: small and still: its picture (snapOf)
-        var want = s < SNAP_S && !(tl === ft && held) && !tl.noSnap, on = want && snapOf(tl);
-        if (on !== !!tl.snapOn) { tl.snapOn = on; tl.svg.style.display = on ? "none" : ""; if (tl.snap) tl.snap.style.display = on ? "" : "none"; }
+      if (wlReady && L.portrait && !snapOf.n) for (var q = 0; q < tiles.length; q++) { var tq = tiles[(q + (snapOf.k || 0)) % tiles.length]; if (tq.svg && (tq.reg1 >= 0 || tq.j !== undefined) && !tq.noSnap && tq.svg.__v && tq.snapV !== tq.svg.__v && tq !== ft) { snapOf(tq); snapOf.k = (q + (snapOf.k || 0) + 1) % tiles.length; break; } }   // made ahead, one at a time, for the challenges overview's
+      // v250: phones: every diagram shows as a picture of itself except the one landed in full screen, which plays live.
+      // A picture costs nothing to zoom; a drawing's hundreds of lines were redrawn at each new size, every frame (the lag
+      // in the opening, the zoom out to "Led by…" and the zoom in to the bridge). At its first frame, the ready-made
+      // picture (media/hero-grid/wl-<name>.webp, loaded with the page); else one made from it as it stands (snapOf)
+      if (wlReady && L.portrait && !preWL) { preWL = true; tiles.forEach(function (tl) {
+        if (!tl.svg) return;
+        var im = document.createElement("img"); im.alt = ""; im.className = "hg-snap"; im.style.display = "none";
+        im.src = M + "wl-" + tl.key.slice(3) + ".webp"; tl.pre = im; tl.svg.parentNode.insertBefore(im, tl.svg.nextSibling);
+        (im.decode ? im.decode() : Promise.resolve()).then(function () { tl.preOK = true; }, function () {});
+      }); }
+      if (wlReady && L.portrait) live.forEach(function (tl) {
+        var use = null;
+        if (!(tl === ft && held)) { if (!tl.svg.__v) { if (tl.preOK) use = tl.pre; } else if (!tl.noSnap && snapOf(tl)) use = tl.snap; }
+        if (use !== (tl.showing || null)) { if (tl.showing) tl.showing.style.display = "none"; if (use) use.style.display = ""; tl.svg.style.display = use ? "none" : ""; tl.showing = use; }
       });
       STORY.forEach(function (it, jj) {
         var tl = byPath[jj];
