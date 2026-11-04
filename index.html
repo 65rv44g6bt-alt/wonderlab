@@ -3999,7 +3999,7 @@ var DRAW = {
     var Q = new URLSearchParams(location.search), FREEZE = Q.has("t") ? parseFloat(Q.get("t")) : null;
     var reduceMq = window.matchMedia("(prefers-reduced-motion: reduce)");
     // v230: each photo's foot colour: its lowest third's average, same hue, taken dark (for the gradient under its words)
-    var FOOT = {"s-chair16": "33, 31, 23", "s-group32": "33, 27, 23", "s-girl47": "33, 27, 23", "s-tower8": "33, 29, 23", "s-boy41": "33, 31, 23", "s-girl41": "33, 29, 23", "f-create": "23, 33, 24", "f-enter": "23, 33, 32", "s-airport2": "33, 27, 23", "s-boy2": "33, 29, 23", "s-boy27b": "33, 28, 23", "s-boy27c": "33, 24, 23", "s-boy27g": "33, 29, 23", "s-boy3": "33, 29, 23", "s-davinci18": "33, 27, 23", "s-egg13": "33, 30, 23", "s-facade1": "33, 27, 23", "s-fractal10": "33, 29, 23", "s-fractal12": "33, 28, 23", "s-girl10": "33, 27, 23", "s-girl2": "33, 29, 23", "s-girl2h": "33, 29, 23", "s-girl3": "33, 29, 23", "s-girl8": "33, 29, 23", "s-girl9": "33, 27, 23", "s-girlfoil": "33, 26, 23", "s-group2": "33, 27, 23", "s-group20b": "33, 26, 23"};
+    var FOOT = {"s-chair16": "33, 31, 23", "s-group34": "33, 27, 23", "s-girl47": "33, 27, 23", "s-tower8": "33, 29, 23", "s-boy41": "33, 31, 23", "s-girl41": "33, 29, 23", "f-create": "23, 33, 24", "f-enter": "23, 33, 32", "s-airport2": "33, 27, 23", "s-boy2": "33, 29, 23", "s-boy27b": "33, 28, 23", "s-boy27c": "33, 24, 23", "s-boy27g": "33, 29, 23", "s-boy3": "33, 29, 23", "s-davinci18": "33, 27, 23", "s-egg13": "33, 30, 23", "s-facade1": "33, 27, 23", "s-fractal10": "33, 29, 23", "s-fractal12": "33, 28, 23", "s-girl10": "33, 27, 23", "s-girl2": "33, 29, 23", "s-girl2h": "33, 29, 23", "s-girl3": "33, 29, 23", "s-girl8": "33, 29, 23", "s-girl9": "33, 27, 23", "s-girlfoil": "33, 26, 23", "s-group2": "33, 27, 23", "s-group20b": "33, 26, 23"};
     function footMix(tl, k) {   // the two pictures of a swapping rectangle: the foot colour follows the swap
       if (!tl.pa || !FOOT[tl.pa[0]] || !FOOT[tl.pa[1]]) return;
       var a = FOOT[tl.pa[0]].split(","), b = FOOT[tl.pa[1]].split(",");
@@ -4044,7 +4044,7 @@ var DRAW = {
     function setOf(k) { return SETS[k] || k; }
     var NATURE = ["b-honeycomb", "b-mud", "b-succulent", "b-wing", "b-urchin", "b-roots", "b-aloe", "b-tensile", "b-tent", "b-stairs", "b-nautilus", "b-membrane"];   // v174: the southern magnolia leaf, white lines on the blue, for the leaf veins
     // where the child is across each studio photo (%), for the tall rectangles on phones; the rest stay centred
-    var FOCAL = { "s-chair16": 44, "s-group32": 50, "s-girl47": 64, "s-tower8": 34, "s-boy41": 61, "s-fractal12": 52, "s-boy27g": 45, "s-girl2h": 82, "s-boy27c": 46, "s-girl10": 70, "s-egg13": 60, "s-davinci18": 52, "s-fractal10": 52, "s-boy27b": 50, "s-girl2": 72, "s-girl3": 78, "s-girl9": 66, "s-boy2": 75, "s-boy3": 74, "s-girl8": 80, "s-girlfoil": 64, "s-group20b": 50, "s-group2": 60, "s-airport2": 63, "s-facade1": 83 };   // airport2: the two on the right; facade1: the tower   // girl3: her scale model; group2: the boats; girl8: the tree house
+    var FOCAL = { "s-chair16": 44, "s-group34": 50, "s-girl47": 64, "s-tower8": 34, "s-boy41": 61, "s-fractal12": 52, "s-boy27g": 45, "s-girl2h": 82, "s-boy27c": 46, "s-girl10": 70, "s-egg13": 60, "s-davinci18": 52, "s-fractal10": 52, "s-boy27b": 50, "s-girl2": 72, "s-girl3": 78, "s-girl9": 66, "s-boy2": 75, "s-boy3": 74, "s-girl8": 80, "s-girlfoil": 64, "s-group20b": 50, "s-group2": 60, "s-airport2": 63, "s-facade1": 83 };   // airport2: the two on the right; facade1: the tower   // girl3: her scale model; group2: the boats; girl8: the tree house
 
     // the story, one stop at a time. A rectangle: its picture (c), its move from the one before (mv: D down, B down and
     // right, in running bond), its line (acc: the word in orange, -1 none, -2 the last) and how long it holds once there.
@@ -4054,7 +4054,7 @@ var DRAW = {
       { c: "x:start", line: "WonderLab", script: true, big: 1.2, acc: -1, dot: true, hold: 2.5, lift: 24,
         next: { line: "A creative thinking and design academy where young minds", acc: -1 }, hold2: 2.5, swapPic: "fade" },
       { c: "wl:towers", mv: "D", line: "think like engineers,", acc: 0, fit: "like", hold: 1.6 },
-      { c: "s-group32", mv: "D", line: "experiment like scientists,", acc: 0, fit: "like", hold: 1.6 },
+      { c: "s-group34", mv: "D", line: "experiment like scientists,", acc: 0, fit: "like", hold: 1.6 },
       { c: "s-egg13", mv: "D", line: "dare like innovators,", acc: 0, fit: "like", hold: 1.6 },
       { c: "s-boy41", mv: "D", line: "and dream like architects", acc: 1, dot: true, dotW: true, fit: "like", hold: 1.6 },
       { over: 3, fill: "challenges", alpha: 0.8, line: "Led by an award-winning architect", acc: -1, hold: 3.2,
@@ -4232,7 +4232,7 @@ var DRAW = {
     Object.keys(CONTENT).forEach(function (k) {
       var v = CONTENT[k], p = k.split(",").map(Number);
       if (v === "s-girlfoil") CONTENT[k] = "s-tower8";   // v252: hero-tower-8 (was hero-tower-2)
-      else if (v === "s-group20b") CONTENT[k] = "s-group32";   // v253: the boats, hero-group-boats-32
+      else if (v === "s-group20b") CONTENT[k] = "s-group34";   // v255: the boats, hero-group-boats-34
       else if (v === "s-airport2" && inOver(p[0], p[1], OI.challenges)) CONTENT[k] = "s-chair16";   // v254: the cardboard chair (hero-chair-16), on the two boys at the left
     });
     var tiles = [];
