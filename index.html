@@ -917,6 +917,7 @@ video.is-waiting { opacity: 0 !important; }
    booking button at the foot, fading into it */
 .book-panel.look-camp:not(.has-strips) { background: linear-gradient(180deg, rgba(0, 0, 0, 0.14) 0, rgba(0, 0, 0, 0.14) 44px, rgba(255, 255, 255, 0.06) 120px, rgba(255, 255, 255, 0.06) calc(100% - 150px), rgba(0, 0, 0, 0.14) calc(100% - 76px), rgba(0, 0, 0, 0.14) 100%), var(--img-camp, none) right top / 200% auto no-repeat, linear-gradient(135deg, var(--st-0), var(--st-1)); }
 .bp-kind { font-size: var(--t0); font-weight: 500; color: var(--orange); }
+@media (max-width: 640px) { .book-panel.look-camp .bp-kind { white-space: nowrap; font-size: min(var(--t0), 3.9vw); } }   /* v309: the Christmas workshop's line on one line on phones */
 .bp-title { margin-top: 6px; font-size: var(--t2); }
 .bp-title span { white-space: nowrap; } /* a line may break after the date, never inside the hours */
 @media (min-width: 901px) { .bp-title { font-size: min(var(--t2), 8.5cqi); } } /* the longest course title fits one line */
@@ -1080,6 +1081,7 @@ footer { background: var(--deep); color: var(--on-navy-soft); padding: clamp(44p
 /* v272: the venue photos, opened from "Wan Chai" and "Mong Kok" under Where */
 .venue-link { padding: 0; border: 0; background: none; color: inherit; font: inherit; text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 3px; cursor: pointer; }
 .venue-link:hover { color: #FFFFFF; }
+.venue-cam { display: inline-block; margin-right: 0.3em; text-decoration: none; }   /* v309: the camera, not underlined */
 .venue { width: min(880px, calc(100% - 32px)); padding: 0; border: 0; border-radius: 20px; overflow: hidden; background: var(--deep); color: var(--on-navy); box-shadow: 0 24px 80px rgba(0,0,0,0.45); }
 .venue::backdrop { background: rgba(13,27,38,0.62); }
 .venue-head { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 18px 22px 16px; }
@@ -1288,8 +1290,8 @@ footer { background: var(--deep); color: var(--on-navy-soft); padding: clamp(44p
 /* v307: the Christmas workshops button, bottom right of the hero beside the sound button: opens December in the
    calendar with the next Christmas workshop chosen */
 .hg-xmas { position: absolute; z-index: 3; right: calc(max(var(--gutter), env(safe-area-inset-right)) + 56px); bottom: max(18px, env(safe-area-inset-bottom));
-  min-height: 44px; padding: 0 18px; background: #FFFFFF; color: var(--navy); font-weight: 600; box-shadow: 0 6px 24px rgba(0, 0, 0, 0.28); }
-.hg-xmas:hover { background: #FFF6EE; }
+  min-height: 44px; padding: 0 18px; background: var(--dot-1); border: 1px solid rgba(255, 255, 255, 0.92); color: #FFFFFF; font-weight: 600; box-shadow: 0 6px 24px rgba(0, 0, 0, 0.28); }   /* v309: the Creators green, a thin white outline */
+.hg-xmas:hover { background: #466F16; }
 .hg-sound[hidden] + .hg-xmas { right: max(var(--gutter), env(safe-area-inset-right)); }
 @media (max-width: 420px) { .hg-xmas { padding: 0 13px; font-size: 0.86rem; } }
 .hg-sound[aria-pressed="true"] .on { display: inline; }
@@ -1615,7 +1617,7 @@ footer { background: var(--deep); color: var(--on-navy-soft); padding: clamp(44p
     <div class="visit-top">
       <dl class="hours fade">
         <div><dt>When</dt><dd><span class="dd-l">Monday to Friday, 4:00 to 5:30pm and 6:00 to 7:30pm.</span><span class="dd-l">Saturdays, 10:00am and 2:00pm, with a parent &amp; child workshop at 4:00pm.</span></dd></div>
-        <div><dt>Where</dt><dd><button type="button" class="venue-link" data-venue="wanchai">Wan Chai</button> &amp; <button type="button" class="venue-link" data-venue="mongkok">Mong Kok</button>, Hong Kong.</dd></div>
+        <div><dt>Where</dt><dd><button type="button" class="venue-link" data-venue="wanchai"><span class="venue-cam" aria-hidden="true">📷</span>Wan Chai</button> and <button type="button" class="venue-link" data-venue="mongkok"><span class="venue-cam" aria-hidden="true">📷</span>Mong Kok</button></dd></div>
         <div><dt>Class size</dt><dd><span class="dd-l">Capped at seven students for tailored mentorship.</span><span class="dd-l">Five parent &amp; child duos for Saturday hands-on workshops.</span></dd></div>
         <div><dt>Contact us</dt><dd><a class="js-wa" data-msg="Hi Julien, I have a question about WonderLab." href="https://wa.me/85267533727" target="_blank" rel="noopener">WhatsApp</a> &middot; <a href="mailto:julien@loadbearinglegends.com?subject=WonderLab">Email</a></dd></div>
       </dl>
