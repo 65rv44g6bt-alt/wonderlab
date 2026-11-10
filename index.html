@@ -1289,11 +1289,16 @@ footer { background: var(--deep); color: var(--on-navy-soft); padding: clamp(44p
 .hg-sound .on { display: none; }
 /* v307: the Christmas workshops button, bottom right of the hero beside the sound button: opens December in the
    calendar with the next Christmas workshop chosen */
-.hg-xmas { position: absolute; z-index: 3; right: calc(max(var(--gutter), env(safe-area-inset-right)) + 56px); bottom: max(18px, env(safe-area-inset-bottom));
-  min-height: 44px; padding: 0 18px; background: var(--dot-1); border: 1px solid rgba(255, 255, 255, 0.92); color: #FFFFFF; font-weight: 600; box-shadow: 0 6px 24px rgba(0, 0, 0, 0.28); }   /* v309: the Creators green, a thin white outline */
-.hg-xmas:hover { background: #466F16; }
-.hg-sound[hidden] + .hg-xmas { right: max(var(--gutter), env(safe-area-inset-right)); }
-@media (max-width: 420px) { .hg-xmas { padding: 0 13px; font-size: 0.86rem; } }
+/* v312: the Christmas workshops button, in its own band under the hero, above Approach: a compact squircle on the booking
+   panel's Creators green, a thin white line inside its edge */
+.xmas-bar { display: flex; justify-content: center; padding: 28px var(--gutter) 0; }
+.hg-xmas { position: relative; isolation: isolate; min-height: 0; padding: 9px 16px; border: 0; border-radius: 14px; background: transparent; color: #FFFFFF;
+  font-size: 0.95rem; font-weight: 600; text-shadow: 0 1px 6px rgba(0, 0, 0, 0.3); box-shadow: 0 8px 22px rgba(31, 58, 29, 0.22); }
+.hg-xmas::before { content: ""; position: absolute; inset: 0; z-index: -1; border-radius: inherit; pointer-events: none; transition: filter 200ms ease;
+  background: linear-gradient(rgba(0, 0, 0, 0.14), rgba(0, 0, 0, 0.14)), var(--img-green, none) right top / 200% auto no-repeat, var(--st-1); }
+.hg-xmas::after { content: ""; position: absolute; inset: 3px; border: 1px solid rgba(255, 255, 255, 0.85); border-radius: 11px; pointer-events: none; }
+.hg-xmas:hover::before { filter: brightness(1.12); }
+@media (max-width: 420px) { .hg-xmas { padding: 8px 13px; font-size: 0.86rem; } }
 .hg-sound[aria-pressed="true"] .on { display: inline; }
 .hg-sound[aria-pressed="true"] .off { display: none; }
 .hg-glyph svg { width: 100%; height: 100%; display: block; }
@@ -1370,7 +1375,6 @@ footer { background: var(--deep); color: var(--on-navy-soft); padding: clamp(44p
       <button class="hg-toggle" id="hg-toggle" type="button" aria-pressed="false" aria-label="Pause the animation"></button>
       <div class="hg-glyph" id="hg-glyph" aria-hidden="true"></div>
       <button class="hg-sound" id="hg-sound" type="button" aria-pressed="false" aria-label="Turn the sound on"></button>
-      <a class="btn hg-xmas" id="hg-xmas" href="#bookings">⭐ Christmas Workshops Bookings ⭐</a>
     </section>
 <script>
 /* the hero's ground (see .hero.hg): blur-blue02's colour field, 24 x 26 cells (cell averages), drawn to a 240 x 260 canvas
@@ -1488,6 +1492,7 @@ footer { background: var(--deep); color: var(--on-navy-soft); padding: clamp(44p
 })();
 </script>
 
+<div class="xmas-bar"><a class="btn hg-xmas" id="hg-xmas" href="#bookings">⭐ Christmas Workshops Bookings ⭐</a></div>   <!-- v312: between the hero and Approach -->
 <section class="section" id="approach">
   <div class="wrap">
     <div class="head" data-cascade><h2>Approach<span class="dot">.</span></h2></div>
