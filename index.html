@@ -801,6 +801,10 @@ video.is-waiting { opacity: 0 !important; }
 .cal-slot:focus-visible { outline: 2px solid var(--orange); outline-offset: 1px; }
 .cal-slot:disabled { opacity: 0.45; cursor: not-allowed; }
 .cal-slot.is-full .t { text-decoration: line-through; }
+/* v315: not available: thin grey lines over the slot itself, its own colours kept underneath */
+.cal-slot.is-off { position: relative; opacity: 1; }   /* v317: the lines over the text and dot */
+.cal-slot.is-off::after { content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none;
+  background: repeating-linear-gradient(135deg, rgba(100, 100, 100, 0.45) 0 1px, transparent 1px 3.5px); }
 .cal-slot.cal-gap { visibility: hidden; pointer-events: none; }
 /* v273: holiday workshops: one bar across their days (Mon to Thu), laid over an empty slot in each day so every day keeps
    the bar's row; the bar sits on the grid itself (placed by JS from those slots), so no day's corners clip it */
@@ -3762,6 +3766,8 @@ var DRAW = {
       { start: "2026-12-21", days: 4, from: "09:30", to: "12:30", name: "Christmas workshop", lead: "\u2B50", tail: "\u2B50", ages: "ages 7 to 11", stages: [0, 1], price: 3600, off: [0, 0, 0.05, 0.10], seats: 11, taken: 0 }   // off: by number of students (2: 5%, 3 or more: 10%)
     ],
     closed: ["2026-10-01", "2026-12-25", "2026-12-26"],
+    // v314: not available (shown greyed and hatched): every session up to and including "until", and single sessions by date and start time
+    off: { until: "2026-11-20", slots: ["2026-11-23 18:00", "2026-11-24 18:00", "2026-11-27 18:00"] },
     taken: {}                            // by date and start time, e.g. "2026-10-06 16:00": 4 means 4 of the 7 seats in that class are booked
   };
   var WORKSHOP = 3;                      // the workshop's filter chip, after the three stages
@@ -3806,7 +3812,9 @@ var DRAW = {
       for (var i = 0; i < k.length; i++) { h ^= k.charCodeAt(i); h = Math.imul(h, 16777619); }
       return 2 + ((h >>> 0) % (max - 1));          // the same date always shows the same number, between 2 and max
     };
+    var isOff = function (d, s) { return !isCamp(s) && (dkey(d) <= BOOK.off.until || BOOK.off.slots.indexOf(dkey(d) + " " + s.from) >= 0); };
     var leftFor = function (d, s) {
+      if (isOff(d, s)) return 0;   // v314
       if (isCamp(s)) return s.seats - (s.taken || 0);   // the holiday workshops show their real places
       if (DEMO) return demoLeft(d, s, isWs(s) ? WS.pairs : BOOK.seats);
       return isWs(s) ? WS.pairs - (WS.taken[dkey(d)] || 0) : seatsFor(course(d), s);
@@ -3903,7 +3911,8 @@ var DRAW = {
           b.setAttribute("aria-label", DAYS[d.getDay()] + " " + d.getDate() + " " + MONTHS[d.getMonth()] + ", " + nameOf(s) + ", " + hours(s) + ", " +
             (left > 0 ? places(s, left) + " left" : "full"));
           b.setAttribute("aria-pressed", "false");
-          if (left <= 0) { b.disabled = true; b.classList.add("is-full"); }
+          if (isOff(d, s)) { b.disabled = true; b.classList.add("is-off"); b.setAttribute("aria-label", DAYS[d.getDay()] + " " + d.getDate() + " " + MONTHS[d.getMonth()] + ", " + startLabel(s) + ", not available"); }
+          else if (left <= 0) { b.disabled = true; b.classList.add("is-full"); }
           cell.appendChild(b);
           cell.classList.add("has-class");
         });
@@ -3914,7 +3923,7 @@ var DRAW = {
             var left2 = leftFor(d, shown), info = document.createElement("span"), spot = cell.querySelector(".cal-gap");
             info.className = "cal-info" + (left2 > 0 && left2 <= 2 ? " is-low" : "");
             info.setAttribute("aria-hidden", "true");
-            info.textContent = left2 > 0 ? left2 + " left" : "Full";
+            info.textContent = isOff(d, shown) ? "\u2014" : left2 > 0 ? left2 + " left" : "Full";
             if (spot) cell.replaceChild(info, spot); else cell.appendChild(info);
           }
         }
