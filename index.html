@@ -804,7 +804,7 @@ video.is-waiting { opacity: 0 !important; }
 /* v315: not available: thin grey lines over the slot itself, its own colours kept underneath */
 .cal-slot.is-off { position: relative; opacity: 1; }   /* v317: the lines over the text and dot */
 .cal-slot.is-off::after { content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none;
-  background: repeating-linear-gradient(135deg, rgba(100, 100, 100, 0.45) 0 1px, transparent 1px 3.5px); }
+  background: repeating-linear-gradient(135deg, rgba(100, 100, 100, 0.45) 0 1px, transparent 1px 2.75px); }
 .cal-slot.cal-gap { visibility: hidden; pointer-events: none; }
 /* v273: holiday workshops: one bar across their days (Mon to Thu), laid over an empty slot in each day so every day keeps
    the bar's row; the bar sits on the grid itself (placed by JS from those slots), so no day's corners clip it */
@@ -3767,7 +3767,7 @@ var DRAW = {
     ],
     closed: ["2026-10-01", "2026-12-25", "2026-12-26"],
     // v314: not available (shown greyed and hatched): every session up to and including "until", and single sessions by date and start time
-    off: { until: "2026-11-20", slots: ["2026-11-23 18:00", "2026-11-24 18:00", "2026-11-27 18:00"] },
+    unavailable: { until: "2026-11-20", slots: ["2026-11-23 18:00", "2026-11-24 18:00", "2026-11-27 18:00"] },
     taken: {}                            // by date and start time, e.g. "2026-10-06 16:00": 4 means 4 of the 7 seats in that class are booked
   };
   var WORKSHOP = 3;                      // the workshop's filter chip, after the three stages
@@ -3812,7 +3812,7 @@ var DRAW = {
       for (var i = 0; i < k.length; i++) { h ^= k.charCodeAt(i); h = Math.imul(h, 16777619); }
       return 2 + ((h >>> 0) % (max - 1));          // the same date always shows the same number, between 2 and max
     };
-    var isOff = function (d, s) { return !isCamp(s) && (dkey(d) <= BOOK.off.until || BOOK.off.slots.indexOf(dkey(d) + " " + s.from) >= 0); };
+    var isOff = function (d, s) { return !isCamp(s) && (dkey(d) <= BOOK.unavailable.until || BOOK.unavailable.slots.indexOf(dkey(d) + " " + s.from) >= 0); };
     var leftFor = function (d, s) {
       if (isOff(d, s)) return 0;   // v314
       if (isCamp(s)) return s.seats - (s.taken || 0);   // the holiday workshops show their real places
