@@ -4282,7 +4282,7 @@ var DRAW = {
     var Q = new URLSearchParams(location.search), FREEZE = Q.has("t") ? parseFloat(Q.get("t")) : null;
     var reduceMq = window.matchMedia("(prefers-reduced-motion: reduce)");
     // v230: each photo's foot colour: its lowest third's average, same hue, taken dark (for the gradient under its words)
-    var FOOT = {"s-girl56": "33, 27, 23", "s-chair16": "33, 31, 23", "s-group49": "33, 29, 23", "s-girl47": "33, 27, 23", "s-tower8": "33, 29, 23", "s-boy41": "33, 31, 23", "s-girl41": "33, 29, 23", "f-create": "23, 33, 24", "f-enter": "23, 33, 32", "s-airport2": "33, 27, 23", "s-boy2": "33, 29, 23", "s-boy27b": "33, 28, 23", "s-boy27c": "33, 24, 23", "s-boy27g": "33, 29, 23", "s-boy3": "33, 29, 23", "s-davinci18": "33, 27, 23", "s-egg13": "33, 30, 23", "s-facade1": "33, 27, 23", "s-fractal10": "33, 29, 23", "s-fractal12": "33, 28, 23", "s-girl10": "33, 27, 23", "s-girl2": "33, 29, 23", "s-girl2h": "33, 29, 23", "s-girl3": "33, 29, 23", "s-girl8": "33, 29, 23", "s-girl9": "33, 27, 23", "s-girlfoil": "33, 26, 23", "s-group2": "33, 27, 23", "s-group20b": "33, 26, 23"};
+    var FOOT = {"s-girl58": "33, 27, 23", "s-chair16": "33, 31, 23", "s-group49": "33, 29, 23", "s-girl47": "33, 27, 23", "s-tower8": "33, 29, 23", "s-boy41": "33, 31, 23", "s-girl41": "33, 29, 23", "f-create": "23, 33, 24", "f-enter": "23, 33, 32", "s-airport2": "33, 27, 23", "s-boy2": "33, 29, 23", "s-boy27b": "33, 28, 23", "s-boy27c": "33, 24, 23", "s-boy27g": "33, 29, 23", "s-boy3": "33, 29, 23", "s-davinci18": "33, 27, 23", "s-egg13": "33, 30, 23", "s-facade1": "33, 27, 23", "s-fractal10": "33, 29, 23", "s-fractal12": "33, 28, 23", "s-girl10": "33, 27, 23", "s-girl2": "33, 29, 23", "s-girl2h": "33, 29, 23", "s-girl3": "33, 29, 23", "s-girl8": "33, 29, 23", "s-girl9": "33, 27, 23", "s-girlfoil": "33, 26, 23", "s-group2": "33, 27, 23", "s-group20b": "33, 26, 23"};
     function footMix(tl, k) {   // the two pictures of a swapping rectangle: the foot colour follows the swap
       if (!tl.pa || !FOOT[tl.pa[0]] || !FOOT[tl.pa[1]]) return;
       var a = FOOT[tl.pa[0]].split(","), b = FOOT[tl.pa[1]].split(",");
@@ -4323,11 +4323,11 @@ var DRAW = {
     var DIAG = Object.keys(WLS).map(function (k) { return "wl:" + k; });
     var PHOTO = ["s-girl2", "s-airport2", "s-girl3", "s-group2", "s-facade1", "s-girl9", "s-boy2", "s-boy3", "s-girl8", "s-girlfoil", "s-group20b"];
     // the studio photos come in sets of the same scene (the girl and her tree house, the boy and his table): never two of a set side by side
-    var SETS = { "s-girl56": "tree", "s-boy41": "tree", "s-girl2": "tree", "s-girl3": "tree", "s-girl9": "tree", "s-girl8": "tree", "s-girl10": "tree", "s-girl2h": "tree", "s-boy27c": "tree", "s-boy27g": "tree", "s-boy2": "boy", "s-boy3": "boy", "s-boy27b": "tree" };
+    var SETS = { "s-girl58": "tree", "s-boy41": "tree", "s-girl2": "tree", "s-girl3": "tree", "s-girl9": "tree", "s-girl8": "tree", "s-girl10": "tree", "s-girl2h": "tree", "s-boy27c": "tree", "s-boy27g": "tree", "s-boy2": "boy", "s-boy3": "boy", "s-boy27b": "tree" };
     function setOf(k) { return SETS[k] || k; }
     var NATURE = ["b-honeycomb", "b-mud", "b-succulent", "b-wing", "b-urchin", "b-roots", "b-aloe", "b-tensile", "b-tent", "b-stairs", "b-nautilus", "b-membrane"];   // v174: the southern magnolia leaf, white lines on the blue, for the leaf veins
     // where the child is across each studio photo (%), for the tall rectangles on phones; the rest stay centred
-    var FOCAL = { "s-chair16": 44, "s-group49": 38, "s-girl56": 58, "s-tower8": 34, "s-boy41": 61, "s-fractal12": 52, "s-boy27g": 45, "s-girl2h": 82, "s-boy27c": 46, "s-girl10": 70, "s-egg13": 60, "s-davinci18": 52, "s-fractal10": 52, "s-boy27b": 50, "s-girl2": 72, "s-girl3": 78, "s-girl9": 66, "s-boy2": 75, "s-boy3": 74, "s-girl8": 80, "s-girlfoil": 64, "s-group20b": 50, "s-group2": 60, "s-airport2": 63, "s-facade1": 83 };   // airport2: the two on the right; facade1: the tower   // girl3: her scale model; group2: the boats; girl8: the tree house
+    var FOCAL = { "s-chair16": 44, "s-group49": 38, "s-girl58": 58, "s-tower8": 34, "s-boy41": 61, "s-fractal12": 52, "s-boy27g": 45, "s-girl2h": 82, "s-boy27c": 46, "s-girl10": 70, "s-egg13": 60, "s-davinci18": 52, "s-fractal10": 52, "s-boy27b": 50, "s-girl2": 72, "s-girl3": 78, "s-girl9": 66, "s-boy2": 75, "s-boy3": 74, "s-girl8": 80, "s-girlfoil": 64, "s-group20b": 50, "s-group2": 60, "s-airport2": 63, "s-facade1": 83 };   // airport2: the two on the right; facade1: the tower   // girl3: her scale model; group2: the boats; girl8: the tree house
 
     // the story, one stop at a time. A rectangle: its picture (c), its move from the one before (mv: D down, B down and
     // right, in running bond), its line (acc: the word in orange, -1 none, -2 the last) and how long it holds once there.
@@ -4526,7 +4526,7 @@ var DRAW = {
       var t = { c: p[0], r: p[1], key: key, el: el, j: ON_PATH[k], shown: false, svg: null, reg1: inOver(p[0], p[1], OI.challenges) ? OI.challenges : -1 };
       if (key.indexOf("wl:") === 0) { t.svg = document.createElementNS("http://www.w3.org/2000/svg", "svg"); t.svg.setAttribute("preserveAspectRatio", "xMidYMid slice"); inner.appendChild(t.svg); }
       else if (key === "x:start" || key === "x:bridges") {
-        var pa = key === "x:start" ? ["s-girl56", "s-davinci18"] : ["f-enter", "f-create"];   // v182: the girl and her tree house, then the egg drop in the park
+        var pa = key === "x:start" ? ["s-girl58", "s-davinci18"]   /* v321: hero-girl-58 */ : ["f-enter", "f-create"];   // v182: the girl and her tree house, then the egg drop in the park
         pa.forEach(function (k2) { var i2 = document.createElement("img"); i2.alt = ""; i2.src = M + k2 + EXT(k2); if (FOCAL[k2]) i2.style.objectPosition = FOCAL[k2] + "% 50%"; inner.appendChild(i2); });
         t.first = inner.firstChild; t.second = inner.lastChild; t.pa = pa;
         if (key === "x:start") t.second.style.opacity = "0"; else t.second.style.transform = "translateY(100%)";
