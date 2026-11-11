@@ -3767,7 +3767,8 @@ var DRAW = {
     ],
     closed: ["2026-10-01", "2026-12-25", "2026-12-26"],
     // v314: not available (shown greyed and hatched): every session up to and including "until", and single sessions by date and start time
-    unavailable: { until: "2026-11-20", slots: ["2026-11-23 16:00", "2026-11-23 18:00", "2026-11-24 18:00", "2026-11-26 16:00", "2026-11-26 18:00", "2026-11-27 18:00",
+    unavailable: { until: "2026-11-20", days: ["2026-11-28", "2026-12-03", "2026-12-04", "2026-12-05"],
+      slots: ["2026-11-21 10:00", "2026-11-21 14:00", "2026-11-27 16:00", "2026-11-23 16:00", "2026-11-23 18:00", "2026-11-24 18:00", "2026-11-26 16:00", "2026-11-26 18:00", "2026-11-27 18:00",
       "2026-12-01 18:00", "2026-12-03 16:00", "2026-12-03 18:00"] },
     taken: {}                            // by date and start time, e.g. "2026-10-06 16:00": 4 means 4 of the 7 seats in that class are booked
   };
@@ -3816,7 +3817,7 @@ var DRAW = {
       var h = demoHash("c" + s.stage + s.day + s.from), wk = Math.max(0, Math.floor((d - new Date(2026, 10, 21)) / 6048e5));
       return Math.min(max - 1, 2 + (h % 2) + Math.floor(wk / (2 + (h >> 3) % 2)));   // never an empty class
     };
-    var isOff = function (d, s) { return !isCamp(s) && (dkey(d) <= BOOK.unavailable.until || BOOK.unavailable.slots.indexOf(dkey(d) + " " + s.from) >= 0); };
+    var isOff = function (d, s) { return !isCamp(s) && (dkey(d) <= BOOK.unavailable.until || BOOK.unavailable.days.indexOf(dkey(d)) >= 0 || BOOK.unavailable.slots.indexOf(dkey(d) + " " + s.from) >= 0); };
     var leftFor = function (d, s) {
       if (isOff(d, s)) return 0;   // v314
       if (isCamp(s)) return s.seats - (s.taken || 0);   // the holiday workshops show their real places
