@@ -3767,7 +3767,8 @@ var DRAW = {
     ],
     closed: ["2026-10-01", "2026-12-25", "2026-12-26"],
     // v314: not available (shown greyed and hatched): every session up to and including "until", and single sessions by date and start time
-    unavailable: { until: "2026-11-20", slots: ["2026-11-23 18:00", "2026-11-24 18:00", "2026-11-27 18:00"] },
+    unavailable: { until: "2026-11-20", slots: ["2026-11-23 16:00", "2026-11-23 18:00", "2026-11-24 18:00", "2026-11-26 16:00", "2026-11-26 18:00", "2026-11-27 18:00",
+      "2026-12-01 18:00", "2026-12-03 16:00", "2026-12-03 18:00"] },
     taken: {}                            // by date and start time, e.g. "2026-10-06 16:00": 4 means 4 of the 7 seats in that class are booked
   };
   var WORKSHOP = 3;                      // the workshop's filter chip, after the three stages
@@ -3807,10 +3808,13 @@ var DRAW = {
     // a course counts seats for children across all its weeks; a workshop counts child-and-parent pairs on its one day
     // DEMO: placeholder places left until real bookings come in. Delete these lines and set DEMO to false to show real counts.
     var DEMO = true;
+    var demoHash = function (k) { var h = 2166136261; for (var i = 0; i < k.length; i++) { h ^= k.charCodeAt(i); h = Math.imul(h, 16777619); } return h >>> 0; };
     var demoLeft = function (d, s, max) {
-      var k = dkey(d) + (isWs(s) ? "w" : s.stage) + s.from, h = 2166136261;
-      for (var i = 0; i < k.length; i++) { h ^= k.charCodeAt(i); h = Math.imul(h, 16777619); }
-      return 2 + ((h >>> 0) % (max - 1));          // the same date always shows the same number, between 2 and max
+      if (isWs(s)) return 2 + (demoHash(dkey(d) + "w" + s.from) % (max - 1));   // a one-day workshop: the same date always shows the same number
+      // v320: a course runs every week from its start, so a later start can never have fewer places than an earlier one:
+      // each class starts fuller and frees a place every 2 or 3 weeks (by class), from 2 or 3 places left
+      var h = demoHash("c" + s.stage + s.day + s.from), wk = Math.max(0, Math.floor((d - new Date(2026, 10, 21)) / 6048e5));
+      return Math.min(max - 1, 2 + (h % 2) + Math.floor(wk / (2 + (h >> 3) % 2)));   // never an empty class
     };
     var isOff = function (d, s) { return !isCamp(s) && (dkey(d) <= BOOK.unavailable.until || BOOK.unavailable.slots.indexOf(dkey(d) + " " + s.from) >= 0); };
     var leftFor = function (d, s) {
